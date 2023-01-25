@@ -209,7 +209,7 @@ public class OwaspDependencyCheck extends Recipe {
     Engine getEngine() throws UpdateException {
         Settings settings = new Settings();
         settings.setBooleanIfNotNull(AUTO_UPDATE, true);
-        Engine engine = new Engine(settings);
+        Engine engine = new Engine(getClass().getClassLoader(), settings);
 
         for (Analyzer analyzer : engine.getAnalyzers()) {
             if (analyzer instanceof NvdCveAnalyzer || analyzer instanceof CPEAnalyzer) {

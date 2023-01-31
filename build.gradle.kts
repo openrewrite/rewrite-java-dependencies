@@ -14,6 +14,10 @@ dependencies {
     implementation("org.owasp:dependency-check-core:latest.release")
     implementation("org.owasp:dependency-check-utils:latest.release")
 
+    implementation("org.apache.lucene:lucene-core:8.11.0")
+    implementation("org.apache.lucene:lucene-analyzers-common:8.11.0")
+    implementation("org.apache.lucene:lucene-queryparser:8.11.0")
+
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")

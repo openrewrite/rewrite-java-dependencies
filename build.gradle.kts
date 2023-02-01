@@ -11,12 +11,9 @@ dependencies {
     implementation("org.openrewrite:rewrite-gradle:$rewriteVersion")
 
     implementation("org.openrewrite.gradle.tooling:model:latest.release")
-    implementation("org.owasp:dependency-check-core:latest.release")
-    implementation("org.owasp:dependency-check-utils:latest.release")
 
-    implementation("org.apache.lucene:lucene-core:8.11.0")
-    implementation("org.apache.lucene:lucene-analyzers-common:8.11.0")
-    implementation("org.apache.lucene:lucene-queryparser:8.11.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")

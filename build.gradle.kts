@@ -12,7 +12,7 @@ dependencies {
 
     implementation("org.openrewrite.gradle.tooling:model:latest.release")
 
-    implementation("dev.gradleplugins:gradle-api:latest.release")
+    implementation("com.google.guava:guava:latest.release")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

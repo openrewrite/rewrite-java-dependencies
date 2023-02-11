@@ -106,8 +106,10 @@ public class DependencyLicenseCheck extends Recipe {
             @Override
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
                 List<ResolvedDependency> scopeDependencies = getResolutionResult().getDependencies().get(aScope);
-                for (ResolvedDependency resolvedDependency : scopeDependencies) {
-                    analyzeDependency(resolvedDependency, licenses);
+                if(scopeDependencies != null) {
+                    for (ResolvedDependency resolvedDependency : scopeDependencies) {
+                        analyzeDependency(resolvedDependency, licenses);
+                    }
                 }
                 return super.visitDocument(document, ctx);
             }

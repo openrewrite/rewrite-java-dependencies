@@ -76,7 +76,7 @@ public class DependencyLicenseCheck extends Recipe {
     @Override
     protected List<SourceFile> visit(List<SourceFile> before, ExecutionContext ctx) {
         Scope aScope = Scope.fromName(scope);
-        Map<ResolvedGroupArtifactVersion, Set<License>> licenses = new HashMap<>();
+        Map<ResolvedGroupArtifactVersion, Set<License>> licenses = new LinkedHashMap<>();
 
         List<SourceFile> after = ListUtils.map(before, sourceFile -> {
             scanMaven(licenses, aScope).visitNonNull(sourceFile, ctx);
@@ -138,10 +138,10 @@ public class DependencyLicenseCheck extends Recipe {
 
     private void analyzeDependency(ResolvedDependency resolvedDependency, Map<ResolvedGroupArtifactVersion, Set<License>> licenses) {
         if (!resolvedDependency.getLicenses().isEmpty()) {
-            licenses.computeIfAbsent(resolvedDependency.getGav(), gav -> new HashSet<>())
+            licenses.computeIfAbsent(resolvedDependency.getGav(), gav -> new LinkedHashSet<>())
                     .addAll(resolvedDependency.getLicenses());
         } else {
-            licenses.computeIfAbsent(resolvedDependency.getGav(), gav -> new HashSet<>())
+            licenses.computeIfAbsent(resolvedDependency.getGav(), gav -> new LinkedHashSet<>())
                     .add(new License("", License.Type.Unknown));
         }
     }

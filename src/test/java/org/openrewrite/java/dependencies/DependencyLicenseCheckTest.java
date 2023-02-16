@@ -34,8 +34,8 @@ public class DependencyLicenseCheckTest implements RewriteTest {
     void maven() {
         rewriteRun(
           spec -> spec.dataTable(LicenseReport.Row.class, rows ->
-            assertThat(rows.stream().map(LicenseReport.Row::getLicenseType).distinct().sorted())
-              .containsExactly("Apache2", "PublicDomain", "Unknown")),
+            assertThat(rows.stream().map(LicenseReport.Row::getLicenseType).distinct())
+              .containsExactly("Apache2", "Unknown", "PublicDomain")),
           //language=xml
           pomXml(
             """

@@ -47,10 +47,16 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
                 description = "The version of Gradle project or Maven module requesting the dependency.")
         String version;
 
+        @Column(displayName = "Dependency group id",
+                description = "The Group ID of the dependency.")
         String dependencyGroupId;
 
+        @Column(displayName = "Dependency artifact id",
+                description = "The Artifact ID of the dependency.")
         String dependencyArtifactId;
 
+        @Column(displayName = "Dependency version",
+                description = "The version of the dependency.")
         String dependencyVersion;
     }
 }

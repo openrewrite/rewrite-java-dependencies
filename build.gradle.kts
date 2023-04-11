@@ -5,6 +5,15 @@ plugins {
 group = "org.openrewrite.recipe"
 description = "A rewrite module automating Java dependency management."
 
+repositories {
+    maven {
+        url = uri("https://repo.gradle.org/gradle/libs-releases/")
+        content {
+            excludeVersionByRegex(".+", ".+", ".+-rc-?[0-9]*")
+        }
+    }
+}
+
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
@@ -19,7 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
-    runtimeOnly("org.gradle:gradle-tooling-api:latest.release")
+    testRuntimeOnly("org.gradle:gradle-tooling-api:latest.release")
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")

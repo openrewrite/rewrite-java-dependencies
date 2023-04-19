@@ -38,7 +38,7 @@ public class DependencyList extends Recipe {
 
     @Option(displayName = "Scope",
             description = "The scope of the dependencies to include in the report.",
-            valid = {"Compile", "Runtime"},
+            valid = {"Compile", "Runtime", "TestRuntime"},
             example = "Compile")
     Scope scope;
 
@@ -116,7 +116,8 @@ public class DependencyList extends Recipe {
 
     public enum Scope {
         Compile,
-        Runtime;
+        Runtime,
+        TestRuntime;
 
         public org.openrewrite.maven.tree.Scope asMavenScope() {
             switch (this) {
@@ -124,6 +125,8 @@ public class DependencyList extends Recipe {
                     return org.openrewrite.maven.tree.Scope.Compile;
                 case Runtime:
                     return org.openrewrite.maven.tree.Scope.Runtime;
+                case TestRuntime:
+                    return org.openrewrite.maven.tree.Scope.Test;
                 default:
                     throw new IllegalStateException("Unexpected value: " + this);
             }
@@ -135,6 +138,8 @@ public class DependencyList extends Recipe {
                     return "compileClasspath";
                 case Runtime:
                     return "runtimeClasspath";
+                case TestRuntime:
+                    return "testRuntimeClasspath";
                 default:
                     throw new IllegalStateException("Unexpected value: " + this);
             }

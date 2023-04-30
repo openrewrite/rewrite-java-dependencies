@@ -34,9 +34,11 @@ import org.openrewrite.xml.tree.Xml;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class DependencyLicenseCheck extends Recipe {
+public class DependencyLicenseCheck extends ScanningRecipe<Map<ResolvedGroupArtifactVersion, Set<License>>> {
     transient LicenseReport report = new LicenseReport(this);
 
     @Option(displayName = "Scope",
@@ -74,17 +76,26 @@ public class DependencyLicenseCheck extends Recipe {
     }
 
     @Override
-    protected List<SourceFile> visit(List<SourceFile> before, ExecutionContext ctx) {
-        Scope aScope = Scope.fromName(scope);
-        Map<ResolvedGroupArtifactVersion, Set<License>> licenses = new LinkedHashMap<>();
+    public Map<ResolvedGroupArtifactVersion, Set<License>> getInitialValue() {
+        return new HashMap<>();
+    }
 
-        List<SourceFile> after = ListUtils.map(before, sourceFile -> {
-            scanMaven(licenses, aScope).visitNonNull(sourceFile, ctx);
-            scanGradleGroovy(licenses, aScope).visitNonNull(sourceFile, ctx);
-            return sourceFile;
-        });
+    @Override
+    public TreeVisitor<?, ExecutionContext> getScanner(Map<ResolvedGroupArtifactVersion, Set<License>> acc) {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                Scope scope = Scope.fromName(DependencyLicenseCheck.this.scope);
+                scanMaven(acc, scope).visit(tree, ctx);
+                scanGradleGroovy(acc, scope).visit(tree, ctx);
+                return tree;
+            }
+        };
+    }
 
-        for (Map.Entry<ResolvedGroupArtifactVersion, Set<License>> licensesByGav : licenses.entrySet()) {
+    @Override
+    public Collection<SourceFile> generate(Map<ResolvedGroupArtifactVersion, Set<License>> acc, ExecutionContext ctx) {
+        for (Map.Entry<ResolvedGroupArtifactVersion, Set<License>> licensesByGav : acc.entrySet()) {
             ResolvedGroupArtifactVersion gav = licensesByGav.getKey();
             for (License license : licensesByGav.getValue()) {
                 report.insertRow(ctx, new LicenseReport.Row(
@@ -96,12 +107,11 @@ public class DependencyLicenseCheck extends Recipe {
                 ));
             }
         }
-
-        return after;
+        return emptyList();
     }
 
-    private MavenVisitor<ExecutionContext> scanMaven(Map<ResolvedGroupArtifactVersion, Set<License>> licenses,
-                                                     Scope aScope) {
+    private MavenVisitor<ExecutionContext> scanMaven(
+            Map<ResolvedGroupArtifactVersion, Set<License>> licenses, Scope aScope) {
         return new MavenIsoVisitor<ExecutionContext>() {
             @Override
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
@@ -116,8 +126,8 @@ public class DependencyLicenseCheck extends Recipe {
         };
     }
 
-    private GroovyVisitor<ExecutionContext> scanGradleGroovy(Map<ResolvedGroupArtifactVersion, Set<License>> licenses,
-                                                             Scope aScope) {
+    private GroovyVisitor<ExecutionContext> scanGradleGroovy(
+            Map<ResolvedGroupArtifactVersion, Set<License>> licenses, Scope aScope) {
         return new GroovyIsoVisitor<ExecutionContext>() {
             @Override
             public G.CompilationUnit visitCompilationUnit(G.CompilationUnit cu, ExecutionContext ctx) {
@@ -136,7 +146,8 @@ public class DependencyLicenseCheck extends Recipe {
         };
     }
 
-    private void analyzeDependency(ResolvedDependency resolvedDependency, Map<ResolvedGroupArtifactVersion, Set<License>> licenses) {
+    private void analyzeDependency(
+            ResolvedDependency resolvedDependency, Map<ResolvedGroupArtifactVersion, Set<License>> licenses) {
         if (!resolvedDependency.getLicenses().isEmpty()) {
             licenses.computeIfAbsent(resolvedDependency.getGav(), gav -> new LinkedHashSet<>())
                     .addAll(resolvedDependency.getLicenses());

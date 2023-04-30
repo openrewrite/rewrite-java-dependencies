@@ -17,18 +17,14 @@ package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.openrewrite.ExecutionContext;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
-import org.openrewrite.SourceFile;
+import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
+import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
-
-import java.util.List;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -60,24 +56,30 @@ public class DependencyList extends Recipe {
     }
 
     @Override
-    protected List<SourceFile> visit(List<SourceFile> before, ExecutionContext ctx) {
-        for(SourceFile s : before) {
-            Markers m = s.getMarkers();
-            m.findFirst(GradleProject.class).ifPresent(gradle -> {
-                GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
-                if(conf != null) {
-                    for (ResolvedDependency dep : conf.getResolved()) {
-                        insertDependency(ctx, gradle, dep, true);
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if(tree == null) {
+                    return null;
+                }
+                Markers m = tree.getMarkers();
+                m.findFirst(GradleProject.class).ifPresent(gradle -> {
+                    GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
+                    if(conf != null) {
+                        for (ResolvedDependency dep : conf.getResolved()) {
+                            insertDependency(ctx, gradle, dep, true);
+                        }
                     }
-                }
-            });
-            m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
-                for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
-                    insertDependency(ctx, maven, dep, true);
-                }
-            });
-        }
-        return before;
+                });
+                m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
+                    for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
+                        insertDependency(ctx, maven, dep, true);
+                    }
+                });
+                return tree;
+            }
+        };
     }
 
     private void insertDependency(ExecutionContext ctx, GradleProject gradle, ResolvedDependency dep, boolean direct) {

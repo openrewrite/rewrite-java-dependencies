@@ -18,6 +18,7 @@ package org.openrewrite.java.dependencies.internal;
 
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Longs;
+import org.openrewrite.internal.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class VersionParser {
         private final Long[] numericParts;
         private final DefaultVersion baseVersion;
 
-        public DefaultVersion(String source, List<String> parts, DefaultVersion baseVersion) {
+        public DefaultVersion(String source, List<String> parts, @Nullable DefaultVersion baseVersion) {
             this.source = source;
             this.parts = parts.toArray(new String[0]);
             this.numericParts = new Long[this.parts.length];

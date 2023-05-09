@@ -67,20 +67,20 @@ public class DependencyList extends Recipe {
                 GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
                 if(conf != null) {
                     for (ResolvedDependency dep : conf.getResolved()) {
-                        insertDependency(ctx, gradle, dep);
+                        insertDependency(ctx, gradle, dep, true);
                     }
                 }
             });
             m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                 for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
-                    insertDependency(ctx, maven, dep);
+                    insertDependency(ctx, maven, dep, true);
                 }
             });
         }
         return before;
     }
 
-    private void insertDependency(ExecutionContext ctx, GradleProject gradle, ResolvedDependency dep) {
+    private void insertDependency(ExecutionContext ctx, GradleProject gradle, ResolvedDependency dep, boolean direct) {
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Gradle",
                 "",
@@ -88,16 +88,17 @@ public class DependencyList extends Recipe {
                 "",
                 dep.getGroupId(),
                 dep.getArtifactId(),
-                dep.getVersion()
+                dep.getVersion(),
+                direct
         ));
         if(includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, gradle, transitive);
+                insertDependency(ctx, gradle, transitive, false);
             }
         }
     }
 
-    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, ResolvedDependency dep) {
+    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, ResolvedDependency dep, boolean direct) {
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Maven",
                 maven.getPom().getGroupId(),
@@ -105,11 +106,12 @@ public class DependencyList extends Recipe {
                 maven.getPom().getVersion(),
                 dep.getGroupId(),
                 dep.getArtifactId(),
-                dep.getVersion()
+                dep.getVersion(),
+                direct
         ));
         if(includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, maven, transitive);
+                insertDependency(ctx, maven, transitive, false);
             }
         }
     }

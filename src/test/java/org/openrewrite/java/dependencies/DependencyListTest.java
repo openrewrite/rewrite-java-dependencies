@@ -29,7 +29,7 @@ public class DependencyListTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyList(DependencyList.Scope.Compile, false));
+        spec.recipe(new DependencyList(DependencyList.Scope.Compile, true));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class DependencyListTest implements RewriteTest {
                       <version>7.39.0</version>
                   </dependency>
                 </dependencies>
-              </project>  
+              </project>
               """)
         );
     }

@@ -58,5 +58,10 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
         @Column(displayName = "Dependency version",
                 description = "The version of the dependency.")
         String dependencyVersion;
+
+        @Column(displayName = "Direct Dependency",
+                description = "When `true` the project directly depends on the dependency. When `false` the project " +
+                              "depends on the dependency transitively through at least one direct dependency.")
+        boolean direct;
     }
 }

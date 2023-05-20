@@ -20,6 +20,14 @@ dependencies {
     implementation("org.openrewrite:rewrite-maven")
     implementation("org.openrewrite:rewrite-gradle")
     implementation("org.openrewrite:rewrite-groovy")
+    runtimeOnly("org.openrewrite:rewrite-java-8")
+    runtimeOnly("org.openrewrite:rewrite-java-11")
+    runtimeOnly("org.openrewrite:rewrite-java-17")
+
+    testRuntimeOnly("org.openrewrite:rewrite-java-8")
+    testRuntimeOnly("org.openrewrite:rewrite-java-11")
+    testRuntimeOnly("org.openrewrite:rewrite-java-17")
+    testRuntimeOnly("org.projectlombok:lombok:latest.release")
 
     implementation("org.openrewrite.gradle.tooling:model:latest.release")
 

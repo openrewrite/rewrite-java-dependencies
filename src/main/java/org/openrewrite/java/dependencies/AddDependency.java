@@ -140,15 +140,54 @@ public class AddDependency extends Recipe {
                "correct scope based on where it is used.";
     }
 
+    @Nullable
+    org.openrewrite.gradle.AddDependency addGradleDependency;
+
+    @Nullable
+    org.openrewrite.maven.AddDependency addMavenDependency;
+
+    public AddDependency(
+        String groupId,
+        String artifactId,
+        @Nullable String version,
+        @Nullable String versionPattern,
+        String onlyIfUsing,
+        @Nullable String classifier,
+        @Nullable String familyPattern,
+        @Nullable String extension,
+        @Nullable String configuration,
+        @Nullable String scope,
+        @Nullable Boolean releasesOnly,
+        @Nullable String type,
+        @Nullable Boolean optional,
+        @Nullable Boolean acceptTransitive) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
+        this.versionPattern = versionPattern;
+        this.onlyIfUsing = onlyIfUsing;
+        this.classifier = classifier;
+        this.familyPattern = familyPattern;
+        this.extension = extension;
+        this.configuration = configuration;
+        this.scope = scope;
+        this.releasesOnly = releasesOnly;
+        this.type = type;
+        this.optional = optional;
+        this.acceptTransitive = acceptTransitive;
+        addGradleDependency = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
+            configuration, onlyIfUsing, classifier, extension, familyPattern);
+        String versionForMaven = version != null ? version : "latest.release";
+        addMavenDependency = new org.openrewrite.maven.AddDependency(groupId, artifactId, versionForMaven,
+            versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
+            acceptTransitive);
+    }
+
     @Override
     public List<Recipe> getRecipeList() {
-        String versionForMaven = version != null ? version : "latest.release";
         return Arrays.asList(
-            new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
-                configuration, onlyIfUsing, classifier, extension, familyPattern),
-            new org.openrewrite.maven.AddDependency(groupId, artifactId, versionForMaven,
-                versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
-                acceptTransitive)
+            addGradleDependency,
+            addMavenDependency
         );
     }
 }

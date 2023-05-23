@@ -18,7 +18,8 @@ val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
     implementation("org.openrewrite:rewrite-maven")
-    implementation("org.openrewrite:rewrite-gradle")
+    // temporarily use SNAPSHOT version to release, to be changed back
+    implementation("org.openrewrite:rewrite-gradle:7.41.0-SNAPSHOT")
     implementation("org.openrewrite:rewrite-groovy")
     runtimeOnly("org.openrewrite:rewrite-java-8")
     runtimeOnly("org.openrewrite:rewrite-java-11")

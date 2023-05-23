@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 the original author or authors.
+ * Copyright 2023 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,6 @@ public class UpgradeDependencyVersion extends Recipe {
     @Nullable
     List<String> retainVersions;
 
-
     @Override
     public String getDisplayName() {
         return "Upgrade Gradle or Maven dependency versions";
@@ -85,13 +84,34 @@ public class UpgradeDependencyVersion extends Recipe {
                "updates to patch or minor releases.";
     }
 
+    @Nullable
+    org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
+
+    @Nullable
+    org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
+
+    public UpgradeDependencyVersion(String groupId,
+                                    String artifactId,
+                                    String newVersion,
+                                    @Nullable String versionPattern,
+                                    @Nullable Boolean overrideManagedVersion,
+                                    @Nullable List<String> retainVersions) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.newVersion = newVersion;
+        this.versionPattern = versionPattern;
+        this.overrideManagedVersion = overrideManagedVersion;
+        this.retainVersions = retainVersions;
+
+        upgradeGradleDependencyVersion =  new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
+        upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
+    }
+
     @Override
     public List<Recipe> getRecipeList() {
-
-
         return Arrays.asList(
-            new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern),
-            new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions)
+            upgradeGradleDependencyVersion,
+            upgradeMavenDependencyVersion
         );
     }
 }

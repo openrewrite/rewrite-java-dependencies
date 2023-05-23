@@ -12,6 +12,10 @@ repositories {
             excludeVersionByRegex(".+", ".+", ".+-rc-?[0-9]*")
         }
     }
+    // Needed to pick up snapshot versions of rewrite
+    maven {
+        url = uri("https://repo.gradle.org/gradle/libs-releases/")
+    }
 }
 
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()

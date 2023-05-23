@@ -46,3 +46,11 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
 }
+
+// temporarily added to release with a SNAPSHOT version of rewrite(depends on a recipe in the SNAPSHOT version only), to be removed
+nebulaPublishVerification {
+    ignore("org.openrewrite:rewrite-maven")
+    ignore("org.openrewrite:rewrite-gradle")
+    ignore("org.openrewrite:rewrite-groovy")
+    ignore("org.openrewrite.gradle.tooling:model")
+}

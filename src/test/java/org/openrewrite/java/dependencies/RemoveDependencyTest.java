@@ -20,14 +20,17 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RemoveDependencyTest implements RewriteTest {
+
     @DocumentExample("Remove a Gradle dependency")
     @Test
-    void removeGradleDependencyUsingStringNotation() {
+    void removeGradleDependencyUsingStringNotationWithExclusion() {
         rewriteRun(
-          spec -> spec.recipe(new RemoveDependency("org.springframework.boot", "spring-boot-starter-web", "implementation", null)),
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveDependency("org.springframework.boot", "spring-boot*", null, null)),
           buildGradle(
             """
               plugins {
@@ -39,8 +42,10 @@ class RemoveDependencyTest implements RewriteTest {
               }
               
               dependencies {
-                  implementation "org.springframework.boot:spring-boot-starter-web:2.7.0"
-                  testImplementation "org.jupiter.vintage:junit-vintage-engine:5.6.2"
+                  implementation("org.springframework.boot:spring-boot-starter-web:2.7.0") {
+                      exclude group: "junit"
+                  }
+                  testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
               }
               """,
             """
@@ -53,7 +58,7 @@ class RemoveDependencyTest implements RewriteTest {
               }
               
               dependencies {
-                  testImplementation "org.jupiter.vintage:junit-vintage-engine:5.6.2"
+                  testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
               }
               """
           )

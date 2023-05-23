@@ -16,7 +16,6 @@
 package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Value;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
@@ -54,12 +53,6 @@ public class RemoveDependency extends Recipe {
     @Nullable
     String scope;
 
-    @Getter(lazy = true)
-    List<Recipe> recipes = Arrays.asList(
-        new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope),
-        new org.openrewrite.gradle.RemoveGradleDependency(configuration, groupId, artifactId)
-    );
-
     @Override
     public String getDisplayName() {
         return "Remove a Gradle or Maven dependency";
@@ -72,7 +65,7 @@ public class RemoveDependency extends Recipe {
     }
 
     @Nullable
-    org.openrewrite.gradle.RemoveGradleDependency removeGradleDependency;
+    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
 
     @Nullable
     org.openrewrite.maven.RemoveDependency removeMavenDependency;
@@ -86,7 +79,7 @@ public class RemoveDependency extends Recipe {
         this.artifactId = artifactId;
         this.configuration = configuration;
         this.scope = scope;
-        removeGradleDependency = new org.openrewrite.gradle.RemoveGradleDependency(configuration, groupId, artifactId);
+        removeGradleDependency = new org.openrewrite.gradle.RemoveDependency(groupId, artifactId, configuration);
         removeMavenDependency = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope);
     }
 

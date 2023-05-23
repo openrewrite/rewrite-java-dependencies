@@ -14,7 +14,7 @@ repositories {
     }
     // Needed to pick up snapshot versions of rewrite
     maven {
-        url = uri("https://repo.gradle.org/gradle/libs-releases/")
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 

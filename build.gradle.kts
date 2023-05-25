@@ -23,7 +23,7 @@ dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
     implementation("org.openrewrite:rewrite-maven")
     // temporarily use SNAPSHOT version to release, to be changed back
-    implementation("org.openrewrite:rewrite-gradle:7.41.0-SNAPSHOT")
+    implementation("org.openrewrite:rewrite-gradle")
     implementation("org.openrewrite:rewrite-groovy")
     runtimeOnly("org.openrewrite:rewrite-java-8")
     runtimeOnly("org.openrewrite:rewrite-java-11")
@@ -47,10 +47,3 @@ dependencies {
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
 }
 
-// temporarily added to release with a SNAPSHOT version of rewrite(depends on a recipe in the SNAPSHOT version only), to be removed
-nebulaPublishVerification {
-    ignore("org.openrewrite:rewrite-maven")
-    ignore("org.openrewrite:rewrite-gradle")
-    ignore("org.openrewrite:rewrite-groovy")
-    ignore("org.openrewrite.gradle.tooling:model")
-}

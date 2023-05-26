@@ -26,6 +26,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.*;
 import static org.openrewrite.maven.Assertions.pomXml;
 
@@ -52,14 +53,30 @@ class AddDependencyTest implements RewriteTest {
     @ValueSource(strings = {"com.google.common.math.*", "com.google.common.math.IntMath"})
     void addGradleDependencyWithOnlyIfUsingTestScope(String onlyIfUsing) {
         rewriteRun(
-          spec -> spec.recipe(addGradleDependency("com.google.guava:guava:29.0-jre", onlyIfUsing)),
+          spec -> spec.beforeRecipe(withToolingApi()).recipe(addGradleDependency("com.google.guava:guava:29.0-jre", onlyIfUsing)),
           mavenProject("project",
             srcTestJava(
               java(usingGuavaIntMath)
             ),
             buildGradle(
-              "",
               """
+                plugins {
+                    id "java-library"
+                }
+                
+                repositories {
+                    mavenCentral()
+                }
+                """,
+              """
+                plugins {
+                    id "java-library"
+                }
+                
+                repositories {
+                    mavenCentral()
+                }
+                
                 dependencies {
                     testImplementation "com.google.guava:guava:29.0-jre"
                 }

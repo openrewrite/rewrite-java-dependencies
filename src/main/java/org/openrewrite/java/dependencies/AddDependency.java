@@ -176,7 +176,7 @@ public class AddDependency extends Recipe {
         this.optional = optional;
         this.acceptTransitive = acceptTransitive;
         addGradleDependency = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
-            configuration, onlyIfUsing, classifier, extension, familyPattern);
+            configuration, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
         String versionForMaven = version != null ? version : "latest.release";
         addMavenDependency = new org.openrewrite.maven.AddDependency(groupId, artifactId, versionForMaven,
             versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,

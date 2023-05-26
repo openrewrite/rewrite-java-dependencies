@@ -34,7 +34,7 @@ dependencies {
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
     testRuntimeOnly("org.projectlombok:lombok:latest.release")
 
-    implementation("org.openrewrite.gradle.tooling:model:latest.release")
+    implementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
 
     implementation("com.google.guava:guava:latest.release")
 

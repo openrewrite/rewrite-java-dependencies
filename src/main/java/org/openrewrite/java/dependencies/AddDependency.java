@@ -122,7 +122,7 @@ public class AddDependency extends Recipe {
     Boolean optional;
 
     @Option(displayName = "Accept transitive",
-        description = "For Maven only, Default false. If enabled, the dependency will not be added if it is already on the classpath as a transitive dependency.",
+        description = "Default false. If enabled, the dependency will not be added if it is already on the classpath as a transitive dependency.",
         example = "true",
         required = false)
     @Nullable

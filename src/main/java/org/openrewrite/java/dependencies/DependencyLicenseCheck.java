@@ -23,7 +23,6 @@ import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.groovy.GroovyIsoVisitor;
 import org.openrewrite.groovy.GroovyVisitor;
 import org.openrewrite.groovy.tree.G;
-import org.openrewrite.internal.ListUtils;
 import org.openrewrite.internal.StringUtils;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.dependencies.table.LicenseReport;
@@ -76,7 +75,7 @@ public class DependencyLicenseCheck extends ScanningRecipe<Map<ResolvedGroupArti
     }
 
     @Override
-    public Map<ResolvedGroupArtifactVersion, Set<License>> getInitialValue() {
+    public Map<ResolvedGroupArtifactVersion, Set<License>> getInitialValue(ExecutionContext ctx) {
         return new HashMap<>();
     }
 

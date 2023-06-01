@@ -32,16 +32,12 @@ import static org.openrewrite.maven.Assertions.pomXml;
 
 public class UpgradeDependencyVersionTest implements RewriteTest {
 
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.beforeRecipe(withToolingApi())
-          .recipe(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null));
-    }
-
     @DocumentExample("Upgrade gradle dependency")
     @Test
     void upgradeGuavaInGradleProject() {
         rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null)),
           buildGradle(
             """
               plugins {
@@ -102,7 +98,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
     @Test
     void updateManagedDependencyVersion() {
         rewriteRun(
-          spec -> spec.recipe(new org.openrewrite.maven.UpgradeDependencyVersion("org.junit.jupiter", "junit-jupiter-api", "5.7.2", null,
+          spec -> spec.recipe(new UpgradeDependencyVersion("org.junit.jupiter", "junit-jupiter-api", "5.7.2", null,
             null, null)),
           pomXml(
             """

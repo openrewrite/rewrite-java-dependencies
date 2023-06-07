@@ -78,8 +78,8 @@ public class UpgradeDependencyVersion extends Recipe {
                "Supports updating dependency declarations of various forms:\n" +
                "* `String` notation: `\"group:artifact:version\"` \n" +
                "* `Map` notation: `group: 'group', name: 'artifact', version: 'version'`\n" +
-               "Can update version numbers which are defined earlier in the same file in variable declarations.\n" +
-               "For Maven projects, Upgrade the version of a dependency by specifying a group and (optionally) an " +
+               "Can update version numbers which are defined earlier in the same file in variable declarations.\n\n" +
+               "For Maven projects, upgrade the version of a dependency by specifying a group and (optionally) an " +
                "artifact using Node Semver advanced range selectors, allowing more precise control over version " +
                "updates to patch or minor releases.";
     }

@@ -15,11 +15,11 @@
  */
 package org.openrewrite.java.dependencies;
 
-import lombok.*;
-import org.openrewrite.ExecutionContext;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
-import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.lang.Nullable;
 
 import java.util.Arrays;

@@ -24,7 +24,7 @@ import org.openrewrite.internal.lang.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @Getter
@@ -95,7 +95,12 @@ public class UpgradeDependencyVersion extends Recipe {
 
     @Override
     public List<Recipe> getRecipeList() {
-        if (upgradeGradleDependencyVersion == null && upgradeMavenDependencyVersion == null) {
+        if (upgradeGradleDependencyVersion == null ||
+                !Objects.equals(upgradeGradleDependencyVersion.getGroupId(), groupId) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getArtifactId(), artifactId) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getNewVersion(), newVersion) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getVersionPattern(), versionPattern)
+        ) {
             upgradeGradleDependencyVersion = new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
             upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
         }

@@ -16,7 +16,8 @@
 package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
 import org.openrewrite.internal.lang.Nullable;
@@ -25,23 +26,25 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@Value
+
+@Getter
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class UpgradeDependencyVersion extends Recipe {
     @Option(displayName = "Group",
         description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
         example = "com.fasterxml.jackson*")
-    String groupId;
+    private final String groupId;
 
     @Option(displayName = "Artifact",
         description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
         example = "jackson-module*")
-    String artifactId;
+    private final String artifactId;
 
     @Option(displayName = "New version",
-        description = "An exact version number or node-style semver selector used to select the version number.",
+        description = "An exact version number or node-style semver selector used to select the version number. ",
         example = "29.X")
-    String newVersion;
+    private final String newVersion;
 
     @Option(displayName = "Version pattern",
         description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
@@ -49,13 +52,13 @@ public class UpgradeDependencyVersion extends Recipe {
         example = "-jre",
         required = false)
     @Nullable
-    String versionPattern;
+    private final String versionPattern;
 
     @Option(displayName = "Override managed version",
         description = "For Maven project only, This flag can be set to explicitly override a managed dependency's version. The default for this flag is `false`.",
         required = false)
     @Nullable
-    Boolean overrideManagedVersion;
+    private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Retain versions",
         description = "For Maven project only, Accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed "
@@ -64,7 +67,7 @@ public class UpgradeDependencyVersion extends Recipe {
         example = "com.jcraft:jsch",
         required = false)
     @Nullable
-    List<String> retainVersions;
+    private final List<String> retainVersions;
 
     @Override
     public String getDisplayName() {
@@ -85,30 +88,17 @@ public class UpgradeDependencyVersion extends Recipe {
     }
 
     @Nullable
-    org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
+    private org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
 
     @Nullable
-    org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
-
-    public UpgradeDependencyVersion(String groupId,
-                                    String artifactId,
-                                    String newVersion,
-                                    @Nullable String versionPattern,
-                                    @Nullable Boolean overrideManagedVersion,
-                                    @Nullable List<String> retainVersions) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.newVersion = newVersion;
-        this.versionPattern = versionPattern;
-        this.overrideManagedVersion = overrideManagedVersion;
-        this.retainVersions = retainVersions;
-
-        upgradeGradleDependencyVersion =  new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
-        upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
-    }
+    private org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
 
     @Override
     public List<Recipe> getRecipeList() {
+        if (upgradeGradleDependencyVersion == null && upgradeMavenDependencyVersion == null) {
+            upgradeGradleDependencyVersion = new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
+            upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
+        }
         return Arrays.asList(
             upgradeGradleDependencyVersion,
             upgradeMavenDependencyVersion

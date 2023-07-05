@@ -24,7 +24,7 @@ import org.openrewrite.internal.lang.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @Getter
@@ -88,14 +88,20 @@ public class UpgradeDependencyVersion extends Recipe {
     }
 
     @Nullable
-    private org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
+    private transient org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
 
     @Nullable
-    private org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
+    private transient org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
 
     @Override
     public List<Recipe> getRecipeList() {
-        if (upgradeGradleDependencyVersion == null && upgradeMavenDependencyVersion == null) {
+        // Checking if the fields have been updated externally via reflection, so we need to update the child recipes
+        if (upgradeGradleDependencyVersion == null ||
+                !Objects.equals(upgradeGradleDependencyVersion.getGroupId(), groupId) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getArtifactId(), artifactId) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getNewVersion(), newVersion) ||
+                !Objects.equals(upgradeGradleDependencyVersion.getVersionPattern(), versionPattern)
+        ) {
             upgradeGradleDependencyVersion = new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
             upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
         }

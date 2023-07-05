@@ -95,7 +95,7 @@ public class UpgradeDependencyVersion extends Recipe {
 
     @Override
     public List<Recipe> getRecipeList() {
-        // Checking if the fields have been updated externally, so we need to update the child recipes
+        // Checking if the fields have been updated externally via reflection, so we need to update the child recipes
         if (upgradeGradleDependencyVersion == null ||
                 !Objects.equals(upgradeGradleDependencyVersion.getGroupId(), groupId) ||
                 !Objects.equals(upgradeGradleDependencyVersion.getArtifactId(), artifactId) ||

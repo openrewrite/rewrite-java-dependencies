@@ -149,7 +149,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
     }
 
     /**
-     * This test tries to emulate how recipes are instantiated and later on their parameters populated via reflection with
+     * This test emulates how recipes are instantiated from the SaaS, build plugins or the CLI using Jackson and later on their parameters populated via reflection with
      * jackson. This causes that some care has to be taken in this recipe when instantiating the child recipes, since the
      * constructor parameters and fields of the class might not be correct (or final) when some methods are called during
      * instantiation or validation.

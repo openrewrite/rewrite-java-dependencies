@@ -88,10 +88,10 @@ public class UpgradeDependencyVersion extends Recipe {
     }
 
     @Nullable
-    private org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
+    private transient org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
 
     @Nullable
-    private org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
+    private transient org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
 
     @Override
     public List<Recipe> getRecipeList() {

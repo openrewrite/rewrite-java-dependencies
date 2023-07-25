@@ -16,13 +16,18 @@
 package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
 import org.openrewrite.internal.lang.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
+@Getter
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ChangeDependency extends Recipe {
     // Gradle and Maven shared parameters
@@ -82,31 +87,24 @@ public class ChangeDependency extends Recipe {
         return "Change the groupId, artifactId and/or the version of a specified Gradle or Maven dependency.";
     }
 
-    private final org.openrewrite.gradle.ChangeDependency changeGradleDependency;
-    private final org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId changeMavenDependency;
-
-    public ChangeDependency(
-            String oldGroupId,
-            String oldArtifactId,
-            @Nullable String newGroupId,
-            @Nullable String newArtifactId,
-            @Nullable String newVersion,
-            @Nullable String versionPattern,
-            @Nullable Boolean overrideManagedVersion
-    ) {
-        this.oldGroupId = oldGroupId;
-        this.oldArtifactId = oldArtifactId;
-        this.newGroupId = newGroupId;
-        this.newArtifactId = newArtifactId;
-        this.newVersion = newVersion;
-        this.versionPattern = versionPattern;
-        this.overrideManagedVersion = overrideManagedVersion;
-        changeGradleDependency = new org.openrewrite.gradle.ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern);
-        changeMavenDependency = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
-    }
+    @Nullable
+    private transient org.openrewrite.gradle.ChangeDependency changeGradleDependency;
+    @Nullable
+    private transient org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId changeMavenDependency;
 
     @Override
     public List<Recipe> getRecipeList() {
+        if (changeGradleDependency == null ||
+                !Objects.equals(changeGradleDependency.getOldGroupId(), oldGroupId) ||
+                !Objects.equals(changeGradleDependency.getOldArtifactId(), oldArtifactId) ||
+                !Objects.equals(changeGradleDependency.getNewGroupId(), newGroupId) ||
+                !Objects.equals(changeGradleDependency.getNewArtifactId(), newArtifactId) ||
+                !Objects.equals(changeGradleDependency.getNewVersion(), newVersion) ||
+                !Objects.equals(changeGradleDependency.getVersionPattern(), versionPattern)
+        ) {
+            changeGradleDependency = new org.openrewrite.gradle.ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern);
+            changeMavenDependency = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
+        }
         return Arrays.asList(
                 changeGradleDependency,
                 changeMavenDependency

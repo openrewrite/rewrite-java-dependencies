@@ -70,7 +70,6 @@ public class ChangeDependency extends Recipe {
     @Nullable
     private final String versionPattern;
 
-    // Maven only parameters
     @Option(displayName = "Override managed version",
             description = "If the new dependency has a managed version, this flag can be used to explicitly set the version on the dependency. The default for this flag is `false`.",
             required = false)
@@ -102,7 +101,7 @@ public class ChangeDependency extends Recipe {
                 !Objects.equals(changeGradleDependency.getNewVersion(), newVersion) ||
                 !Objects.equals(changeGradleDependency.getVersionPattern(), versionPattern)
         ) {
-            changeGradleDependency = new org.openrewrite.gradle.ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern);
+            changeGradleDependency = new org.openrewrite.gradle.ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
             changeMavenDependency = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
         }
         return Arrays.asList(

@@ -39,8 +39,21 @@ import static java.util.Collections.emptySet;
 
 public class ParseAdvisories {
     public static void main(String[] args) throws IOException {
-        File advisoriesRepo = new File(System.getProperty("user.home") + "/Projects/github/github/advisory-database/advisories");
-        File advisoriesCsv = new File("src/main/resources/advisories.csv");
+        if (args.length != 2) {
+            System.err.println("Usage: ParseAdvisories <advisories-repo> <advisories-csv>");
+            System.exit(1);
+        }
+        File advisoriesRepo = new File(args[0]);
+        if (!advisoriesRepo.isDirectory() || !advisoriesRepo.canRead()) {
+            System.err.println("Advisories repo " + advisoriesRepo + " not readable");
+            System.exit(1);
+        }
+        File advisoriesCsv = new File(args[1]);
+        if (!advisoriesCsv.isFile() || !advisoriesCsv.canWrite()) {
+            System.err.println("Advisories CSV " + advisoriesCsv + " not writable");
+            System.exit(1);
+        }
+
         parseAdvisories(advisoriesRepo, advisoriesCsv);
     }
 

@@ -75,11 +75,19 @@ class PathSimpleFileVisitor extends SimpleFileVisitor<Path> {
         this.writer = getObjectWriter();
     }
 
+    private Path current;
+
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        System.out.println("Parsing " + file);
-        if (file.getFileName().toString().endsWith(".json")) {
-            Advisory advisory = reader.readValue(file.toFile(), Advisory.class);
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+        if (path.getFileName().toString().endsWith(".json")) {
+
+            Path parent = path.getParent().getParent();
+            if (current == null || !current.equals(parent)) {
+                current = parent;
+                System.out.println("Parsing " + current);
+            }
+
+            Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
             for (Affected affected : advisory.getAffected()) {
                 if (affected.getPkg().getEcosystem().equals("Maven")
                         && affected.getRanges() != null

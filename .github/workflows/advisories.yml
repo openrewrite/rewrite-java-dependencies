@@ -17,10 +17,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Checkout advisories-database
+      - name: Checkout advisory-database
         uses: actions/checkout@v3
         with:
-          repository: github/advisories-database
+          repository: github/advisory-database
           path: build/advisories
       - uses: actions/setup-java@v3
         with:

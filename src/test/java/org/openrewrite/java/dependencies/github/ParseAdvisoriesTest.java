@@ -33,6 +33,6 @@ class ParseAdvisoriesTest {
         ParseAdvisories.parseAdvisories(new File("src/test/advisories"), output.toFile());
 
         List<String> allLines = Files.readAllLines(output);
-        assertThat(allLines).containsExactly("CVE-2023-34150,2023-07-05T09:30:20Z,\"Apache Any23 vulnerable to excessive memory usage\",\"org.apache.any23:apache-any23\",0,,MODERATE");
+        assertThat(allLines).containsExactly("CVE-2023-34150,2023-07-05T09:30:20Z,\"Apache Any23 vulnerable to excessive memory usage\",\"org.apache.any23:apache-any23\",0,,MODERATE,CWE-20;CWE-400");
     }
 }

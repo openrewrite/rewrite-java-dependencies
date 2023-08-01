@@ -15,11 +15,17 @@
  */
 package org.openrewrite.java.dependencies.github.advisories;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 import org.openrewrite.internal.lang.Nullable;
+
+import java.util.List;
 
 @Value
 public class DatabaseSpecific {
     @Nullable
     String severity;
+
+    @JsonProperty("cwe_ids")
+    List<String> cweIds;
 }

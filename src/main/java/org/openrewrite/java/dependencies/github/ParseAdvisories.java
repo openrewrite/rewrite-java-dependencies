@@ -59,73 +59,74 @@ public class ParseAdvisories {
 
     static void parseAdvisories(File advisoriesRepoInput, File advisoriesCsvOutput) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(advisoriesCsvOutput)) {
-            Files.walkFileTree(advisoriesRepoInput.toPath(), emptySet(), 16, new PathSimpleFileVisitor(fos));
+            Files.walkFileTree(advisoriesRepoInput.toPath(), emptySet(), 16, new MavenAdvisoriesVisitor(fos));
         }
     }
-}
 
-class PathSimpleFileVisitor extends SimpleFileVisitor<Path> {
-    private final FileOutputStream fos;
-    private final ObjectMapper reader;
-    private final ObjectWriter writer;
+    private static final class MavenAdvisoriesVisitor extends SimpleFileVisitor<Path> {
+        private final FileOutputStream fos;
+        private final ObjectMapper reader;
+        private final ObjectWriter writer;
 
-    public PathSimpleFileVisitor(FileOutputStream fos) {
-        this.fos = fos;
-        this.reader = getObjectMapper();
-        this.writer = getObjectWriter();
-    }
+        public MavenAdvisoriesVisitor(FileOutputStream fos) {
+            this.fos = fos;
+            this.reader = getObjectMapper();
+            this.writer = getObjectWriter();
+        }
 
-    private Path current;
+        private Path current;
 
-    @Override
-    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-        if (path.getFileName().toString().endsWith(".json")) {
+        @Override
+        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+            if (path.getFileName().toString().endsWith(".json")) {
 
-            Path parent = path.getParent().getParent();
-            if (current == null || !current.equals(parent)) {
-                current = parent;
-                System.out.println("Parsing " + current);
-            }
+                Path parent = path.getParent().getParent();
+                if (current == null || !current.equals(parent)) {
+                    current = parent;
+                    System.out.println("Parsing " + current);
+                }
 
-            Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
-            for (Affected affected : advisory.getAffected()) {
-                if (affected.getPkg().getEcosystem().equals("Maven")
-                        && affected.getRanges() != null
-                        && !affected.getRanges().isEmpty()) {
-                    Range range = affected.getRanges().iterator().next();
-                    Vulnerability vulnerability = new Vulnerability(
-                            advisory.getAliases().isEmpty() ?
-                                    advisory.getId() :
-                                    advisory.getAliases().iterator().next(),
-                            advisory.getPublished(),
-                            advisory.getSummary(),
-                            affected.getPkg().getName(),
-                            range.getIntroduced(),
-                            range.getFixed(),
-                            Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity())
-                    );
-                    writer.writeValue(fos, vulnerability);
+                Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
+                for (Affected affected : advisory.getAffected()) {
+                    if (affected.getPkg().getEcosystem().equalsIgnoreCase("Maven")
+                            && affected.getRanges() != null
+                            && !affected.getRanges().isEmpty()) {
+                        Range range = affected.getRanges().iterator().next();
+                        Vulnerability vulnerability = new Vulnerability(
+                                advisory.getAliases().isEmpty() ?
+                                        advisory.getId() :
+                                        advisory.getAliases().iterator().next(),
+                                advisory.getPublished(),
+                                advisory.getSummary(),
+                                affected.getPkg().getName(),
+                                range.getIntroduced(),
+                                range.getFixed(),
+                                Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity())
+                        );
+                        writer.writeValue(fos, vulnerability);
+                    }
                 }
             }
+            return FileVisitResult.CONTINUE;
         }
-        return FileVisitResult.CONTINUE;
+
+        private static ObjectMapper getObjectMapper() {
+            return new ObjectMapper()
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .registerModule(new JavaTimeModule());
+        }
+
+        private static ObjectWriter getObjectWriter() {
+            CsvFactory factory = new CsvFactory();
+            factory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+            CsvMapper csvMapper = (CsvMapper) CsvMapper.builder(factory)
+                    .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .build()
+                    .registerModule(new JavaTimeModule());
+            CsvSchema schema = csvMapper.schemaFor(Vulnerability.class);
+            return csvMapper.writer(schema);
+        }
     }
 
-    private static ObjectMapper getObjectMapper() {
-        return new ObjectMapper()
-                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .registerModule(new JavaTimeModule());
-    }
-
-    private static ObjectWriter getObjectWriter() {
-        CsvFactory factory = new CsvFactory();
-        factory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-        CsvMapper csvMapper = (CsvMapper) CsvMapper.builder(factory)
-                .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .build()
-                .registerModule(new JavaTimeModule());
-        CsvSchema schema = csvMapper.schemaFor(Vulnerability.class);
-        return csvMapper.writer(schema);
-    }
 }

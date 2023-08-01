@@ -92,17 +92,20 @@ public class ParseAdvisories {
                             && affected.getRanges() != null
                             && !affected.getRanges().isEmpty()) {
                         Range range = affected.getRanges().iterator().next();
+                        String cve = advisory.getAliases().isEmpty() ?
+                                advisory.getId() :
+                                advisory.getAliases().iterator().next();
+                        String cwe = advisory.getDatabaseSpecific().getCweIds().isEmpty() ?
+                                "" : advisory.getDatabaseSpecific().getCweIds().iterator().next();
                         Vulnerability vulnerability = new Vulnerability(
-                                advisory.getAliases().isEmpty() ?
-                                        advisory.getId() :
-                                        advisory.getAliases().iterator().next(),
+                                cve,
                                 advisory.getPublished(),
                                 advisory.getSummary(),
                                 affected.getPkg().getName(),
                                 range.getIntroduced(),
                                 range.getFixed(),
                                 Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity()),
-                                advisory.getDatabaseSpecific().getCweIds().iterator().next()
+                                cwe
                         );
                         writer.writeValue(fos, vulnerability);
                     }

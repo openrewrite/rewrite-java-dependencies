@@ -9,8 +9,6 @@ on:
   schedule:
     - cron: 0 11 * * WED
 
-env:
-  GITHUB_TOKEN: ${{secrets.PAT}}
 jobs:
   ingest:
     runs-on: ubuntu-latest
@@ -35,7 +33,6 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           branch: advisories/${{ env.NOW }}
-          token: ${{secrets.PAT}}
           title: "[Auto] GitHub advisories as of ${{ env.NOW }}"
           body: |
             [Auto] GitHub advisories as of ${{ env.NOW }}.

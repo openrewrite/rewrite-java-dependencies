@@ -97,7 +97,7 @@ public class ParseAdvisories {
                                 advisory.getId() :
                                 advisory.getAliases().iterator().next();
                         List<String> cweIds = advisory.getDatabaseSpecific().getCweIds();
-                        String cwes = cweIds == null || cweIds.isEmpty() ? null : String.join(",", cweIds);
+                        String cwes = cweIds == null || cweIds.isEmpty() ? null : String.join(";", cweIds);
                         Vulnerability vulnerability = new Vulnerability(
                                 cve,
                                 advisory.getPublished(),

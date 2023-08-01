@@ -95,8 +95,6 @@ public class ParseAdvisories {
                         String cve = advisory.getAliases().isEmpty() ?
                                 advisory.getId() :
                                 advisory.getAliases().iterator().next();
-                        String cwe = advisory.getDatabaseSpecific().getCweIds().isEmpty() ?
-                                null : String.join(",", advisory.getDatabaseSpecific().getCweIds());
                         Vulnerability vulnerability = new Vulnerability(
                                 cve,
                                 advisory.getPublished(),
@@ -105,7 +103,7 @@ public class ParseAdvisories {
                                 range.getIntroduced(),
                                 range.getFixed(),
                                 Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity()),
-                                cwe
+                                advisory.getDatabaseSpecific().getCweIds()
                         );
                         writer.writeValue(fos, vulnerability);
                     }

@@ -101,7 +101,8 @@ public class ParseAdvisories {
                                 affected.getPkg().getName(),
                                 range.getIntroduced(),
                                 range.getFixed(),
-                                Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity())
+                                Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity()),
+                                advisory.getDatabaseSpecific().getCweIds().iterator().next()
                         );
                         writer.writeValue(fos, vulnerability);
                     }

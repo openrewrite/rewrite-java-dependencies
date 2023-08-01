@@ -28,7 +28,6 @@ import org.openrewrite.java.dependencies.github.advisories.Range;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -40,50 +39,94 @@ import static java.util.Collections.emptySet;
 
 public class ParseAdvisories {
     public static void main(String[] args) throws IOException {
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .registerModule(new JavaTimeModule());
+        if (args.length != 2) {
+            System.err.println("Usage: ParseAdvisories <advisories-repo> <advisories-csv>");
+            System.exit(1);
+        }
+        File advisoriesRepo = new File(args[0]);
+        if (!advisoriesRepo.isDirectory() || !advisoriesRepo.canRead()) {
+            System.err.println("Advisories repo " + advisoriesRepo + " not readable");
+            System.exit(1);
+        }
+        File advisoriesCsv = new File(args[1]);
+        if (!advisoriesCsv.createNewFile() && !advisoriesCsv.canWrite()) {
+            System.err.println("Advisories CSV " + advisoriesCsv + " not writable");
+            System.exit(1);
+        }
 
-        CsvFactory factory = new CsvFactory();
-        factory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+        parseAdvisories(advisoriesRepo, advisoriesCsv);
+    }
 
-        CsvMapper csvMapper = (CsvMapper) CsvMapper.builder(factory)
-                .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .build()
-                .registerModule(new JavaTimeModule());
-        CsvSchema schema = csvMapper.schemaFor(Vulnerability.class);
-        ObjectWriter vWriter = csvMapper.writer(schema);
-
-        try (FileOutputStream f = new FileOutputStream("src/main/resources/advisories.csv")) {
-            Files.walkFileTree(new File(System.getProperty("user.home") + "/Projects/github/github/advisory-database/advisories").toPath(), emptySet(), 16, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    System.out.println("Parsing " + file);
-                    if (file.getFileName().toString().endsWith(".json")) {
-                        Advisory advisory = mapper.readValue(file.toFile(), Advisory.class);
-                        for (Affected affected : advisory.getAffected()) {
-                            if (affected.getPkg().getEcosystem().equals("Maven") &&
-                                affected.getRanges() != null && !affected.getRanges().isEmpty()) {
-                                Range range = affected.getRanges().iterator().next();
-                                Vulnerability vulnerability = new Vulnerability(
-                                        advisory.getAliases().isEmpty() ?
-                                                advisory.getId() :
-                                                advisory.getAliases().iterator().next(),
-                                        advisory.getPublished(),
-                                        advisory.getSummary(),
-                                        affected.getPkg().getName(),
-                                        range.getIntroduced(),
-                                        range.getFixed(),
-                                        Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity())
-                                );
-                                vWriter.writeValue(f, vulnerability);
-                            }
-                        }
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+    static void parseAdvisories(File advisoriesRepoInput, File advisoriesCsvOutput) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(advisoriesCsvOutput)) {
+            Files.walkFileTree(advisoriesRepoInput.toPath(), emptySet(), 16, new MavenAdvisoriesVisitor(fos));
         }
     }
+
+    private static final class MavenAdvisoriesVisitor extends SimpleFileVisitor<Path> {
+        private final FileOutputStream fos;
+        private final ObjectMapper reader;
+        private final ObjectWriter writer;
+
+        public MavenAdvisoriesVisitor(FileOutputStream fos) {
+            this.fos = fos;
+            this.reader = getObjectMapper();
+            this.writer = getObjectWriter();
+        }
+
+        private Path current;
+
+        @Override
+        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+            if (path.getFileName().toString().endsWith(".json")) {
+
+                Path parent = path.getParent().getParent();
+                if (current == null || !current.equals(parent)) {
+                    current = parent;
+                    System.out.println("Parsing " + current);
+                }
+
+                Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
+                for (Affected affected : advisory.getAffected()) {
+                    if (affected.getPkg().getEcosystem().equalsIgnoreCase("Maven")
+                            && affected.getRanges() != null
+                            && !affected.getRanges().isEmpty()) {
+                        Range range = affected.getRanges().iterator().next();
+                        Vulnerability vulnerability = new Vulnerability(
+                                advisory.getAliases().isEmpty() ?
+                                        advisory.getId() :
+                                        advisory.getAliases().iterator().next(),
+                                advisory.getPublished(),
+                                advisory.getSummary(),
+                                affected.getPkg().getName(),
+                                range.getIntroduced(),
+                                range.getFixed(),
+                                Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity())
+                        );
+                        writer.writeValue(fos, vulnerability);
+                    }
+                }
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        private static ObjectMapper getObjectMapper() {
+            return new ObjectMapper()
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .registerModule(new JavaTimeModule());
+        }
+
+        private static ObjectWriter getObjectWriter() {
+            CsvFactory factory = new CsvFactory();
+            factory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+            CsvMapper csvMapper = (CsvMapper) CsvMapper.builder(factory)
+                    .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .build()
+                    .registerModule(new JavaTimeModule());
+            CsvSchema schema = csvMapper.schemaFor(Vulnerability.class);
+            return csvMapper.writer(schema);
+        }
+    }
+
 }

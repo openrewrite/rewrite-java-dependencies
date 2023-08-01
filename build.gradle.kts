@@ -45,5 +45,13 @@ dependencies {
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
+
+    testImplementation("org.assertj:assertj-core:3.24.+")
 }
 
+tasks {
+    val deps by registering(Copy::class) {
+        from(configurations.runtimeClasspath)
+        into("build/deps")
+    }
+}

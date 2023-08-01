@@ -49,7 +49,7 @@ public class ParseAdvisories {
             System.exit(1);
         }
         File advisoriesCsv = new File(args[1]);
-        if (!advisoriesCsv.isFile() || !advisoriesCsv.canWrite()) {
+        if (!advisoriesCsv.createNewFile() && !advisoriesCsv.canWrite()) {
             System.err.println("Advisories CSV " + advisoriesCsv + " not writable");
             System.exit(1);
         }

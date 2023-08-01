@@ -49,3 +49,9 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.24.+")
 }
 
+tasks {
+    val deps by registering(Copy::class) {
+        from(configurations.runtimeClasspath)
+        into("build/deps")
+    }
+}

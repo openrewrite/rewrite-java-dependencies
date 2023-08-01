@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 
 import static java.util.Collections.emptySet;
 
@@ -95,6 +96,8 @@ public class ParseAdvisories {
                         String cve = advisory.getAliases().isEmpty() ?
                                 advisory.getId() :
                                 advisory.getAliases().iterator().next();
+                        List<String> cweIds = advisory.getDatabaseSpecific().getCweIds();
+                        String cwes = cweIds == null || cweIds.isEmpty() ? null : String.join(",", cweIds);
                         Vulnerability vulnerability = new Vulnerability(
                                 cve,
                                 advisory.getPublished(),
@@ -103,7 +106,7 @@ public class ParseAdvisories {
                                 range.getIntroduced(),
                                 range.getFixed(),
                                 Vulnerability.Severity.valueOf(advisory.getDatabaseSpecific().getSeverity()),
-                                advisory.getDatabaseSpecific().getCweIds()
+                                cwes
                         );
                         writer.writeValue(fos, vulnerability);
                     }

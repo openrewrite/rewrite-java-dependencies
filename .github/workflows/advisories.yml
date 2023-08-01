@@ -31,6 +31,8 @@ jobs:
           path: advisory-database
       - name: Update advisories
         run: java -classpath "build/deps/*:build/libs/*" org.openrewrite.java.dependencies.github.ParseAdvisories advisory-database src/main/resources/advisories.csv
+      - name: Sort advisories
+        run: sort --output=src/main/resources/advisories.csv src/main/resources/advisories.csv
 
       # Create pull request
       - name: Timestamp

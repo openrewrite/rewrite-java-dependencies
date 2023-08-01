@@ -2,9 +2,6 @@
 name: Update the GitHub advisories CSV
 
 on:
-  pull_request:
-    branches:
-      - main
   workflow_dispatch: {}
   schedule:
     - cron: 0 11 * * WED

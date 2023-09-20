@@ -1,3 +1,21 @@
+CVE-2000-0759,2022-04-30T18:14:15Z,"Jakarta Apache Tomcat Reveals Physical Paths",org.apache.tomcat:tomcat,0,,MODERATE,CWE-200
+CVE-2000-1210,2022-04-30T18:15:08Z,"Apache Tomcat Directory Traversal",org.apache.tomcat:tomcat,0,,MODERATE,CWE-22
+CVE-2001-0590,2022-04-30T18:16:22Z,"Apache Tomcat Allows Source Disclosure","org.apache.tomcat:tomcat-servlet-api",0,3.2.2,MODERATE,CWE-200
+CVE-2001-0829,2022-04-30T18:16:47Z,"Apache Tomcat allows webmasters to insert xss into error messages",org.apache.tomcat:tomcat,0,,MODERATE,CWE-80
+CVE-2003-0042,2022-04-29T01:25:43Z,"Jakarta Tomcat Directory Listing vulnerability",org.apache.tomcat:tomcat,0,3.3.1a,MODERATE,CWE-22
+CVE-2003-0044,2022-04-29T01:25:44Z,"Jakarta Tomcat cross-site scripting (XSS) vulnerability",org.apache.tomcat:tomcat,3.0,3.3.2,MODERATE,CWE-79
+CVE-2003-0045,2022-04-29T01:25:43Z,"Jakarta Tomcat Denial of Service vulnerability",org.apache.tomcat:tomcat,0,3.3.1a,MODERATE,CWE-400
+CVE-2003-0866,2022-04-29T01:27:08Z,"Apache Tomcat Denial of Service vulnerability in the Catalina package",org.apache.tomcat:tomcat,4.0,4.1.0,MODERATE,CWE-400
+CVE-2004-2381,2022-04-29T03:01:19Z,"Jetty HTTP Server Denial of Service vulnerability",org.mortbay.jetty:jetty,0,4.2.19,MODERATE,CWE-400
+CVE-2004-2650,2022-04-29T03:01:51Z,"Apache James Denial of Service","org.apache.james:james-server",0,2.2.0,MODERATE,CWE-400
+CVE-2005-2090,2022-05-01T02:04:54Z,"Tomcat Vulnerable to Web Cache Poisoning",org.apache.tomcat:tomcat,4.0.0,,MODERATE,
+CVE-2005-2090,2022-05-01T02:04:54Z,"Tomcat Vulnerable to Web Cache Poisoning",org.apache.tomcat:tomcat,5.0.0,,MODERATE,
+CVE-2005-3164,2022-05-01T02:15:08Z,"Apache Tomcat AJP Connector Information Leak",org.apache.tomcat:tomcat,4.0.1,,LOW,CWE-200
+CVE-2005-3164,2022-05-01T02:15:08Z,"Apache Tomcat AJP Connector Information Leak",org.apache.tomcat:tomcat,4.1.0,,LOW,CWE-200
+CVE-2005-3745,2022-05-01T02:20:38Z,"Apache Struts Cross-site scripting Vulnerability","org.apache.struts:struts-core",0,,MODERATE,CWE-80
+CVE-2005-3747,2022-05-01T02:20:38Z,"Mortbay Jetty Discloses JSP Source Code",org.mortbay.jetty:jetty,0,5.1.6,MODERATE,CWE-200
+CVE-2005-4703,2022-05-01T02:29:50Z,"Apache Tomcat Discloses MS-DOS Pathname",org.apache.tomcat:tomcat,0,,MODERATE,CWE-200
+CVE-2005-4836,2022-05-01T02:31:23Z,"Apache Tomcat allows remote attackers to read JSP source files",org.apache.tomcat:tomcat,4.1.15,,HIGH,CWE-200
 CVE-2005-4849,2022-05-01T02:31:27Z,"Apache Derby exposes user and password attributes",org.apache.derby:derby,0,10.1.2.1,MODERATE,CWE-200
 CVE-2006-0254,2022-05-01T06:38:20Z,"Apache Geronimo console 1.0 vulnerable to cross-site scripting","geronimo:geronimo-console-standard",0,1.1,MODERATE,CWE-79
 CVE-2006-1546,2022-05-01T06:50:42Z,"Apache Struts vulnerable to Improper Input Validation",struts:struts,0,1.2.9,HIGH,CWE-20
@@ -950,7 +968,7 @@ CVE-2017-14735,2018-10-18T17:22:11Z,"OWASP AntiSamy Cross-site Scripting vulnera
 CVE-2017-14868,2018-10-17T00:04:31Z,"Restlet Framework, when using SimpleXMLProvider, allows remote attackers to access arbitrary files via an XXE attack in a REST API HTTP request","org.restlet.jse:org.restlet",0,2.3.11,HIGH,CWE-611
 CVE-2017-14949,2018-10-17T00:04:18Z,"Restlet Framework allows remote attackers to access arbitrary files via a crafted REST API HTTP request","org.restlet.jse:org.restlet",0,2.3.12,HIGH,CWE-611
 CVE-2017-15089,2022-05-14T00:59:30Z,"Deserialization of Untrusted Data in Infinispan","org.infinispan:infinispan-core",0,9.2.0.CR1,HIGH,CWE-502
-CVE-2017-15095,2018-10-18T17:42:34Z,"jackson-databind vulnerable to deserialization flaw leading to unauthenticated remote code execution","com.fasterxml.jackson.core:jackson-databind",0,2.8.11,CRITICAL,CWE-184;CWE-502
+CVE-2017-15095,2018-10-18T17:42:34Z,"jackson-databind vulnerable to deserialization flaw leading to unauthenticated remote code execution","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11,CRITICAL,CWE-184;CWE-502
 CVE-2017-15095,2018-10-18T17:42:34Z,"jackson-databind vulnerable to deserialization flaw leading to unauthenticated remote code execution","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.4,CRITICAL,CWE-184;CWE-502
 CVE-2017-15113,2022-05-13T01:37:34Z,"ovirt-engine Logs Plaintext Passwords To File","org.ovirt.engine.sdk:ovirt-engine-sdk-java",0,4.1.7.6,MODERATE,CWE-532
 CVE-2017-15288,2018-10-19T16:51:11Z,"High severity vulnerability that affects org.scala-lang:scala-compiler","org.scala-lang:scala-compiler",0,2.10.7,HIGH,CWE-732
@@ -1406,9 +1424,9 @@ CVE-2018-1199,2018-10-17T20:01:54Z,"Improper Input Validation in org.springframe
 CVE-2018-1199,2018-10-17T20:01:54Z,"Improper Input Validation in org.springframework.security:spring-security-core, org.springframework.security:spring-security-core , and org.springframework:spring-core","org.springframework.security:spring-security-core",5.0.0,5.0.1,MODERATE,CWE-20
 CVE-2018-1199,2018-10-17T20:01:54Z,"Improper Input Validation in org.springframework.security:spring-security-core, org.springframework.security:spring-security-core , and org.springframework:spring-core","org.springframework:spring-core",4.3.0,4.3.14,MODERATE,CWE-20
 CVE-2018-1199,2018-10-17T20:01:54Z,"Improper Input Validation in org.springframework.security:spring-security-core, org.springframework.security:spring-security-core , and org.springframework:spring-core","org.springframework:spring-core",5.0.0,5.0.3,MODERATE,CWE-20
-CVE-2018-12022,2019-03-25T18:03:09Z,"High severity vulnerability that affects com.fasterxml.jackson.core:jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.7.9.4,HIGH,CWE-502
-CVE-2018-12022,2019-03-25T18:03:09Z,"High severity vulnerability that affects com.fasterxml.jackson.core:jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.2,HIGH,CWE-502
-CVE-2018-12022,2019-03-25T18:03:09Z,"High severity vulnerability that affects com.fasterxml.jackson.core:jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.6,HIGH,CWE-502
+CVE-2018-12022,2019-03-25T18:03:09Z,"jackson-databind Deserialization of Untrusted Data vulnerability","com.fasterxml.jackson.core:jackson-databind",0,2.7.9.4,HIGH,CWE-502
+CVE-2018-12022,2019-03-25T18:03:09Z,"jackson-databind Deserialization of Untrusted Data vulnerability","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.2,HIGH,CWE-502
+CVE-2018-12022,2019-03-25T18:03:09Z,"jackson-databind Deserialization of Untrusted Data vulnerability","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.6,HIGH,CWE-502
 CVE-2018-12023,2020-06-15T18:44:51Z,"Deserialization of Untrusted Data","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.7.9.4,HIGH,CWE-502
 CVE-2018-12023,2020-06-15T18:44:51Z,"Deserialization of Untrusted Data","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.2,HIGH,CWE-502
 CVE-2018-12023,2020-06-15T18:44:51Z,"Deserialization of Untrusted Data","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.6,HIGH,CWE-502
@@ -1531,7 +1549,8 @@ CVE-2018-14655,2022-05-13T01:34:29Z,"Keycloak XSS Vulnerability","org.keycloak:k
 CVE-2018-14657,2022-05-13T01:12:25Z,"Keycloak Improper Bruteforce Detection","org.keycloak:keycloak-parent",0,,HIGH,CWE-307
 CVE-2018-14658,2022-05-13T01:34:29Z,"Keycloak Open Redirect","org.keycloak:keycloak-core",0,,MODERATE,CWE-601
 CVE-2018-14667,2022-05-13T01:17:53Z,"Richfaces vulnerable to arbitrary code execution","org.richfaces:richfaces-core",0,3.3.4,CRITICAL,CWE-94
-CVE-2018-14718,2019-01-04T19:06:55Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.7.9.5,CRITICAL,CWE-502
+CVE-2018-14718,2019-01-04T19:06:55Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.3,CRITICAL,CWE-502
+CVE-2018-14718,2019-01-04T19:06:55Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.7.9.5,CRITICAL,CWE-502
 CVE-2018-14718,2019-01-04T19:06:55Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.3,CRITICAL,CWE-502
 CVE-2018-14718,2019-01-04T19:06:55Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.7,CRITICAL,CWE-502
 CVE-2018-14719,2019-01-04T19:09:49Z,"Arbitrary Code Execution in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.7.9.5,CRITICAL,CWE-502
@@ -1658,7 +1677,7 @@ CVE-2018-3258,2022-05-13T01:52:26Z,"Improper Privilege Management in MySQL Conne
 CVE-2018-3831,2022-05-13T01:27:27Z,"Exposure of Sensitive Information to an Unauthorized Actor in Elasticsearch","org.elasticsearch:elasticsearch",5.6.0,5.6.12,HIGH,CWE-200
 CVE-2018-3831,2022-05-13T01:27:27Z,"Exposure of Sensitive Information to an Unauthorized Actor in Elasticsearch","org.elasticsearch:elasticsearch",6.0.0,6.4.1,HIGH,CWE-200
 CVE-2018-5382,2022-05-13T01:01:01Z,"Improper Validation of Integrity Check Value in Bouncy Castle","org.bouncycastle:bcprov-jdk15on",0,1.50,MODERATE,CWE-354
-CVE-2018-5968,2020-06-30T20:40:50Z,"Deserialization of Untrusted Data in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.8.11,HIGH,CWE-184;CWE-502
+CVE-2018-5968,2020-06-30T20:40:50Z,"Deserialization of Untrusted Data in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,,HIGH,CWE-184;CWE-502
 CVE-2018-5968,2020-06-30T20:40:50Z,"Deserialization of Untrusted Data in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.4,HIGH,CWE-184;CWE-502
 CVE-2018-6356,2022-05-13T01:01:01Z,"Improper Limitation of a Pathname to a Restricted Directory in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.89.4,MODERATE,CWE-22
 CVE-2018-6356,2022-05-13T01:01:01Z,"Improper Limitation of a Pathname to a Restricted Directory in Jenkins","org.jenkins-ci.main:jenkins-core",2.90,2.107,MODERATE,CWE-22
@@ -2041,18 +2060,25 @@ CVE-2019-13235,2019-11-12T22:58:16Z,"XSS in login form",org.opencms:opencms-core
 CVE-2019-13236,2019-11-12T22:58:21Z,"XSS issues in the management interface",org.opencms:opencms-core,0,11.0.1,MODERATE,CWE-79
 CVE-2019-13237,2019-11-12T22:58:14Z,"Local file inclusion allows unauthorized access to internal resources in Alkacon OpenCms",org.opencms:opencms-core,0,11.0.1,MODERATE,CWE-200;CWE-22
 CVE-2019-13990,2020-07-01T17:55:03Z,"XML external entity injection in Terracotta Quartz Scheduler","org.quartz-scheduler:quartz",0,2.3.2,CRITICAL,CWE-611
-CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.9.9.2,CRITICAL,CWE-1321;CWE-915
-CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.9.9.2,HIGH,CWE-502
-CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.9.10,CRITICAL,CWE-502
+CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.7.9.6,CRITICAL,CWE-1321;CWE-915
+CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.4,CRITICAL,CWE-1321;CWE-915
+CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.9.2,CRITICAL,CWE-1321;CWE-915
+CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,HIGH,CWE-502
+CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.7.9.6,HIGH,CWE-502
+CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.14,HIGH,CWE-502
+CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.9.2,HIGH,CWE-502
+CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,CRITICAL,CWE-502
+CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
+CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,CRITICAL,CWE-502
 CVE-2019-14820,2020-04-15T21:08:21Z,"Exposure of Sensitive Information to an Unauthorized Actor in Keycloak","org.keycloak:keycloak-core",0,8.0.0,MODERATE,CWE-200
 CVE-2019-14832,2022-05-24T16:58:47Z,"Keycloak Unauthenticated Access","org.keycloak:keycloak-model-infinispan",0,7.0.1,HIGH,CWE-863
 CVE-2019-14832,2022-05-24T16:58:47Z,"Keycloak Unauthenticated Access","org.keycloak:keycloak-model-jpa",0,7.0.1,HIGH,CWE-863
 CVE-2019-14837,2022-05-24T17:05:43Z,"keycloak vulnerable to unauthorized login via mail server setup","org.keycloak:keycloak-core",0,8.0.0,MODERATE,
 CVE-2019-14838,2022-05-24T16:58:43Z,"Wildfly Authorization Misconfiguration","org.wildfly.core:wildfly-core-parent",0,7.2.5.GA,MODERATE,CWE-284
 CVE-2019-14888,2022-05-24T17:07:10Z,"Undertow vulnerable to Uncontrolled Resource Consumption","io.undertow:undertow-core",0,2.0.29.Final,HIGH,CWE-400
-CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,HIGH,CWE-502
-CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.5,HIGH,CWE-502
-CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,HIGH,CWE-502
+CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,HIGH,CWE-200;CWE-502
+CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,HIGH,CWE-200;CWE-502
+CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,HIGH,CWE-200;CWE-502
 CVE-2019-14893,2020-05-15T18:59:07Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,HIGH,CWE-502
 CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.infinispan:infinispan-hibernate-cache-v53",0,5.3.18,MODERATE,CWE-89
 CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.infinispan:infinispan-hibernate-cache-v53",5.4.0,5.4.18,MODERATE,CWE-89
@@ -2064,7 +2090,9 @@ CVE-2019-15488,2019-08-27T17:37:33Z,"Cross-site Scripting in Ignite Realtime Ope
 CVE-2019-15563,2022-05-24T16:54:46Z,"OHDSI WebAPI vulnerable to SQL Injection",org.ohdsi:WebAPI,0,2.7.2,CRITICAL,CWE-89
 CVE-2019-15630,2022-05-24T16:55:15Z,"Mule modules contain Directory Traversal",org.mule.runtime:mule,3.0.0,,HIGH,CWE-22
 CVE-2019-16148,2019-09-23T18:33:18Z,"Cross-site scripting in Sakai","org.sakaiproject:chat-base",0,,MODERATE,CWE-79
-CVE-2019-16335,2019-09-23T18:33:45Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.9.10,CRITICAL,CWE-502
+CVE-2019-16335,2019-09-23T18:33:45Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,CRITICAL,CWE-502
+CVE-2019-16335,2019-09-23T18:33:45Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
+CVE-2019-16335,2019-09-23T18:33:45Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,CRITICAL,CWE-502
 CVE-2019-16370,2022-05-24T16:56:18Z,"Use of a weak cryptographic algorithm in Gradle",org.gradle:gradle-core,0,6.0,LOW,CWE-327
 CVE-2019-16530,2022-05-24T16:59:30Z,"Unrestricted Upload of File with Dangerous Type in Sonatype Nexus Repository Manager","org.sonatype.nexus:nexus-repository",2.0.0,2.14.15,HIGH,CWE-434
 CVE-2019-16530,2022-05-24T16:59:30Z,"Unrestricted Upload of File with Dangerous Type in Sonatype Nexus Repository Manager","org.sonatype.nexus:nexus-repository",3.0.0,3.19.0,HIGH,CWE-434
@@ -2095,15 +2123,20 @@ CVE-2019-16771,2019-12-05T18:40:51Z,"Low severity vulnerability that affects com
 CVE-2019-16869,2019-10-11T18:41:23Z,"HTTP Request Smuggling in Netty",io.netty:netty-all,0,4.1.42.Final,HIGH,CWE-444
 CVE-2019-16869,2019-10-11T18:41:23Z,"HTTP Request Smuggling in Netty",org.jboss.netty:netty,0,,HIGH,CWE-444
 CVE-2019-16942,2019-10-28T20:51:15Z,"Polymorphic Typing in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.1,CRITICAL,CWE-502
-CVE-2019-16943,2019-11-13T00:32:27Z,"Polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",0,2.9.10.1,CRITICAL,CWE-502
+CVE-2019-16943,2019-11-13T00:32:27Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,CRITICAL,CWE-502
+CVE-2019-16943,2019-11-13T00:32:27Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
+CVE-2019-16943,2019-11-13T00:32:27Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.1,CRITICAL,CWE-502
 CVE-2019-17091,2022-05-24T16:57:42Z,"Cross-site Scripting in Eclipse Mojarra","org.glassfish:jakarta.faces",0,2.3.10,MODERATE,CWE-79
 CVE-2019-17091,2022-05-24T16:57:42Z,"Cross-site Scripting in Eclipse Mojarra","org.glassfish:javax.faces",0,2.2.20,MODERATE,CWE-79
 CVE-2019-17195,2019-10-16T18:31:17Z,"Improper Check for Unusual or Exceptional Conditions in Connect2id Nimbus JOSE+JWT","com.nimbusds:nimbus-jose-jwt",0,7.9,CRITICAL,CWE-754;CWE-755
-CVE-2019-17267,2020-06-15T18:44:48Z,"Improper Input Validation in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.9.10,CRITICAL,CWE-502
+CVE-2019-17267,2020-06-15T18:44:48Z,"Improper Input Validation in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.8.11.5,CRITICAL,CWE-502
+CVE-2019-17267,2020-06-15T18:44:48Z,"Improper Input Validation in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,CRITICAL,CWE-502
 CVE-2019-17352,2022-05-25T19:21:15Z,"JFinal file validation vulnerability",com.jfinal:jfinal,0,4.5,HIGH,CWE-434
 CVE-2019-17359,2019-10-17T18:15:16Z,"Out-of-Memory Error in Bouncy Castle Crypto","org.bouncycastle:bcprov-jdk14",1.63,1.64,HIGH,CWE-770
 CVE-2019-17513,2019-10-21T16:08:43Z,"io.ratpack:ratpack-core vulnerable to Improper Neutralization of Special Elements in Output ('Injection')",io.ratpack:ratpack-core,0,1.7.5,HIGH,CWE-74
-CVE-2019-17531,2019-11-13T00:32:38Z,"Polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",0,2.9.10.1,CRITICAL,CWE-502
+CVE-2019-17531,2019-11-13T00:32:38Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,CRITICAL,CWE-502
+CVE-2019-17531,2019-11-13T00:32:38Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
+CVE-2019-17531,2019-11-13T00:32:38Z,"jackson-databind polymorphic typing issue","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.1,CRITICAL,CWE-502
 CVE-2019-17554,2020-02-04T22:37:43Z,"Improper Restriction of XML External Entity Reference in Apache Olingo","org.apache.olingo:odata-client-core",4.0.0,4.7.0,MODERATE,CWE-611
 CVE-2019-17554,2020-02-04T22:37:43Z,"Improper Restriction of XML External Entity Reference in Apache Olingo","org.apache.olingo:odata-server-core",4.0.0,4.7.0,MODERATE,CWE-611
 CVE-2019-17555,2020-02-04T22:37:15Z,"Improper input validation in Apache Olingo","org.apache.olingo:odata-client-core",4.0.0,4.7.0,HIGH,CWE-20
@@ -2233,7 +2266,8 @@ CVE-2020-10204,2020-04-14T15:27:14Z,"Remote Code Execution - JavaEL Injection (l
 CVE-2020-10591,2022-02-10T20:48:47Z,"Exposure of Sensitive Information to an Unauthorized Actor in Concord","com.walmartlabs.concord.docker:concord-common",0,1.44.0,HIGH,CWE-200
 CVE-2020-10650,2022-07-15T19:41:47Z,"jackson-databind before 2.9.10.4 vulnerable to unsafe deserialization","com.fasterxml.jackson.core:jackson-databind",0,2.9.10.4,HIGH,CWE-502
 CVE-2020-10672,2020-04-23T16:32:59Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.4,HIGH,
-CVE-2020-10673,2020-05-15T18:59:04Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.4,MODERATE,
+CVE-2020-10673,2020-05-15T18:59:04Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.4,HIGH,
+CVE-2020-10673,2020-05-15T18:59:04Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.4,HIGH,
 CVE-2020-10683,2020-06-05T16:13:36Z,"dom4j allows External Entities by default which might enable XXE attacks",dom4j:dom4j,0,,CRITICAL,CWE-611
 CVE-2020-10683,2020-06-05T16:13:36Z,"dom4j allows External Entities by default which might enable XXE attacks",org.dom4j:dom4j,0,2.0.3,CRITICAL,CWE-611
 CVE-2020-10683,2020-06-05T16:13:36Z,"dom4j allows External Entities by default which might enable XXE attacks",org.dom4j:dom4j,2.1.0,2.1.3,CRITICAL,CWE-611
@@ -2868,17 +2902,24 @@ CVE-2020-35509,2022-08-24T00:00:29Z,"Keycloak vulnerable to Improper Certificate
 CVE-2020-35510,2022-03-18T17:58:30Z,"Uncontrolled Resource Consumption in jboss-remoting","org.jboss.remoting:jboss-remoting",0,5.0.20.Final,HIGH,CWE-400
 CVE-2020-35728,2021-12-09T19:15:24Z,"Serialization gadget exploit in jackson-databind","com.fasterxml.jackson:jackson-databind",2.0.0,2.9.10.8,HIGH,CWE-502
 CVE-2020-35774,2022-02-09T22:37:28Z,"TwitterServer Cross-site Scripting via /histograms endpoint","com.twitter:twitter-server_2.12",0,20.12.0,MODERATE,CWE-79
-CVE-2020-36179,2021-12-09T19:15:54Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36180,2021-12-09T19:16:18Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36181,2021-12-09T19:16:10Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36182,2021-12-09T19:15:46Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36183,2021-12-09T19:16:34Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36184,2021-12-09T19:16:26Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36185,2021-12-09T19:16:02Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36186,2021-11-19T20:13:06Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36187,2021-12-09T19:16:51Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36188,2021-12-09T19:16:42Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
-CVE-2020-36189,2021-12-09T19:16:59Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36179,2021-12-09T19:15:54Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36179,2021-12-09T19:15:54Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36180,2021-12-09T19:16:18Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36180,2021-12-09T19:16:18Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36181,2021-12-09T19:16:10Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36181,2021-12-09T19:16:10Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36182,2021-12-09T19:15:46Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36182,2021-12-09T19:15:46Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36183,2021-12-09T19:16:34Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36183,2021-12-09T19:16:34Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.00,2.9.10.8,HIGH,CWE-502
+CVE-2020-36184,2021-12-09T19:16:26Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36185,2021-12-09T19:16:02Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36186,2021-11-19T20:13:06Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36187,2021-12-09T19:16:51Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36188,2021-12-09T19:16:42Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36188,2021-12-09T19:16:42Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
+CVE-2020-36189,2021-12-09T19:16:59Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.5,HIGH,CWE-502
+CVE-2020-36189,2021-12-09T19:16:59Z,"Unsafe Deserialization in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.8,HIGH,CWE-502
 CVE-2020-36282,2021-12-10T17:15:49Z,"Unsafe Deserialization that can Result in Code Execution","com.rabbitmq.jms:rabbitmq-jms",1.0,1.15.2,HIGH,CWE-502
 CVE-2020-36282,2021-12-10T17:15:49Z,"Unsafe Deserialization that can Result in Code Execution","com.rabbitmq.jms:rabbitmq-jms",2.0,2.2.0,HIGH,CWE-502
 CVE-2020-36319,2021-04-19T14:52:14Z,"Potential sensitive data exposure in applications using Vaadin 15",com.vaadin:flow-server,3.0.0,3.0.6,LOW,CWE-200;CWE-668
@@ -3008,8 +3049,12 @@ CVE-2020-9492,2022-02-09T22:17:38Z,"Improper Privilege Management in Apache Hado
 CVE-2020-9492,2022-02-09T22:17:38Z,"Improper Privilege Management in Apache Hadoop","org.apache.hadoop:hadoop-common",3.2.0,3.2.2,HIGH,CWE-269;CWE-863
 CVE-2020-9495,2022-02-10T23:06:22Z,"Injection in Apache Archiva","org.apache.archiva:archiva",0,2.2.5,MODERATE,CWE-74
 CVE-2020-9546,2020-04-23T21:08:40Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.4,CRITICAL,CWE-502
-CVE-2020-9547,2020-05-15T18:59:10Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.4,CRITICAL,CWE-502
-CVE-2020-9548,2020-05-15T18:59:01Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.9.10.4,CRITICAL,CWE-502
+CVE-2020-9547,2020-05-15T18:59:10Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.7.9.7,CRITICAL,CWE-502
+CVE-2020-9547,2020-05-15T18:59:10Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.6,CRITICAL,CWE-502
+CVE-2020-9547,2020-05-15T18:59:10Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.4,CRITICAL,CWE-502
+CVE-2020-9548,2020-05-15T18:59:01Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.7.9.7,CRITICAL,CWE-502
+CVE-2020-9548,2020-05-15T18:59:01Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.6,CRITICAL,CWE-502
+CVE-2020-9548,2020-05-15T18:59:01Z,"jackson-databind mishandles the interaction between serialization gadgets and typing","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10.4,CRITICAL,CWE-502
 CVE-2021-20190,2021-01-20T21:20:15Z,"Deserialization of untrusted data in jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.5,HIGH,CWE-502
 CVE-2021-20190,2021-01-20T21:20:15Z,"Deserialization of untrusted data in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.9.10.7,HIGH,CWE-502
 CVE-2021-20195,2021-06-08T23:02:43Z,"keycloak Self Stored Cross-site Scripting vulnerability","org.keycloak:keycloak-core",0,13.0.0,CRITICAL,CWE-116;CWE-20;CWE-79
@@ -3726,6 +3771,7 @@ CVE-2021-43980,2022-09-29T00:00:25Z,"Apache Tomcat Race Condition vulnerability"
 CVE-2021-44138,2022-04-05T00:00:28Z,"Path Traversal in Caucho Resin",com.caucho:resin,4.0.52,,HIGH,CWE-22
 CVE-2021-44140,2021-11-29T17:59:24Z,"Incorrect Default Permissions in Apache JSPWiki","org.apache.jspwiki:jspwiki-main",0,2.11.0,CRITICAL,CWE-276
 CVE-2021-44145,2022-01-05T17:33:32Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache NiFi",org.apache.nifi:nifi,0,1.15.1,MODERATE,CWE-200
+CVE-2021-44228,2021-12-10T00:40:56Z,"Remote code injection in Log4j","com.guicedee.services:log4j-core",0,,CRITICAL,"CWE-20;CWE-400;CWE-502;CWE-917"
 CVE-2021-44228,2021-12-10T00:40:56Z,"Remote code injection in Log4j","org.apache.logging.log4j:log4j-core",0,2.3.1,CRITICAL,"CWE-20;CWE-400;CWE-502;CWE-917"
 CVE-2021-44228,2021-12-10T00:40:56Z,"Remote code injection in Log4j","org.apache.logging.log4j:log4j-core",2.13.0,2.15.0,CRITICAL,"CWE-20;CWE-400;CWE-502;CWE-917"
 CVE-2021-44228,2021-12-10T00:40:56Z,"Remote code injection in Log4j","org.apache.logging.log4j:log4j-core",2.4,2.12.2,CRITICAL,"CWE-20;CWE-400;CWE-502;CWE-917"
@@ -3789,7 +3835,7 @@ CVE-2022-0839,2022-03-05T00:00:45Z,"Improper Restriction of XML External Entity 
 CVE-2022-1245,2022-04-26T21:21:00Z,"Keycloak vulnerable to privilege escalation on Token Exchange feature","org.keycloak:keycloak-services",0,18.0.0,CRITICAL,CWE-639;CWE-862;CWE-863
 CVE-2022-1274,2023-03-01T17:58:01Z,"HTML Injection in Keycloak Admin REST API","org.keycloak:keycloak-services",0,20.0.5,MODERATE,CWE-79
 CVE-2022-1278,2022-09-14T00:00:48Z,"WildFly vulnerable to Insecure Default Initialization of Resource",org.wildfly.bom:wildfly,0,27.0.0.Beta1,HIGH,CWE-1188
-CVE-2022-1415,2023-09-11T21:30:17Z,"Drools Core Deserialization of Untrusted Data vulnerability",org.drools:drools-core,0,7.69.0.Final,MODERATE,
+CVE-2022-1415,2023-09-11T21:30:17Z,"Drools Core Deserialization of Untrusted Data vulnerability",org.drools:drools-core,0,7.69.0.Final,MODERATE,CWE-502
 CVE-2022-1438,2023-03-01T16:18:55Z,"Keycloak vulnerable to Cross-site Scripting","org.keycloak:keycloak-services",0,,MODERATE,CWE-79
 CVE-2022-1466,2022-04-27T00:00:19Z,"Improper authorization in Keycloak","org.keycloak:keycloak-core",0,17.0.1,MODERATE,CWE-863
 CVE-2022-1471,2022-12-12T21:19:47Z,"SnakeYaml Constructor Deserialization Remote Code Execution",org.yaml:snakeyaml,0,2.0,HIGH,CWE-20;CWE-502
@@ -3973,6 +4019,8 @@ CVE-2022-24697,2023-07-06T19:24:01Z,"Apache Kylin vulnerable to remote code exec
 CVE-2022-24721,2022-03-15T19:02:36Z,"Improper Authorization in org.cometd.oort","org.cometd.java:cometd-java-oort",0,5.0.11,HIGH,CWE-863
 CVE-2022-24721,2022-03-15T19:02:36Z,"Improper Authorization in org.cometd.oort","org.cometd.java:cometd-java-oort",6.0.0,6.0.6,HIGH,CWE-863
 CVE-2022-24721,2022-03-15T19:02:36Z,"Improper Authorization in org.cometd.oort","org.cometd.java:cometd-java-oort",7.0.0,7.0.6,HIGH,CWE-863
+CVE-2022-24816,2023-09-19T20:35:16Z,"Improper Control of Generation of Code ('Code Injection') in jai-ext","it.geosolutions.jaiext.jiffle:jt-jiffle",0,1.1.22,CRITICAL,CWE-94
+CVE-2022-24816,2023-09-19T20:35:16Z,"Improper Control of Generation of Code ('Code Injection') in jai-ext","it.geosolutions.jaiext.jiffle:jt-jiffle-language",0,1.1.22,CRITICAL,CWE-94
 CVE-2022-24819,2022-04-08T21:53:38Z,"Unauthenticated user can retrieve the list of users through uorgsuggest.vm","org.xwiki.platform:xwiki-platform-web-templates",0,12.10.11,MODERATE,CWE-359
 CVE-2022-24819,2022-04-08T21:53:38Z,"Unauthenticated user can retrieve the list of users through uorgsuggest.vm","org.xwiki.platform:xwiki-platform-web-templates",13.0.0,13.4.4,MODERATE,CWE-359
 CVE-2022-24819,2022-04-08T21:53:38Z,"Unauthenticated user can retrieve the list of users through uorgsuggest.vm","org.xwiki.platform:xwiki-platform-web-templates",13.5.0,13.9,MODERATE,CWE-359
@@ -4934,6 +4982,8 @@ CVE-2023-0869,2023-02-23T15:33:05Z,"Cross Site Scripting in OpenNMS","org.opennm
 CVE-2023-0870,2023-03-22T21:30:17Z,"OpenNMS Meridian and Horizon vulnerable to Cross-Site Request Forgery","org.opennms:opennms-webapp",0,31.0.6,MODERATE,CWE-352
 CVE-2023-0871,2023-08-11T18:31:49Z,"OpenNMS Horizon XXE Injection Vulnerability","org.opennms.core:org.opennms.core.xml",31.0.8,32.0.2,HIGH,CWE-611
 CVE-2023-0872,2023-08-14T18:32:59Z,"OpenNMS privilege elevation vulnerability","org.opennms:opennms-webapp-rest",31.0.8,32.0.2,HIGH,CWE-269
+CVE-2023-1108,2023-09-14T15:31:23Z,"Undertow denial of service vulnerability","io.undertow:undertow-core",0,2.2.25.Final,HIGH,
+CVE-2023-1108,2023-09-14T15:31:23Z,"Undertow denial of service vulnerability","io.undertow:undertow-core",2.3.0,2.3.5.Final,HIGH,
 CVE-2023-1370,2023-03-23T20:32:03Z,"json-smart Uncontrolled Recursion vulnerabilty",net.minidev:json-smart,0,2.4.9,HIGH,CWE-674
 CVE-2023-1428,2023-07-06T21:15:08Z,"gRPC Reachable Assertion issue",io.grpc:grpc-protobuf,0,1.53.0,HIGH,CWE-617
 CVE-2023-1436,2023-03-22T06:30:21Z,"Jettison vulnerable to infinite recursion","org.codehaus.jettison:jettison",0,1.5.4,HIGH,CWE-674
@@ -5610,6 +5660,12 @@ CVE-2023-34981,2023-06-21T12:30:19Z,"Apache Tomcat vulnerable to information lea
 CVE-2023-34981,2023-06-21T12:30:19Z,"Apache Tomcat vulnerable to information leak",org.apache.tomcat:tomcat,11.0.0-M5,11.0.0-M6,HIGH,
 CVE-2023-34981,2023-06-21T12:30:19Z,"Apache Tomcat vulnerable to information leak",org.apache.tomcat:tomcat,8.5.88,8.5.89,HIGH,
 CVE-2023-34981,2023-06-21T12:30:19Z,"Apache Tomcat vulnerable to information leak",org.apache.tomcat:tomcat,9.0.74,9.0.75,HIGH,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wfs,0,2.18.6,CRITICAL,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wfs,2.19.0,2.19.6,CRITICAL,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wfs,2.20.0,2.20.4,CRITICAL,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wms,0,2.18.6,CRITICAL,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wms,2.19.0,2.19.6,CRITICAL,
+CVE-2023-35042,2023-06-12T15:30:29Z,"GeoServer RCE due to improper control of generation of code in jai-ext`Jiffle` map algebra language",org.geoserver:gs-wms,2.20.0,2.20.4,CRITICAL,
 CVE-2023-35088,2023-07-25T09:30:18Z,"SQL injection in audit endpoint","org.apache.inlong:manager-service",1.4.0,1.8.0,CRITICAL,CWE-89
 CVE-2023-35110,2023-06-14T15:30:39Z,"jjson vulnerable to stack exhaustion",de.grobmeier.json:jjson,0,,HIGH,CWE-400;CWE-787
 CVE-2023-35141,2023-06-14T15:30:37Z,"Jenkins CSRF protection bypass vulnerability","org.jenkins-ci.main:jenkins-core",0,2.400,HIGH,CWE-352
@@ -5670,6 +5726,12 @@ CVE-2023-36471,2023-06-30T20:41:50Z,"org.xwiki.commons:xwiki-commons-xml's HTML 
 CVE-2023-36477,2023-06-30T20:40:47Z,"XWiki Platform vulnerable to persistent Cross-site Scripting through CKEditor Configuration pages","org.xwiki.contrib:application-ckeditor-ui",1.9,1.64.9,CRITICAL,CWE-79
 CVE-2023-36477,2023-06-30T20:40:47Z,"XWiki Platform vulnerable to persistent Cross-site Scripting through CKEditor Configuration pages","org.xwiki.platform:xwiki-platform-ckeditor-ui",14.6-rc-1,14.10.6,CRITICAL,CWE-79
 CVE-2023-36477,2023-06-30T20:40:47Z,"XWiki Platform vulnerable to persistent Cross-site Scripting through CKEditor Configuration pages","org.xwiki.platform:xwiki-platform-ckeditor-ui",15.0-rc-1,15.1,CRITICAL,CWE-79
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee10:jetty-ee10-servlets",0,12.0.0-beta2,LOW,CWE-149
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee8:jetty-ee8-servlets",0,12.0.0-beta2,LOW,CWE-149
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee9:jetty-ee9-servlets",0,12.0.0-beta2,LOW,CWE-149
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty:jetty-servlets",10.0.0,10.0.16,LOW,CWE-149
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty:jetty-servlets",11.0.0,11.0.16,LOW,CWE-149
+CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty:jetty-servlets",9.0.0,9.4.52,LOW,CWE-149
 CVE-2023-36480,2023-08-03T19:45:39Z,"Aerospike Java Client vulnerable to unsafe deserialization of server responses","com.aerospike:aerospike-client",0,4.5.0,CRITICAL,CWE-502
 CVE-2023-36480,2023-08-03T19:45:39Z,"Aerospike Java Client vulnerable to unsafe deserialization of server responses","com.aerospike:aerospike-client",5.0.0,5.2.0,CRITICAL,CWE-502
 CVE-2023-36480,2023-08-03T19:45:39Z,"Aerospike Java Client vulnerable to unsafe deserialization of server responses","com.aerospike:aerospike-client",6.0.0,6.2.0,CRITICAL,CWE-502
@@ -5762,6 +5824,10 @@ CVE-2023-40037,2023-08-19T00:30:29Z,"Apache NiFi Insufficient Property Validatio
 CVE-2023-40037,2023-08-19T00:30:29Z,"Apache NiFi Insufficient Property Validation vulnerability","org.apache.nifi:nifi-dbcp-service-api",1.21.0,1.23.1,MODERATE,CWE-184;CWE-697
 CVE-2023-40037,2023-08-19T00:30:29Z,"Apache NiFi Insufficient Property Validation vulnerability","org.apache.nifi:nifi-dbcp-service-bundle",1.21.0,1.23.1,MODERATE,CWE-184;CWE-697
 CVE-2023-40037,2023-08-19T00:30:29Z,"Apache NiFi Insufficient Property Validation vulnerability","org.apache.nifi:nifi-jms-processors",1.21.0,1.23.1,MODERATE,CWE-184;CWE-697
+CVE-2023-40167,2023-09-14T16:17:27Z,"Jetty accepts ""+"" prefixed value in Content-Length","org.eclipse.jetty:jetty-http",10.0.0,10.0.16,MODERATE,CWE-130
+CVE-2023-40167,2023-09-14T16:17:27Z,"Jetty accepts ""+"" prefixed value in Content-Length","org.eclipse.jetty:jetty-http",11.0.0,11.0.16,MODERATE,CWE-130
+CVE-2023-40167,2023-09-14T16:17:27Z,"Jetty accepts ""+"" prefixed value in Content-Length","org.eclipse.jetty:jetty-http",12.0.0,12.0.1,MODERATE,CWE-130
+CVE-2023-40167,2023-09-14T16:17:27Z,"Jetty accepts ""+"" prefixed value in Content-Length","org.eclipse.jetty:jetty-http",9.0.0,9.4.52,MODERATE,CWE-130
 CVE-2023-40176,2023-08-21T19:59:12Z,"XWiki Platform Stored Cross-site Scripting in the user profile via the timezone displayer","org.xwiki.platform:xwiki-platform-web-templates",4.1-milestone-2,14.10.5,MODERATE,CWE-79
 CVE-2023-40177,2023-08-21T20:10:55Z,"XWiki Platform privilege escalation (PR) from account through AWM content fields","org.xwiki.platform:xwiki-platform-appwithinminutes-ui",4.3-milestone-2,14.10.5,CRITICAL,CWE-95
 CVE-2023-40311,2023-08-14T18:32:59Z,"OpenNMS vulnerable to Cross-site Scripting","org.opennms:opennms-webapp",31.0.8,32.0.2,MODERATE,CWE-79
@@ -5812,20 +5878,25 @@ CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebindin
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes","com.github.tomakehurst:wiremock-jre8-standalone",0,2.35.1,LOW,CWE-290;CWE-350
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes","org.wiremock:wiremock-standalone",0,3.0.3,LOW,CWE-290;CWE-350
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes",org.wiremock:wiremock,0,3.0.3,LOW,CWE-290;CWE-350
-CVE-2023-41578,2023-09-08T21:30:35Z,"Jeecg boot arbitrary file read vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,MODERATE,
+CVE-2023-41578,2023-09-08T21:30:35Z,"Jeecg boot arbitrary file read vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,HIGH,
 CVE-2023-41886,2023-09-12T13:52:05Z,"OpenRefine vulnerable to arbitrary file read in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,MODERATE,
 CVE-2023-41887,2023-09-12T13:52:54Z,"OpenRefine Remote Code execution in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,MODERATE,
-CVE-2023-42268,2023-09-08T21:30:35Z,"Jeecg boot SQL Injection vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,MODERATE,
-CVE-2023-42276,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,MODERATE,
-CVE-2023-42276,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,MODERATE,
-CVE-2023-42277,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,MODERATE,
-CVE-2023-42277,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,MODERATE,
-CVE-2023-42278,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,MODERATE,
-CVE-2023-42278,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,MODERATE,
+CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",10.0.0,10.0.16,LOW,CWE-1390
+CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",11.0.0,11.0.16,LOW,CWE-1390
+CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",9.4.21,9.4.52,LOW,CWE-1390
+CVE-2023-42268,2023-09-08T21:30:35Z,"Jeecg boot SQL Injection vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,CRITICAL,CWE-89
+CVE-2023-42276,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,CRITICAL,CWE-120
+CVE-2023-42276,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,CRITICAL,CWE-120
+CVE-2023-42277,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,CRITICAL,CWE-120
+CVE-2023-42277,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,CRITICAL,CWE-120
+CVE-2023-42278,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-core,0,,HIGH,CWE-120
+CVE-2023-42278,2023-09-09T00:30:48Z,"hutool Buffer Overflow vulnerability",cn.hutool:hutool-json,0,,HIGH,CWE-120
+CVE-2023-42503,2023-09-14T09:30:28Z,"Apache Commons Compress denial of service vulnerability","org.apache.commons:commons-compress",1.22,1.24.0,MODERATE,CWE-20;CWE-400
 CVE-2023-4301,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin cross-site request forgery vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-352
 CVE-2023-4302,2023-08-22T00:31:10Z,"Jenkins Fortify Plugin missing permission check","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-862
 CVE-2023-4303,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin HTML injection vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-79
-CVE-2023-4918,2023-09-12T21:10:37Z,"Keycloak vulnerable to Plaintext Storage of User Password","org.keycloak:keycloak-core",0,22.0.3,HIGH,CWE-256
+CVE-2023-4759,2023-09-18T15:30:18Z,"Arbitrary File Overwrite in Eclipse JGit ","org.eclipse.jgit:org.eclipse.jgit",0,6.6.1.202309021850-r,HIGH,CWE-178
+CVE-2023-4918,2023-09-12T21:10:37Z,"Keycloak vulnerable to Plaintext Storage of User Password","org.keycloak:keycloak-core",22.0.2,22.0.3,HIGH,CWE-256
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

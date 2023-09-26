@@ -27,7 +27,7 @@ public class Range {
     @Nullable
     public String getIntroduced() {
         for (Event event : events) {
-            if(event.getIntroduced() != null) {
+            if (event.getIntroduced() != null) {
                 return event.getIntroduced();
             }
         }
@@ -37,7 +37,7 @@ public class Range {
     @Nullable
     public String getFixed() {
         for (Event event : events) {
-            if(event.getFixed() != null) {
+            if (event.getFixed() != null) {
                 return event.getFixed();
             }
         }

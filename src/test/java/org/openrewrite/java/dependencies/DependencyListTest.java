@@ -40,10 +40,10 @@ public class DependencyListTest implements RewriteTest {
                 .dataTable(DependencyListReport.Row.class, rows -> {
                     assertThat(rows).isNotEmpty();
                     assertThat(rows)
-                        .filteredOn( it -> it.getBuildTool().equals("Maven") && it.getDependencyArtifactId().equals("rewrite-core"))
+                        .filteredOn(it -> it.getBuildTool().equals("Maven") && it.getDependencyArtifactId().equals("rewrite-core"))
                         .hasSize(1);
                     assertThat(rows)
-                        .filteredOn( it -> it.getBuildTool().equals("Gradle") && it.getDependencyArtifactId().equals("rewrite-core"))
+                        .filteredOn(it -> it.getBuildTool().equals("Gradle") && it.getDependencyArtifactId().equals("rewrite-core"))
                         .hasSize(1);
                 }),
             //language=groovy

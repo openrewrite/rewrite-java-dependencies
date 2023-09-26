@@ -115,7 +115,7 @@ public class DependencyLicenseCheck extends ScanningRecipe<Map<ResolvedGroupArti
             @Override
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
                 List<ResolvedDependency> scopeDependencies = getResolutionResult().getDependencies().get(aScope);
-                if(scopeDependencies != null) {
+                if (scopeDependencies != null) {
                     for (ResolvedDependency resolvedDependency : scopeDependencies) {
                         analyzeDependency(resolvedDependency, licenses);
                     }

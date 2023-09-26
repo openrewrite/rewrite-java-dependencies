@@ -60,13 +60,13 @@ public class DependencyList extends Recipe {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(tree == null) {
+                if (tree == null) {
                     return null;
                 }
                 Markers m = tree.getMarkers();
                 m.findFirst(GradleProject.class).ifPresent(gradle -> {
                     GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
-                    if(conf != null) {
+                    if (conf != null) {
                         for (ResolvedDependency dep : conf.getResolved()) {
                             insertDependency(ctx, gradle, dep, true);
                         }
@@ -93,7 +93,7 @@ public class DependencyList extends Recipe {
                 dep.getVersion(),
                 direct
         ));
-        if(includeTransitive) {
+        if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
                 insertDependency(ctx, gradle, transitive, false);
             }
@@ -111,7 +111,7 @@ public class DependencyList extends Recipe {
                 dep.getVersion(),
                 direct
         ));
-        if(includeTransitive) {
+        if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
                 insertDependency(ctx, maven, transitive, false);
             }

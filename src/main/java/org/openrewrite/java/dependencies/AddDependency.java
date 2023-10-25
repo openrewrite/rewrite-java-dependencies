@@ -54,6 +54,7 @@ public class AddDependency extends Recipe {
     @Nullable
     String versionPattern;
 
+    @SuppressWarnings("NullableProblems")
     @Option(displayName = "Only if using",
         description = "Used to determine if the dependency will be added and in which scope it should be placed.",
         example = "org.junit.jupiter.api.*",

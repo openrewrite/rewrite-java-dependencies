@@ -56,7 +56,9 @@ public class AddDependency extends Recipe {
 
     @Option(displayName = "Only if using",
         description = "Used to determine if the dependency will be added and in which scope it should be placed.",
-        example = "org.junit.jupiter.api.*")
+        example = "org.junit.jupiter.api.*",
+        required = false)
+    @Nullable
     String onlyIfUsing;
 
     @Option(displayName = "Classifier",

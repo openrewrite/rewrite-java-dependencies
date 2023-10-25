@@ -1604,7 +1604,8 @@ CVE-2018-14371,2022-05-14T02:59:22Z,"Path Traversal in Eclipse Mojarra","org.gla
 CVE-2018-14380,2022-05-14T02:59:36Z,"Cross-site Scripting in Graylog Server","org.graylog2:graylog2-server",0,2.4.6,MODERATE,CWE-79
 CVE-2018-14637,2018-12-21T17:48:45Z,"Improper Authentication in Keycloak","org.keycloak:keycloak-core",0,4.6.0,HIGH,CWE-285;CWE-287
 CVE-2018-14642,2022-05-13T01:12:21Z,"Exposure of Sensitive Information to an Unauthorized Actor in Undertow","io.undertow:undertow-core",0,2.0.19.FINAL,MODERATE,CWE-200
-CVE-2018-14655,2022-05-13T01:34:29Z,"Keycloak XSS Vulnerability","org.keycloak:keycloak-core",3.4.3.Final,,MODERATE,CWE-79
+CVE-2018-14655,2022-05-13T01:34:29Z,"Keycloak vulnerable to cross-site scripting via the state parameter","org.keycloak:keycloak-parent",0,,MODERATE,CWE-79
+CVE-2018-14655,2022-05-13T01:34:29Z,"Keycloak vulnerable to cross-site scripting via the state parameter","org.keycloak:keycloak-parent",4.0.0.Beta1,,MODERATE,CWE-79
 CVE-2018-14657,2022-05-13T01:12:25Z,"Keycloak Improper Bruteforce Detection","org.keycloak:keycloak-parent",0,4.6.0.Final,HIGH,CWE-307
 CVE-2018-14658,2022-05-13T01:34:29Z,"Keycloak Open Redirect","org.keycloak:keycloak-core",0,,MODERATE,CWE-601
 CVE-2018-14667,2022-05-13T01:17:53Z,"Richfaces vulnerable to arbitrary code execution","org.richfaces:richfaces-core",0,3.3.4,CRITICAL,CWE-94
@@ -5215,6 +5216,8 @@ CVE-2023-25613,2023-02-20T18:30:17Z,"Apache Kerby LdapIdentityBackend LDAP Injec
 CVE-2023-25621,2023-02-23T09:30:17Z,"Improper Privilege Management in Apache Sling","org.apache.sling:org.apache.sling.i18n",0,2.6.2,MODERATE,CWE-269
 CVE-2023-25721,2023-03-28T21:30:20Z,"Veracode Scan Jenkins Plugin vulnerable to information disclosure","com.veracode.jenkins:veracode-scan",0,23.3.19.0,MODERATE,CWE-532
 CVE-2023-25722,2023-03-28T21:30:20Z,"Veracode Scan Jenkins Plugin vulnerable to information disclosure","com.veracode.jenkins:veracode-scan",0,23.3.19.0,MODERATE,CWE-214
+CVE-2023-25753,2023-10-19T09:30:18Z,"Apache Shenyu Server Side Request Forgery vulnerability","org.apache.shenyu:shenyu-admin",0,2.6.0,MODERATE,CWE-918
+CVE-2023-25753,2023-10-19T09:30:18Z,"Apache Shenyu Server Side Request Forgery vulnerability","org.apache.shenyu:shenyu-common",0,2.6.0,MODERATE,CWE-918
 CVE-2023-25761,2023-02-15T15:30:41Z,"Cross-site Scripting in Jenkins JUnit Plugin","org.jenkins-ci.plugins:junit",0,,MODERATE,CWE-79
 CVE-2023-25762,2023-02-15T15:30:41Z,"Cross-site Scripting in Jenkins Pipeline: Build Step Plugin","org.jenkins-ci.plugins:pipeline-build-step",0,,MODERATE,CWE-79
 CVE-2023-25763,2023-02-15T15:30:41Z,"Cross-site Scripting in Jenkins Email Extension Plugin","org.jenkins-ci.plugins:email-ext",0,,MODERATE,CWE-79
@@ -5819,9 +5822,6 @@ CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer al
 CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty.http2:http2-hpack",9.3.0,9.4.53,HIGH,CWE-190
 CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty.http3:http3-qpack",10.0.0,10.0.16,HIGH,CWE-190
 CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty.http3:http3-qpack",11.0.0,11.0.16,HIGH,CWE-190
-CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty:jetty-http",10.0.0,10.0.16,HIGH,CWE-190
-CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty:jetty-http",11.0.0,11.0.16,HIGH,CWE-190
-CVE-2023-36478,2023-10-10T21:16:23Z,"HTTP/2 HPACK integer overflow and buffer allocation","org.eclipse.jetty:jetty-http",9.3.0,9.4.53,HIGH,CWE-190
 CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee10:jetty-ee10-servlets",0,12.0.0-beta2,LOW,CWE-149
 CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee8:jetty-ee8-servlets",0,12.0.0-beta2,LOW,CWE-149
 CVE-2023-36479,2023-09-14T16:16:00Z,"Jetty vulnerable to errant command quoting in CGI Servlet","org.eclipse.jetty.ee9:jetty-ee9-servlets",0,12.0.0-beta2,LOW,CWE-149
@@ -5963,6 +5963,7 @@ CVE-2023-40572,2023-08-23T20:37:04Z,"XWiki Platform vulnerable to CSRF privilege
 CVE-2023-40573,2023-08-23T20:41:30Z,"XWiki Platform's Groovy jobs check the wrong author, allowing remote code execution","com.xpn.xwiki.platform.plugins:xwiki-plugin-scheduler",1.3,,CRITICAL,CWE-284
 CVE-2023-40573,2023-08-23T20:41:30Z,"XWiki Platform's Groovy jobs check the wrong author, allowing remote code execution","org.xwiki.platform:xwiki-platform-scheduler-api",0,14.10.9,CRITICAL,CWE-284
 CVE-2023-40573,2023-08-23T20:41:30Z,"XWiki Platform's Groovy jobs check the wrong author, allowing remote code execution","org.xwiki.platform:xwiki-platform-scheduler-api",15.0-rc-1,15.4-rc-1,CRITICAL,CWE-284
+CVE-2023-40743,2023-09-05T15:30:25Z,"Apache Axis 1.x (EOL) may allow RCE when untrusted input is passed to getService",org.apache.axis:axis,0,,CRITICAL,CWE-20
 CVE-2023-40771,2023-09-01T18:30:41Z,"DataEase vulnerable to SQL injection","io.dataease:dataease-plugin-common",0,,HIGH,CWE-89
 CVE-2023-40826,2023-08-29T00:32:04Z,"pf4j vulnerable to remote code execution via the zippluginPath parameter",org.pf4j:pf4j,0,,HIGH,CWE-22;CWE-94
 CVE-2023-40827,2023-08-29T00:32:04Z,"pf4j vulnerable to remote code execution via loadpluginPath parameter",org.pf4j:pf4j,0,,HIGH,CWE-22;CWE-94
@@ -5991,6 +5992,8 @@ CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebindin
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes","com.github.tomakehurst:wiremock-jre8-standalone",0,2.35.1,LOW,CWE-290;CWE-350
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes","org.wiremock:wiremock-standalone",0,3.0.3,LOW,CWE-290;CWE-350
 CVE-2023-41329,2023-09-08T12:19:49Z,"Domain restrictions bypass via DNS Rebinding in WireMock and WireMock Studio webhooks, proxy and recorder modes",org.wiremock:wiremock,0,3.0.3,LOW,CWE-290;CWE-350
+CVE-2023-41339,2023-10-24T19:20:34Z,"Unsecured WMS dynamic styling sld=<url> parameter affords blind unauthenticated SSRF",org.geoserver:gs-wms,0,2.22.5,HIGH,CWE-918
+CVE-2023-41339,2023-10-24T19:20:34Z,"Unsecured WMS dynamic styling sld=<url> parameter affords blind unauthenticated SSRF",org.geoserver:gs-wms,2.23.0,2.23.2,HIGH,CWE-918
 CVE-2023-41578,2023-09-08T21:30:35Z,"Jeecg boot arbitrary file read vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,HIGH,
 CVE-2023-41886,2023-09-12T13:52:05Z,"OpenRefine vulnerable to arbitrary file read in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,HIGH,CWE-89
 CVE-2023-41887,2023-09-12T13:52:54Z,"OpenRefine Remote Code execution in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,CRITICAL,CWE-89
@@ -6032,12 +6035,21 @@ CVE-2023-43642,2023-09-25T18:30:18Z,"snappy-java's missing upper bound check on 
 CVE-2023-43643,2023-10-09T00:42:27Z,"mXSS in AntiSamy","org.owasp.antisamy:antisamy",0,1.7.4,MODERATE,CWE-79
 CVE-2023-43666,2023-10-16T09:30:19Z,"Insufficient Verification of Data Authenticity in Apache InLong",org.apache.inlong:inlong,1.4.0,1.9.0,MODERATE,CWE-345
 CVE-2023-43667,2023-10-16T09:30:19Z,"SQL Injection in Apache InLong",org.apache.inlong:inlong,1.4.0,1.8.0,HIGH,CWE-89
-CVE-2023-43668,2023-10-16T09:30:19Z,"Authorization Bypass in Apache InLong",org.apache.inlong:inlong,1.4.0,1.9.0,MODERATE,CWE-502
-CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",0,3.7.2,MODERATE,CWE-639
-CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.8.0,3.8.3,MODERATE,CWE-639
-CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.9.0,3.9.1,MODERATE,CWE-639
+CVE-2023-43668,2023-10-16T09:30:19Z,"Authorization Bypass in Apache InLong",org.apache.inlong:inlong,1.4.0,1.9.0,CRITICAL,CWE-502;CWE-639
+CVE-2023-43795,2023-10-24T19:21:02Z,"WPS Server Side Request Forgery vulnerability","org.geoserver.extension:gs-wps-core",0,2.22.5,HIGH,CWE-918
+CVE-2023-43795,2023-10-24T19:21:02Z,"WPS Server Side Request Forgery vulnerability","org.geoserver.extension:gs-wps-core",2.23.0,2.23.2,HIGH,CWE-918
+CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",0,2.2.6,MODERATE,CWE-532
+CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",2.3.0,2.3.4,MODERATE,CWE-532
+CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",3.0.0,3.0.3,MODERATE,CWE-532
+CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",0,3.7.2,CRITICAL,CWE-639
+CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.8.0,3.8.3,CRITICAL,CWE-639
+CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.9.0,3.9.1,CRITICAL,CWE-639
 CVE-2023-45138,2023-10-17T02:19:16Z,"XWiki Change Request Application UI XSS and remote code execution through change request title","org.xwiki.contrib.changerequest:application-changerequest-ui",0.11,1.9.2,CRITICAL,CWE-79
 CVE-2023-45144,2023-10-17T12:51:01Z,"XWiki Identity Oauth Privilege escalation (PR)/remote code execution from login screen through unescaped URL parameter","com.xwiki.identity-oauth:identity-oauth-ui",1.0,1.6,CRITICAL,CWE-79
+CVE-2023-45277,2023-10-19T18:30:30Z,"Yamcs Path Traversal vulnerability",org.yamcs:yamcs,0,5.8.7,MODERATE,CWE-22
+CVE-2023-45278,2023-10-19T18:30:30Z,"Yamcs API Directory Traversal vulnerability",org.yamcs:yamcs,0,5.8.7,MODERATE,CWE-22
+CVE-2023-45279,2023-10-20T00:30:24Z,"Yamcs Cross-site Scripting vulnerability",org.yamcs:yamcs,0,5.8.7,MODERATE,CWE-79
+CVE-2023-45280,2023-10-20T00:30:24Z,"Yamcs Cross-site Scripting vulnerability",org.yamcs:yamcs,0,5.8.7,MODERATE,CWE-79
 CVE-2023-45303,2023-10-06T21:30:49Z,"ThingsBoard Server-Side Template Injection","org.thingsboard:thingsboard",0,3.5,HIGH,CWE-74
 CVE-2023-45648,2023-10-10T21:31:12Z,"Apache Tomcat Improper Input Validation vulnerability",org.apache.tomcat:tomcat,10.1.0-M1,10.1.14,MODERATE,CWE-20
 CVE-2023-45648,2023-10-10T21:31:12Z,"Apache Tomcat Improper Input Validation vulnerability",org.apache.tomcat:tomcat,11.0.0-M1,11.0.0-M12,MODERATE,CWE-20
@@ -6047,6 +6059,13 @@ CVE-2023-45669,2023-10-17T13:23:20Z,"WebAuthn4J Spring Security Improper signatu
 CVE-2023-45807,2023-10-17T14:25:36Z,"OpenSearch Issue with tenant read-only permissions","org.opensearch.plugin:opensearch-security",0,1.3.14.0,MODERATE,CWE-281
 CVE-2023-45807,2023-10-17T14:25:36Z,"OpenSearch Issue with tenant read-only permissions","org.opensearch.plugin:opensearch-security",2.0.0.0,2.11.0.0,MODERATE,CWE-281
 CVE-2023-4586,2023-10-04T12:30:14Z,"Netty-handler does not validate host names by default",io.netty:netty-handler,4.1.0.Final,,MODERATE,CWE-295
+CVE-2023-46120,2023-10-24T01:49:09Z,"RabbitMQ Java client's Lack of Message Size Limitation leads to Remote DoS Attack",com.rabbitmq:amqp-client,0,5.18.0,MODERATE,CWE-400
+CVE-2023-46122,2023-10-24T01:51:04Z,"sbt vulnerable to arbitrary file write via archive extraction (Zip Slip)",org.scala-sbt:io_2.12,1.0.0,1.9.7,MODERATE,CWE-22
+CVE-2023-46122,2023-10-24T01:51:04Z,"sbt vulnerable to arbitrary file write via archive extraction (Zip Slip)",org.scala-sbt:io_2.13,1.0.0,1.9.7,MODERATE,CWE-22
+CVE-2023-46122,2023-10-24T01:51:04Z,"sbt vulnerable to arbitrary file write via archive extraction (Zip Slip)",org.scala-sbt:io_3,1.0.0,1.9.7,MODERATE,CWE-22
+CVE-2023-46122,2023-10-24T01:51:04Z,"sbt vulnerable to arbitrary file write via archive extraction (Zip Slip)",org.scala-sbt:sbt,0.3.4,1.9.7,MODERATE,CWE-22
+CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-common",1.4.0,1.9.0,MODERATE,CWE-502
+CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-pojo",1.4.0,1.9.0,MODERATE,CWE-502
 CVE-2023-4759,2023-09-18T15:30:18Z,"Arbitrary File Overwrite in Eclipse JGit ","org.eclipse.jgit:org.eclipse.jgit",0,6.6.1.202309021850-r,HIGH,CWE-178
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-csrf-reactive",0,2.16.11.Final,HIGH,CWE-863
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-csrf-reactive",3.0.0,3.2.6.Final,HIGH,CWE-863

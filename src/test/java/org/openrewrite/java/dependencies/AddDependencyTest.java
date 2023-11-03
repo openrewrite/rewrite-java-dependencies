@@ -141,8 +141,6 @@ class AddDependencyTest implements RewriteTest {
           null,
           null,
           null,
-          null,
-          null,
           null
         );
     }

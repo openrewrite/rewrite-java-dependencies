@@ -53,7 +53,7 @@ class AddDependencyTest implements RewriteTest {
     @ValueSource(strings = {"com.google.common.math.*", "com.google.common.math.IntMath"})
     void addGradleDependencyWithOnlyIfUsingTestScope(String onlyIfUsing) {
         rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi()).recipe(addGradleDependency("com.google.guava:guava:29.0-jre", onlyIfUsing)),
+          spec -> spec.beforeRecipe(withToolingApi()).recipe(addDependency("com.google.guava:guava:29.0-jre", onlyIfUsing, null)),
           mavenProject("project",
             srcTestJava(
               java(usingGuavaIntMath)
@@ -91,7 +91,7 @@ class AddDependencyTest implements RewriteTest {
     void addMavenDependencyWithSystemScope() {
         rewriteRun(
           spec -> spec
-            .recipe(addMavenDependency("doesnotexist:doesnotexist:1", "com.google.common.math.IntMath", "system")),
+            .recipe(addDependency("doesnotexist:doesnotexist:1", "com.google.common.math.IntMath", "system")),
           mavenProject("project",
             srcMainJava(
               java(usingGuavaIntMath)
@@ -124,8 +124,8 @@ class AddDependencyTest implements RewriteTest {
         );
     }
 
-    @SuppressWarnings("all")
-    private AddDependency addGradleDependency(String gav, String onlyIfUsing) {
+
+    private AddDependency addDependency(String gav, String onlyIfUsing, @Nullable String scope) {
         String[] gavParts = gav.split(":");
         return new AddDependency(
           gavParts[0],
@@ -137,31 +137,12 @@ class AddDependencyTest implements RewriteTest {
           null,
           null,
           null,
-          null,
-          null,
-          null,
-          null,
-          null
-        );
-    }
-
-    @SuppressWarnings("all")
-    private AddDependency addMavenDependency(String gav, String onlyIfUsing, @Nullable String scope) {
-        String[] gavParts = gav.split(":");
-        return new AddDependency(
-          gavParts[0],
-          gavParts[1],
-          gavParts[2],
-          null,
-          onlyIfUsing,
-          null,
-          null,
-          onlyIfUsing,
-          null,
           scope,
-          true,
           null,
-          false,
+          null,
+          null,
+          null,
+          null,
           null
         );
     }

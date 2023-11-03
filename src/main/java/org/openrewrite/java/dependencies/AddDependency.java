@@ -17,17 +17,12 @@ package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
+import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class AddDependency extends Recipe {
+public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Group",
         description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
@@ -54,7 +49,6 @@ public class AddDependency extends Recipe {
     @Nullable
     String versionPattern;
 
-    @SuppressWarnings("NullableProblems")
     @Option(displayName = "Only if using",
         description = "Used to determine if the dependency will be added and in which scope it should be placed.",
         example = "org.junit.jupiter.api.*",
@@ -143,54 +137,66 @@ public class AddDependency extends Recipe {
                "correct scope based on where it is used.";
     }
 
+    @Override
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator(gradleAddDep().getInitialValue(ctx), mavenAddDep().getInitialValue(ctx));
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                gradleAddDep().getScanner(acc.gradleAccumulator).visit(tree, ctx);
+                mavenAddDep().getScanner(acc.mavenAccumulator).visit(tree, ctx);
+                return tree;
+            }
+        };
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            final TreeVisitor<?, ExecutionContext> gradleAddDep = gradleAddDep().getVisitor(acc.gradleAccumulator);
+            final TreeVisitor<?, ExecutionContext> mavenAddDep = mavenAddDep().getVisitor(acc.mavenAccumulator);
+            @Override
+            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if(!(tree instanceof SourceFile)) {
+                    return tree;
+                }
+                Tree t = tree;
+                if(gradleAddDep.isAcceptable((SourceFile) t, ctx)) {
+                    t = gradleAddDep.visitNonNull(tree, ctx);
+                }
+                if(mavenAddDep.isAcceptable((SourceFile) t, ctx)) {
+                    t = mavenAddDep.visitNonNull(tree, ctx);
+                }
+                return t;
+            }
+        };
+    }
+
+    @Value
+    public static class Accumulator {
+        org.openrewrite.gradle.AddDependency.Scanned gradleAccumulator;
+        org.openrewrite.maven.AddDependency.Scanned mavenAccumulator;
+    }
+
     @Nullable
     org.openrewrite.gradle.AddDependency addGradleDependency;
 
     @Nullable
     org.openrewrite.maven.AddDependency addMavenDependency;
 
-    public AddDependency(
-        String groupId,
-        String artifactId,
-        @Nullable String version,
-        @Nullable String versionPattern,
-        String onlyIfUsing,
-        @Nullable String classifier,
-        @Nullable String familyPattern,
-        @Nullable String extension,
-        @Nullable String configuration,
-        @Nullable String scope,
-        @Nullable Boolean releasesOnly,
-        @Nullable String type,
-        @Nullable Boolean optional,
-        @Nullable Boolean acceptTransitive) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        this.versionPattern = versionPattern;
-        this.onlyIfUsing = onlyIfUsing;
-        this.classifier = classifier;
-        this.familyPattern = familyPattern;
-        this.extension = extension;
-        this.configuration = configuration;
-        this.scope = scope;
-        this.releasesOnly = releasesOnly;
-        this.type = type;
-        this.optional = optional;
-        this.acceptTransitive = acceptTransitive;
-        addGradleDependency = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
-            configuration, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
-        String versionForMaven = version != null ? version : "latest.release";
-        addMavenDependency = new org.openrewrite.maven.AddDependency(groupId, artifactId, versionForMaven,
-            versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
-            acceptTransitive);
+
+    private org.openrewrite.gradle.AddDependency gradleAddDep() {
+        return new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
+                configuration, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
     }
 
-    @Override
-    public List<Recipe> getRecipeList() {
-        return Arrays.asList(
-            addGradleDependency,
-            addMavenDependency
-        );
+    private org.openrewrite.maven.AddDependency mavenAddDep() {
+        return new org.openrewrite.maven.AddDependency(groupId, artifactId, version != null ? version : "latest.release",
+                versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
+                acceptTransitive);
     }
 }

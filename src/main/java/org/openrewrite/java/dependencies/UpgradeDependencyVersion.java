@@ -18,19 +18,18 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
+import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
+import org.openrewrite.maven.tree.GroupArtifact;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UpgradeDependencyVersion extends Recipe {
+public class UpgradeDependencyVersion extends ScanningRecipe<Set<GroupArtifact>> {
     @Option(displayName = "Group",
         description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
         example = "com.fasterxml.jackson*")
@@ -87,27 +86,40 @@ public class UpgradeDependencyVersion extends Recipe {
                "updates to patch or minor releases.";
     }
 
-    @Nullable
-    private transient org.openrewrite.gradle.UpgradeDependencyVersion upgradeGradleDependencyVersion;
-
-    @Nullable
-    private transient org.openrewrite.maven.UpgradeDependencyVersion upgradeMavenDependencyVersion;
+    @Override
+    public Set<GroupArtifact> getInitialValue(ExecutionContext ctx) {
+        return getUpgradeMavenDependencyVersion().getInitialValue(ctx);
+    }
 
     @Override
-    public List<Recipe> getRecipeList() {
-        // Checking if the fields have been updated externally via reflection, so we need to update the child recipes
-        if (upgradeGradleDependencyVersion == null ||
-                !Objects.equals(upgradeGradleDependencyVersion.getGroupId(), groupId) ||
-                !Objects.equals(upgradeGradleDependencyVersion.getArtifactId(), artifactId) ||
-                !Objects.equals(upgradeGradleDependencyVersion.getNewVersion(), newVersion) ||
-                !Objects.equals(upgradeGradleDependencyVersion.getVersionPattern(), versionPattern)
-        ) {
-            upgradeGradleDependencyVersion = new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
-            upgradeMavenDependencyVersion = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
-        }
-        return Arrays.asList(
-            upgradeGradleDependencyVersion,
-            upgradeMavenDependencyVersion
-        );
+    public TreeVisitor<?, ExecutionContext> getScanner(Set<GroupArtifact> acc) {
+        return getUpgradeMavenDependencyVersion().getScanner(acc);
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Set<GroupArtifact> acc) {
+        TreeVisitor<?, ExecutionContext> mavenVisitor = getUpgradeMavenDependencyVersion().getVisitor(acc);
+        TreeVisitor<?, ExecutionContext> gradleVisitor = getUpgradeGradleDependencyVersion().getVisitor();
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                Tree t = tree;
+                assert tree != null;
+                if(mavenVisitor.isAcceptable((SourceFile) tree, ctx)) {
+                    t = mavenVisitor.visit(tree, ctx);
+                } else if(gradleVisitor.isAcceptable((SourceFile) tree, ctx)) {
+                    t = gradleVisitor.visit(t, ctx);
+                }
+                return t;
+            }
+        };
+    }
+
+    org.openrewrite.maven.UpgradeDependencyVersion getUpgradeMavenDependencyVersion() {
+        return new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
+    }
+
+    public org.openrewrite.gradle.UpgradeDependencyVersion getUpgradeGradleDependencyVersion() {
+        return new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
     }
 }

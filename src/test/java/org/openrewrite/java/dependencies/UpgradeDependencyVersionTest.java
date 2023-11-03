@@ -16,22 +16,12 @@
 package org.openrewrite.java.dependencies;
 
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
-import org.openrewrite.config.RecipeDescriptor;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.test.RewriteTest;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,6 +38,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
           spec -> spec.beforeRecipe(withToolingApi())
             .recipe(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null)),
           buildGradle(
+            //language=groovy
             """
               plugins {
                 id 'java-library'
@@ -64,6 +55,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
                 }
               }
               """,
+            //language=groovy
             """
               plugins {
                 id 'java-library'
@@ -109,6 +101,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
         rewriteRun(
           spec -> spec.recipe(new UpgradeDependencyVersion("org.junit.jupiter", "junit-jupiter-api", "5.7.2", null,
             null, null)),
+          //language=xml
           pomXml(
             """
               <project>
@@ -143,108 +136,6 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
                       </dependencies>
                   </dependencyManagement>
               </project>
-              """
-          )
-        );
-    }
-
-    /**
-     * This test emulates how recipes are instantiated from the SaaS, build plugins or the CLI using Jackson and later on their parameters populated via reflection with
-     * jackson. This causes that some care has to be taken in this recipe when instantiating the child recipes, since the
-     * constructor parameters and fields of the class might not be correct (or final) when some methods are called during
-     * instantiation or validation.
-     */
-    @Test
-    void testRecipeInstantiation() throws JsonMappingException {
-        // We instantiate the recipe with default values.
-        UpgradeDependencyVersion recipe = new UpgradeDependencyVersion("", "", "", null, null, null);
-
-        // We get the RecipeDescriptor (internally calls getRecipeList).
-        RecipeDescriptor recipeDescriptor = recipe.getDescriptor();
-        assertThat(recipeDescriptor.getRecipeList().size()).isEqualTo(2);
-
-        // This is a similar ObjectMapper than the one used to set up recipes
-        ObjectMapper mapper = JsonMapper.builder()
-          .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-          .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-          .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
-          .build()
-          .registerModule(new ParameterNamesModule())
-          .registerModule(new JavaTimeModule());
-
-        // New parameters to update the recipe
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("groupId", "org.openrewrite.recipe");
-        parameters.put("artifactId", "rewrite-java-dependencies");
-        parameters.put("newVersion", "1.0.4");
-
-        UpgradeDependencyVersion updatedRecipe = mapper.updateValue(recipe, parameters);
-
-        // We check that it's the same instance that is being updated
-        assertThat(updatedRecipe).isSameAs(recipe);
-
-        // We then run the recipe with maven and gradle projects.
-        rewriteRun(
-          spec -> {
-              spec.recipe(updatedRecipe);
-              spec.beforeRecipe(withToolingApi());
-          },
-          pomXml(
-            """
-              <project>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>my-app</artifactId>
-                  <version>1</version>
-                  <dependencies>
-                      <dependency>
-                          <groupId>org.openrewrite.recipe</groupId>
-                          <artifactId>rewrite-java-dependencies</artifactId>
-                          <version>1.0.0</version>
-                      </dependency>
-                  </dependencies>
-              </project>
-              """,
-            """
-              <project>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>my-app</artifactId>
-                  <version>1</version>
-                  <dependencies>
-                      <dependency>
-                          <groupId>org.openrewrite.recipe</groupId>
-                          <artifactId>rewrite-java-dependencies</artifactId>
-                          <version>1.0.4</version>
-                      </dependency>
-                  </dependencies>
-              </project>
-              """
-          ),
-          buildGradle(
-            """
-              plugins {
-                id 'java-library'
-              }
-              
-              repositories {
-                mavenCentral()
-              }
-              
-              dependencies {
-                compileOnly 'org.openrewrite.recipe:rewrite-java-dependencies:1.0.0'
-              }
-              """,
-            """
-              plugins {
-                id 'java-library'
-              }
-              
-              repositories {
-                mavenCentral()
-              }
-              
-              dependencies {
-                compileOnly 'org.openrewrite.recipe:rewrite-java-dependencies:1.0.4'
-              }
               """
           )
         );

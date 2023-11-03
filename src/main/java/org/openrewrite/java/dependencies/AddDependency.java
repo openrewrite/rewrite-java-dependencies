@@ -182,13 +182,6 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
         org.openrewrite.maven.AddDependency.Scanned mavenAccumulator;
     }
 
-    @Nullable
-    org.openrewrite.gradle.AddDependency addGradleDependency;
-
-    @Nullable
-    org.openrewrite.maven.AddDependency addMavenDependency;
-
-
     private org.openrewrite.gradle.AddDependency gradleAddDep() {
         return new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
                 configuration, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);

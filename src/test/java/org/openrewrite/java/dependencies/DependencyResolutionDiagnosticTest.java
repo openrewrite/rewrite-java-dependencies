@@ -106,12 +106,12 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                   <artifactId>test</artifactId>
                   <version>0.1.0</version>
                   
-                <repositories>
-                    <repository>
-                        <id>nonexistent</id>
-                        <url>https://nonexistent.moderne.io/maven2</url>
-                    </repository>
-                </repositories>
+                  <repositories>
+                      <repository>
+                          <id>nonexistent</id>
+                          <url>https://nonexistent.moderne.io/maven2</url>
+                      </repository>
+                   </repositories>
               </project>
               """)
         );

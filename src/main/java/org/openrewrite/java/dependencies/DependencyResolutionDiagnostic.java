@@ -54,7 +54,8 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
     }
 
     public static class Accumulator {
-        Set<MavenRepository> mavenRepositories = new HashSet<>();
+        Set<MavenRepository> repositoriesFromGradle = new HashSet<>();
+        Set<MavenRepository> repositoriesFromMaven = new HashSet<>();
     }
 
     @Override
@@ -71,11 +72,11 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                     return null;
                 }
                 tree.getMarkers().findFirst(GradleProject.class).ifPresent(gp -> {
-                    acc.mavenRepositories.addAll(gp.getMavenRepositories());
-                    acc.mavenRepositories.addAll(gp.getMavenPluginRepositories());
+                    acc.repositoriesFromGradle.addAll(gp.getMavenRepositories());
+                    acc.repositoriesFromGradle.addAll(gp.getMavenPluginRepositories());
                 });
                 tree.getMarkers().findFirst(MavenResolutionResult.class).ifPresent(mrr ->
-                        acc.mavenRepositories.addAll(mrr.getPom().getRepositories()));
+                    acc.repositoriesFromMaven.addAll(mrr.getPom().getRepositories()));
                 return tree;
             }
         };
@@ -83,34 +84,10 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
 
     @Override
     public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
-        MavenPomDownloader mpd = new MavenPomDownloader(ctx);
-        // Since there's no dependency that every repository can be guaranteed to have, try to download one that
-        // doesn't exist and interpret non-404 results as failure
-        GroupArtifactVersion gav = new GroupArtifactVersion("org.openrewrite.nonexistent", "nonexistent", "0.0.0");
         Set<String> succeeded = new HashSet<>();
         Map<String, String> failed = new HashMap<>();
-        for (MavenRepository repo : acc.mavenRepositories) {
-            String uri = noTrailingSlash(repo.getUri());
-            if(succeeded.contains(uri) || failed.containsKey(uri)) {
-                continue;
-            }
-            try {
-                mpd.download(gav, null, null, Collections.singletonList(repo));
-            } catch (MavenDownloadingException e) {
-                if(e.getRepositoryResponses().isEmpty()) {
-                    failed.put(uri, "No response from repository");
-                }
-                for (Map.Entry<MavenRepository, String> result : e.getRepositoryResponses().entrySet()) {
-                    if (result.getValue().contains("404") ||
-                        "Did not attempt to download because of a previous failure to retrieve from this repository.".equals(result.getValue()) ||
-                        "Local repository does not contain pom".equals(result.getValue())) {
-                        succeeded.add(noTrailingSlash(result.getKey().getUri()));
-                    } else {
-                        failed.put(noTrailingSlash(result.getKey().getUri()), result.getValue());
-                    }
-                }
-            }
-        }
+        record(true, acc.repositoriesFromMaven, succeeded, failed, ctx);
+        record(false, acc.repositoriesFromGradle, succeeded, failed, ctx);
         for(String uri : succeeded) {
             report.insertRow(ctx, new RepositoryAccessibilityReport.Row(uri, ""));
         }
@@ -119,6 +96,64 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         }
 
         return emptyList();
+    }
+
+    private static void record(boolean addMavenDefaultRepositories, Collection<MavenRepository> repos, Set<String> succeeded, Map<String, String> failed, ExecutionContext ctx) {
+        // Use MavenPomDownloader without any default repositories, so we can test exactly one repository at a time
+        MavenPomDownloader mpd = new MavenPomDownloader(ctx);
+        Collection<MavenRepository> effectiveRepos = repos;
+        if(addMavenDefaultRepositories) {
+            if(!effectiveRepos.contains(MavenRepository.MAVEN_LOCAL_DEFAULT)) {
+                effectiveRepos = new ArrayList<>(effectiveRepos);
+                effectiveRepos.add(MavenRepository.MAVEN_LOCAL_DEFAULT);
+            }
+            if(!effectiveRepos.contains(MavenRepository.MAVEN_CENTRAL)) {
+                effectiveRepos = new ArrayList<>(effectiveRepos);
+                effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
+            }
+        }
+
+        // Some repositories don't respond to a simple ping, so try requesting a dependency
+        // Since there's no dependency that every repository can be guaranteed to have, try to download one that
+        // doesn't exist and interpret non-404 results as failure
+        GroupArtifactVersion gav = new GroupArtifactVersion("org.openrewrite.nonexistent", "nonexistent", "0.0.0");
+
+        for (MavenRepository repo : effectiveRepos) {
+            String uri = noTrailingSlash(repo.getUri());
+            if(succeeded.contains(uri) || failed.containsKey(uri)) {
+                continue;
+            }
+            if(uri.startsWith("file:/")) {
+                // Local repositories are always accessible
+                succeeded.add(uri);
+                continue;
+            }
+            try {
+                mpd.download(gav, null, null, Collections.singletonList(repo));
+            } catch (MavenDownloadingException e) {
+                if(e.getRepositoryResponses().isEmpty()) {
+                    record(repo, e.getMessage(), succeeded, failed);
+                } else {
+                    for (Map.Entry<MavenRepository, String> result : e.getRepositoryResponses().entrySet()) {
+                        record(result.getKey(), result.getValue(), succeeded, failed);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void record(MavenRepository repo, String message, Set<String> succeeded, Map<String, String> failed) {
+        if (message.contains("404") ||
+            "Did not attempt to download because of a previous failure to retrieve from this repository.".equals(message) ||
+            "Local repository does not contain pom".equals(message)) {
+            succeeded.add(noTrailingSlash(repo.getUri()));
+        } else {
+            if("org.openrewrite.nonexistent:nonexistent:0.0.0 failed. Unable to download POM.".equals(message)) {
+                failed.put(noTrailingSlash(repo.getUri()), "No response from repository");
+            } else {
+                failed.put(noTrailingSlash(repo.getUri()), message);
+            }
+        }
     }
 
     private static String noTrailingSlash(String uri) {

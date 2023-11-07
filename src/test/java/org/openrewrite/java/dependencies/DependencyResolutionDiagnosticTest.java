@@ -23,7 +23,9 @@ import org.openrewrite.test.RewriteTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.Assertions.withToolingApi;
+import static org.openrewrite.maven.Assertions.pomXml;
 
+@SuppressWarnings("GroovyAssignabilityCheck")
 public class DependencyResolutionDiagnosticTest implements RewriteTest {
 
     @Override
@@ -36,15 +38,14 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
+                assertThat(rows).hasSize(4);
                 assertThat(rows).contains(
                   new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", ""));
                 assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getErrorMessage())).hasSize(1);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "")
-                );
+                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", ""));
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "No response from repository")
-                );
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "No response from repository"));
             }),
           //language=groovy
           buildGradle("""
@@ -82,6 +83,37 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
 //            }
 //            """
           )
+        );
+    }
+
+
+    @Test
+    void maven() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
+                assertThat(rows).contains(
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", ""));
+                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getErrorMessage())).hasSize(1);
+                assertThat(rows).contains(
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "No response from repository")
+                );
+            }),
+            //language=xml
+            pomXml("""
+              <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>test</artifactId>
+                  <version>0.1.0</version>
+                  
+                <repositories>
+                    <repository>
+                        <id>nonexistent</id>
+                        <url>https://nonexistent.moderne.io/maven2</url>
+                    </repository>
+                </repositories>
+              </project>
+              """)
         );
     }
 }

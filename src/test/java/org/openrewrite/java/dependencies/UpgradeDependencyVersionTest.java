@@ -50,9 +50,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
               
               dependencies {
                 compileOnly 'com.google.guava:guava:29.0-jre'
-                runtimeOnly ('com.google.guava:guava:29.0-jre') {
-                    force = true
-                }
+                runtimeOnly ('com.google.guava:guava:29.0-jre')
               }
               """,
             //language=groovy
@@ -67,9 +65,7 @@ public class UpgradeDependencyVersionTest implements RewriteTest {
               
               dependencies {
                 compileOnly 'com.google.guava:guava:30.1.1-jre'
-                runtimeOnly ('com.google.guava:guava:30.1.1-jre') {
-                    force = true
-                }
+                runtimeOnly ('com.google.guava:guava:30.1.1-jre')
               }
               """,
             spec -> spec.afterRecipe(after -> {

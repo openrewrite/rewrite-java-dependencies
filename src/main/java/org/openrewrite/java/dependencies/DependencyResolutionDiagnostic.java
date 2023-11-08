@@ -23,8 +23,8 @@ import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.groovy.GroovyIsoVisitor;
 import org.openrewrite.groovy.tree.G;
 import org.openrewrite.internal.lang.Nullable;
+import org.openrewrite.java.dependencies.table.GradleDependencyConfigurationErrors;
 import org.openrewrite.java.dependencies.table.RepositoryAccessibilityReport;
-import org.openrewrite.marker.SearchResult;
 import org.openrewrite.maven.internal.MavenPomDownloader;
 import org.openrewrite.maven.tree.MavenRepository;
 import org.openrewrite.maven.tree.MavenResolutionResult;
@@ -40,6 +40,7 @@ import static java.util.Collections.*;
 public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyResolutionDiagnostic.Accumulator> {
 
     transient RepositoryAccessibilityReport report = new RepositoryAccessibilityReport(this);
+    transient GradleDependencyConfigurationErrors gradleErrors = new GradleDependencyConfigurationErrors(this);
 
     @Override
     public String getDisplayName() {
@@ -48,9 +49,15 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
 
     @Override
     public String getDescription() {
-        return "Recipes which manipulate dependencies must be able to successfully access the repositories used by the " +
-               "project and retrieve dependency metadata from them. This recipe lists the repositories that were found " +
-               "and whether or not dependency metadata could successfully be resolved from them.";
+        return "Recipes which manipulate dependencies must be able to successfully access the artifact repositories " +
+               "and resolve dependencies from them. This recipe produces two data tables used to understand the state " +
+               "of dependency resolution.\n\n" +
+               "The Repository accessibility report lists all the artifact repositories known to the project and whether" +
+               "they respond to network access. The network access is attempted while the recipe is run and so is " +
+               "representative of current conditions.\n\n" +
+               "The Gradle dependency configuration errors lists all the dependency configurations that failed to " +
+               "resolve one or more dependencies when the project was parsed. This is representative of conditions at " +
+               "the time the LST was parsed.";
     }
 
     public static class Accumulator {
@@ -168,11 +175,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                     if (conf.getExceptionType() == null) {
                         continue;
                     }
-                    g = SearchResult.found(g, "Found Gradle dependency configuration which failed to resolve during parsing: " +
-                                              conf.getName() + ": " + conf.getExceptionType() + " - " + conf.getMessage());
-                    // If one configuration failed to resolve, others likely failed and probably for the same reasons
-                    // Record only first failure to reduce noise
-                    break;
+                    gradleErrors.insertRow(ctx, new GradleDependencyConfigurationErrors.Row(gp.getPath(), conf.getName(), conf.getExceptionType(), conf.getMessage()));
                 }
 
                 return g;

@@ -37,6 +37,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
     void gradle() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
+            // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
+            // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).hasSize(4);
                 assertThat(rows).contains(
@@ -63,26 +65,7 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
             dependencies {
                 implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
             }
-            """
-            // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
-            // When run with real Gradle this recipe _should_ produce the following result, included here for documentation.
-//            ,"""
-//            ~~(Found Gradle dependency configuration which failed to resolve during parsing)~~>plugins {
-//                id("java")
-//            }
-//            repositories {
-//                mavenLocal()
-//                mavenCentral()
-//                maven {
-//                    url "https://nonexistent.moderne.io/maven2"
-//                }
-//            }
-//
-//            dependencies {
-//                implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
-//            }
-//            """
-          )
+            """)
         );
     }
 

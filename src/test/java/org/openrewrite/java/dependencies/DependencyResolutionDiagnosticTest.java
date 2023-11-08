@@ -40,12 +40,12 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).hasSize(4);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", ""));
-                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getErrorMessage())).hasSize(1);
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200));
+                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getExceptionMessage())).hasSize(1);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", ""));
+                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200));
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "No response from repository"));
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null));
             }),
           //language=groovy
           buildGradle("""
@@ -93,10 +93,10 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> spec.beforeRecipe(withToolingApi())
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", ""));
-                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getErrorMessage())).hasSize(1);
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200));
+                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getExceptionMessage())).hasSize(1);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "No response from repository")
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null)
                 );
             }),
             //language=xml

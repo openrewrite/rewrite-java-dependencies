@@ -19,6 +19,7 @@ import lombok.Value;
 import org.openrewrite.Column;
 import org.openrewrite.DataTable;
 import org.openrewrite.Recipe;
+import org.openrewrite.internal.lang.Nullable;
 
 public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibilityReport.Row> {
 
@@ -35,9 +36,19 @@ public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibi
                 description = "The URI of the repository")
         String uri;
 
+        @Column(displayName = "Exception type",
+                description = "Empty if the repository was accessible. Otherwise, the type of exception encountered " +
+                              "when attempting to access the repository.")
+        String exceptionType;
+
         @Column(displayName = "Error message",
                 description = "Empty if the repository was accessible. Otherwise, the error message encountered when " +
                               "attempting to access the repository.")
-        String errorMessage;
+        String exceptionMessage;
+
+        @Column(displayName = "HTTP code",
+                description = "The HTTP response code returned by the repository. May be empty for non-HTTP repositories.")
+        @Nullable
+        Integer httpCode;
     }
 }

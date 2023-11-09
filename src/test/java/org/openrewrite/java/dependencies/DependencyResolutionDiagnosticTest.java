@@ -55,8 +55,6 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                 id("java")
             }
             repositories {
-                mavenLocal()
-                mavenCentral()
                 maven {
                     url "https://nonexistent.moderne.io/maven2"
                 }

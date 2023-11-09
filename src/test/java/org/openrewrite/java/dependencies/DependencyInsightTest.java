@@ -16,7 +16,6 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
-import org.openrewrite.maven.Assertions;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -26,7 +25,7 @@ public class DependencyInsightTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyInsight("org.springframework*", "*"));
+        spec.recipe(new DependencyInsight("org.springframework*", "*", null));
     }
 
     @Test
@@ -35,9 +34,9 @@ public class DependencyInsightTest implements RewriteTest {
           //language=xml
           pomXml("""
               <project>
-                <groupId></groupId>
-                <artifactId></artifactId>
-                <version></version>
+                <groupId>com.example</groupId>
+                <artifactId>foo</artifactId>
+                <version>1.0.0</version>
                 
                 <dependencies>
                   <dependency>
@@ -50,9 +49,9 @@ public class DependencyInsightTest implements RewriteTest {
               """,
             """
               <project>
-                <groupId></groupId>
-                <artifactId></artifactId>
-                <version></version>
+                <groupId>com.example</groupId>
+                <artifactId>foo</artifactId>
+                <version>1.0.0</version>
                 
                 <dependencies>
                   <!--~~>--><dependency>

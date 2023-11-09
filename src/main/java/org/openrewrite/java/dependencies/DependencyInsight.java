@@ -44,12 +44,21 @@ public class DependencyInsight extends Recipe {
             example = "jackson-module-*")
     String artifactIdPattern;
 
+    @Option(displayName = "Version",
+            description = "Match only dependencies with the specified version. " +
+                          "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used." +
+                          "All versions are searched by default.",
+            example = "1.x",
+            required = false)
+    @Nullable
+    String version;
+
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, null)
+            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern,  version,null)
                     .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, null, false)
+            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, null, version, false)
                     .getVisitor();
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

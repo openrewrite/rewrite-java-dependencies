@@ -59,7 +59,8 @@ public class DependencyInsight extends Recipe {
                 SourceFile s = (SourceFile) tree;
                 if(gdi.isAcceptable(s, ctx)) {
                     s = (SourceFile) gdi.visitNonNull(s, ctx);
-                } else if(mdi.isAcceptable(s, ctx)) {
+                }
+                if(mdi.isAcceptable(s, ctx)) {
                     s = (SourceFile) mdi.visitNonNull(s, ctx);
                 }
                 return s;

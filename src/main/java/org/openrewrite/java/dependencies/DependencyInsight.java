@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
-import org.openrewrite.maven.tree.Scope;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -50,7 +49,7 @@ public class DependencyInsight extends Recipe {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, null)
                     .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, Scope.Test.name(), false)
+            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, null, false)
                     .getVisitor();
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

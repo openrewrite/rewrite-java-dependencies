@@ -25,8 +25,11 @@ import org.openrewrite.groovy.tree.G;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.dependencies.table.GradleDependencyConfigurationErrors;
 import org.openrewrite.java.dependencies.table.RepositoryAccessibilityReport;
+import org.openrewrite.maven.MavenExecutionContextView;
+import org.openrewrite.maven.MavenSettings;
 import org.openrewrite.maven.internal.MavenPomDownloader;
 import org.openrewrite.maven.tree.MavenRepository;
+import org.openrewrite.maven.tree.MavenRepositoryMirror;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 
 import java.io.UncheckedIOException;
@@ -62,7 +65,10 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
     }
 
     public static class Accumulator {
+        boolean foundGradle;
         Set<MavenRepository> repositoriesFromGradle = new HashSet<>();
+
+        boolean foundMaven;
         Set<MavenRepository> repositoriesFromMaven = new HashSet<>();
     }
 
@@ -80,11 +86,14 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                     return null;
                 }
                 tree.getMarkers().findFirst(GradleProject.class).ifPresent(gp -> {
+                    acc.foundGradle = true;
                     acc.repositoriesFromGradle.addAll(gp.getMavenRepositories());
                     acc.repositoriesFromGradle.addAll(gp.getMavenPluginRepositories());
                 });
-                tree.getMarkers().findFirst(MavenResolutionResult.class).ifPresent(mrr ->
-                    acc.repositoriesFromMaven.addAll(mrr.getPom().getRepositories()));
+                tree.getMarkers().findFirst(MavenResolutionResult.class).ifPresent(mrr -> {
+                    acc.foundMaven = true;
+                    acc.repositoriesFromMaven.addAll(mrr.getPom().getRepositories());
+                });
                 return tree;
             }
         };
@@ -93,8 +102,12 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
     @Override
     public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
         Set<String> seen = new HashSet<>();
-        record(true, acc.repositoriesFromMaven, seen, ctx);
-        record(false, acc.repositoriesFromGradle, seen, ctx);
+        if(acc.foundMaven) {
+            record(true, acc.repositoriesFromMaven, seen, ctx);
+        }
+        if(acc.foundGradle) {
+            record(false, acc.repositoriesFromGradle, seen, ctx);
+        }
         return emptyList();
     }
 
@@ -123,11 +136,21 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                 if(reason == null) {
                     reason = new RuntimeException("Repository unreachable for unknown reason");
                 }
-                seen.add(noTrailingSlash(repo.getUri()));
-                report.insertRow(ctx, rowFor(repo, reason));
+
+                MavenExecutionContextView mctx = new MavenExecutionContextView(ctx);
+                MavenSettings settings = mctx.getSettings();
+                if(settings != null) {
+                    // normalizeRepository() internally applies mirrors,but normalizeRepository() just returned null.
+                    // Replicate mirror application so that the correct URL is recorded
+                    repo = MavenRepositoryMirror.apply(mctx.getMirrors(settings), repo);
+                }
+                if(seen.add(noTrailingSlash(repo.getUri()))) {
+                    report.insertRow(ctx, rowFor(repo, reason));
+                }
             } else {
-                seen.add(noTrailingSlash(normalized.getUri()));
-                report.insertRow(ctx, rowFor(repo, null));
+                if(seen.add(noTrailingSlash(normalized.getUri()))) {
+                    report.insertRow(ctx, rowFor(normalized, null));
+                }
             }
         }
     }
@@ -156,7 +179,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
             exceptionClass = t.getClass().getName();
             exceptionMessage = t.getMessage();
         }
-        return new RepositoryAccessibilityReport.Row(repo.getUri(), exceptionClass, exceptionMessage, httpResponseCode);
+        return new RepositoryAccessibilityReport.Row(noTrailingSlash(repo.getUri()), exceptionClass, exceptionMessage, httpResponseCode);
     }
 
     @Override

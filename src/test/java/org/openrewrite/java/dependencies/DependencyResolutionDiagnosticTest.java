@@ -37,7 +37,7 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyResolutionDiagnostic());
+        spec.recipe(new DependencyResolutionDiagnostic(null, null, null));
     }
 
     @Test
@@ -49,12 +49,12 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).hasSize(4);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200));
-                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getExceptionMessage())).hasSize(1);
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
+                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200));
+                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""));
                 assertThat(rows)
-                  .filteredOn(row -> row.getUri().equals("https://nonexistent.moderne.io/maven2") && row.getHttpCode() == null).hasSize(1);
+                  .filteredOn(row -> row.getUri().equals("https://nonexistent.moderne.io/maven2") && row.getPingHttpCode() == null).hasSize(1);
             }),
           //language=groovy
           buildGradle("""
@@ -86,9 +86,9 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).hasSize(2);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200));
+                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""));
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null));
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""));
             }),
           //language=groovy
           buildGradle("""
@@ -133,7 +133,7 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
               spec.beforeRecipe(withToolingApi())
                 .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                     assertThat(rows).contains(
-                      new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null)
+                      new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
                     );
                     assertThat(rows).noneMatch(repo -> repo.getUri().contains("https://repo.maven.apache.org/maven2"));
                 })
@@ -156,10 +156,10 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> spec.beforeRecipe(withToolingApi())
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200));
-                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getExceptionMessage())).hasSize(1);
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
+                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
                 assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null)
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
                 );
             }),
           //language=xml
@@ -177,6 +177,46 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                    </repositories>
               </project>
               """)
+        );
+    }
+
+    @Test
+    void gradleNoMarker() {
+        rewriteRun(
+            //language=groovy
+            buildGradle("""
+                plugins {
+                    id("java")
+                }
+                """,
+              """
+                /*~~(build.gradle is a Gradle build file, but it is missing a GradleProject marker.)~~>*/plugins {
+                    id("java")
+                }
+                """)
+        );
+    }
+
+    @Test
+    void dependencyNotFound() {
+        rewriteRun(
+          spec -> spec.recipe(new DependencyResolutionDiagnostic("org.nonexistent", "nonexistent", "0"))
+            .beforeRecipe(withToolingApi())
+            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
+                assertThat(rows).contains(
+                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2",
+                    "", "", 200, "org.openrewrite.maven.MavenDownloadingException",
+                    "org.nonexistent:nonexistent:0 failed. Unable to download POM. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404"));
+            }),
+          //language=groovy
+          buildGradle("""
+                plugins {
+                    id("java")
+                }
+                repositories {
+                    mavenCentral()
+                }
+                """)
         );
     }
 }

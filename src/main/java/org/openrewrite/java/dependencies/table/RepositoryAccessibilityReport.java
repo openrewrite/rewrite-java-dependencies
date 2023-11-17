@@ -36,19 +36,29 @@ public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibi
                 description = "The URI of the repository")
         String uri;
 
-        @Column(displayName = "Exception type",
-                description = "Empty if the repository was accessible. Otherwise, the type of exception encountered " +
+        @Column(displayName = "Ping exception type",
+                description = "Empty if the repository responded to a ping. Otherwise, the type of exception encountered " +
                               "when attempting to access the repository.")
-        String exceptionType;
+        String pingExceptionType;
 
-        @Column(displayName = "Error message",
+        @Column(displayName = "Ping error message",
                 description = "Empty if the repository was accessible. Otherwise, the error message encountered when " +
                               "attempting to access the repository.")
-        String exceptionMessage;
+        String pingExceptionMessage;
 
-        @Column(displayName = "HTTP code",
+        @Column(displayName = "Ping HTTP code",
                 description = "The HTTP response code returned by the repository. May be empty for non-HTTP repositories.")
         @Nullable
-        Integer httpCode;
+        Integer pingHttpCode;
+
+        @Column(displayName = "Dependency resolution exception type",
+                description = "Empty if ping failed, or if the repository successfully downloaded the specified dependency. Otherwise, the type of exception encountered " +
+                              "when attempting to access the repository.")
+        String dependencyResolveExceptionType;
+
+        @Column(displayName = "Dependency resolution error message",
+                description = "Empty if ping failed, or if the repository successfully downloaded the specified dependency. Otherwise, the error message encountered when " +
+                              "attempting to access the repository.")
+        String dependencyResolveExceptionMessage;
     }
 }

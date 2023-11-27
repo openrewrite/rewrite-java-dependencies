@@ -2224,7 +2224,7 @@ CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in Faster
 CVE-2019-14379,2019-08-01T19:18:00Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.9.2,CRITICAL,CWE-1321;CWE-915
 CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,HIGH,CWE-502
 CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.7.9.6,HIGH,CWE-502
-CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.14,HIGH,CWE-502
+CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.4,HIGH,CWE-502
 CVE-2019-14439,2019-08-01T19:18:06Z,"Deserialization of untrusted data in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.9.2,HIGH,CWE-502
 CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",0,2.6.7.3,CRITICAL,CWE-502
 CVE-2019-14540,2019-09-23T18:33:25Z,"Polymorphic Typing issue in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
@@ -3024,7 +3024,7 @@ CVE-2020-27196,2022-02-10T20:23:25Z,"Out-of-bounds Write in Play Framework","com
 CVE-2020-27196,2022-02-10T20:23:25Z,"Out-of-bounds Write in Play Framework","com.typesafe.play:play-java",2.8.0,2.8.3,HIGH,CWE-787
 CVE-2020-27196,2022-02-10T20:23:25Z,"Out-of-bounds Write in Play Framework",com.typesafe.play:play,2.6.0,2.7.6,HIGH,CWE-787
 CVE-2020-27196,2022-02-10T20:23:25Z,"Out-of-bounds Write in Play Framework",com.typesafe.play:play,2.8.0,2.8.3,HIGH,CWE-787
-CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",0,9.4.33,HIGH,CWE-378;CWE-379;CWE-552
+CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",0,9.4.33.v20201020,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",10.0.0.beta1,10.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",11.0.0.beta1,11.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.mortbay.jetty:jetty-webapp",0,9.4.33,HIGH,CWE-378;CWE-379;CWE-552

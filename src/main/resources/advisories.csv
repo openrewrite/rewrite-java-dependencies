@@ -1942,7 +1942,7 @@ CVE-2019-10090,2019-10-11T18:41:44Z,"Cross-site scripting in Apache JSPWiki","or
 CVE-2019-10091,2022-02-10T20:51:04Z,"Apache Geode SSL endpoint verification vulnerability","org.apache.geode:geode-core",0,1.10.0,HIGH,CWE-295
 CVE-2019-10093,2019-08-06T01:43:38Z,"Allocation of Resources Without Limits or Throttling in Apache Tika","org.apache.tika:tika-parsers",1.19,1.22,MODERATE,CWE-770
 CVE-2019-10094,2019-08-06T01:43:35Z,"Allocation of Resources Without Limits or Throttling in Apache Tika","org.apache.tika:tika-core",1.7,1.22,HIGH,CWE-770
-CVE-2019-10095,2021-09-07T22:56:43Z,"Bash command injection in Apache Zeppelin","org.apache.zeppelin:zeppelin",0,0.10.0,HIGH,CWE-77;CWE-78
+CVE-2019-10095,2021-09-07T22:56:43Z,"Bash command injection in Apache Zeppelin","org.apache.zeppelin:zeppelin",0,0.10.0,CRITICAL,CWE-77;CWE-78
 CVE-2019-10099,2019-08-08T15:18:22Z,"Sensitive data written to disk unencrypted in Spark","org.apache.spark:spark-core_2.11",0,2.3.3,HIGH,CWE-312
 CVE-2019-1010206,2022-05-24T22:00:16Z,"kevinsawicki/http-request Missing certificate validation","com.github.kevinsawicki:http-request",0,,MODERATE,CWE-295
 CVE-2019-1010260,2019-04-08T15:18:54Z,"High severity vulnerability that affects com.github.shyiko.ktlint:ktlint-core","com.github.shyiko.ktlint:ktlint-core",0,0.30.0,HIGH,CWE-319
@@ -3027,7 +3027,7 @@ CVE-2020-27196,2022-02-10T20:23:25Z,"Out-of-bounds Write in Play Framework",com.
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",0,9.4.33.v20201020,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",10.0.0.beta1,10.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.eclipse.jetty:jetty-webapp",11.0.0.beta1,11.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
-CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.mortbay.jetty:jetty-webapp",0,9.4.33.v20201020,HIGH,CWE-378;CWE-379;CWE-552
+CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.mortbay.jetty:jetty-webapp",0,9.4.33,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.mortbay.jetty:jetty-webapp",10.0.0.beta1,10.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27216,2020-11-04T17:50:24Z,"Local Temp Directory Hijacking Vulnerability","org.mortbay.jetty:jetty-webapp",11.0.0.beta1,11.0.0.beta3,HIGH,CWE-378;CWE-379;CWE-552
 CVE-2020-27217,2022-02-10T20:22:06Z,"Improper Validation of Specified Quantity in Input in Eclipse Hono","org.eclipse.hono:hono-core",0,1.4.3,HIGH,CWE-1284
@@ -3403,8 +3403,8 @@ CVE-2021-21674,2022-05-24T19:06:36Z,"Missing permission check in Jenkins request
 CVE-2021-21675,2022-05-24T19:06:36Z,"CSRF vulnerabilities in Jenkins requests-plugin Plugin","org.jenkins-ci.plugins:requests",0,2.2.13,MODERATE,CWE-352
 CVE-2021-21676,2022-05-24T19:06:35Z,"Missing permission check in Jenkins requests-plugin Plugin allows sending emails","org.jenkins-ci.plugins:requests",0,2.2.8,MODERATE,CWE-862
 CVE-2021-21677,2022-05-24T19:12:36Z,"RCE vulnerability in Jenkins Code Coverage API Plugin","io.jenkins.plugins:code-coverage-api",0,1.4.1,HIGH,CWE-502
-CVE-2021-21678,2022-05-24T19:12:37Z,"Jenkins SAML Plugin allows bypassing CSRF protection for any URL","org.jenkins-ci.plugins:saml",0,2.0.8,HIGH,CWE-693
-CVE-2021-21679,2022-05-24T19:12:36Z,"Jenkins Azure AD Plugin allows bypassing CSRF protection for any URL","org.jenkins-ci.plugins:azure-ad",0,180.v8b1e80e6f242,HIGH,CWE-693
+CVE-2021-21678,2022-05-24T19:12:37Z,"Jenkins SAML Plugin allows bypassing CSRF protection for any URL","org.jenkins-ci.plugins:saml",0,2.0.8,HIGH,CWE-352;CWE-693
+CVE-2021-21679,2022-05-24T19:12:36Z,"Jenkins Azure AD Plugin allows bypassing CSRF protection for any URL","org.jenkins-ci.plugins:azure-ad",0,180.v8b1e80e6f242,HIGH,CWE-352;CWE-693
 CVE-2021-21680,2022-05-24T19:12:36Z,"XXE vulnerability in Jenkins Nested View Plugin","org.jenkins-ci.plugins:nested-view",0,1.21,HIGH,CWE-611
 CVE-2021-21681,2022-05-24T19:12:36Z,"Password stored in plain text by Jenkins Nomad Plugin","org.jenkins-ci.plugins:nomad",0,0.7.5,MODERATE,CWE-256;CWE-522
 CVE-2021-21682,2022-05-24T19:16:59Z,"Improper handling of equivalent directory names on Windows in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.2,MODERATE,CWE-42
@@ -3422,12 +3422,12 @@ CVE-2021-21688,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing pa
 CVE-2021-21688,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-862
 CVE-2021-21689,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-862
 CVE-2021-21689,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-862
-CVE-2021-21690,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-693
-CVE-2021-21690,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-693
-CVE-2021-21691,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-863
-CVE-2021-21691,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-863
-CVE-2021-21692,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-863
-CVE-2021-21692,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-863
+CVE-2021-21690,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-22;CWE-693
+CVE-2021-21690,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-22;CWE-693
+CVE-2021-21691,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-59;CWE-863
+CVE-2021-21691,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-59;CWE-863
+CVE-2021-21692,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-22;CWE-863
+CVE-2021-21692,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-22;CWE-863
 CVE-2021-21693,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-285;CWE-863
 CVE-2021-21693,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",2.304,2.319,CRITICAL,CWE-285;CWE-863
 CVE-2021-21694,2022-05-24T19:19:44Z,"Multiple vulnerabilities allow bypassing path filtering of agent-to-controller access control in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.303.3,CRITICAL,CWE-862
@@ -3796,6 +3796,7 @@ CVE-2021-37579,2021-09-10T17:56:23Z,"Security check skip in Apache Dubbo",org.ap
 CVE-2021-37579,2021-09-10T17:56:23Z,"Security check skip in Apache Dubbo",org.apache.dubbo:dubbo,3.0.0,3.0.2,CRITICAL,CWE-502
 CVE-2021-37580,2021-11-17T23:15:30Z,"Improper Authentication in Apache ShenYu Admin","org.apache.shenyu:shenyu-admin",2.3.0,2.4.1,CRITICAL,CWE-287
 CVE-2021-37714,2021-08-23T19:42:38Z,"Uncaught Exception in jsoup",org.jsoup:jsoup,0,1.14.2,HIGH,CWE-248;CWE-835
+CVE-2021-37942,2023-11-22T03:30:19Z,"APM Java Agent Local Privilege Escalation issue","co.elastic.apm:apm-agent-parent",1.18.0,1.27.1,HIGH,CWE-269
 CVE-2021-38153,2021-09-23T23:18:58Z,"Observable Discrepancy in Apache Kafka","org.apache.kafka:kafka-clients",2.0.0,2.6.3,MODERATE,CWE-203
 CVE-2021-38153,2021-09-23T23:18:58Z,"Observable Discrepancy in Apache Kafka","org.apache.kafka:kafka-clients",2.7.0,2.7.2,MODERATE,CWE-203
 CVE-2021-38153,2021-09-23T23:18:58Z,"Observable Discrepancy in Apache Kafka","org.apache.kafka:kafka-clients",2.8.0,2.8.1,MODERATE,CWE-203
@@ -4663,17 +4664,17 @@ CVE-2022-34795,2022-07-01T00:01:07Z,"Cross-site Scripting in Jenkins Deployment 
 CVE-2022-34796,2022-07-01T00:01:07Z,"Jenkins Deployment Dashboard Plugin has Insufficiently Protected Credentials","org.jenkins-ci.plugins:ec2-deployment-dashboard",0,,MODERATE,CWE-522;CWE-862
 CVE-2022-34797,2022-07-01T00:01:07Z,"Cross-Site Request Forgery in Jenkins Deployment Dashboard Plugin","org.jenkins-ci.plugins:ec2-deployment-dashboard",0,,MODERATE,CWE-352
 CVE-2022-34798,2022-07-01T00:01:07Z,"Missing Authorization in Jenkins Deployment Dashboard Plugin","org.jenkins-ci.plugins:ec2-deployment-dashboard",0,,MODERATE,CWE-862
-CVE-2022-34799,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins Deployment Dashboard Plugin","org.jenkins-ci.plugins:ec2-deployment-dashboard",0,,LOW,CWE-256
-CVE-2022-34800,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins Build Notifications Plugin","tools.devnull:build-notifications",0,,LOW,CWE-256
-CVE-2022-34801,2022-07-01T00:01:07Z,"Cleartext Storage of Sensitive Information in Jenkins Build Notifications Plugin","tools.devnull:build-notifications",0,,LOW,CWE-318
-CVE-2022-34802,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins RocketChat Notifier Plugin","org.jenkins-ci.plugins:rocketchatnotifier",0,,LOW,CWE-256
+CVE-2022-34799,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins Deployment Dashboard Plugin","org.jenkins-ci.plugins:ec2-deployment-dashboard",0,,LOW,CWE-256;CWE-522
+CVE-2022-34800,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins Build Notifications Plugin","tools.devnull:build-notifications",0,,LOW,CWE-256;CWE-522
+CVE-2022-34801,2022-07-01T00:01:07Z,"Cleartext Storage of Sensitive Information in Jenkins Build Notifications Plugin","tools.devnull:build-notifications",0,,LOW,CWE-318;CWE-319
+CVE-2022-34802,2022-07-01T00:01:07Z,"Plaintext Storage of a Password in Jenkins RocketChat Notifier Plugin","org.jenkins-ci.plugins:rocketchatnotifier",0,,LOW,CWE-256;CWE-522
 CVE-2022-34803,2022-07-01T00:01:08Z,"Jenkins OpsGenie Plugin Plaintext Storage of a Password vulnerability","org.jenkins-ci.plugins:opsgenie",0,,MODERATE,CWE-256;CWE-522
 CVE-2022-34804,2022-07-01T00:01:08Z,"Jenkins OpsGenie Plugin vulnerable to Cleartext Transmission of Sensitive Information","org.jenkins-ci.plugins:opsgenie",0,,MODERATE,CWE-319
-CVE-2022-34805,2022-07-01T00:01:08Z,"Plaintext Storage of a Password in Jenkins Skype notifier Plugin","org.jenkins-ci.plugins:skype-notifier",0,,LOW,CWE-256
-CVE-2022-34806,2022-07-01T00:01:08Z,"Plaintext Storage of a Password in Jenkins Jigomerge Plugin","org.jenkins-ci.plugins:jigomerge",0,,LOW,CWE-256
+CVE-2022-34805,2022-07-01T00:01:08Z,"Plaintext Storage of a Password in Jenkins Skype notifier Plugin","org.jenkins-ci.plugins:skype-notifier",0,,LOW,CWE-256;CWE-522
+CVE-2022-34806,2022-07-01T00:01:08Z,"Plaintext Storage of a Password in Jenkins Jigomerge Plugin","org.jenkins-ci.plugins:jigomerge",0,,LOW,CWE-256;CWE-522
 CVE-2022-34807,2022-07-01T00:01:08Z,"Plaintext Storage of a Password in Jenkins Elasticsearch Query Plugin","org.jenkins-ci.plugins:elasticsearch-query",0,,LOW,CWE-256;CWE-522
 CVE-2022-34808,2022-07-01T00:01:08Z,"Token stored in plain text by Jenkins Cisco Spark Plugin","org.jenkins-ci.plugins:cisco-spark",0,,LOW,CWE-522
-CVE-2022-34809,2022-07-01T00:01:08Z,"Password stored in plain text by Jenkins RQM Plugin",net.praqma:rqm-plugin,0,,LOW,CWE-256
+CVE-2022-34809,2022-07-01T00:01:08Z,"Password stored in plain text by Jenkins RQM Plugin",net.praqma:rqm-plugin,0,,LOW,CWE-256;CWE-522
 CVE-2022-34810,2022-07-01T00:01:08Z,"Jenkins RQM Plugin allows enumerating credentials IDs due to missing permission check",net.praqma:rqm-plugin,0,,MODERATE,CWE-862
 CVE-2022-34811,2022-07-01T00:01:08Z,"Missing Authorization in Jenkins XPath Configuration Viewer Plugin","org.jenkins-ci.plugins:xpath-config-viewer",0,,MODERATE,CWE-862
 CVE-2022-34812,2022-07-01T00:01:08Z,"Cross-Site Request Forgery in Jenkins XPath Configuration Viewer Plugin","org.jenkins-ci.plugins:xpath-config-viewer",0,,MODERATE,CWE-352
@@ -4765,11 +4766,11 @@ CVE-2022-36537,2022-08-27T00:00:43Z,"ZK Framework vulnerable to malicious POST",
 CVE-2022-36537,2022-08-27T00:00:43Z,"ZK Framework vulnerable to malicious POST",org.zkoss.zk:zk,9.6.1,9.6.2,HIGH,CWE-200
 CVE-2022-36599,2022-08-17T00:00:30Z,"Mingsoft MCMS SQL injection vulnerability in /mdiy/model/delete URI via models List",net.mingsoft:ms-mcms,0,,CRITICAL,CWE-89
 CVE-2022-36663,2022-09-07T00:01:50Z,"Gluu Oxauth before v4.4.1 vulnerable to Server-Side Request Forgery attacks via a crafted request_uri parameter",org.gluu:oxauth-common,0,4.4.1,CRITICAL,CWE-918
-CVE-2022-36881,2022-07-28T00:00:43Z,"Jenkins Git client plugin 3.11.0 does not perform SSH host key verification","org.jenkins-ci.plugins:git-client",0,3.11.1,MODERATE,CWE-322
+CVE-2022-36881,2022-07-28T00:00:43Z,"Jenkins Git client plugin 3.11.0 does not perform SSH host key verification","org.jenkins-ci.plugins:git-client",0,3.11.1,MODERATE,CWE-295;CWE-322
 CVE-2022-36882,2022-07-28T00:00:43Z,"Lack of authentication mechanism in Jenkins Git Plugin webhook","org.jenkins-ci.plugins:git",0,4.11.4,MODERATE,CWE-352
 CVE-2022-36883,2022-07-28T00:00:43Z,"Lack of authentication mechanism in Jenkins Git Plugin webhook","org.jenkins-ci.plugins:git",0,4.11.4,MODERATE,CWE-862
 CVE-2022-36884,2022-07-28T00:00:43Z,"Lack of authentication mechanism in Jenkins Git Plugin webhook","org.jenkins-ci.plugins:git",0,4.11.4,MODERATE,CWE-200;CWE-306
-CVE-2022-36885,2022-07-28T00:00:43Z,"Jenkins GitHub plugin 1.34.4 uses weak webhook signature function","com.coravy.hudson.plugins.github:github",0,1.34.5,LOW,CWE-208
+CVE-2022-36885,2022-07-28T00:00:43Z,"Jenkins GitHub plugin 1.34.4 uses weak webhook signature function","com.coravy.hudson.plugins.github:github",0,1.34.5,LOW,CWE-203;CWE-208
 CVE-2022-36886,2022-07-28T00:00:43Z,"External Monitor Job Type Plugin does not require POST requests for an HTTP endpoint","org.jenkins-ci.plugins:external-monitor-job",0,192.ve979ca_8b_3ccd,MODERATE,CWE-352
 CVE-2022-36887,2022-07-28T00:00:43Z,"Jenkins Job Configuration History Plugin does not require POST requests for several HTTP endpoints","org.jenkins-ci.plugins:jobConfigHistory",0,1156.v536a_97b_8d649,MODERATE,CWE-352
 CVE-2022-36888,2022-07-28T00:00:43Z,"Jenkins HashiCorp Vault Plugin does not perform permission checks in several HTTP endpoints that perform Vault connection tests","com.datapipe.jenkins.plugins:hashicorp-vault-plugin",0,355.v3b_38d767a_b_a_8,MODERATE,CWE-862
@@ -4933,6 +4934,8 @@ CVE-2022-41401,2023-08-04T18:30:39Z,"OpenRefine Server-Side Request Forgery vuln
 CVE-2022-41404,2022-10-12T12:00:20Z,"org.ini4j allows attackers to cause a Denial of Service (DoS) ",org.ini4j:ini4j,0,0.5.4,HIGH,
 CVE-2022-4147,2022-12-06T21:30:46Z,"Quarkus CORS filter allows simple GET and POST requests with an invalid Origin to proceed","io.quarkus:quarkus-vertx-http",0,2.13.5.Final,HIGH,CWE-285
 CVE-2022-4147,2022-12-06T21:30:46Z,"Quarkus CORS filter allows simple GET and POST requests with an invalid Origin to proceed","io.quarkus:quarkus-vertx-http",2.14.0.CR1,2.14.2.Final,HIGH,CWE-285
+CVE-2022-41678,2023-11-28T18:30:23Z,"Apache ActiveMQ Deserialization of Untrusted Data vulnerability","org.apache.activemq:apache-activemq",0,5.16.6,MODERATE,CWE-502
+CVE-2022-41678,2023-11-28T18:30:23Z,"Apache ActiveMQ Deserialization of Untrusted Data vulnerability","org.apache.activemq:apache-activemq",5.17.0,5.17.4,MODERATE,CWE-502
 CVE-2022-41704,2022-10-25T19:00:29Z,"Apache XML Graphics Batik vulnerable to code execution via SVG.","org.apache.xmlgraphics:batik",0,1.16,HIGH,CWE-918
 CVE-2022-41828,2022-10-12T18:23:36Z,"com.amazon.redshift:redshift-jdbc42 vulnerable to remote command execution","com.amazon.redshift:redshift-jdbc42",0,2.1.0.8,HIGH,CWE-704
 CVE-2022-41852,2022-10-06T18:52:05Z,"Withdrawn: CVE Rejected: JXPath vulnerable to remote code execution when interpreting untrusted XPath expressions","commons-jxpath:commons-jxpath",0,,CRITICAL,CWE-470
@@ -5770,6 +5773,7 @@ CVE-2023-33201,2023-07-05T03:30:23Z,"Bouncy Castle For Java LDAP injection vulne
 CVE-2023-33201,2023-07-05T03:30:23Z,"Bouncy Castle For Java LDAP injection vulnerability","org.bouncycastle:bcprov-jdk15on",1.49,,MODERATE,CWE-295
 CVE-2023-33201,2023-07-05T03:30:23Z,"Bouncy Castle For Java LDAP injection vulnerability","org.bouncycastle:bcprov-jdk15to18",0,1.74,MODERATE,CWE-295
 CVE-2023-33201,2023-07-05T03:30:23Z,"Bouncy Castle For Java LDAP injection vulnerability","org.bouncycastle:bcprov-jdk18on",0,1.74,MODERATE,CWE-295
+CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk18on",0,1.73,HIGH,
 CVE-2023-33246,2023-07-06T21:15:04Z,"Apache RocketMQ may have remote code execution vulnerability when using update configuration function","org.apache.rocketmq:rocketmq-broker",5.0.0,5.1.1,CRITICAL,CWE-94
 CVE-2023-33246,2023-07-06T21:15:04Z,"Apache RocketMQ may have remote code execution vulnerability when using update configuration function","org.apache.rocketmq:rocketmq-controller",5.0.0,5.1.1,CRITICAL,CWE-94
 CVE-2023-33246,2023-07-06T21:15:04Z,"Apache RocketMQ may have remote code execution vulnerability when using update configuration function","org.apache.rocketmq:rocketmq-namesrv",4.0.0,4.9.6,CRITICAL,CWE-94
@@ -5818,6 +5822,12 @@ CVE-2023-34040,2023-08-24T15:31:10Z,"Spring-Kafka has Java Deserialization vulne
 CVE-2023-34040,2023-08-24T15:31:10Z,"Spring-Kafka has Java Deserialization vulnerability When Improperly Configured","org.springframework.kafka:spring-kafka",3.0.0,3.0.10,HIGH,CWE-502
 CVE-2023-34047,2023-09-20T12:30:22Z,"Spring for GraphQL may be exposed to GraphQL context with values from a different session","org.springframework.graphql:spring-graphql",1.1.0,1.1.6,LOW,
 CVE-2023-34047,2023-09-20T12:30:22Z,"Spring for GraphQL may be exposed to GraphQL context with values from a different session","org.springframework.graphql:spring-graphql",1.2.0,1.2.3,LOW,
+CVE-2023-34053,2023-11-28T09:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-webmvc",6.0.0,6.0.14,MODERATE,
+CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-http",1.0.0,1.0.39,MODERATE,
+CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-http",1.1.0,1.1.13,MODERATE,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",0,2.7.18,MODERATE,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",3.0.0,3.0.13,MODERATE,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",3.1.0,3.1.6,MODERATE,
 CVE-2023-34062,2023-11-15T12:30:30Z,"In Reactor Netty HTTP Server a malicious user can send a request using a specially crafted URL that can lead to a directory traversal attack","io.projectreactor.netty:reactor-netty-http",1.0.0,1.0.39,HIGH,CWE-22
 CVE-2023-34062,2023-11-15T12:30:30Z,"In Reactor Netty HTTP Server a malicious user can send a request using a specially crafted URL that can lead to a directory traversal attack","io.projectreactor.netty:reactor-netty-http",1.1.0,1.1.13,HIGH,CWE-22
 CVE-2023-3414,2023-07-26T21:30:18Z,"Credential leakage in Jenkins Plug-in for ServiceNow ","io.jenkins.plugins:servicenow-devops",0,1.38.1,MODERATE,CWE-200;CWE-352
@@ -5827,6 +5837,7 @@ CVE-2023-34150,2023-07-05T09:30:20Z,"Apache Any23 vulnerable to excessive memory
 CVE-2023-34189,2023-07-25T09:30:17Z,"Apache InLong: General user can delete and update process","org.apache.inlong:inlong-manager",1.4.0,1.8.0,MODERATE,CWE-668
 CVE-2023-34212,2023-06-12T18:30:18Z,"Apache NiFi vulnerable to Deserialization of Untrusted Data","org.apache.nifi:nifi-jms-bundle",1.8.0,1.22.0,MODERATE,CWE-502
 CVE-2023-3431,2023-06-27T15:30:28Z,"PlantUML Improper Access Control vulnerability","net.sourceforge.plantuml:plantuml-mit",0,1.2023.9,MODERATE,CWE-284
+CVE-2023-3432,2023-06-27T15:30:29Z,"PlantUML Server-Side Request Forgery vulnerability","net.sourceforge.plantuml:plantuml",0,1.2023.9,HIGH,CWE-918
 CVE-2023-3432,2023-06-27T15:30:29Z,"PlantUML Server-Side Request Forgery vulnerability","net.sourceforge.plantuml:plantuml-mit",0,1.2023.9,HIGH,CWE-918
 CVE-2023-34340,2023-06-21T09:30:15Z,"Apache Accumulo Improper Authentication vulnerability","org.apache.accumulo:accumulo-shell",2.1.0,2.1.1,CRITICAL,CWE-287
 CVE-2023-34396,2023-06-14T09:30:42Z,"Apache Struts vulnerable to memory exhaustion","org.apache.struts:struts2-core",0,2.5.31,HIGH,CWE-770
@@ -5926,6 +5937,7 @@ CVE-2023-35887,2023-07-10T18:30:49Z,"Apache MINA SSHD information disclosure vul
 CVE-2023-35925,2023-06-22T20:00:36Z,"FastAsyncWorldEdit vulnerable to Uncontrolled Resource Consumption","com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit",0,2.6.3,MODERATE,CWE-400
 CVE-2023-35925,2023-06-22T20:00:36Z,"FastAsyncWorldEdit vulnerable to Uncontrolled Resource Consumption","com.fastasyncworldedit:FastAsyncWorldEdit-Core",0,2.6.3,MODERATE,CWE-400
 CVE-2023-36106,2023-08-17T21:30:53Z,"PowerJob incorrect access control vulnerability",tech.powerjob:powerjob,0,,HIGH,
+CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability","com.squareup.okio:okio-jvm",2.0.0-RC1,3.4.0,MODERATE,CWE-195;CWE-681
 CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability",com.squareup.okio:okio,0,1.17.6,MODERATE,CWE-195;CWE-681
 CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability",com.squareup.okio:okio,2.0.0-RC1,3.4.0,MODERATE,CWE-195;CWE-681
 CVE-2023-36468,2023-06-30T20:42:07Z,"Upgrading doesn't prevent exploiting vulnerable XWiki documents","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.2-rc-1,CRITICAL,CWE-459
@@ -6082,6 +6094,7 @@ CVE-2023-40177,2023-08-21T20:10:55Z,"XWiki Platform privilege escalation (PR) fr
 CVE-2023-40311,2023-08-14T18:32:59Z,"OpenNMS vulnerable to Cross-site Scripting","org.opennms:opennms-webapp",31.0.8,32.0.2,MODERATE,CWE-79
 CVE-2023-40312,2023-08-14T18:32:59Z,"OpenNMS vulnerable to Cross-site Scripting","org.opennms:opennms-webapp",31.0.8,32.0.2,MODERATE,CWE-79
 CVE-2023-40313,2023-08-17T21:30:53Z,"OpenNMS vulnerable to remote code execution","org.opennms:opennms-base-assembly",0,32.0.2,HIGH,
+CVE-2023-40314,2023-11-17T00:31:06Z,"OpenNMS Cross-site Scripting vulnerability","org.opennms:opennms-webapp",0,32.0.5,MODERATE,CWE-20;CWE-79
 CVE-2023-40315,2023-08-17T21:30:54Z,"OpenNMS privilege escalation vulnerability","org.opennms:opennms-webapp-rest",31.0.8,32.0.2,MODERATE,
 CVE-2023-40336,2023-08-16T15:30:17Z,"Jenkins Folders Plugin cross-site request forgery vulnerability","org.jenkins-ci.plugins:cloudbees-folder",0,6.848.ve3b,HIGH,CWE-352
 CVE-2023-40337,2023-08-16T15:30:17Z,"Jenkins Folders Plugin cross-site request forgery vulnerability","org.jenkins-ci.plugins:cloudbees-folder",0,6.848.ve3b,MODERATE,CWE-352
@@ -6169,6 +6182,7 @@ CVE-2023-42795,2023-10-10T18:31:35Z,"Apache Tomcat Incomplete Cleanup vulnerabil
 CVE-2023-4301,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin cross-site request forgery vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-352
 CVE-2023-4302,2023-08-22T00:31:10Z,"Jenkins Fortify Plugin missing permission check","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-862
 CVE-2023-4303,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin HTML injection vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-79
+CVE-2023-43123,2023-11-23T12:30:23Z,"Apache Storm Local Information Disclosure Vulnerability in Storm-core on Unix-Like systems due temporary files ","org.apache.storm:storm-core",2.0.0,2.6.0,LOW,CWE-200
 CVE-2023-43494,2023-09-20T18:30:21Z,"Jenkins does not exclude sensitive build variables from search","org.jenkins-ci.main:jenkins-core",2.415,2.424,MODERATE,
 CVE-2023-43494,2023-09-20T18:30:21Z,"Jenkins does not exclude sensitive build variables from search","org.jenkins-ci.main:jenkins-core",2.50,2.414.2,MODERATE,
 CVE-2023-43495,2023-09-20T18:30:21Z,"Jenkins Cross-site Scripting vulnerability","org.jenkins-ci.main:jenkins-core",2.415,2.424,HIGH,CWE-79
@@ -6240,6 +6254,10 @@ CVE-2023-46243,2023-11-07T23:02:57Z,"XWiki Platform vulnerable to privilege esca
 CVE-2023-46244,2023-11-07T23:03:57Z,"XWiki Platform privilege escalation from script right to programming right through title displayer","org.xwiki.platform:xwiki-platform-display-api",15.0,15.2-rc-1,CRITICAL,CWE-863
 CVE-2023-46244,2023-11-07T23:03:57Z,"XWiki Platform privilege escalation from script right to programming right through title displayer","org.xwiki.platform:xwiki-platform-display-api",3.2-milestone-3,14.10.7,CRITICAL,CWE-863
 CVE-2023-46502,2023-10-31T00:31:00Z,"OpenCRX allows a remote attacker to execute arbitrary code via a crafted request","org.opencrx:opencrx-client",0,5.3.0,CRITICAL,CWE-611;CWE-918
+CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat:tomcat-catalina",10.1.0-M1,10.1.16,MODERATE,CWE-20
+CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat:tomcat-catalina",11.0.0-M1,11.0.0-M11,MODERATE,CWE-20
+CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat:tomcat-catalina",8.5.0,8.5.96,MODERATE,CWE-20
+CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat:tomcat-catalina",9.0.0-M1,9.0.83,MODERATE,CWE-20
 CVE-2023-46604,2023-10-27T15:30:20Z,"Apache ActiveMQ is vulnerable to Remote Code Execution","org.apache.activemq:activemq-client",0,5.15.16,CRITICAL,CWE-502
 CVE-2023-46604,2023-10-27T15:30:20Z,"Apache ActiveMQ is vulnerable to Remote Code Execution","org.apache.activemq:activemq-client",5.16.0,5.16.7,CRITICAL,CWE-502
 CVE-2023-46604,2023-10-27T15:30:20Z,"Apache ActiveMQ is vulnerable to Remote Code Execution","org.apache.activemq:activemq-client",5.17.0,5.17.6,CRITICAL,CWE-502
@@ -6260,13 +6278,17 @@ CVE-2023-46657,2023-10-25T18:32:25Z,"Jenkins Gogs Plugin uses non-constant time 
 CVE-2023-46658,2023-10-25T18:32:25Z,"Jenkins MSTeams Webhook Trigger Plugin uses non-constant time webhook token comparison ","io.jenkins.plugins:teams-webhook-trigger",0,,LOW,CWE-208;CWE-697
 CVE-2023-46659,2023-10-25T18:32:25Z,"Jenkins Edgewall Trac Plugin vulnerable to Stored XSS","org.jenkins-ci.plugins:trac",0,,HIGH,CWE-79
 CVE-2023-46660,2023-10-25T18:32:25Z,"Non-constant time webhook token hash comparison in Jenkins Zanata Plugin","org.jenkins-ci.plugins:zanata",0,,LOW,CWE-208;CWE-697
+CVE-2023-46673,2023-11-22T12:30:26Z,"Elasticsearch Improper Handling of Exceptional Conditions","org.elasticsearch:elasticsearch",7.0.0,7.17.14,MODERATE,CWE-755
+CVE-2023-46673,2023-11-22T12:30:26Z,"Elasticsearch Improper Handling of Exceptional Conditions","org.elasticsearch:elasticsearch",8.0.0,8.10.3,MODERATE,CWE-755
 CVE-2023-46731,2023-11-08T14:51:06Z,"XWiki Platform vulnerable to remote code execution through the section parameter in Administration as guest","org.xwiki.platform:xwiki-platform-administration",0,14.10.14,CRITICAL,CWE-94;CWE-95
 CVE-2023-46731,2023-11-08T14:51:06Z,"XWiki Platform vulnerable to remote code execution through the section parameter in Administration as guest","org.xwiki.platform:xwiki-platform-administration-ui",0,14.10.14,CRITICAL,CWE-94;CWE-95
 CVE-2023-46731,2023-11-08T14:51:06Z,"XWiki Platform vulnerable to remote code execution through the section parameter in Administration as guest","org.xwiki.platform:xwiki-platform-administration-ui",15.0-rc-1,15.5.1,CRITICAL,CWE-94;CWE-95
 CVE-2023-46732,2023-11-08T14:51:37Z,"XWiki Platform vulnerable to  reflected cross-site scripting through revision parameter in content menu","org.xwiki.platform:xwiki-platform-flamingo-skin-resources",15.0-rc-1,15.5.1,CRITICAL,CWE-79;CWE-80
 CVE-2023-46732,2023-11-08T14:51:37Z,"XWiki Platform vulnerable to  reflected cross-site scripting through revision parameter in content menu","org.xwiki.platform:xwiki-platform-flamingo-skin-resources",9.7-rc-1,14.10.14,CRITICAL,CWE-79;CWE-80
 CVE-2023-47112,2023-11-16T20:13:06Z,"Authenticated users can view job names and groups they do not have authorization to view",org.rundeck:rundeckapp,4.17.0,4.17.3,MODERATE,CWE-862
+CVE-2023-47467,2023-11-22T18:30:57Z,"Directory Traversal in jeecg-boot","org.jeecgframework.boot:jeecg-boot-common",0,,MODERATE,CWE-22
 CVE-2023-4759,2023-09-18T15:30:18Z,"Arbitrary File Overwrite in Eclipse JGit ","org.eclipse.jgit:org.eclipse.jgit",0,6.6.1.202309021850-r,HIGH,CWE-178
+CVE-2023-47797,2023-11-17T06:31:22Z,"Liferay Portal XSS with `p_l_back_url_title` on edit content page","com.liferay.portal:release.portal.bom",7.4.3.94,7.4.3.96,CRITICAL,CWE-79
 CVE-2023-48087,2023-11-15T15:30:21Z,"xxl-job-admin vulnerable to Insecure Permissions","com.xuxueli:xxl-job-admin",0,,MODERATE,CWE-732
 CVE-2023-48088,2023-11-15T15:30:21Z,"xxl-job-admin vulnerable to Cross Site Scripting","com.xuxueli:xxl-job-admin",0,,MODERATE,CWE-79
 CVE-2023-48089,2023-11-15T15:30:21Z,"xxl-job-admin vulnerable to Remote Code Execution","com.xuxueli:xxl-job-admin",0,,HIGH,
@@ -6290,8 +6312,13 @@ CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluat
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-vertx-http",0,2.16.11.Final,HIGH,CWE-863
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-vertx-http",3.0.0,3.2.6.Final,HIGH,CWE-863
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-vertx-http",3.3.0,3.3.3,HIGH,CWE-863
+CVE-2023-48796,2023-11-24T09:30:28Z,"Apache DolphinScheduler sensitive information disclosure","org.apache.dolphinscheduler:dolphinscheduler",3.0.0,3.0.2,MODERATE,CWE-200
+CVE-2023-48848,2023-11-28T18:30:23Z,"ureport arbitrary file read vulnerability","com.bstek.ureport:ureport2-core",0,,MODERATE,
+CVE-2023-49068,2023-11-27T12:30:55Z,"Apache DolphinScheduler Exposure of Sensitive Information to an Unauthorized Actor vulnerability","org.apache.dolphinscheduler:dolphinscheduler-api",0,3.2.1,MODERATE,CWE-200
+CVE-2023-49145,2023-11-28T00:30:33Z,"Improper Neutralization of Input in Advanced User Interface for Jolt","org.apache.nifi:nifi-jolt-transform-json-ui",0,1.24.0,HIGH,CWE-79
 CVE-2023-4918,2023-09-12T21:10:37Z,"Keycloak vulnerable to Plaintext Storage of User Password","org.keycloak:keycloak-core",22.0.2,22.0.3,HIGH,CWE-256;CWE-319
 CVE-2023-5072,2023-11-14T22:24:08Z,"Java: DoS Vulnerability in JSON-JAVA",org.json:json,0,20231013,HIGH,CWE-358
+CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-runtime_2.12",0,0.23.1,HIGH,CWE-22
 CVE-2023-5720,2023-11-15T15:30:21Z,"Quarkus does not properly sanitize artifacts created from its use of the Gradle plugin, allowing certain build system information to remain","io.quarkus:quarkus-project",3.0.0.CR1,,HIGH,CWE-526
 CVE-2023-5763,2023-11-03T09:32:49Z,"Eclipse Glassfish remote code execution issue","org.glassfish.main.orb:orb-connector",5.0.0,7.0.0,MODERATE,CWE-20;CWE-913
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
@@ -6387,6 +6414,7 @@ GHSA-q76j-58cx-wp5v,2020-11-13T17:28:49Z,"Vulnerability in RPKI manifest validat
 GHSA-q95j-488q-5q3p,2023-01-09T20:05:31Z,"Apiman Manager API affected by Jackson denial of service vulnerability","io.apiman:apiman-manager-api-impl",0,3.0.0.Final,MODERATE,CWE-787
 GHSA-r53m-pfr5-7v87,2019-04-18T14:50:19Z,"Moderate severity vulnerability that affects org.apache.tomcat.embed:tomcat-embed-core","org.apache.tomcat.embed:tomcat-embed-core",8.5.0,8.5.38,MODERATE,
 GHSA-r53m-pfr5-7v87,2019-04-18T14:50:19Z,"Moderate severity vulnerability that affects org.apache.tomcat.embed:tomcat-embed-core","org.apache.tomcat.embed:tomcat-embed-core",9.0.0.M1,9.0.16,MODERATE,
+GHSA-r68h-jhhj-9jvm,2023-11-27T17:25:46Z,"Validator.isValidSafeHTML is being deprecated and will be deleted from org.owasp.esapi:esapi in 1 year",org.owasp.esapi:esapi,0,,HIGH,
 GHSA-rm7j-f5g5-27vv,2023-10-12T18:30:28Z,"Duplicate Advisory: Denial of Service  in JSON-Java",org.json:json,0,20231013,HIGH,CWE-770
 GHSA-v57x-gxfj-484q,2022-01-21T23:25:04Z,"Security Advisory for ""Log4Shell""","com.hazelcast.jet:hazelcast-jet",4.1,4.5.3,CRITICAL,CWE-20;CWE-400;CWE-502
 GHSA-v57x-gxfj-484q,2022-01-21T23:25:04Z,"Security Advisory for ""Log4Shell""",com.hazelcast:hazelcast,4.0.0,4.0.5,CRITICAL,CWE-20;CWE-400;CWE-502

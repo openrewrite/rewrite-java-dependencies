@@ -130,10 +130,10 @@ class AddDependencyTest implements RewriteTest {
         return new AddDependency(
           gavParts[0],
           gavParts[1],
-          (gavParts.length < 3) ? null : gavParts[2],
+          gavParts.length < 3 ? null : gavParts[2],
           null,
           onlyIfUsing,
-          (gavParts.length < 4) ? null : gavParts[3],
+          gavParts.length < 4 ? null : gavParts[3],
           null,
           null,
           null,

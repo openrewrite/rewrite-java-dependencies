@@ -273,7 +273,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                 }
                 SourceFile s = (SourceFile) tree;
                 if(s.getSourcePath().endsWith("build.gradle") && !s.getMarkers().findFirst(GradleProject.class).isPresent()) {
-                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> marker.getClass().getName().equals("org.openrewrite.gradle.marker.GradleProject"))) {
+                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.gradle.marker.GradleProject".equals(marker.getClass().getName()))) {
                         s = Markup.error(s, new IllegalStateException(
                                 s.getSourcePath() + " has a GradleProject marker, but it is loaded by a different classloader than the recipe."));
                     } else {
@@ -281,7 +281,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                                 s.getSourcePath() + " is a Gradle build file, but it is missing a GradleProject marker."));
                     }
                 } else if(s.getSourcePath().endsWith("pom.xml") && !s.getMarkers().findFirst(MavenResolutionResult.class).isPresent()) {
-                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> marker.getClass().getName().equals("org.openrewrite.maven.tree.MavenResolutionResult"))) {
+                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.maven.tree.MavenResolutionResult".equals(marker.getClass().getName()))) {
                         s = Markup.error(s, new IllegalStateException(
                                 s.getSourcePath() + " has a MavenResolutionResult marker, but it is loaded by a different classloader than the recipe."));
                     } else {

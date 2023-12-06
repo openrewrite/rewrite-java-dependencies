@@ -54,7 +54,7 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                 assertThat(rows).contains(
                   new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""));
                 assertThat(rows)
-                  .filteredOn(row -> row.getUri().equals("https://nonexistent.moderne.io/maven2") && row.getPingHttpCode() == null).hasSize(1);
+                  .filteredOn(row -> "https://nonexistent.moderne.io/maven2".equals(row.getUri()) && row.getPingHttpCode() == null).hasSize(1);
             }),
           //language=groovy
           buildGradle("""

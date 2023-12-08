@@ -57,7 +57,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                   .filteredOn(row -> "https://nonexistent.moderne.io/maven2".equals(row.getUri()) && row.getPingHttpCode() == null).hasSize(1);
             }),
           //language=groovy
-          buildGradle("""
+          buildGradle(
+                """
             plugins {
                 id("java")
             }
@@ -91,7 +92,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                   new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""));
             }),
           //language=groovy
-          buildGradle("""
+          buildGradle(
+                """
             plugins {
                 id("java")
             }
@@ -140,7 +142,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                 .executionContext(ctx);
           },
           //language=xml
-          pomXml("""
+          pomXml(
+                """
             <project>
                 <groupId>com.example</groupId>
                 <artifactId>test</artifactId>
@@ -163,7 +166,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                 );
             }),
           //language=xml
-          pomXml("""
+          pomXml(
+                """
               <project>
                   <groupId>com.example</groupId>
                   <artifactId>test</artifactId>
@@ -184,7 +188,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
     void gradleNoMarker() {
         rewriteRun(
             //language=groovy
-            buildGradle("""
+            buildGradle(
+                """
                 plugins {
                     id("java")
                 }
@@ -209,7 +214,8 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
                     "org.nonexistent:nonexistent:0 failed. Unable to download POM. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404"));
             }),
           //language=groovy
-          buildGradle("""
+          buildGradle(
+                """
                 plugins {
                     id("java")
                 }

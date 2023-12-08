@@ -47,7 +47,8 @@ public class DependencyListTest implements RewriteTest {
                         .hasSize(1);
                 }),
             //language=groovy
-            buildGradle("""
+            buildGradle(
+                """
               plugins {
                   id 'java'
               }
@@ -61,7 +62,8 @@ public class DependencyListTest implements RewriteTest {
               }
               """),
             //language=xml
-            pomXml("""
+            pomXml(
+                """
               <project>
                 <groupId>com.mycompany.app</groupId>
                 <artifactId>my-app</artifactId>

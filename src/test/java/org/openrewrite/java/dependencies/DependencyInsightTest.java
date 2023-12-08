@@ -32,7 +32,8 @@ public class DependencyInsightTest implements RewriteTest {
     void maven() {
         rewriteRun(
           //language=xml
-          pomXml("""
+          pomXml(
+                """
               <project>
                 <groupId>com.example</groupId>
                 <artifactId>foo</artifactId>

@@ -192,10 +192,17 @@ CVE-2012-0022,2022-05-04T00:27:43Z,"Denial of Service in Apache Tomcat",org.apac
 CVE-2012-0022,2022-05-04T00:27:43Z,"Denial of Service in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.23,MODERATE,
 CVE-2012-0213,2022-05-04T00:28:50Z,"Denial of Service in Apache POI","org.apache.poi:poi-scratchpad",0,3.10-beta1,MODERATE,
 CVE-2012-0213,2022-05-04T00:28:50Z,"Denial of Service in Apache POI",org.apache.poi:poi,0,3.10-beta1,MODERATE,
-CVE-2012-0391,2022-05-04T00:29:43Z,"Apache Struts Remote Java Code Execution","org.apache.struts:struts2-parent",0,2.2.3.1,HIGH,CWE-20
+CVE-2012-0391,2022-05-04T00:29:43Z,"Apache Struts Remote Java Code Execution","org.apache.struts.xwork:xwork-core",0,2.2.3.1,HIGH,CWE-20
+CVE-2012-0391,2022-05-04T00:29:43Z,"Apache Struts Remote Java Code Execution","org.apache.struts:struts2-core",0,2.2.3.1,HIGH,CWE-20
+CVE-2012-0392,2022-05-04T00:29:43Z,"Apache Struts's CookieInterceptor component does not use the parameter-name whitelist","org.apache.struts.xwork:xwork-core",0,2.2.3.1,MODERATE,
+CVE-2012-0392,2022-05-04T00:29:43Z,"Apache Struts's CookieInterceptor component does not use the parameter-name whitelist","org.apache.struts:struts2-core",0,2.2.3.1,MODERATE,
+CVE-2012-0393,2022-05-04T00:29:43Z,"Apache Struts's ParameterInterceptor component does not prevent access to public constructors","org.apache.struts.xwork:xwork-core",0,2.2.3.1,MODERATE,
+CVE-2012-0393,2022-05-04T00:29:43Z,"Apache Struts's ParameterInterceptor component does not prevent access to public constructors","org.apache.struts:struts2-core",0,2.2.3.1,MODERATE,
+CVE-2012-0394,2022-05-04T00:29:43Z,"Apache Struts's DebuggingInterceptor component allows remote code execution in developer mode","org.apache.struts.xwork:xwork-core",0,2.3.18,MODERATE,CWE-94
 CVE-2012-0803,2022-05-13T01:09:22Z,"Improper Authentication in Apache CXF",org.apache.cxf:cxf,2.4.0,2.4.6,CRITICAL,CWE-287
 CVE-2012-0803,2022-05-13T01:09:22Z,"Improper Authentication in Apache CXF",org.apache.cxf:cxf,2.5.0,2.5.2,CRITICAL,CWE-287
 CVE-2012-0818,2022-05-17T01:49:58Z,"Exposure of Sensitive Information to an Unauthorized Actor in RESTEasy","org.jboss.resteasy:resteasy-client",0,2.3.1,MODERATE,CWE-200
+CVE-2012-0838,2022-05-14T01:51:59Z,"Apache Struts Code injection due to conversion error","org.apache.struts.xwork:xwork-core",0,2.2.3.1,HIGH,CWE-20
 CVE-2012-0838,2022-05-14T01:51:59Z,"Apache Struts Code injection due to conversion error","org.apache.struts:struts2-core",0,2.2.3.1,HIGH,CWE-20
 CVE-2012-0881,2020-06-15T18:51:38Z,"Denial of service in Apache Xerces2",xerces:xercesImpl,0,2.12.0,HIGH,CWE-400
 CVE-2012-1006,2022-05-17T01:49:11Z,"Apache Struts Multiple Cross-site Scripting Vulnerabilities","org.apache.struts:struts2-parent",0,2.1.2,MODERATE,CWE-79
@@ -227,7 +234,7 @@ CVE-2012-3536,2022-05-14T03:37:10Z,"Apache James Hupa Webmail application Cross-
 CVE-2012-3546,2022-05-17T00:59:04Z,"Authentication Bypass in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.36,MODERATE,CWE-287
 CVE-2012-3546,2022-05-17T00:59:04Z,"Authentication Bypass in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.30,MODERATE,CWE-287
 CVE-2012-4386,2022-05-17T01:42:17Z,"Cross-Site Request Forgery in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.4.1,MODERATE,CWE-352
-CVE-2012-4387,2022-05-17T01:42:17Z,"Denial of service in Apache Struts","org.apache.struts:struts2-core",0,2.3.4.1,MODERATE,
+CVE-2012-4387,2022-05-17T01:42:17Z,"Denial of service in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.4.1,MODERATE,
 CVE-2012-4431,2022-05-17T00:57:51Z,"Cross-Site Request Forgery in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.36,MODERATE,CWE-352
 CVE-2012-4431,2022-05-17T00:57:51Z,"Cross-Site Request Forgery in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.32,MODERATE,CWE-352
 CVE-2012-4446,2022-05-17T05:13:24Z,"Improper Authentication in Apache Qpid","org.apache.qpid:qpid-client",0,0.20,MODERATE,CWE-287
@@ -282,7 +289,8 @@ CVE-2013-1821,2022-05-17T03:23:26Z,"Ruby vulnerable to denial of service",org.jr
 CVE-2013-1879,2022-05-17T01:36:25Z,"Improper Neutralization of Input During Web Page Generation in Apache ActiveMQ","org.apache.activemq:activemq-client",0,5.9.0,MODERATE,CWE-79
 CVE-2013-1880,2022-05-17T03:46:32Z,"Apache ActiveMQ Cross-site scripting (XSS) vulnerability in the Portfolio publisher servlet ","org.apache.activemq:activemq-core",0,5.9.0,MODERATE,CWE-79
 CVE-2013-1965,2022-05-14T00:54:15Z,"Improper Control of Generation of Code in Apache Struts","org.apache.struts:struts2-core",0,2.3.14.3,HIGH,CWE-94
-CVE-2013-1966,2022-05-14T00:54:15Z,"Arbitrary code execution in Apache Struts","org.apache.struts:struts2-core",0,2.3.14.2,HIGH,CWE-94
+CVE-2013-1966,2022-05-14T00:54:15Z,"Arbitrary code execution in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.14.2,HIGH,CWE-94
+CVE-2013-1966,2022-05-14T00:54:15Z,"Arbitrary code execution in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.14.2,HIGH,CWE-94
 CVE-2013-2027,2022-05-14T02:05:10Z,"Jython Improper Access Restrictions vulnerability","org.python:jython-standalone",0,2.7.2b3,MODERATE,CWE-281
 CVE-2013-2033,2022-05-14T01:52:20Z,"Jenkins vulnerable to Cross-site Scripting","org.jenkins-ci.main:jenkins-core",0,1.509.1,MODERATE,CWE-79
 CVE-2013-2033,2022-05-14T01:52:20Z,"Jenkins vulnerable to Cross-site Scripting","org.jenkins-ci.main:jenkins-core",1.513,1.514,MODERATE,CWE-79
@@ -292,9 +300,12 @@ CVE-2013-2035,2022-05-17T04:17:07Z,"Improper Control of Generation of Code in Ha
 CVE-2013-2067,2022-05-14T01:10:35Z,"Improper Authentication in Apache Tomcat",org.apache.tomcat:tomcat,6.0.21,6.0.37,MODERATE,CWE-287
 CVE-2013-2067,2022-05-14T01:10:35Z,"Improper Authentication in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.33,MODERATE,CWE-287
 CVE-2013-2071,2022-05-17T02:44:28Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.40,LOW,CWE-200
-CVE-2013-2115,2022-05-13T01:16:08Z,"Code injection in Apache Struts","org.apache.struts:struts2-core",0,2.3.14.2,HIGH,CWE-94
-CVE-2013-2134,2022-05-14T01:57:02Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",0,2.3.14.3,HIGH,CWE-94
-CVE-2013-2135,2022-05-14T01:57:01Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",0,2.3.14.3,HIGH,CWE-94
+CVE-2013-2115,2022-05-13T01:16:08Z,"Code injection in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.14.2,HIGH,CWE-94
+CVE-2013-2115,2022-05-13T01:16:08Z,"Code injection in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.14.2,HIGH,CWE-94
+CVE-2013-2134,2022-05-14T01:57:02Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts.xwork:xwork-core",2.0.0,2.3.14.3,HIGH,CWE-94
+CVE-2013-2134,2022-05-14T01:57:02Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",2.0.0,2.3.14.3,HIGH,CWE-94
+CVE-2013-2135,2022-05-14T01:57:01Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts.xwork:xwork-core",2.0.0,2.3.14.3,HIGH,CWE-94
+CVE-2013-2135,2022-05-14T01:57:01Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",2.0.0,2.3.14.3,HIGH,CWE-94
 CVE-2013-2160,2022-05-13T01:09:20Z,"Missing XML Validation in Apache CXF","org.apache.cxf:cxf-rt-frontend-jaxrs",2.5.0,2.5.10,MODERATE,CWE-112
 CVE-2013-2160,2022-05-13T01:09:20Z,"Missing XML Validation in Apache CXF","org.apache.cxf:cxf-rt-frontend-jaxrs",2.6.0,2.6.7,MODERATE,CWE-112
 CVE-2013-2160,2022-05-13T01:09:20Z,"Missing XML Validation in Apache CXF","org.apache.cxf:cxf-rt-frontend-jaxrs",2.7.0,2.7.4,MODERATE,CWE-112
@@ -324,7 +335,8 @@ CVE-2013-4286,2022-05-14T01:10:36Z,"Apache Tomcat is vulnerable to HTTP request-
 CVE-2013-4286,2022-05-14T01:10:36Z,"Apache Tomcat is vulnerable to HTTP request-smuggling",org.apache.tomcat:tomcat,8.0.0-RC1,8.0.0-RC3,MODERATE,CWE-20
 CVE-2013-4295,2022-05-17T04:59:44Z,"Apache Shindig PHP Sensitive Information Disclosure","org.apache.shindig:shindig-php",2.5.0-beta1,2.5.0-update1,MODERATE,CWE-200
 CVE-2013-4310,2022-05-17T04:44:52Z,"Apache Struts2 Broken Access Control Vulnerability","org.apache.struts:struts2-core",0,2.3.15.3,MODERATE,CWE-284
-CVE-2013-4316,2022-05-17T03:28:23Z,"Code injection in Apache Struts","org.apache.struts:struts2-core",0,2.3.15.1,HIGH,CWE-94
+CVE-2013-4316,2022-05-17T03:28:23Z,"Code injection in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.15.2,HIGH,CWE-94
+CVE-2013-4316,2022-05-17T03:28:23Z,"Code injection in Apache Struts","org.apache.struts:struts2-rest-plugin",2.0.0,2.3.15.2,HIGH,CWE-94
 CVE-2013-4322,2022-05-14T01:10:35Z,"Apache Tomcat Denial of Service vulnerability",org.apache.tomcat:tomcat,0,6.0.39,MODERATE,CWE-400
 CVE-2013-4322,2022-05-14T01:10:35Z,"Apache Tomcat Denial of Service vulnerability",org.apache.tomcat:tomcat,7.0.0,7.0.50,MODERATE,CWE-400
 CVE-2013-4322,2022-05-14T01:10:35Z,"Apache Tomcat Denial of Service vulnerability",org.apache.tomcat:tomcat,8.0.0-RC1,8.0.0-RC10,MODERATE,CWE-400
@@ -380,7 +392,8 @@ CVE-2014-0075,2022-05-14T01:10:19Z,"Integer Overflow or Wraparound in Apache Tom
 CVE-2014-0085,2022-05-14T02:19:43Z,"Exposure of Sensitive Information to an Unauthorized Actor in JBoss Fuse","org.jboss.fuse:jboss-fuse",0,6.1.0,LOW,CWE-200
 CVE-2014-0086,2022-05-17T00:13:54Z,"JBoss RichFaces Improper Input Validation vulnerability",org.richfaces:richfaces,4.3.4,,MODERATE,CWE-20
 CVE-2014-0086,2022-05-17T00:13:54Z,"JBoss RichFaces Improper Input Validation vulnerability",org.richfaces:richfaces,5.0.0.Alpha1,5.0.0.Alpha3,MODERATE,CWE-20
-CVE-2014-0094,2022-05-14T00:54:15Z,"ClassLoader manipulation in Apache Struts","org.apache.struts:struts2-core",0,2.3.16.2,MODERATE,
+CVE-2014-0094,2022-05-14T00:54:15Z,"ClassLoader manipulation in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.16.2,MODERATE,
+CVE-2014-0094,2022-05-14T00:54:15Z,"ClassLoader manipulation in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.16.2,MODERATE,
 CVE-2014-0096,2022-05-14T01:10:18Z,"Improper Input Validation in Apache Tomcat",org.apache.tomcat:tomcat,0,6.0.40,MODERATE,CWE-20
 CVE-2014-0096,2022-05-14T01:10:18Z,"Improper Input Validation in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.54,MODERATE,CWE-20
 CVE-2014-0096,2022-05-14T01:10:18Z,"Improper Input Validation in Apache Tomcat",org.apache.tomcat:tomcat,8.0.0,8.0.6,MODERATE,CWE-20
@@ -546,7 +559,8 @@ CVE-2015-1776,2022-05-17T03:44:57Z,"Exposure of Sensitive Information to an Unau
 CVE-2015-1796,2022-05-17T03:38:17Z,"Improper Certificate Validation in Shibboleth Identity Provider and OpenSAML","edu.internet2.middleware:shibboleth-identityprovider",0,2.4.4,MODERATE,CWE-295
 CVE-2015-1796,2022-05-17T03:38:17Z,"Improper Certificate Validation in Shibboleth Identity Provider and OpenSAML",org.opensaml:opensaml,0,2.6.5,MODERATE,CWE-295
 CVE-2015-1830,2022-05-14T01:14:51Z,"Improper Limitation of a Pathname to a Restricted Directory in Apache ActiveMQ","org.apache.activemq:activemq-client",5.0.0,5.11.2,MODERATE,CWE-22
-CVE-2015-1831,2022-05-17T00:50:08Z,"Incomplete exclude pattern in Apache Struts","org.apache.struts:struts2-core",0,2.3.20.1,HIGH,
+CVE-2015-1831,2022-05-17T00:50:08Z,"Incomplete exclude pattern in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.20.1,HIGH,
+CVE-2015-1831,2022-05-17T00:50:08Z,"Incomplete exclude pattern in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.20.1,HIGH,
 CVE-2015-1832,2022-05-13T01:14:26Z,"Improper Restriction of XML External Entity Reference in Apace Derby",org.apache.derby:derby,0,10.12.1.1,CRITICAL,CWE-611
 CVE-2015-1833,2022-05-14T02:49:30Z,"Improper Input Validation in Apache Jackrabbit","org.apache.jackrabbit:jackrabbit-core",0,2.0.6,MODERATE,CWE-20
 CVE-2015-1833,2022-05-14T02:49:30Z,"Improper Input Validation in Apache Jackrabbit","org.apache.jackrabbit:jackrabbit-core",2.10.0,2.10.1,MODERATE,CWE-20
@@ -684,7 +698,8 @@ CVE-2016-0767,2022-05-13T01:06:11Z,"PostgreSQL PL/Java Improper Privilege Manage
 CVE-2016-0782,2022-05-14T01:14:51Z,"Improper Neutralization of Input During Web Page Generation in Apache ActiveMQ","org.apache.activemq:activemq-client",5.0.0,5.11.4,MODERATE,CWE-79
 CVE-2016-0782,2022-05-14T01:14:51Z,"Improper Neutralization of Input During Web Page Generation in Apache ActiveMQ","org.apache.activemq:activemq-client",5.12.0,5.12.3,MODERATE,CWE-79
 CVE-2016-0782,2022-05-14T01:14:51Z,"Improper Neutralization of Input During Web Page Generation in Apache ActiveMQ","org.apache.activemq:activemq-client",5.13.0,5.13.2,MODERATE,CWE-79
-CVE-2016-0785,2022-05-14T00:52:12Z,"Apache Struts RCE Vulnerability","org.apache.struts:struts2-core",2.0,2.3.28,HIGH,CWE-20
+CVE-2016-0785,2022-05-14T00:52:12Z,"Apache Struts RCE Vulnerability","org.apache.struts:struts2-core",2.0.0,2.3.20.3,HIGH,CWE-20
+CVE-2016-0785,2022-05-14T00:52:12Z,"Apache Struts RCE Vulnerability","org.apache.struts:struts2-core",2.3.24,2.3.24.3,HIGH,CWE-20
 CVE-2016-0790,2022-05-14T03:58:16Z,"Exposure of Sensitive Information in Jenkins Core","org.jenkins-ci.main:jenkins-core",0,1.650,MODERATE,CWE-200
 CVE-2016-0791,2022-05-14T03:58:15Z,"Exposure of Sensitive Information in Jenkins Core","org.jenkins-ci.main:jenkins-core",0,1.650,CRITICAL,CWE-200
 CVE-2016-0956,2022-05-14T02:47:05Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Sling Servlets Post","org.apache.sling:org.apache.sling.servlets.post",0,2.3.8,HIGH,CWE-200
@@ -754,6 +769,9 @@ CVE-2016-3083,2019-03-14T15:40:32Z,"org.apache.hive:hive, org.apache.hive:hive-e
 CVE-2016-3083,2019-03-14T15:40:32Z,"org.apache.hive:hive, org.apache.hive:hive-exec, and org.apache.hive:hive-service vulnerable to Improper Certificate Validation ",org.apache.hive:hive,2.0.0,2.0.1,HIGH,CWE-295
 CVE-2016-3086,2022-05-17T01:08:00Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Hadoop","org.apache.hadoop:hadoop-yarn-server-nodemanager",2.6.0,2.6.5,CRITICAL,CWE-200
 CVE-2016-3086,2022-05-17T01:08:00Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Hadoop","org.apache.hadoop:hadoop-yarn-server-nodemanager",2.7.0,2.7.3,CRITICAL,CWE-200
+CVE-2016-3087,2022-05-14T00:54:14Z,"Apache Struts vulnerable to arbitrary remote code execution due to improper input validation","org.apache.struts:struts2-core",2.3.19,2.3.20.3,CRITICAL,CWE-20
+CVE-2016-3087,2022-05-14T00:54:14Z,"Apache Struts vulnerable to arbitrary remote code execution due to improper input validation","org.apache.struts:struts2-core",2.3.21,2.3.24.3,CRITICAL,CWE-20
+CVE-2016-3087,2022-05-14T00:54:14Z,"Apache Struts vulnerable to arbitrary remote code execution due to improper input validation","org.apache.struts:struts2-core",2.3.25,2.3.28.1,CRITICAL,CWE-20
 CVE-2016-3088,2022-05-14T01:14:51Z,"Improper Input Validation in Apache ActiveMQ","org.apache.activemq:activemq-client",5.0.0,5.14.0,CRITICAL,CWE-20
 CVE-2016-3089,2022-05-14T02:46:33Z,"Apache OpenMeetings Cross-site Scripting vulnerability","org.apache.openmeetings:openmeetings-parent",0,3.1.2,MODERATE,CWE-79
 CVE-2016-3090,2022-05-14T03:15:07Z,"Apache Struts RCE Vulnerability","org.apache.struts:struts2-parent",2.0.0,2.3.20,HIGH,CWE-20
@@ -776,7 +794,8 @@ CVE-2016-4432,2018-10-16T19:49:48Z,"AMQP 0-8, 0-9, 0-91, and 0-10 connection han
 CVE-2016-4433,2022-05-17T02:16:00Z,"Apache Struts Open Redirect","org.apache.struts:struts-master",2.3.20,,HIGH,CWE-20
 CVE-2016-4434,2018-10-17T15:44:22Z,"Apache Tika does not properly initialize the XML parser or choose handlers","org.apache.tika:tika-core",0,1.13,HIGH,CWE-611
 CVE-2016-4437,2022-05-14T02:46:17Z,"Improper Access Control in Apache Shiro","org.apache.shiro:shiro-core",0,1.2.5,HIGH,CWE-284
-CVE-2016-4438,2022-05-14T00:54:13Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",0,2.3.29,CRITICAL,CWE-20
+CVE-2016-4438,2022-05-14T00:54:13Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-core",2.3.19,2.3.29,CRITICAL,CWE-20
+CVE-2016-4438,2022-05-14T00:54:13Z,"Arbitrary code execution in Apache Struts 2","org.apache.struts:struts2-rest-plugin",2.3.19,2.3.29,CRITICAL,CWE-20
 CVE-2016-4464,2018-10-18T16:57:10Z,"High severity vulnerability that affects org.apache.cxf.fediz:fediz-spring and org.apache.cxf.fediz:fediz-spring2","org.apache.cxf.fediz:fediz-spring",1.2.0,1.2.3,HIGH,CWE-284
 CVE-2016-4464,2018-10-18T16:57:10Z,"High severity vulnerability that affects org.apache.cxf.fediz:fediz-spring and org.apache.cxf.fediz:fediz-spring2","org.apache.cxf.fediz:fediz-spring",1.3.0,1.3.1,HIGH,CWE-284
 CVE-2016-4464,2018-10-18T16:57:10Z,"High severity vulnerability that affects org.apache.cxf.fediz:fediz-spring and org.apache.cxf.fediz:fediz-spring2","org.apache.cxf.fediz:fediz-spring2",1.2.0,1.2.3,HIGH,CWE-284
@@ -1321,6 +1340,7 @@ CVE-2017-9805,2018-10-16T19:37:56Z,"REST Plugin in Apache Struts uses an XStream
 CVE-2018-1000011,2022-05-14T03:46:08Z,"XML External Entity Reference in Jenkins FindBugs Plugin","org.jvnet.hudson.plugins.findbugs:library",0,,HIGH,CWE-611
 CVE-2018-1000054,2022-05-14T03:38:33Z,"Jenkins CCM Plugin vulnerable to Improper Restriction of XML External Entity Reference","org.jvnet.hudson.plugins:ccm",0,3.2,HIGH,CWE-611
 CVE-2018-1000056,2022-05-14T03:40:06Z,"Improper Restriction of XML External Entity Reference in Jenkins JUnit Plugin","org.jenkins-ci.plugins:junit",0,1.24,HIGH,CWE-611
+CVE-2018-1000057,2022-05-13T01:48:30Z,"Jenkins Credentials Binding Plugin has Insufficiently Protected Credentials","org.jenkins-ci.plugins:credentials-binding",0,1.15,MODERATE,CWE-522
 CVE-2018-1000067,2022-05-13T01:01:03Z,"Server-Side Request Forgery in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.89.4,MODERATE,CWE-918
 CVE-2018-1000067,2022-05-13T01:01:03Z,"Server-Side Request Forgery in Jenkins","org.jenkins-ci.main:jenkins-core",2.90,2.107,MODERATE,CWE-918
 CVE-2018-1000068,2022-05-13T01:01:02Z,"Exposure of Sensitive Information to an Unauthorized Actor in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.89.4,MODERATE,CWE-200
@@ -4406,7 +4426,7 @@ CVE-2022-27200,2022-03-16T00:00:44Z,"Stored Cross-site Scripting vulnerability i
 CVE-2022-27201,2022-03-16T00:00:45Z,"Agent-to-controller security bypass in Jenkins Semantic Versioning Plugin","org.jenkins-ci.plugins:semantic-versioning-plugin",0,1.14,HIGH,CWE-611;CWE-918
 CVE-2022-27202,2022-03-16T00:00:44Z,"Stored Cross-site Scripting vulnerability in Jenkins Extended Choice Parameter Plugin","org.jenkins-ci.plugins:extended-choice-parameter",0,,HIGH,CWE-79
 CVE-2022-27203,2022-03-16T00:00:44Z,"Arbitrary JSON and property file read vulnerability in Jenkins Extended Choice Parameter Plugin","org.jenkins-ci.plugins:extended-choice-parameter",0,,MODERATE,CWE-22
-CVE-2022-27204,2022-03-16T00:00:44Z,"CSRF vulnerability and missing permission checks in Jenkins Extended Choice Parameter Plugin allow SSRF","org.jenkins-ci.plugins:extended-choice-parameter",0,,MODERATE,CWE-352
+CVE-2022-27204,2022-03-16T00:00:44Z,"CSRF vulnerability and missing permission checks in Jenkins Extended Choice Parameter Plugin allow SSRF","org.jenkins-ci.plugins:extended-choice-parameter",0,356.va_90a_94ca_62ec,MODERATE,CWE-352
 CVE-2022-27205,2022-03-16T00:00:43Z,"CSRF vulnerability and missing permission checks in Extended Choice Parameter Plugin allow SSRF","org.jenkins-ci.plugins:extended-choice-parameter",0,,MODERATE,CWE-276;CWE-862
 CVE-2022-27206,2022-03-16T00:00:43Z,"Client Secret stored in plain text by Jenkins GitLab Authentication Plugin","org.jenkins-ci.plugins:gitlab-oauth",0,1.14,LOW,CWE-311;CWE-522
 CVE-2022-27207,2022-03-16T00:00:43Z,"Stored Cross-site Scripting vulnerability in Jenkins global-build-stats Plugin","org.jenkins-ci.plugins:global-build-stats",0,,MODERATE,CWE-79
@@ -6518,6 +6538,7 @@ CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Se
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50449,2023-12-10T18:30:18Z,"Directory Traversal in JFinalCMS",com.jfinal:jfinal,0,,HIGH,CWE-22
+CVE-2023-50572,2023-12-29T15:30:37Z,"JLine vulnerable to out of memory error",org.jline:jline-parent,0,3.25.0,MODERATE,CWE-122
 CVE-2023-50719,2023-12-16T00:03:54Z,"Solr search discloses password hashes of all users","org.xwiki.platform:xwiki-platform-search-solr-api",15.0-rc-1,15.5.2,HIGH,CWE-200;CWE-312
 CVE-2023-50719,2023-12-16T00:03:54Z,"Solr search discloses password hashes of all users","org.xwiki.platform:xwiki-platform-search-solr-api",15.6-rc-1,15.7-rc-1,HIGH,CWE-200;CWE-312
 CVE-2023-50719,2023-12-16T00:03:54Z,"Solr search discloses password hashes of all users","org.xwiki.platform:xwiki-platform-search-solr-api",7.2-milestone-2,14.10.15,HIGH,CWE-200;CWE-312
@@ -6564,6 +6585,7 @@ CVE-2023-50776,2023-12-13T18:31:04Z,"Tokens stored in plain text by PaaSLane Est
 CVE-2023-50777,2023-12-13T18:31:04Z,"Tokens stored in plain text by PaaSLane Estimate Plugin ","com.cloudtp.jenkins:paaslane-estimate",0,,MODERATE,CWE-312
 CVE-2023-50778,2023-12-13T18:31:04Z,"Cross-Site Request Forgery in Jenkins PaaSLane Estimate Plugin","com.cloudtp.jenkins:paaslane-estimate",0,,MODERATE,CWE-352
 CVE-2023-50779,2023-12-13T18:31:04Z,"Missing permission check in Jenkins PaaSLane Estimate Plugin","com.cloudtp.jenkins:paaslane-estimate",0,,MODERATE,CWE-862
+CVE-2023-51075,2023-12-27T21:31:01Z,"hutool-core discovered to contain an infinite loop in the StrSplitter.splitByRegex function",cn.hutool:hutool-core,0,5.8.24,MODERATE,
 CVE-2023-51656,2023-12-21T12:30:29Z,"Apache IoTDB: Unsafe deserialize map in Sync Tool","org.apache.iotdb:iotdb-parent",0.13.0,1.2.2,HIGH,CWE-502
 CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-runtime_2.12",0,0.23.1,HIGH,CWE-22
 CVE-2023-5720,2023-11-15T15:30:21Z,"Quarkus does not properly sanitize artifacts created from its use of the Gradle plugin, allowing certain build system information to remain","io.quarkus:quarkus-project",3.0.0.CR1,,HIGH,CWE-526
@@ -6584,6 +6606,7 @@ CVE-2023-6481,2023-12-04T09:30:23Z,"Logback is vulnerable to an attacker mountin
 CVE-2023-6481,2023-12-04T09:30:23Z,"Logback is vulnerable to an attacker mounting a Denial-Of-Service attack by sending poisoned data","ch.qos.logback:logback-core",1.3.13,1.3.14,HIGH,
 CVE-2023-6481,2023-12-04T09:30:23Z,"Logback is vulnerable to an attacker mounting a Denial-Of-Service attack by sending poisoned data","ch.qos.logback:logback-core",1.4.13,1.4.14,HIGH,
 CVE-2023-6563,2023-12-14T18:30:22Z,"Allocation of Resources Without Limits in Keycloak","org.keycloak:keycloak-model-jpa",0,21.0.0,HIGH,CWE-770
+CVE-2023-6835,2023-12-15T12:30:25Z,"WSO2 API Manager allows attackers to change the API rating","org.wso2.carbon.apimgt:forum",0,,MODERATE,CWE-20
 CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Entity attack","org.wso2.carbon.analytics-common:org.wso2.carbon.event.input.adapter.core",0,5.2.23,MODERATE,CWE-611
 CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Entity attack","org.wso2.carbon.commons:org.wso2.carbon.ntask.core",0,4.7.24,MODERATE,CWE-611
 CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Entity attack","org.wso2.carbon.event-processing:org.wso2.carbon.event.processor.core",0,2.2.12,MODERATE,CWE-611
@@ -6593,6 +6616,7 @@ CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Ent
 CVE-2023-6886,2023-12-17T03:30:19Z,"Xnx3 Wangmarket Cross-Site Scripting vulnerability","com.xnx3.wangmarket:wangmarket",0,,MODERATE,CWE-79
 CVE-2023-6911,2023-12-22T18:30:30Z,"WSO2 Registry Stored Cross Site Scripting (XSS) vulnerability","org.wso2.carbon.registry:carbon-registry",0,4.7.37,MODERATE,CWE-79
 CVE-2023-6927,2023-12-19T00:30:21Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-parent",0,,MODERATE,CWE-601
+CVE-2023-7148,2023-12-29T03:30:29Z,"ShifuML shifu code injection vulnerability",ml.shifu:shifu,0,,MODERATE,CWE-94
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

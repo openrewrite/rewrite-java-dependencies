@@ -139,6 +139,8 @@ CVE-2010-3718,2022-05-14T01:17:02Z,"Improper Limitation of a Pathname to a Restr
 CVE-2010-4172,2022-05-14T02:42:46Z,"Improper Neutralization of Input During Web Page Generation  in Apache Tomcat",org.apache.tomcat:tomcat,6.0.12,,MODERATE,CWE-79
 CVE-2010-4172,2022-05-14T02:42:46Z,"Improper Neutralization of Input During Web Page Generation  in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.5,MODERATE,CWE-79
 CVE-2010-5312,2017-10-24T18:33:38Z,"Cross-site Scripting in jquery-ui","org.webjars.npm:jquery-ui",1.7.0,1.10.0,MODERATE,CWE-79
+CVE-2010-5327,2022-05-17T03:05:00Z,"Shell command injection in Liferay Portal","com.liferay.portal:portal-impl",0,6.2.11,HIGH,
+CVE-2010-5327,2022-05-17T03:05:00Z,"Shell command injection in Liferay Portal","com.liferay.portal:portal-service",0,6.2.11,HIGH,
 CVE-2011-0013,2022-05-03T03:25:09Z,"Improper Neutralization of Input During Web Page Generation in Apache Tomcat",org.apache.tomcat:tomcat,5.5.0,5.5.32,MODERATE,CWE-79
 CVE-2011-0013,2022-05-03T03:25:09Z,"Improper Neutralization of Input During Web Page Generation in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.30,MODERATE,CWE-79
 CVE-2011-0013,2022-05-03T03:25:09Z,"Improper Neutralization of Input During Web Page Generation in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.6,MODERATE,CWE-79
@@ -180,6 +182,7 @@ CVE-2011-4858,2022-05-14T03:52:45Z,"Improper Input Validation in Apache Tomcat",
 CVE-2011-4858,2022-05-14T03:52:45Z,"Improper Input Validation in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.23,MODERATE,CWE-20
 CVE-2011-4905,2022-05-17T05:35:59Z,"Denial of Service in Apache ActiveMQ","org.apache.activemq:activemq-core",0,5.6.0,MODERATE,
 CVE-2011-4969,2022-05-14T01:09:51Z,"jQuery vulnerable to Cross-Site Scripting (XSS)",org.webjars.npm:jquery,0,1.6.3,MODERATE,CWE-79
+CVE-2011-5034,2022-05-13T01:07:39Z,"Apache Geronimo Hash Collisions Cause DoS","org.apache.geronimo:geronimo",0,2.2.1,HIGH,CWE-400
 CVE-2011-5036,2022-05-17T04:59:13Z,"Rack Gem Subject to Denial of Service via Hash Collisions",org.jruby:jruby-parent,0,1.6.5.1,MODERATE,CWE-328;CWE-400
 CVE-2011-5062,2022-05-14T01:17:03Z,"Improper Authentication in Apache Tomcat",org.apache.tomcat:tomcat,5.5.0,5.5.34,MODERATE,CWE-287
 CVE-2011-5062,2022-05-14T01:17:03Z,"Improper Authentication in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.33,MODERATE,CWE-287
@@ -239,6 +242,7 @@ CVE-2012-3546,2022-05-17T00:59:04Z,"Authentication Bypass in Apache Tomcat",org.
 CVE-2012-3546,2022-05-17T00:59:04Z,"Authentication Bypass in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.30,MODERATE,CWE-287
 CVE-2012-4386,2022-05-17T01:42:17Z,"Cross-Site Request Forgery in Apache Struts","org.apache.struts:struts2-core",2.0.0,2.3.4.1,MODERATE,CWE-352
 CVE-2012-4387,2022-05-17T01:42:17Z,"Denial of service in Apache Struts","org.apache.struts.xwork:xwork-core",2.0.0,2.3.4.1,MODERATE,
+CVE-2012-4418,2022-05-17T05:16:12Z,"Apache Axis2 Vulnerable to XML Signature wrapping attack",org.apache.axis2:axis2,0,1.7.9,MODERATE,CWE-287
 CVE-2012-4431,2022-05-17T00:57:51Z,"Cross-Site Request Forgery in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.36,MODERATE,CWE-352
 CVE-2012-4431,2022-05-17T00:57:51Z,"Cross-Site Request Forgery in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.32,MODERATE,CWE-352
 CVE-2012-4446,2022-05-17T05:13:24Z,"Improper Authentication in Apache Qpid","org.apache.qpid:qpid-client",0,0.20,MODERATE,CWE-287
@@ -3075,6 +3079,7 @@ CVE-2020-2306,2022-05-24T17:33:07Z,"Missing Authorization in Jenkins Mercurial P
 CVE-2020-2306,2022-05-24T17:33:07Z,"Missing Authorization in Jenkins Mercurial Plugin","org.jenkins-ci.plugins:mercurial",2.10,2.10.1,MODERATE,CWE-862
 CVE-2020-2306,2022-05-24T17:33:07Z,"Missing Authorization in Jenkins Mercurial Plugin","org.jenkins-ci.plugins:mercurial",2.11,2.12,MODERATE,CWE-862
 CVE-2020-2306,2022-05-24T17:33:07Z,"Missing Authorization in Jenkins Mercurial Plugin","org.jenkins-ci.plugins:mercurial",2.9,2.9.1,MODERATE,CWE-862
+CVE-2020-23064,2023-06-26T21:30:58Z,"jQuery Cross Site Scripting vulnerability",org.webjars.npm:jquery,1.0.3,3.5.0,MODERATE,CWE-79
 CVE-2020-2307,2022-05-24T17:33:07Z,"Exposure of Sensitive Information to an Unauthorized Actor in Jenkins Kubernetes Plugin","org.csanchez.jenkins.plugins:kubernetes",0,1.21.6,MODERATE,CWE-200
 CVE-2020-2307,2022-05-24T17:33:07Z,"Exposure of Sensitive Information to an Unauthorized Actor in Jenkins Kubernetes Plugin","org.csanchez.jenkins.plugins:kubernetes",1.22.0,1.25.4.1,MODERATE,CWE-200
 CVE-2020-2307,2022-05-24T17:33:07Z,"Exposure of Sensitive Information to an Unauthorized Actor in Jenkins Kubernetes Plugin","org.csanchez.jenkins.plugins:kubernetes",1.26.0,1.26.5,MODERATE,CWE-200
@@ -5308,6 +5313,7 @@ CVE-2022-47500,2022-12-19T12:30:23Z,"Apache Helix UI vulnerable to Open Redirect
 CVE-2022-47551,2023-01-03T12:28:06Z,"Apiman has potential permissions bypass","io.apiman:apiman-manager-api-rest-impl",1.5.7,3.0.0.Final,HIGH,
 CVE-2022-4772,2022-12-28T00:30:22Z,"Widoco Path Traversal vulnerability","com.github.dgarijo:Widoco",0,,HIGH,CWE-22
 CVE-2022-47937,2023-05-15T12:30:16Z,"Apache Sling Commons JSON bundle vulnerable to Improper Input Validation","org.apache.sling:org.apache.sling.commons.json",0,,MODERATE,CWE-20
+CVE-2022-4903,2023-02-10T15:30:28Z,"CodenameOne Pending Intent vulnerability","com.codenameone:codenameone-core",0,7.0.71,CRITICAL,CWE-668;CWE-927
 CVE-2023-0044,2023-02-23T21:30:16Z,"Cross-site Scripting in Quarkus","io.quarkus:quarkus-vertx-http",0,2.13.7.Final,MODERATE,CWE-79
 CVE-2023-0091,2023-01-12T23:39:39Z,"Keycloak has lack of validation of access token on client registrations endpoint","org.keycloak:keycloak-core",0,20.0.3,MODERATE,CWE-284;CWE-863
 CVE-2023-0100,2023-03-15T15:30:22Z,"Improper Input Validation In Eclipse BIRT","org.eclipse.birt:org.eclipse.birt.report.viewer",2.6.2,4.13,HIGH,CWE-20
@@ -6450,6 +6456,7 @@ CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",4.0.0,4.1.3,MODERATE,CWE-400
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",5.0.0,5.3.4,MODERATE,CWE-400
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",6.0.0,6.1.0,MODERATE,CWE-400
+CVE-2023-46226,2024-01-15T12:30:19Z,"Remote Code Execution vulnerability in Apache IoTDB via UDF","org.apache.iotdb:iotdb-core",1.0.0,1.3.0,MODERATE,
 CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-common",1.4.0,1.9.0,HIGH,CWE-502
 CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-pojo",1.4.0,1.9.0,HIGH,CWE-502
 CVE-2023-46242,2023-11-07T22:35:24Z,"XWiki Platform vulnerable to remote code execution via the edit action because it lacks CSRF token","org.xwiki.platform:xwiki-platform-oldcore",1.0,14.10.7,CRITICAL,CWE-352;CWE-94
@@ -6497,6 +6504,8 @@ CVE-2023-46731,2023-11-08T14:51:06Z,"XWiki Platform vulnerable to remote code ex
 CVE-2023-46731,2023-11-08T14:51:06Z,"XWiki Platform vulnerable to remote code execution through the section parameter in Administration as guest","org.xwiki.platform:xwiki-platform-administration-ui",15.0-rc-1,15.5.1,CRITICAL,CWE-94;CWE-95
 CVE-2023-46732,2023-11-08T14:51:37Z,"XWiki Platform vulnerable to  reflected cross-site scripting through revision parameter in content menu","org.xwiki.platform:xwiki-platform-flamingo-skin-resources",15.0-rc-1,15.5.1,CRITICAL,CWE-79;CWE-80
 CVE-2023-46732,2023-11-08T14:51:37Z,"XWiki Platform vulnerable to  reflected cross-site scripting through revision parameter in content menu","org.xwiki.platform:xwiki-platform-flamingo-skin-resources",9.7-rc-1,14.10.14,CRITICAL,CWE-79;CWE-80
+CVE-2023-46749,2024-01-15T12:30:19Z,"Apache Shiro vulnerable to path traversal","org.apache.shiro:shiro-core",0,1.13.0,MODERATE,CWE-22
+CVE-2023-46749,2024-01-15T12:30:19Z,"Apache Shiro vulnerable to path traversal","org.apache.shiro:shiro-core",2.0.0alpha1,2.0.0-alpha4,MODERATE,CWE-22
 CVE-2023-46750,2023-12-14T09:30:19Z,"Open redirect in Apache Shiro","org.apache.shiro:shiro-web",0,1.13.0,MODERATE,CWE-601
 CVE-2023-46750,2023-12-14T09:30:19Z,"Open redirect in Apache Shiro","org.apache.shiro:shiro-web",2.0.0-alpha-1,2.0.0-alpha-4,MODERATE,CWE-601
 CVE-2023-47112,2023-11-16T20:13:06Z,"Authenticated users can view job names and groups they do not have authorization to view",org.rundeck:rundeckapp,4.17.0,4.17.3,MODERATE,CWE-862
@@ -6594,6 +6603,7 @@ CVE-2023-50102,2023-12-14T18:30:21Z,"Cross-site Scripting in JFinalcms",com.jfin
 CVE-2023-50137,2023-12-14T18:30:21Z,"Cross-site Scripting in JFinalcms",com.jfinal:jfinal,0,,MODERATE,CWE-79
 CVE-2023-50164,2023-12-07T09:30:45Z,"Apache Struts vulnerable to path traversal","org.apache.struts:struts2-core",2.0.0,2.5.33,CRITICAL,CWE-552
 CVE-2023-50164,2023-12-07T09:30:45Z,"Apache Struts vulnerable to path traversal","org.apache.struts:struts2-core",6.0.0,6.3.0.2,CRITICAL,CWE-552
+CVE-2023-50290,2024-01-15T12:30:19Z,"Apache Solr allows read access to host environmet variables","org.apache.solr:solr-core",9.0.0,9.3.0,MODERATE,CWE-200
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",0,2.17.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",0,2.17.0,CRITICAL,CWE-269;CWE-639
@@ -6601,7 +6611,7 @@ CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Se
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
 CVE-2023-50449,2023-12-10T18:30:18Z,"Directory Traversal in JFinalCMS",com.jfinal:jfinal,0,,HIGH,CWE-22
-CVE-2023-50570,2023-12-29T15:30:37Z,"IPAddress Infinite Loop vulnerability","com.github.seancfoley:ipaddress",0,,MODERATE,CWE-835
+CVE-2023-50570,2023-12-29T15:30:37Z,"IPAddress Infinite Loop vulnerability (Disputed)","com.github.seancfoley:ipaddress",0,,MODERATE,CWE-835
 CVE-2023-50572,2023-12-29T15:30:37Z,"JLine vulnerable to out of memory error",org.jline:jline-parent,0,3.25.0,MODERATE,CWE-122;CWE-787
 CVE-2023-50578,2023-12-30T18:30:35Z,"Mingsoft MCMS SQL injection",net.mingsoft:ms-mcms,0,,HIGH,CWE-89
 CVE-2023-50719,2023-12-16T00:03:54Z,"Solr search discloses password hashes of all users","org.xwiki.platform:xwiki-platform-search-solr-api",15.0-rc-1,15.5.2,HIGH,CWE-200;CWE-312
@@ -6654,7 +6664,7 @@ CVE-2023-51074,2023-12-27T21:31:01Z,"json-path Out-of-bounds Write vulnerability
 CVE-2023-51075,2023-12-27T21:31:01Z,"hutool-core discovered to contain an infinite loop in the StrSplitter.splitByRegex function",cn.hutool:hutool-core,0,5.8.24,HIGH,CWE-835
 CVE-2023-51080,2023-12-27T21:31:01Z,"hutool-core was discovered to contain a stack overflow via NumberUtil.toBigDecimal method",cn.hutool:hutool-core,5.8.22,,HIGH,CWE-787
 CVE-2023-51084,2023-12-27T21:31:01Z,"hyavijava stack overflow vulnerability",com.github:hyavijava,0,,CRITICAL,CWE-787
-CVE-2023-51441,2024-01-06T12:30:34Z,"Apache Axis Improper Input Validation vulnerability",org.apache.axis:axis,0,,MODERATE,CWE-20
+CVE-2023-51441,2024-01-06T12:30:34Z,"Apache Axis Improper Input Validation vulnerability",org.apache.axis:axis,0,,HIGH,CWE-20;CWE-918
 CVE-2023-51656,2023-12-21T12:30:29Z,"Apache IoTDB: Unsafe deserialize map in Sync Tool","org.apache.iotdb:iotdb-parent",0.13.0,1.2.2,HIGH,CWE-502
 CVE-2023-51784,2024-01-03T12:30:21Z,"Apache InLong Manager Remote Code Execution vulnerability","org.apache.inlong:manager-pojo",1.5.0,1.10.0,CRITICAL,CWE-94
 CVE-2023-51785,2024-01-03T12:30:21Z,"Apache InLong Manager Arbitrary File Read Vulnerability","org.apache.inlong:manager-pojo",1.5.0,1.10.0,HIGH,CWE-502
@@ -6662,7 +6672,8 @@ CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-r
 CVE-2023-5720,2023-11-15T15:30:21Z,"Quarkus does not properly sanitize artifacts created from its use of the Gradle plugin, allowing certain build system information to remain","io.quarkus:quarkus-project",3.0.0.CR1,,HIGH,CWE-526
 CVE-2023-5763,2023-11-03T09:32:49Z,"Eclipse Glassfish remote code execution issue","org.glassfish.main.orb:orb-connector",5.0.0,7.0.0,MODERATE,CWE-20;CWE-913
 CVE-2023-6134,2023-12-18T19:31:02Z,"Keycloak vulnerable to reflected XSS via wildcard in OIDC redirect_uri","org.keycloak:keycloak-services",0,23.0.3,MODERATE,CWE-75
-CVE-2023-6147,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for Policy Compliance XML External Entity vulnerability","com.qualys.plugins:qualys-pc",0,,MODERATE,CWE-611
+CVE-2023-6147,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for Policy Compliance XML External Entity vulnerability","com.qualys.plugins:qualys-pc",0,1.0.6,MODERATE,CWE-611
+CVE-2023-6148,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for Policy Compliance Cross-site Scripting vulnerability","com.qualys.plugins:qualys-pc",0,1.0.6,MODERATE,CWE-79
 CVE-2023-6149,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for WAS XML External Entity vulnerability","com.qualys.plugins:qualys-was",0,2.0.12,MODERATE,CWE-611
 CVE-2023-6291,2023-12-21T18:25:30Z,"The redirect_uri validation logic allows for bypassing explicitly allowed hosts that would otherwise be restricted","org.keycloak:keycloak-services",0,23.0.3,HIGH,CWE-20
 CVE-2023-6378,2023-11-29T12:30:16Z,"logback serialization vulnerability","ch.qos.logback:logback-classic",0,1.2.13,HIGH,CWE-502
@@ -6696,9 +6707,9 @@ CVE-2024-21634,2024-01-03T22:04:08Z,"Ion Java StackOverflow vulnerability",com.a
 CVE-2024-21648,2024-01-08T16:25:58Z,"XWiki has no right protection on rollback action","org.xwiki.platform:xwiki-platform",15.0-rc-1,15.5.3,HIGH,CWE-274
 CVE-2024-21648,2024-01-08T16:25:58Z,"XWiki has no right protection on rollback action","org.xwiki.platform:xwiki-platform",15.6-rc-1,15.8-rc-1,HIGH,CWE-274
 CVE-2024-21648,2024-01-08T16:25:58Z,"XWiki has no right protection on rollback action","org.xwiki.platform:xwiki-platform-oldcore",1.0,14.10.17,HIGH,CWE-274
-CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",15.0-rc-1,15.5.3,CRITICAL,CWE-95
-CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",15.6-rc-1,15.8-rc-1,CRITICAL,CWE-95
-CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",2.2,14.10.17,CRITICAL,CWE-95
+CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",15.0-rc-1,15.5.3,CRITICAL,CWE-94;CWE-95
+CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",15.6-rc-1,15.8-rc-1,CRITICAL,CWE-94;CWE-95
+CVE-2024-21650,2024-01-08T16:33:14Z,"XWiki Remote Code Execution Vulnerability via User Registration","org.xwiki.platform:xwiki-platform-administration-ui",2.2,14.10.17,CRITICAL,CWE-94;CWE-95
 CVE-2024-21651,2024-01-08T16:39:47Z,"XWiki vulnerable to Denial of Service attack through attachments","org.xwiki.platform:xwiki-platform-distribution-war",14.10,14.10.18,HIGH,CWE-400
 CVE-2024-21651,2024-01-08T16:39:47Z,"XWiki vulnerable to Denial of Service attack through attachments","org.xwiki.platform:xwiki-platform-distribution-war",15.0-rc-1,15.5.3,HIGH,CWE-400
 CVE-2024-21651,2024-01-08T16:39:47Z,"XWiki vulnerable to Denial of Service attack through attachments","org.xwiki.platform:xwiki-platform-distribution-war",15.6-rc-1,15.8-rc-1,HIGH,CWE-400

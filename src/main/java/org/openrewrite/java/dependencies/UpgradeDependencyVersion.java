@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,42 +30,42 @@ import java.util.Set;
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UpgradeDependencyVersion extends ScanningRecipe<Set<GroupArtifact>> {
+public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVersion.Accumulator> {
     @Option(displayName = "Group",
-        description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
-        example = "com.fasterxml.jackson*")
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
+            example = "com.fasterxml.jackson*")
     private final String groupId;
 
     @Option(displayName = "Artifact",
-        description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
-        example = "jackson-module*")
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
+            example = "jackson-module*")
     private final String artifactId;
 
     @Option(displayName = "New version",
-        description = "An exact version number or node-style semver selector used to select the version number. ",
-        example = "29.X")
+            description = "An exact version number or node-style semver selector used to select the version number. ",
+            example = "29.X")
     private final String newVersion;
 
     @Option(displayName = "Version pattern",
-        description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                      "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
-        example = "-jre",
-        required = false)
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
+                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+            example = "-jre",
+            required = false)
     @Nullable
     private final String versionPattern;
 
     @Option(displayName = "Override managed version",
-        description = "For Maven project only, This flag can be set to explicitly override a managed dependency's version. The default for this flag is `false`.",
-        required = false)
+            description = "For Maven project only, This flag can be set to explicitly override a managed dependency's version. The default for this flag is `false`.",
+            required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Retain versions",
-        description = "For Maven project only, Accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed "
-                      + "from dependency management after the changes from this recipe, then it will be retained with an explicit version. "
-                      + "The version can be omitted from the GAV to use the old value from dependency management",
-        example = "com.jcraft:jsch",
-        required = false)
+            description = "For Maven project only, Accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed "
+                          + "from dependency management after the changes from this recipe, then it will be retained with an explicit version. "
+                          + "The version can be omitted from the GAV to use the old value from dependency management",
+            example = "com.jcraft:jsch",
+            required = false)
     @Nullable
     private final List<String> retainVersions;
 
@@ -87,27 +88,47 @@ public class UpgradeDependencyVersion extends ScanningRecipe<Set<GroupArtifact>>
     }
 
     @Override
-    public Set<GroupArtifact> getInitialValue(ExecutionContext ctx) {
-        return getUpgradeMavenDependencyVersion().getInitialValue(ctx);
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator(
+                getUpgradeMavenDependencyVersion().getInitialValue(ctx),
+                getUpgradeGradleDependencyVersion().getInitialValue(ctx)
+        );
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(Set<GroupArtifact> acc) {
-        return getUpgradeMavenDependencyVersion().getScanner(acc);
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
+        TreeVisitor<?, ExecutionContext> mavenScanner = getUpgradeMavenDependencyVersion().getScanner(acc.mavenAccumulator);
+        TreeVisitor<?, ExecutionContext> gradleScanner = getUpgradeGradleDependencyVersion().getScanner(acc.gradleAccumulator);
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
+                return mavenScanner.isAcceptable(sourceFile, ctx) || gradleScanner.isAcceptable(sourceFile, ctx);
+            }
+
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (mavenScanner.isAcceptable((SourceFile) tree, ctx)) {
+                    return mavenScanner.visit(tree, ctx);
+                } else if (gradleScanner.isAcceptable((SourceFile) tree, ctx)) {
+                    return gradleScanner.visit(tree, ctx);
+                }
+                return tree;
+            }
+        };
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Set<GroupArtifact> acc) {
-        TreeVisitor<?, ExecutionContext> mavenVisitor = getUpgradeMavenDependencyVersion().getVisitor(acc);
-        TreeVisitor<?, ExecutionContext> gradleVisitor = getUpgradeGradleDependencyVersion().getVisitor();
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
+        TreeVisitor<?, ExecutionContext> mavenVisitor = getUpgradeMavenDependencyVersion().getVisitor(acc.mavenAccumulator);
+        TreeVisitor<?, ExecutionContext> gradleVisitor = getUpgradeGradleDependencyVersion().getVisitor(acc.gradleAccumulator);
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 Tree t = tree;
                 assert tree != null;
-                if(mavenVisitor.isAcceptable((SourceFile) tree, ctx)) {
+                if (mavenVisitor.isAcceptable((SourceFile) tree, ctx)) {
                     t = mavenVisitor.visit(tree, ctx);
-                } else if(gradleVisitor.isAcceptable((SourceFile) tree, ctx)) {
+                } else if (gradleVisitor.isAcceptable((SourceFile) tree, ctx)) {
                     t = gradleVisitor.visit(t, ctx);
                 }
                 return t;
@@ -121,5 +142,11 @@ public class UpgradeDependencyVersion extends ScanningRecipe<Set<GroupArtifact>>
 
     public org.openrewrite.gradle.UpgradeDependencyVersion getUpgradeGradleDependencyVersion() {
         return new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
+    }
+
+    @Data
+    public static final class Accumulator {
+        private final Set<GroupArtifact> mavenAccumulator;
+        private final org.openrewrite.gradle.UpgradeDependencyVersion.DependencyVersionState gradleAccumulator;
     }
 }

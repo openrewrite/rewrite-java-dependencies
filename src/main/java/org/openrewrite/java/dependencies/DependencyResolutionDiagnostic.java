@@ -29,16 +29,14 @@ import org.openrewrite.marker.Markup;
 import org.openrewrite.maven.MavenExecutionContextView;
 import org.openrewrite.maven.MavenSettings;
 import org.openrewrite.maven.internal.MavenPomDownloader;
-import org.openrewrite.maven.tree.GroupArtifactVersion;
-import org.openrewrite.maven.tree.MavenRepository;
-import org.openrewrite.maven.tree.MavenRepositoryMirror;
-import org.openrewrite.maven.tree.MavenResolutionResult;
+import org.openrewrite.maven.tree.*;
 
 import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.openrewrite.internal.StringUtils.isBlank;
 
 @Value
@@ -116,7 +114,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(!(tree instanceof SourceFile)) {
+                if (!(tree instanceof SourceFile)) {
                     return null;
                 }
                 tree.getMarkers().findFirst(GradleProject.class).ifPresent(gp -> {
@@ -136,10 +134,10 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
     @Override
     public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
         Set<String> seen = new HashSet<>();
-        if(acc.foundMaven) {
+        if (acc.foundMaven) {
             record(true, acc.repositoriesFromMaven, seen, ctx);
         }
-        if(acc.foundGradle) {
+        if (acc.foundGradle) {
             record(false, acc.repositoriesFromGradle, seen, ctx);
         }
         return emptyList();
@@ -149,58 +147,69 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         // Use MavenPomDownloader without any default repositories, so we can test exactly one repository at a time
         MavenPomDownloader mpd = new MavenPomDownloader(ctx);
         Collection<MavenRepository> effectiveRepos = repos;
-        if(addMavenDefaultRepositories) {
-            if(!effectiveRepos.contains(MavenRepository.MAVEN_LOCAL_DEFAULT)) {
+        if (addMavenDefaultRepositories) {
+            if (!effectiveRepos.contains(MavenRepository.MAVEN_LOCAL_DEFAULT)) {
                 effectiveRepos = new ArrayList<>(effectiveRepos);
                 effectiveRepos.add(MavenRepository.MAVEN_LOCAL_DEFAULT);
             }
-            if(!effectiveRepos.contains(MavenRepository.MAVEN_CENTRAL)) {
+            if (!effectiveRepos.contains(MavenRepository.MAVEN_CENTRAL)) {
                 effectiveRepos = new ArrayList<>(effectiveRepos);
                 effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
             }
         }
-        for (MavenRepository repo : effectiveRepos) {
-            if(seen.contains(noTrailingSlash(repo.getUri()))) {
-                continue;
-            }
-            AtomicReference<Throwable> nullReason = new AtomicReference<>();
-            MavenRepository normalized = mpd.normalizeRepository(repo, null, nullReason::set);
-            if(normalized == null) {
-                Throwable reason = nullReason.get();
-                if(reason == null) {
-                    reason = new RuntimeException("Repository unreachable for unknown reason");
+        MavenExecutionContextView mctx = MavenExecutionContextView.view(ctx);
+        ResolutionEventListener resolutionListener = mctx.getResolutionListener();
+        try {
+            for (MavenRepository repo : effectiveRepos) {
+                if (seen.contains(noTrailingSlash(repo.getUri()))) {
+                    continue;
                 }
-
-                MavenExecutionContextView mctx = new MavenExecutionContextView(ctx);
-                MavenSettings settings = mctx.getSettings();
-                if(settings != null) {
-                    // normalizeRepository() internally applies mirrors,but normalizeRepository() just returned null.
-                    // Replicate mirror application so that the correct URL is recorded
-                    repo = MavenRepositoryMirror.apply(mctx.getMirrors(settings), repo);
-                }
-                if(seen.add(noTrailingSlash(repo.getUri()))) {
-                    report.insertRow(ctx, rowFor(repo, reason, null));
-                }
-            } else {
-                if(seen.add(noTrailingSlash(normalized.getUri()))) {
-                    GroupArtifactVersion gav = new GroupArtifactVersion(
-                            isBlank(groupId) ? "com.fasterxml.jackson.core" : groupId,
-                            isBlank(artifactId) ? "jackson-core" : artifactId,
-                            isBlank(version) ? "2.16.0" : version);
-                    Throwable resolutionThrowable = null;
-                    try {
-                        mpd.download(gav, null, null, singletonList(normalized));
-                    } catch (Exception e) {
-                        resolutionThrowable = e;
+                AtomicReference<Throwable> nullReason = new AtomicReference<>();
+                mctx.setResolutionListener(new ResolutionEventListener() {
+                    @Override
+                    public void repositoryAccessFailed(String uri, Throwable e) {
+                        nullReason.set(e);
                     }
-                    report.insertRow(ctx, rowFor(normalized, null, resolutionThrowable));
+                });
+                MavenRepository normalized = mpd.normalizeRepository(repo, mctx, null);
+                if (normalized == null) {
+                    Throwable reason = nullReason.get();
+                    if (reason == null) {
+                        reason = new RuntimeException("Repository unreachable for unknown reason");
+                    }
+
+                    MavenSettings settings = mctx.getSettings();
+                    if (settings != null) {
+                        // normalizeRepository() internally applies mirrors,but normalizeRepository() just returned null.
+                        // Replicate mirror application so that the correct URL is recorded
+                        repo = MavenRepositoryMirror.apply(mctx.getMirrors(settings), repo);
+                    }
+                    if (seen.add(noTrailingSlash(repo.getUri()))) {
+                        report.insertRow(ctx, rowFor(repo, reason, null));
+                    }
+                } else {
+                    if (seen.add(noTrailingSlash(normalized.getUri()))) {
+                        GroupArtifactVersion gav = new GroupArtifactVersion(
+                                isBlank(groupId) ? "com.fasterxml.jackson.core" : groupId,
+                                isBlank(artifactId) ? "jackson-core" : artifactId,
+                                isBlank(version) ? "2.16.0" : version);
+                        Throwable resolutionThrowable = null;
+                        try {
+                            mpd.download(gav, null, null, singletonList(normalized));
+                        } catch (Exception e) {
+                            resolutionThrowable = e;
+                        }
+                        report.insertRow(ctx, rowFor(normalized, null, resolutionThrowable));
+                    }
                 }
             }
+        } finally {
+            mctx.setResolutionListener(resolutionListener);
         }
     }
 
     private static String noTrailingSlash(String uri) {
-        if(uri.endsWith("/")) {
+        if (uri.endsWith("/")) {
             return uri.substring(0, uri.length() - 1);
         }
         return uri;
@@ -210,14 +219,14 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         Integer pingHttpResponseCode = null;
         String pingExceptionClass = "";
         String pingExceptionMessage = "";
-        if(pingThrowable instanceof MavenPomDownloader.HttpSenderResponseException) {
+        if (pingThrowable instanceof MavenPomDownloader.HttpSenderResponseException) {
             pingHttpResponseCode = ((MavenPomDownloader.HttpSenderResponseException) pingThrowable).getResponseCode();
             pingThrowable = pingThrowable.getCause();
         }
-        if(pingThrowable instanceof UncheckedIOException) {
+        if (pingThrowable instanceof UncheckedIOException) {
             pingThrowable = pingThrowable.getCause();
         }
-        if(pingThrowable == null) {
+        if (pingThrowable == null) {
             pingHttpResponseCode = 200;
         } else {
             pingExceptionClass = pingThrowable.getClass().getName();
@@ -225,13 +234,13 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         }
         String resolveExceptionClass = "";
         String resolveExceptionMessage = "";
-        if(resolveThrowable instanceof MavenPomDownloader.HttpSenderResponseException) {
+        if (resolveThrowable instanceof MavenPomDownloader.HttpSenderResponseException) {
             resolveThrowable = resolveThrowable.getCause();
         }
-        if(resolveThrowable instanceof UncheckedIOException) {
+        if (resolveThrowable instanceof UncheckedIOException) {
             resolveThrowable = resolveThrowable.getCause();
         }
-        if(resolveThrowable != null) {
+        if (resolveThrowable != null) {
             resolveExceptionClass = resolveThrowable.getClass().getName();
             resolveExceptionMessage = resolveThrowable.getMessage();
         }
@@ -268,20 +277,20 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(!(tree instanceof SourceFile)) {
+                if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
                 SourceFile s = (SourceFile) tree;
-                if(s.getSourcePath().endsWith("build.gradle") && !s.getMarkers().findFirst(GradleProject.class).isPresent()) {
-                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.gradle.marker.GradleProject".equals(marker.getClass().getName()))) {
+                if (s.getSourcePath().endsWith("build.gradle") && !s.getMarkers().findFirst(GradleProject.class).isPresent()) {
+                    if (s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.gradle.marker.GradleProject".equals(marker.getClass().getName()))) {
                         s = Markup.error(s, new IllegalStateException(
                                 s.getSourcePath() + " has a GradleProject marker, but it is loaded by a different classloader than the recipe."));
                     } else {
                         s = Markup.warn(s, new IllegalStateException(
                                 s.getSourcePath() + " is a Gradle build file, but it is missing a GradleProject marker."));
                     }
-                } else if(s.getSourcePath().endsWith("pom.xml") && !s.getMarkers().findFirst(MavenResolutionResult.class).isPresent()) {
-                    if(s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.maven.tree.MavenResolutionResult".equals(marker.getClass().getName()))) {
+                } else if (s.getSourcePath().endsWith("pom.xml") && !s.getMarkers().findFirst(MavenResolutionResult.class).isPresent()) {
+                    if (s.getMarkers().getMarkers().stream().anyMatch(marker -> "org.openrewrite.maven.tree.MavenResolutionResult".equals(marker.getClass().getName()))) {
                         s = Markup.error(s, new IllegalStateException(
                                 s.getSourcePath() + " has a MavenResolutionResult marker, but it is loaded by a different classloader than the recipe."));
                     } else {
@@ -289,7 +298,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                                 s.getSourcePath() + " is a Maven pom, but it is missing a MavenResolutionResult marker."));
                     }
                 }
-                if(gv.isAcceptable(s, ctx)) {
+                if (gv.isAcceptable(s, ctx)) {
                     s = (SourceFile) gv.visit(s, ctx);
                 }
                 return s;

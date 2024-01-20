@@ -29,6 +29,7 @@ import org.openrewrite.test.RewriteTest;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RelocatedDependencyCheckTest implements RewriteTest {
@@ -83,14 +84,12 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     <artifactId>rewrite-example</artifactId>
                     <version>1.0-SNAPSHOT</version>
                     <dependencies>
-                      <dependency>
-                        <!--Relocated to org.apache.commons:commons-lang3-->
+                      <!--~~(Relocated to org.apache.commons:commons-lang3)~~>--><dependency>
                         <groupId>commons-lang</groupId>
                         <artifactId>commons-lang</artifactId>
                         <version>2.6</version>
                       </dependency>
-                      <dependency>
-                        <!--Relocated to org.apache.groovy-->
+                      <!--~~(Relocated to org.apache.groovy)~~>--><dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy</artifactId>
                         <version>2.5.6</version>
@@ -133,8 +132,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       <version>1.0-SNAPSHOT</version>
                       <build>
                         <plugins>
-                          <plugin>
-                            <!--Relocated to org.apache.groovy-->
+                          <!--~~(Relocated to org.apache.groovy)~~>--><plugin>
                             <groupId>org.codehaus.groovy</groupId>
                             <artifactId>groovy-eclipse-compiler</artifactId>
                             <version>3.3.0-01</version>
@@ -207,4 +205,47 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
     }
 
+    @Nested
+    class Gradle {
+        @Test
+        void findRelocatedGradleDependencies() {
+            rewriteRun(
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  
+                  repositories {
+                      mavenCentral()
+                  }
+                  
+                  def groovyVersion = "2.5.6"
+                  dependencies {
+                      implementation "commons-lang:commons-lang:2.6"
+                      implementation group: "commons-lang", name: "commons-lang", version: "2.6"
+                      implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+                  }
+                  """,
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  
+                  repositories {
+                      mavenCentral()
+                  }
+                  
+                  def groovyVersion = "2.5.6"
+                  dependencies {
+                      /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation "commons-lang:commons-lang:2.6"
+                      implementation group: "commons-lang", name: "commons-lang", version: "2.6"
+                      implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+                  }
+                  """
+              )
+            );
+        }
+    }
 }

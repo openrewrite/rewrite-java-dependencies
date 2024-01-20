@@ -15,12 +15,14 @@
  */
 package org.openrewrite.java.dependencies.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.Value;
 import org.openrewrite.Column;
 import org.openrewrite.DataTable;
 import org.openrewrite.Recipe;
 import org.openrewrite.internal.lang.Nullable;
 
+@JsonIgnoreType
 public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibilityReport.Row> {
 
     public RepositoryAccessibilityReport(Recipe recipe) {

@@ -15,13 +15,14 @@
  */
 package org.openrewrite.java.dependencies.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.Value;
 import org.openrewrite.Column;
 import org.openrewrite.DataTable;
 import org.openrewrite.Recipe;
 
+@JsonIgnoreType
 public class DependencyListReport extends DataTable<DependencyListReport.Row> {
-
     public DependencyListReport(Recipe recipe) {
         super(recipe,
                 "Dependency report",

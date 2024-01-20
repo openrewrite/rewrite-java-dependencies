@@ -55,3 +55,7 @@ tasks {
         into("build/deps")
     }
 }
+
+license {
+    exclude("**/*.json")
+}

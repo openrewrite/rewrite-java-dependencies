@@ -1,0 +1,13 @@
+{
+  "date": "2024/12/05",
+  "migration": [
+    {
+      "old": "acegisecurity",
+      "new": "org.acegisecurity"
+    },
+    {
+      "old": "activation:activation",
+      "new": "javax.activation:activation"
+    }
+  ]
+}

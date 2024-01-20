@@ -1,0 +1,12 @@
+{
+  "date": "2024/01/12",
+  "migration": [
+    {
+      "old": "com.jcraft:jsch",
+      "proposal": [
+        "com.github.mwiede:jsch"
+      ],
+      "context": "See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
+    }
+  ]
+}

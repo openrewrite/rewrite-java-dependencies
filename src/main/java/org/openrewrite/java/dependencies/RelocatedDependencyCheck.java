@@ -18,7 +18,6 @@ package org.openrewrite.java.dependencies;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.openrewrite.*;
 import org.openrewrite.groovy.GroovyIsoVisitor;
 import org.openrewrite.groovy.tree.G;
@@ -145,7 +144,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 return mi;
             }
 
-            @NotNull
             private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi) {
                 String gav = (String) literal.getValue();
                 assert gav != null;
@@ -156,7 +154,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 return mi;
             }
 
-            @NotNull
             private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi) {
                 String groupId = null;
                 String artifactId = null;

@@ -18,8 +18,10 @@ package org.openrewrite.java.dependencies;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.Value;
+import org.jetbrains.annotations.NotNull;
 import org.openrewrite.*;
 import org.openrewrite.groovy.GroovyIsoVisitor;
+import org.openrewrite.groovy.tree.G;
 import org.openrewrite.internal.StringUtils;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.MethodMatcher;
@@ -129,22 +131,85 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
                 J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
                 if (dependencyMatcher.matches(mi)) {
-                    List<Expression> depArgs = method.getArguments();
-                    if (depArgs.get(0) instanceof J.Literal) {
-                        String gav = (String) ((J.Literal) depArgs.get(0)).getValue();
-                        assert gav != null;
-                        String[] parts = gav.split(":");
-                        if (gav.length() >= 2) {
-                            String groupId = parts[0];
-                            String artifactId = parts[1];
-                            mi = maybeAddComment(acc, mi, groupId, artifactId);
+                    List<Expression> methodArguments = mi.getArguments();
+                    Expression firstMethodArgument = methodArguments.get(0);
+                    if (firstMethodArgument instanceof J.Literal) {
+                        J.Literal literal = (J.Literal) firstMethodArgument;
+                        mi = searchInLiteral(literal, mi);
+                    } else if (firstMethodArgument instanceof G.GString) {
+                        G.GString gString = (G.GString) firstMethodArgument;
+                        List<J> strings = gString.getStrings();
+                        if (!strings.isEmpty() && strings.get(0) instanceof J.Literal) {
+                            mi = searchInLiteral((J.Literal) strings.get(0), mi);
                         }
-                    } else {
-                        System.out.println("depArgs = " + depArgs);
+                    } else if (firstMethodArgument instanceof G.MapEntry) {
+                        mi = searchInGMapEntry(methodArguments, mi);
                     }
+
                 }
                 return mi;
             }
+
+            @NotNull
+            private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi) {
+                String gav = (String) literal.getValue();
+                assert gav != null;
+                String[] parts = gav.split(":");
+                if (gav.length() >= 2) {
+                    mi = maybeAddComment(acc, mi, parts[0], parts[1]);
+                }
+                mi = maybeAddComment(acc, mi, parts[0], null);
+                return mi;
+            }
+
+            @NotNull
+            private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi) {
+                String groupId = null;
+                String artifactId = null;
+                for (Expression e : methodArguments) {
+                    if (!(e instanceof G.MapEntry)) {
+                        continue;
+                    }
+                    G.MapEntry arg = (G.MapEntry) e;
+                    if (!(arg.getKey() instanceof J.Literal)) {
+                        continue;
+                    }
+                    J.Literal key = (J.Literal) arg.getKey();
+                    Expression argValue = arg.getValue();
+                    String valueValue = null;
+                    if (argValue instanceof J.Literal) {
+                        J.Literal value = (J.Literal) argValue;
+                        if (value.getValue() instanceof String) {
+                            valueValue = (String) value.getValue();
+                        }
+                    } else if (argValue instanceof J.Identifier) {
+                        J.Identifier value = (J.Identifier) argValue;
+                        valueValue = value.getSimpleName();
+                    } else if (argValue instanceof G.GString) {
+                        G.GString value = (G.GString) argValue;
+                        List<J> strings = value.getStrings();
+                        if (!strings.isEmpty() && strings.get(0) instanceof G.GString.Value) {
+                            G.GString.Value versionGStringValue = (G.GString.Value) strings.get(0);
+                            if (versionGStringValue.getTree() instanceof J.Identifier) {
+                                valueValue = ((J.Identifier) versionGStringValue.getTree()).getSimpleName();
+                            }
+                        }
+                    }
+                    if (!(key.getValue() instanceof String)) {
+                        continue;
+                    }
+                    String keyValue = (String) key.getValue();
+                    if ("group".equals(keyValue)) {
+                        groupId = valueValue;
+                    } else if ("name".equals(keyValue)) {
+                        artifactId = valueValue;
+                    }
+                }
+                mi = maybeAddComment(acc, mi, groupId, artifactId);
+                mi = maybeAddComment(acc, mi, groupId, null);
+                return mi;
+            }
+
         };
     }
 

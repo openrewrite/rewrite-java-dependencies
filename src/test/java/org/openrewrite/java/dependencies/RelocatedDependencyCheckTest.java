@@ -240,8 +240,8 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                   def groovyVersion = "2.5.6"
                   dependencies {
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation "commons-lang:commons-lang:2.6"
-                      implementation group: "commons-lang", name: "commons-lang", version: "2.6"
-                      implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+                      /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation group: "commons-lang", name: "commons-lang", version: "2.6"
+                      /*~~(Relocated to org.apache.groovy)~~>*/implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
                   }
                   """
               )

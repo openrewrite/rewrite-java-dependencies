@@ -28,7 +28,6 @@ import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.dependencies.oldgroupids.Migration;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
-import org.openrewrite.java.tree.JavaSourceFile;
 import org.openrewrite.marker.SearchResult;
 import org.openrewrite.maven.MavenIsoVisitor;
 import org.openrewrite.xml.XPathMatcher;
@@ -36,13 +35,10 @@ import org.openrewrite.xml.tree.Xml;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
 
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
     @Override
@@ -97,21 +93,18 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
-        return Preconditions.or(new IsBuildGradle<>(), new MavenIsoVisitor<ExecutionContext>() {
-            @Override
-            public @Nullable Xml visit(@Nullable Tree tree, ExecutionContext executionContext) {
-                return null; // Any Maven pom.xml file
-            }
-        });
+        return TreeVisitor.noop();
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
-        TreeVisitor<?, ExecutionContext> gradleVisitor = gradleVisitor(acc);
-        TreeVisitor<?, ExecutionContext> mavenVisitor = mavenVisitor(acc);
         return new TreeVisitor<Tree, ExecutionContext>() {
+            private final TreeVisitor<?, ExecutionContext> gradleVisitor = gradleVisitor(acc);
+            private final TreeVisitor<?, ExecutionContext> mavenVisitor = mavenVisitor(acc);
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+
                 if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
@@ -256,27 +249,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         }
         // Try again without artifactId
         return maybeAddComment(acc, tree, groupId, null);
-    }
-
-    // TODO switch to the provided one in https://github.com/openrewrite/rewrite/pull/3933 when ready
-    static class IsBuildGradle<P> extends TreeVisitor<Tree, P> {
-        @Override
-        public Tree visit(@Nullable Tree tree, P p) {
-            if (tree instanceof JavaSourceFile) {
-                JavaSourceFile cu = (JavaSourceFile) requireNonNull(tree);
-                if (matches(cu.getSourcePath())) {
-                    return SearchResult.found(cu);
-                }
-            }
-            return super.visit(tree, p);
-        }
-
-        public static boolean matches(Path sourcePath) {
-            return (sourcePath.toString().endsWith(".gradle") ||
-                    sourcePath.toString().endsWith(".gradle.kts")) &&
-                   !(sourcePath.toString().endsWith("settings.gradle") ||
-                     sourcePath.toString().endsWith("settings.gradle.kts"));
-        }
     }
 }
 

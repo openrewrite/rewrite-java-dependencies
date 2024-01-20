@@ -53,7 +53,7 @@ public class ParseDefinitionMigrations {
         parseDefinitionMigrations(repo, csv);
     }
 
-    private static void parseDefinitionMigrations(File repo, File csv) throws IOException {
+    static void parseDefinitionMigrations(File repo, File csv) throws IOException {
         ObjectMapper objectMapper = getObjectMapper();
 
         Path uc = repo.toPath().resolve("uc");

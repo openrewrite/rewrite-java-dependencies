@@ -17,17 +17,20 @@ package org.openrewrite.java.dependencies.oldgroupids;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvFactory;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.openrewrite.internal.lang.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParseDefinitionMigrations {
@@ -59,12 +62,26 @@ public class ParseDefinitionMigrations {
 
         List<DefinitionMigration> definitions = objectMapper.readValue(official, Definitions.class).getMigration();
         List<ProposedMigration> proposed = objectMapper.readValue(unofficial, UnofficialDefinitions.class).getMigration();
+
+        List<Migration> migrations = new ArrayList<>(definitions.size() + proposed.size());
+        for (DefinitionMigration d : definitions) {
+            migrations.add(getMigration(d.getOldGav(), d.getNewGav(), d.getContext()));
+        }
         for (ProposedMigration p : proposed) {
-            definitions.add(new DefinitionMigration(p.getOldGav(), p.getNewGav().get(0), p.getContext()));
+            migrations.add(getMigration(p.getOldGav(), p.getProposal().get(0), p.getContext()));
         }
 
         ObjectWriter objectWriter = getObjectWriter();
-        objectWriter.writeValue(csv, definitions);
+        objectWriter.writeValue(csv, migrations);
+    }
+
+    private static Migration getMigration(String oldGav1, String newGav1, String context) {
+        String[] oldGav = oldGav1.split(":");
+        String[] newGav = newGav1.split(":");
+        return new Migration(
+                oldGav[0], oldGav.length > 1 ? oldGav[1] : null,
+                newGav[0], newGav.length > 1 ? newGav[1] : null,
+                context);
     }
 
     private static ObjectMapper getObjectMapper() {
@@ -78,9 +95,8 @@ public class ParseDefinitionMigrations {
         factory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         CsvMapper csvMapper = CsvMapper.builder(factory)
                 .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .build();
-        return csvMapper.writer(csvMapper.schemaFor(DefinitionMigration.class));
+        return csvMapper.writer(csvMapper.schemaFor(Migration.class));
     }
 }
 
@@ -93,7 +109,6 @@ class Definitions {
 }
 
 @Data
-@AllArgsConstructor
 class DefinitionMigration {
     @JsonProperty("old")
     String oldGav;
@@ -112,8 +127,7 @@ class UnofficialDefinitions {
 class ProposedMigration {
     @JsonProperty("old")
     String oldGav;
-    @JsonProperty("proposal")
-    List<String> newGav;
+    List<String> proposal;
     @Nullable
     String context;
 }

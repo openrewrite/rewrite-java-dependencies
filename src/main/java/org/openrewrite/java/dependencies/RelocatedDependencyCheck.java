@@ -52,8 +52,10 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
     @Override
     public String getDescription() {
-        return "Find dependencies that have been relocated.";
-        // TODO credit https://github.com/jonathanlermitage/oga-maven-plugin
+        //language=markdown
+        return "Find Maven and Gradle dependencies and Maven plugins that have relocated to a new `groupId` or `artifactId`. " +
+               "Relocation information comes from the [oga-maven-plugin](https://github.com/jonathanlermitage/oga-maven-plugin/) " +
+               "maintained by Jonathan Lermitage, Filipe Roque and others.";
     }
 
     @Value
@@ -158,7 +160,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 if (gav.length() >= 2) {
                     mi = maybeAddComment(acc, mi, parts[0], parts[1]);
                 }
-                mi = maybeAddComment(acc, mi, parts[0], null);
                 return mi;
             }
 
@@ -205,8 +206,9 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         artifactId = valueValue;
                     }
                 }
-                mi = maybeAddComment(acc, mi, groupId, artifactId);
-                mi = maybeAddComment(acc, mi, groupId, null);
+                if (groupId != null) {
+                    mi = maybeAddComment(acc, mi, groupId, artifactId);
+                }
                 return mi;
             }
 
@@ -226,14 +228,12 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String groupId = optionalGroupId.get();
                         String artifactId = optionalArtifactId.orElse(null);
                         tag = maybeAddComment(acc, tag, groupId, artifactId);
-                        tag = maybeAddComment(acc, tag, groupId, null);
                     }
                 } else if (isPluginTag()) {
                     if (optionalArtifactId.isPresent()) {
                         String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
                         String artifactId = optionalArtifactId.get();
                         tag = maybeAddComment(acc, tag, groupId, artifactId);
-                        tag = maybeAddComment(acc, tag, groupId, null);
                     }
                 }
                 return tag;
@@ -251,7 +251,11 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     relocation.getContext() == null ? "" : " as per \"" + relocation.getContext() + "\"");
             return SearchResult.found(tree, commentText);
         }
-        return tree;
+        if (artifactId == null) {
+            return tree;
+        }
+        // Try again without artifactId
+        return maybeAddComment(acc, tree, groupId, null);
     }
 
     // TODO switch to the provided one in https://github.com/openrewrite/rewrite/pull/3933 when ready

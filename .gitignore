@@ -8,3 +8,4 @@ out/
 bin/
 *.log
 advisory-database/
+oga-maven-plugin/

@@ -43,7 +43,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     }
 
     @Value
-    static class Accumulator {
+    public static class Accumulator {
         Map<GroupArtifact, Relocation> migrations;
     }
 
@@ -69,8 +69,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     .readValues(RelocatedDependencyCheck.class.getResourceAsStream("/migrations.csv"));
             while (objectMappingIterator.hasNext()) {
                 Migration def = objectMappingIterator.next();
-                GroupArtifact oldGav = new GroupArtifact(def.getOldGroupId(), def.getOldArtifactId());
-                GroupArtifact newGav = new GroupArtifact(def.getNewGroupId(), def.getNewArtifactId());
+                GroupArtifact oldGav = new GroupArtifact(def.getOldGroupId(), StringUtils.isBlank(def.getOldArtifactId())? null : def.getOldArtifactId());
+                GroupArtifact newGav = new GroupArtifact(def.getNewGroupId(), StringUtils.isBlank(def.getNewArtifactId())? null : def.getNewArtifactId());
                 migrations.put(oldGav, new Relocation(newGav, StringUtils.isBlank(def.getContext()) ? null : def.getContext()));
             }
         } catch (IOException e) {

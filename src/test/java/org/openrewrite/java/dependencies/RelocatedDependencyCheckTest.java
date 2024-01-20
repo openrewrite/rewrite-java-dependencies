@@ -30,7 +30,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
     void initialValueParser() {
         Accumulator initialValue = new RelocatedDependencyCheck().getInitialValue(null);
         Map<GroupArtifact, Relocation> migrations = initialValue.getMigrations();
-        assertThat(migrations).containsEntry(new GroupArtifact("commons-lang", "commons-lang"),
-          new Relocation(new GroupArtifact("org.apache.commons", "commons-lang3"), null));
+        assertThat(migrations)
+          .containsEntry(new GroupArtifact("commons-lang", "commons-lang"),
+            new Relocation(new GroupArtifact("org.apache.commons", "commons-lang3"), null))
+          .containsEntry(new GroupArtifact("org.codehaus.groovy", null),
+            new Relocation(new GroupArtifact("org.apache.groovy", null), null));
     }
 }

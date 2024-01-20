@@ -15,7 +15,6 @@
  */
 package org.openrewrite.java.dependencies;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -146,7 +145,6 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
-        @Disabled("Not supported yet")
         void findRelocatedMavenPluginDependency() {
             rewriteRun(
               //language=xml
@@ -188,8 +186,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                             <artifactId>org.openrewrite.maven</artifactId>
                             <version>5.20.0</version>
                             <dependencies>
-                              <dependency>
-                                <!--Relocated to org.apache.commons:commons-lang3-->
+                              <!--~~(Relocated to org.apache.commons:commons-lang3)~~>--><dependency>
                                 <groupId>commons-lang</groupId>
                                 <artifactId>commons-lang</artifactId>
                                 <version>2.6</version>

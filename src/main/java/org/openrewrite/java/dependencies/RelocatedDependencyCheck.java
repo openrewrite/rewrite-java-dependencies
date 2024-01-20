@@ -209,14 +209,14 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     }
 
     private static TreeVisitor<?, ExecutionContext> mavenVisitor(Accumulator acc) {
-        final XPathMatcher dependencyMatcher = new XPathMatcher("/project/*/dependencies/dependency");
+        final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
         return new MavenIsoVisitor<ExecutionContext>() {
             @Override
             public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
                 tag = super.visitTag(tag, ctx);
                 Optional<String> optionalGroupId = tag.getChildValue("groupId");
                 Optional<String> optionalArtifactId = tag.getChildValue("artifactId");
-                if (isDependencyTag() || dependencyMatcher.matches(getCursor())) {
+                if (dependencyMatcher.matches(getCursor())) {
                     if (optionalGroupId.isPresent()) {
                         String groupId = optionalGroupId.get();
                         String artifactId = optionalArtifactId.orElse(null);

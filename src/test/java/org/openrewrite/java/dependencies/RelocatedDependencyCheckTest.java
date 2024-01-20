@@ -22,6 +22,7 @@ import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.java.dependencies.RelocatedDependencyCheck.Accumulator;
 import org.openrewrite.java.dependencies.RelocatedDependencyCheck.GroupArtifact;
 import org.openrewrite.java.dependencies.RelocatedDependencyCheck.Relocation;
+import org.openrewrite.java.dependencies.table.RelocatedDependencyReport;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -54,6 +55,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @DocumentExample
         void findRelocatedMavenDependencies() {
             rewriteRun(
+              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+                new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
+                new RelocatedDependencyReport.Row("org.codehaus.groovy", null, "org.apache.groovy", null, null)
+              )),
               //language=xml
               pomXml(
                 """
@@ -97,7 +102,6 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                   </project>
                   """
               )
-
             );
         }
 
@@ -207,17 +211,20 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedGradleDependencies() {
             rewriteRun(
+              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+                new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
+                new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
+                new RelocatedDependencyReport.Row("org.codehaus.groovy", null, "org.apache.groovy", null, null)
+              )),
               //language=groovy
               buildGradle(
                 """
                   plugins {
                       id "java-library"
                   }
-                  
                   repositories {
                       mavenCentral()
                   }
-                  
                   def groovyVersion = "2.5.6"
                   dependencies {
                       implementation "commons-lang:commons-lang:2.6"
@@ -229,11 +236,9 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                   plugins {
                       id "java-library"
                   }
-                  
                   repositories {
                       mavenCentral()
                   }
-                  
                   def groovyVersion = "2.5.6"
                   dependencies {
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation "commons-lang:commons-lang:2.6"

@@ -15,14 +15,14 @@
  */
 package org.openrewrite.java.dependencies.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.Value;
 import org.openrewrite.Column;
 import org.openrewrite.DataTable;
 import org.openrewrite.Recipe;
 
+@JsonIgnoreType
 public class GradleDependencyConfigurationErrors extends DataTable<GradleDependencyConfigurationErrors.Row> {
-
-
     public GradleDependencyConfigurationErrors(Recipe recipe) {
         super(recipe, "Gradle dependency configuration errors",
                 "Records Gradle dependency configurations which failed to resolve during parsing. " +

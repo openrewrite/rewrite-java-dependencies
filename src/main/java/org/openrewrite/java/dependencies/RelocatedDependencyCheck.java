@@ -25,6 +25,7 @@ import org.openrewrite.internal.StringUtils;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.MethodMatcher;
 import org.openrewrite.java.dependencies.oldgroupids.Migration;
+import org.openrewrite.java.dependencies.table.RelocatedDependencyReport;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.marker.SearchResult;
@@ -40,6 +41,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
+    transient RelocatedDependencyReport report = new RelocatedDependencyReport(this);
+
     @Override
     public String getDisplayName() {
         return "Find relocated dependencies";
@@ -50,7 +53,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         //language=markdown
         return "Find Maven and Gradle dependencies and Maven plugins that have relocated to a new `groupId` or `artifactId`. " +
                "Relocation information comes from the [oga-maven-plugin](https://github.com/jonathanlermitage/oga-maven-plugin/) " +
-               "maintained by Jonathan Lermitage, Filipe Roque and others.";
+               "maintained by Jonathan Lermitage, Filipe Roque and others. " +
+               "This recipe makes no changes to any source file.";
     }
 
     @Value
@@ -129,32 +133,32 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     Expression firstMethodArgument = methodArguments.get(0);
                     if (firstMethodArgument instanceof J.Literal) {
                         J.Literal literal = (J.Literal) firstMethodArgument;
-                        mi = searchInLiteral(literal, mi);
+                        mi = searchInLiteral(literal, mi, ctx);
                     } else if (firstMethodArgument instanceof G.GString) {
                         G.GString gString = (G.GString) firstMethodArgument;
                         List<J> strings = gString.getStrings();
                         if (!strings.isEmpty() && strings.get(0) instanceof J.Literal) {
-                            mi = searchInLiteral((J.Literal) strings.get(0), mi);
+                            mi = searchInLiteral((J.Literal) strings.get(0), mi, ctx);
                         }
                     } else if (firstMethodArgument instanceof G.MapEntry) {
-                        mi = searchInGMapEntry(methodArguments, mi);
+                        mi = searchInGMapEntry(methodArguments, mi, ctx);
                     }
 
                 }
                 return mi;
             }
 
-            private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi) {
+            private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi, ExecutionContext ctx) {
                 String gav = (String) literal.getValue();
                 assert gav != null;
                 String[] parts = gav.split(":");
                 if (gav.length() >= 2) {
-                    mi = maybeAddComment(acc, mi, parts[0], parts[1]);
+                    mi = maybeAddComment(acc, mi, parts[0], parts[1], ctx);
                 }
                 return mi;
             }
 
-            private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi) {
+            private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi, ExecutionContext ctx) {
                 String groupId = null;
                 String artifactId = null;
                 for (Expression e : methodArguments) {
@@ -197,7 +201,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     }
                 }
                 if (groupId != null) {
-                    mi = maybeAddComment(acc, mi, groupId, artifactId);
+                    mi = maybeAddComment(acc, mi, groupId, artifactId, ctx);
                 }
                 return mi;
             }
@@ -205,7 +209,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         };
     }
 
-    private static TreeVisitor<?, ExecutionContext> mavenVisitor(Accumulator acc) {
+    private TreeVisitor<?, ExecutionContext> mavenVisitor(Accumulator acc) {
         final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
         return new MavenIsoVisitor<ExecutionContext>() {
             @Override
@@ -217,13 +221,13 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     if (optionalGroupId.isPresent()) {
                         String groupId = optionalGroupId.get();
                         String artifactId = optionalArtifactId.orElse(null);
-                        tag = maybeAddComment(acc, tag, groupId, artifactId);
+                        tag = maybeAddComment(acc, tag, groupId, artifactId, ctx);
                     }
                 } else if (isPluginTag()) {
                     if (optionalArtifactId.isPresent()) {
                         String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
                         String artifactId = optionalArtifactId.get();
-                        tag = maybeAddComment(acc, tag, groupId, artifactId);
+                        tag = maybeAddComment(acc, tag, groupId, artifactId, ctx);
                     }
                 }
                 return tag;
@@ -232,20 +236,27 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         };
     }
 
-    private static <T extends Tree> T maybeAddComment(Accumulator acc, T tree, String groupId, @Nullable String artifactId) {
+    private <T extends Tree> T maybeAddComment(Accumulator acc, T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
         Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
         if (relocation != null) {
+            GroupArtifact relocatedGA = relocation.getTo();
             String commentText = String.format("Relocated to %s%s%s",
-                    relocation.getTo().getGroupId(),
-                    Optional.ofNullable(relocation.getTo().getArtifactId()).map(a -> ":" + a).orElse(""),
+                    relocatedGA.getGroupId(),
+                    Optional.ofNullable(relocatedGA.getArtifactId()).map(a -> ":" + a).orElse(""),
                     relocation.getContext() == null ? "" : " as per \"" + relocation.getContext() + "\"");
+            report.insertRow(ctx, new RelocatedDependencyReport.Row(
+                    groupId,
+                    artifactId,
+                    relocatedGA.getGroupId(),
+                    relocatedGA.getArtifactId(),
+                    relocation.getContext()));
             return SearchResult.found(tree, commentText);
         }
         if (artifactId == null) {
             return tree;
         }
         // Try again without artifactId
-        return maybeAddComment(acc, tree, groupId, null);
+        return maybeAddComment(acc, tree, groupId, null, ctx);
     }
 }
 

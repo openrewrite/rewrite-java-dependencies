@@ -15,7 +15,6 @@
  */
 package org.openrewrite.java.dependencies;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -31,6 +30,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RelocatedDependencyCheckTest implements RewriteTest {
@@ -292,10 +292,11 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
-        @Disabled
         void changeRelocatedGradleDependencies() {
             rewriteRun(
-              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              recipe -> recipe
+                .beforeRecipe(withToolingApi())
+                .recipe(new RelocatedDependencyCheck(true)),
               //language=groovy
               buildGradle(
                 """

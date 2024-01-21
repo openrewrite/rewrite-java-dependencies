@@ -114,8 +114,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            private final TreeVisitor<?, ExecutionContext> gradleVisitor = gradleVisitor(acc);
-            private final TreeVisitor<?, ExecutionContext> mavenVisitor = mavenVisitor(acc);
+            private final TreeVisitor<?, ExecutionContext> gradleVisitor = gradleVisitor();
+            private final TreeVisitor<?, ExecutionContext> mavenVisitor = mavenVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -130,181 +130,177 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 }
                 return s;
             }
-        };
-    }
 
-    private TreeVisitor<?, ExecutionContext> gradleVisitor(Accumulator acc) {
-        MethodMatcher dependencyMatcher = new MethodMatcher("DependencyHandlerSpec *(..)");
-        return new GroovyIsoVisitor<ExecutionContext>() {
-            @Override
-            public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
-                J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
-                if (dependencyMatcher.matches(mi)) {
-                    List<Expression> methodArguments = mi.getArguments();
-                    Expression firstMethodArgument = methodArguments.get(0);
-                    if (firstMethodArgument instanceof J.Literal) {
-                        J.Literal literal = (J.Literal) firstMethodArgument;
-                        mi = searchInLiteral(literal, mi, ctx);
-                    } else if (firstMethodArgument instanceof G.GString) {
-                        G.GString gString = (G.GString) firstMethodArgument;
-                        List<J> strings = gString.getStrings();
-                        if (!strings.isEmpty() && strings.get(0) instanceof J.Literal) {
-                            mi = searchInLiteral((J.Literal) strings.get(0), mi, ctx);
-                        }
-                    } else if (firstMethodArgument instanceof G.MapEntry) {
-                        mi = searchInGMapEntry(methodArguments, mi, ctx);
-                    }
-                }
-                return mi;
-            }
-
-            private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi, ExecutionContext ctx) {
-                String gav = (String) literal.getValue();
-                assert gav != null;
-                String[] parts = gav.split(":");
-                if (gav.length() >= 2) {
-                    mi = maybeUpdate(acc, mi, parts[0], parts[1], ctx);
-                }
-                return mi;
-            }
-
-            private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi, ExecutionContext ctx) {
-                String groupId = null;
-                String artifactId = null;
-                for (Expression e : methodArguments) {
-                    if (!(e instanceof G.MapEntry)) {
-                        continue;
-                    }
-                    G.MapEntry arg = (G.MapEntry) e;
-                    if (!(arg.getKey() instanceof J.Literal)) {
-                        continue;
-                    }
-                    J.Literal key = (J.Literal) arg.getKey();
-                    Expression argValue = arg.getValue();
-                    String valueValue = null;
-                    if (argValue instanceof J.Literal) {
-                        J.Literal value = (J.Literal) argValue;
-                        if (value.getValue() instanceof String) {
-                            valueValue = (String) value.getValue();
-                        }
-                    } else if (argValue instanceof J.Identifier) {
-                        J.Identifier value = (J.Identifier) argValue;
-                        valueValue = value.getSimpleName();
-                    } else if (argValue instanceof G.GString) {
-                        G.GString value = (G.GString) argValue;
-                        List<J> strings = value.getStrings();
-                        if (!strings.isEmpty() && strings.get(0) instanceof G.GString.Value) {
-                            G.GString.Value versionGStringValue = (G.GString.Value) strings.get(0);
-                            if (versionGStringValue.getTree() instanceof J.Identifier) {
-                                valueValue = ((J.Identifier) versionGStringValue.getTree()).getSimpleName();
+            private TreeVisitor<?, ExecutionContext> gradleVisitor() {
+                MethodMatcher dependencyMatcher = new MethodMatcher("DependencyHandlerSpec *(..)");
+                return new GroovyIsoVisitor<ExecutionContext>() {
+                    @Override
+                    public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
+                        J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
+                        if (dependencyMatcher.matches(mi)) {
+                            List<Expression> methodArguments = mi.getArguments();
+                            Expression firstMethodArgument = methodArguments.get(0);
+                            if (firstMethodArgument instanceof J.Literal) {
+                                J.Literal literal = (J.Literal) firstMethodArgument;
+                                mi = searchInLiteral(literal, mi, ctx);
+                            } else if (firstMethodArgument instanceof G.GString) {
+                                G.GString gString = (G.GString) firstMethodArgument;
+                                List<J> strings = gString.getStrings();
+                                if (!strings.isEmpty() && strings.get(0) instanceof J.Literal) {
+                                    mi = searchInLiteral((J.Literal) strings.get(0), mi, ctx);
+                                }
+                            } else if (firstMethodArgument instanceof G.MapEntry) {
+                                mi = searchInGMapEntry(methodArguments, mi, ctx);
                             }
                         }
+                        return mi;
                     }
-                    if (!(key.getValue() instanceof String)) {
-                        continue;
+
+                    private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi, ExecutionContext ctx) {
+                        String gav = (String) literal.getValue();
+                        assert gav != null;
+                        String[] parts = gav.split(":");
+                        if (gav.length() >= 2) {
+                            mi = maybeUpdate(mi, parts[0], parts[1], ctx);
+                        }
+                        return mi;
                     }
-                    String keyValue = (String) key.getValue();
-                    if ("group".equals(keyValue)) {
-                        groupId = valueValue;
-                    } else if ("name".equals(keyValue)) {
-                        artifactId = valueValue;
+
+                    private J.MethodInvocation searchInGMapEntry(List<Expression> methodArguments, J.MethodInvocation mi, ExecutionContext ctx) {
+                        String groupId = null;
+                        String artifactId = null;
+                        for (Expression e : methodArguments) {
+                            if (!(e instanceof G.MapEntry)) {
+                                continue;
+                            }
+                            G.MapEntry arg = (G.MapEntry) e;
+                            if (!(arg.getKey() instanceof J.Literal)) {
+                                continue;
+                            }
+                            J.Literal key = (J.Literal) arg.getKey();
+                            Expression argValue = arg.getValue();
+                            String valueValue = null;
+                            if (argValue instanceof J.Literal) {
+                                J.Literal value = (J.Literal) argValue;
+                                if (value.getValue() instanceof String) {
+                                    valueValue = (String) value.getValue();
+                                }
+                            } else if (argValue instanceof J.Identifier) {
+                                J.Identifier value = (J.Identifier) argValue;
+                                valueValue = value.getSimpleName();
+                            } else if (argValue instanceof G.GString) {
+                                G.GString value = (G.GString) argValue;
+                                List<J> strings = value.getStrings();
+                                if (!strings.isEmpty() && strings.get(0) instanceof G.GString.Value) {
+                                    G.GString.Value versionGStringValue = (G.GString.Value) strings.get(0);
+                                    if (versionGStringValue.getTree() instanceof J.Identifier) {
+                                        valueValue = ((J.Identifier) versionGStringValue.getTree()).getSimpleName();
+                                    }
+                                }
+                            }
+                            if (!(key.getValue() instanceof String)) {
+                                continue;
+                            }
+                            String keyValue = (String) key.getValue();
+                            if ("group".equals(keyValue)) {
+                                groupId = valueValue;
+                            } else if ("name".equals(keyValue)) {
+                                artifactId = valueValue;
+                            }
+                        }
+                        if (groupId != null) {
+                            mi = maybeUpdate(mi, groupId, artifactId, ctx);
+                        }
+                        return mi;
                     }
-                }
-                if (groupId != null) {
-                    mi = maybeUpdate(acc, mi, groupId, artifactId, ctx);
-                }
-                return mi;
+
+                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
+                        Relocation relocation = getRelocation(groupId, artifactId);
+                        if (relocation != null) {
+                            insertRow(groupId, artifactId, relocation, ctx);
+                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
+                                String newGroupId = relocation.getTo().getGroupId();
+                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
+                                doAfterVisit(new ChangeDependency(
+                                        groupId, artifactId, newGroupId, newArtifactId,
+                                        "latest.release", null, null).getVisitor());
+                            } else {
+                                return getSearchResultFound(tree, relocation);
+                            }
+                        }
+                        return tree;
+                    }
+                };
             }
 
-            private <T extends Tree> T maybeUpdate(Accumulator acc, T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                Relocation relocation = getRelocation(acc, groupId, artifactId);
-                if (relocation != null) {
-                    insertRow(groupId, artifactId, relocation, ctx);
-                    if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                        String newGroupId = relocation.getTo().getGroupId();
-                        String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                        doAfterVisit(new ChangeDependency(
-                                groupId, artifactId, newGroupId, newArtifactId,
-                                "latest.release", null, null).getVisitor());
-                    } else {
-                        return getSearchResultFound(tree, relocation);
+            private TreeVisitor<?, ExecutionContext> mavenVisitor() {
+                final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
+                return new MavenIsoVisitor<ExecutionContext>() {
+                    @Override
+                    public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
+                        tag = super.visitTag(tag, ctx);
+                        Optional<String> optionalGroupId = tag.getChildValue("groupId");
+                        Optional<String> optionalArtifactId = tag.getChildValue("artifactId");
+                        if (dependencyMatcher.matches(getCursor())) {
+                            if (optionalGroupId.isPresent()) {
+                                String groupId = optionalGroupId.get();
+                                String artifactId = optionalArtifactId.orElse(null);
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                            }
+                        } else if (isPluginTag()) {
+                            if (optionalArtifactId.isPresent()) {
+                                String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
+                                String artifactId = optionalArtifactId.get();
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                            }
+                        }
+                        return tag;
                     }
+
+                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
+                        Relocation relocation = getRelocation(groupId, artifactId);
+                        if (relocation != null) {
+                            insertRow(groupId, artifactId, relocation, ctx);
+                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
+                                String newGroupId = relocation.getTo().getGroupId();
+                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
+                                doAfterVisit(new ChangeDependencyGroupIdAndArtifactId(
+                                        groupId, artifactId, newGroupId, newArtifactId,
+                                        "latest.release", null, null).getVisitor());
+                            } else {
+                                return getSearchResultFound(tree, relocation);
+                            }
+                        }
+                        return tree;
+                    }
+                };
+            }
+
+            private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {
+                Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
+                if (relocation == null && artifactId != null) {
+                    // Try again without artifactId, as some migrations only specify groupId
+                    relocation = acc.getMigrations().get(new GroupArtifact(groupId, null));
                 }
-                return tree;
+                return relocation;
+            }
+
+            private void insertRow(String groupId, @Nullable String artifactId, Relocation relocation, ExecutionContext ctx) {
+                GroupArtifact relocatedGA = relocation.getTo();
+                report.insertRow(ctx, new RelocatedDependencyReport.Row(
+                        groupId, artifactId,
+                        relocatedGA.getGroupId(), Optional.ofNullable(relocatedGA.getArtifactId()).orElse(artifactId),
+                        relocation.getContext()));
+            }
+
+            private <T extends Tree> T getSearchResultFound(T tree, Relocation relocation) {
+                GroupArtifact relocatedGA = relocation.getTo();
+                String relocatedMessage = String.format("Relocated to %s%s%s",
+                        relocatedGA.getGroupId(),
+                        Optional.ofNullable(relocatedGA.getArtifactId()).map(a -> ":" + a).orElse(""),
+                        relocation.getContext() == null ? "" : " as per \"" + relocation.getContext() + "\"");
+                return SearchResult.found(tree, relocatedMessage);
             }
         };
     }
-
-    private TreeVisitor<?, ExecutionContext> mavenVisitor(Accumulator acc) {
-        final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
-        return new MavenIsoVisitor<ExecutionContext>() {
-            @Override
-            public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
-                tag = super.visitTag(tag, ctx);
-                Optional<String> optionalGroupId = tag.getChildValue("groupId");
-                Optional<String> optionalArtifactId = tag.getChildValue("artifactId");
-                if (dependencyMatcher.matches(getCursor())) {
-                    if (optionalGroupId.isPresent()) {
-                        String groupId = optionalGroupId.get();
-                        String artifactId = optionalArtifactId.orElse(null);
-                        tag = maybeUpdate(acc, tag, groupId, artifactId, ctx);
-                    }
-                } else if (isPluginTag()) {
-                    if (optionalArtifactId.isPresent()) {
-                        String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
-                        String artifactId = optionalArtifactId.get();
-                        tag = maybeUpdate(acc, tag, groupId, artifactId, ctx);
-                    }
-                }
-                return tag;
-            }
-
-            private <T extends Tree> T maybeUpdate(Accumulator acc, T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                Relocation relocation = getRelocation(acc, groupId, artifactId);
-                if (relocation != null) {
-                    insertRow(groupId, artifactId, relocation, ctx);
-                    if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                        String newGroupId = relocation.getTo().getGroupId();
-                        String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                        doAfterVisit(new ChangeDependencyGroupIdAndArtifactId(
-                                groupId, artifactId, newGroupId, newArtifactId,
-                                "latest.release", null, null).getVisitor());
-                    } else {
-                        return getSearchResultFound(tree, relocation);
-                    }
-                }
-                return tree;
-            }
-        };
-    }
-
-
-    private static @Nullable Relocation getRelocation(Accumulator acc, String groupId, @Nullable String artifactId) {
-        Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
-        if (relocation == null && artifactId != null) {
-            // Try again without artifactId, as some migrations only specify groupId
-            relocation = acc.getMigrations().get(new GroupArtifact(groupId, null));
-        }
-        return relocation;
-    }
-
-    private void insertRow(String groupId, @Nullable String artifactId, Relocation relocation, ExecutionContext ctx) {
-        GroupArtifact relocatedGA = relocation.getTo();
-        report.insertRow(ctx, new RelocatedDependencyReport.Row(
-                groupId, artifactId,
-                relocatedGA.getGroupId(), Optional.ofNullable(relocatedGA.getArtifactId()).orElse(artifactId),
-                relocation.getContext()));
-    }
-
-    private static <T extends Tree> T getSearchResultFound(T tree, Relocation relocation) {
-        GroupArtifact relocatedGA = relocation.getTo();
-        String relocatedMessage = String.format("Relocated to %s%s%s",
-                relocatedGA.getGroupId(),
-                Optional.ofNullable(relocatedGA.getArtifactId()).map(a -> ":" + a).orElse(""),
-                relocation.getContext() == null ? "" : " as per \"" + relocation.getContext() + "\"");
-        return SearchResult.found(tree, relocatedMessage);
-    }
-
 }
-
-

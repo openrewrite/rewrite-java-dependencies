@@ -130,8 +130,9 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             }
 
             private TreeVisitor<?, ExecutionContext> gradleVisitor() {
-                MethodMatcher dependencyMatcher = new MethodMatcher("DependencyHandlerSpec *(..)");
                 return new GroovyIsoVisitor<ExecutionContext>() {
+                    private final MethodMatcher dependencyMatcher = new MethodMatcher("DependencyHandlerSpec *(..)");
+
                     @Override
                     public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
                         J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
@@ -232,8 +233,9 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             }
 
             private TreeVisitor<?, ExecutionContext> mavenVisitor() {
-                final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
                 return new MavenIsoVisitor<ExecutionContext>() {
+                    private final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
+
                     @Override
                     public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
                         tag = super.visitTag(tag, ctx);

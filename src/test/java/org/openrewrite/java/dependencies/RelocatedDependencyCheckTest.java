@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
@@ -35,7 +36,7 @@ import static org.openrewrite.maven.Assertions.pomXml;
 class RelocatedDependencyCheckTest implements RewriteTest {
     @Test
     void initialValueParser() {
-        Accumulator initialValue = new RelocatedDependencyCheck().getInitialValue(new InMemoryExecutionContext());
+        Accumulator initialValue = new RelocatedDependencyCheck(null).getInitialValue(new InMemoryExecutionContext());
         Map<GroupArtifact, Relocation> migrations = initialValue.getMigrations();
         assertThat(migrations)
           .containsEntry(new GroupArtifact("commons-lang", "commons-lang"),
@@ -46,7 +47,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new RelocatedDependencyCheck());
+        spec.recipe(new RelocatedDependencyCheck(null));
     }
 
     @Nested
@@ -57,7 +58,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
             rewriteRun(
               recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
-                new RelocatedDependencyReport.Row("org.codehaus.groovy", null, "org.apache.groovy", null, null)
+                new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy", "org.apache.groovy", "groovy", null)
               )),
               //language=xml
               pomXml(
@@ -97,6 +98,46 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy</artifactId>
                         <version>2.5.6</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void changeRelocatedMavenDependencies() {
+            rewriteRun(
+              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.31</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """,
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>com.mysql</groupId>
+                        <artifactId>mysql-connector-j</artifactId>
+                        <version>8.0.31</version>
                       </dependency>
                     </dependencies>
                   </project>
@@ -214,7 +255,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
               recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
-                new RelocatedDependencyReport.Row("org.codehaus.groovy", null, "org.apache.groovy", null, null)
+                new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy-all", "org.apache.groovy", "groovy-all", null)
               )),
               //language=groovy
               buildGradle(
@@ -244,6 +285,39 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation "commons-lang:commons-lang:2.6"
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation group: "commons-lang", name: "commons-lang", version: "2.6"
                       /*~~(Relocated to org.apache.groovy)~~>*/implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+                  }
+                  """
+              )
+            );
+        }
+
+        @Test
+        @Disabled
+        void changeRelocatedGradleDependencies() {
+            rewriteRun(
+              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  repositories {
+                      mavenCentral()
+                  }
+                  dependencies {
+                      implementation "mysql:mysql-connector-java:8.0.31"
+                  }
+                  """,
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  repositories {
+                      mavenCentral()
+                  }
+                  dependencies {
+                      implementation "com.mysql:mysql-connector-j:8.0.31"
                   }
                   """
               )

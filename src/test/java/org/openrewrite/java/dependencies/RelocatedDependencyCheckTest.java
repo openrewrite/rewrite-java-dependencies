@@ -29,6 +29,7 @@ import org.openrewrite.test.RewriteTest;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.Assertions.withToolingApi;
@@ -143,7 +144,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     </dependencies>
                   </project>
                   """.formatted(Pattern.compile("<version>(.*)</version>")
-                  .matcher(actual).results().skip(1).findFirst().orElseThrow().group(1))
+                  .matcher(requireNonNull(actual)).results().skip(1).findFirst().orElseThrow().group(1))
                 )
               )
             );
@@ -324,7 +325,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       implementation "%s"
                   }
                   """.formatted(Pattern.compile("com.mysql:mysql-connector-j:[^\"]+")
-                  .matcher(actual).results().findFirst().orElseThrow().group()))
+                  .matcher(requireNonNull(actual)).results().findFirst().orElseThrow().group()))
               )
             );
         }

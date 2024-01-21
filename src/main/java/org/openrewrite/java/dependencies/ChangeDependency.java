@@ -18,13 +18,8 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
+import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 @Getter
 @RequiredArgsConstructor
@@ -64,7 +59,7 @@ public class ChangeDependency extends Recipe {
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                    "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
             example = "-jre",
             required = false)
     @Nullable
@@ -86,27 +81,29 @@ public class ChangeDependency extends Recipe {
         return "Change the groupId, artifactId and/or the version of a specified Gradle or Maven dependency.";
     }
 
-    @Nullable
-    private transient org.openrewrite.gradle.ChangeDependency changeGradleDependency;
-    @Nullable
-    private transient org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId changeMavenDependency;
-
     @Override
-    public List<Recipe> getRecipeList() {
-        if (changeGradleDependency == null ||
-                !Objects.equals(changeGradleDependency.getOldGroupId(), oldGroupId) ||
-                !Objects.equals(changeGradleDependency.getOldArtifactId(), oldArtifactId) ||
-                !Objects.equals(changeGradleDependency.getNewGroupId(), newGroupId) ||
-                !Objects.equals(changeGradleDependency.getNewArtifactId(), newArtifactId) ||
-                !Objects.equals(changeGradleDependency.getNewVersion(), newVersion) ||
-                !Objects.equals(changeGradleDependency.getVersionPattern(), versionPattern)
-        ) {
-            changeGradleDependency = new org.openrewrite.gradle.ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
-            changeMavenDependency = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
-        }
-        return Arrays.asList(
-                changeGradleDependency,
-                changeMavenDependency
-        );
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            private final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
+                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)
+                    .getVisitor();
+            private final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
+                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)
+                    .getVisitor();
+
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (!(tree instanceof SourceFile)) {
+                    return tree;
+                }
+                SourceFile s = (SourceFile) tree;
+                if (gradleVisitor.isAcceptable(s, ctx)) {
+                    s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
+                } else if (mavenVisitor.isAcceptable(s, ctx)) {
+                    s = (SourceFile) mavenVisitor.visitNonNull(s, ctx);
+                }
+                return s;
+            }
+        };
     }
 }

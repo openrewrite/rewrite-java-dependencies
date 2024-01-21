@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.openrewrite.*;
 import org.openrewrite.gradle.ChangeDependency;
 import org.openrewrite.groovy.GroovyIsoVisitor;
@@ -296,7 +295,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 relocation.getContext()));
     }
 
-    @NotNull
     private static <T extends Tree> T getSearchResultFound(T tree, Relocation relocation) {
         GroupArtifact relocatedGA = relocation.getTo();
         String relocatedMessage = String.format("Relocated to %s%s%s",

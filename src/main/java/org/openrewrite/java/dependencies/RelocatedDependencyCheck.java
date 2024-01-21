@@ -20,7 +20,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.openrewrite.*;
-import org.openrewrite.gradle.ChangeDependency;
 import org.openrewrite.groovy.GroovyIsoVisitor;
 import org.openrewrite.groovy.tree.G;
 import org.openrewrite.internal.StringUtils;
@@ -31,7 +30,6 @@ import org.openrewrite.java.dependencies.table.RelocatedDependencyReport;
 import org.openrewrite.java.tree.Expression;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.marker.SearchResult;
-import org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId;
 import org.openrewrite.maven.MavenIsoVisitor;
 import org.openrewrite.xml.XPathMatcher;
 import org.openrewrite.xml.tree.Xml;
@@ -264,7 +262,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
                                 String newGroupId = relocation.getTo().getGroupId();
                                 String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                doAfterVisit(new ChangeDependencyGroupIdAndArtifactId(
+                                doAfterVisit(new ChangeDependency(
                                         groupId, artifactId, newGroupId, newArtifactId,
                                         "latest.release", null, null).getVisitor());
                             } else {

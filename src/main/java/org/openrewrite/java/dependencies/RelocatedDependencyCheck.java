@@ -225,7 +225,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
                         doAfterVisit(new ChangeDependency(
                                 groupId, artifactId, newGroupId, newArtifactId,
-                                null, null, null).getVisitor());
+                                "latest.release", null, null).getVisitor());
                     } else {
                         return getSearchResultFound(tree, relocation);
                     }
@@ -268,7 +268,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
                         doAfterVisit(new ChangeDependencyGroupIdAndArtifactId(
                                 groupId, artifactId, newGroupId, newArtifactId,
-                                null, null, null).getVisitor());
+                                "latest.release", null, null).getVisitor());
                     } else {
                         return getSearchResultFound(tree, relocation);
                     }

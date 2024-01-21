@@ -27,6 +27,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -127,7 +128,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     </dependencies>
                   </project>
                   """,
-                """
+                spec -> spec.after(actual -> """
                   <project>
                     <modelVersion>4.0.0</modelVersion>
                     <groupId>org.openrewrite.example</groupId>
@@ -137,11 +138,13 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       <dependency>
                         <groupId>com.mysql</groupId>
                         <artifactId>mysql-connector-j</artifactId>
-                        <version>8.0.31</version>
+                        <version>%s</version>
                       </dependency>
                     </dependencies>
                   </project>
-                  """
+                  """.formatted(Pattern.compile("<version>(.*)</version>")
+                  .matcher(actual).results().skip(1).findFirst().orElseThrow().group(1))
+                )
               )
             );
         }
@@ -310,7 +313,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       implementation "mysql:mysql-connector-java:8.0.31"
                   }
                   """,
-                """
+                spec -> spec.after(actual -> """
                   plugins {
                       id "java-library"
                   }
@@ -318,9 +321,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       mavenCentral()
                   }
                   dependencies {
-                      implementation "com.mysql:mysql-connector-j:8.0.31"
+                      implementation "%s"
                   }
-                  """
+                  """.formatted(Pattern.compile("com.mysql:mysql-connector-j:[^\"]+")
+                  .matcher(actual).results().findFirst().orElseThrow().group()))
               )
             );
         }

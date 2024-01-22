@@ -23,9 +23,10 @@ import org.openrewrite.internal.lang.Nullable;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class DependencyInsight extends Recipe {
+
     @Override
     public String getDisplayName() {
-        return "Dependency Insight Gradle or Maven";
+        return "Dependency insight for Gradle and Maven";
     }
 
     @Override

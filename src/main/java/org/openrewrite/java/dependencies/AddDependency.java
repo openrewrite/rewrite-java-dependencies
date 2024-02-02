@@ -24,12 +24,12 @@ import org.openrewrite.internal.lang.Nullable;
 @EqualsAndHashCode(callSuper = true)
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Gradle and Maven shared parameters
-    @Option(displayName = "Group",
+    @Option(displayName = "Group ID",
         description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
         example = "com.google.guava")
     String groupId;
 
-    @Option(displayName = "Artifact",
+    @Option(displayName = "Artifact ID",
         description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`",
         example = "guava")
     String artifactId;

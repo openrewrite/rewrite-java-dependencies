@@ -26,17 +26,19 @@ import org.openrewrite.maven.tree.GroupArtifact;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Objects.requireNonNull;
+
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVersion.Accumulator> {
-    @Option(displayName = "Group",
+    @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
     private final String groupId;
 
-    @Option(displayName = "Artifact",
+    @Option(displayName = "Artifact ID",
             description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "jackson-module*")
     private final String artifactId;
@@ -55,15 +57,16 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     private final String versionPattern;
 
     @Option(displayName = "Override managed version",
-            description = "For Maven project only, This flag can be set to explicitly override a managed dependency's version. The default for this flag is `false`.",
+            description = "For Maven project only, This flag can be set to explicitly override a managed " +
+                          "dependency's version. The default for this flag is `false`.",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Retain versions",
-            description = "For Maven project only, Accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed "
-                          + "from dependency management after the changes from this recipe, then it will be retained with an explicit version. "
-                          + "The version can be omitted from the GAV to use the old value from dependency management",
+            description = "For Maven project only, accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed " +
+                          "from dependency management after the changes from this recipe, then it will be retained with an explicit version. " +
+                          "The version can be omitted from the GAV to use the old value from dependency management.",
             example = "com.jcraft:jsch",
             required = false)
     @Nullable
@@ -77,13 +80,13 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     @Override
     public String getDescription() {
         //language=markdown
-        return "For Gradle projects, upgrade the version of a dependency in a build.gradle file. " +
+        return "For Gradle projects, upgrade the version of a dependency in a `build.gradle` file. " +
                "Supports updating dependency declarations of various forms:\n" +
                "* `String` notation: `\"group:artifact:version\"` \n" +
                "* `Map` notation: `group: 'group', name: 'artifact', version: 'version'`\n" +
-               "Can update version numbers which are defined earlier in the same file in variable declarations.\n\n" +
-               "For Maven projects, upgrade the version of a dependency by specifying a group and (optionally) an " +
-               "artifact using Node Semver advanced range selectors, allowing more precise control over version " +
+               "It is possible to update version numbers which are defined earlier in the same file in variable declarations.\n\n" +
+               "For Maven projects, upgrade the version of a dependency by specifying a group ID and (optionally) an " +
+               "artifact ID using Node Semver advanced range selectors, allowing more precise control over version " +
                "updates to patch or minor releases.";
     }
 
@@ -107,7 +110,7 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (mavenScanner.isAcceptable((SourceFile) tree, ctx)) {
+                if (mavenScanner.isAcceptable((SourceFile) requireNonNull(tree), ctx)) {
                     return mavenScanner.visit(tree, ctx);
                 } else if (gradleScanner.isAcceptable((SourceFile) tree, ctx)) {
                     return gradleScanner.visit(tree, ctx);

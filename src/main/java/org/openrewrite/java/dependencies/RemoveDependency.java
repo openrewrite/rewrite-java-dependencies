@@ -28,12 +28,12 @@ import java.util.List;
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class RemoveDependency extends Recipe {
-    @Option(displayName = "Group",
+    @Option(displayName = "Group ID",
         description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
         example = "com.fasterxml.jackson*")
     String groupId;
 
-    @Option(displayName = "Artifact",
+    @Option(displayName = "Artifact ID",
         description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
         example = "jackson-module*")
     String artifactId;

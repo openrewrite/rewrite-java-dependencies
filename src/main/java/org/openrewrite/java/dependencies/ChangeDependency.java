@@ -26,25 +26,25 @@ import org.openrewrite.internal.lang.Nullable;
 @EqualsAndHashCode(callSuper = true)
 public class ChangeDependency extends Recipe {
     // Gradle and Maven shared parameters
-    @Option(displayName = "Old groupId",
-            description = "The old groupId to replace. The groupId is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+    @Option(displayName = "Old group ID",
+            description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "org.openrewrite.recipe")
     private final String oldGroupId;
 
-    @Option(displayName = "Old artifactId",
-            description = "The old artifactId to replace. The artifactId is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+    @Option(displayName = "Old artifact ID",
+            description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "rewrite-testing-frameworks")
     private final String oldArtifactId;
 
-    @Option(displayName = "New groupId",
-            description = "The new groupId to use. Defaults to the existing group id.",
+    @Option(displayName = "New group ID",
+            description = "The new group ID to use. Defaults to the existing group ID.",
             example = "corp.internal.openrewrite.recipe",
             required = false)
     @Nullable
     private final String newGroupId;
 
-    @Option(displayName = "New artifactId",
-            description = "The new artifactId to use. Defaults to the existing artifact id.",
+    @Option(displayName = "New artifact ID",
+            description = "The new artifact ID to use. Defaults to the existing artifact ID.",
             example = "rewrite-testing-frameworks",
             required = false)
     @Nullable
@@ -78,7 +78,7 @@ public class ChangeDependency extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Change the groupId, artifactId and/or the version of a specified Gradle or Maven dependency.";
+        return "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ChangeDependency extends Recipe {
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)
                     .getVisitor();
             private final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)
+                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, null)
                     .getVisitor();
 
             @Override

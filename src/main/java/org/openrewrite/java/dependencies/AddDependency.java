@@ -21,7 +21,7 @@ import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Group ID",

@@ -27,7 +27,7 @@ import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class DependencyList extends Recipe {
 
     transient DependencyListReport report = new DependencyListReport(this);

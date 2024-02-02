@@ -21,7 +21,7 @@ import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class DependencyInsight extends Recipe {
 
     @Override

@@ -23,7 +23,7 @@ import org.openrewrite.internal.lang.Nullable;
 
 @Getter
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class ChangeDependency extends Recipe {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",

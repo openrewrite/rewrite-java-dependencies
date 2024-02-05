@@ -29,7 +29,7 @@ import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
-public class UpgradeDependencyVersionTest implements RewriteTest {
+class UpgradeDependencyVersionTest implements RewriteTest {
 
     @DocumentExample("Upgrade gradle dependency")
     @Test

@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -28,6 +29,7 @@ public class DependencyInsightTest implements RewriteTest {
         spec.recipe(new DependencyInsight("org.springframework*", "*", null));
     }
 
+    @DocumentExample
     @Test
     void maven() {
         rewriteRun(

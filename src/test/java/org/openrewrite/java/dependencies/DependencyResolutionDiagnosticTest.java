@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Parser;
 import org.openrewrite.java.dependencies.table.RepositoryAccessibilityReport;
@@ -184,6 +185,7 @@ public class DependencyResolutionDiagnosticTest implements RewriteTest {
         );
     }
 
+    @DocumentExample
     @Test
     void gradleNoMarker() {
         rewriteRun(

@@ -25,7 +25,7 @@ import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
-public class DependencyListTest implements RewriteTest {
+class DependencyListTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {

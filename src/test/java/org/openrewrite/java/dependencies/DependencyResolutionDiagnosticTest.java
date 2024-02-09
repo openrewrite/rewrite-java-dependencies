@@ -34,7 +34,7 @@ import static org.openrewrite.gradle.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 @SuppressWarnings("GroovyAssignabilityCheck")
-public class DependencyResolutionDiagnosticTest implements RewriteTest {
+class DependencyResolutionDiagnosticTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {

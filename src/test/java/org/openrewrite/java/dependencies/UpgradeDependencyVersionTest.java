@@ -43,11 +43,11 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               plugins {
                 id 'java-library'
               }
-              
+                            
               repositories {
                 mavenCentral()
               }
-              
+                            
               dependencies {
                 compileOnly 'com.google.guava:guava:29.0-jre'
                 runtimeOnly ('com.google.guava:guava:29.0-jre')
@@ -58,11 +58,11 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               plugins {
                 id 'java-library'
               }
-              
+                            
               repositories {
                 mavenCentral()
               }
-              
+                            
               dependencies {
                 compileOnly 'com.google.guava:guava:30.1.1-jre'
                 runtimeOnly ('com.google.guava:guava:30.1.1-jre')

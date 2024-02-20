@@ -35,35 +35,35 @@ class DependencyListTest implements RewriteTest {
     @Test
     void basic() {
         rewriteRun(
-            spec -> spec
-                .beforeRecipe(withToolingApi())
-                .dataTable(DependencyListReport.Row.class, rows -> {
-                    assertThat(rows).isNotEmpty();
-                    assertThat(rows)
-                        .filteredOn(it -> "Maven".equals(it.getBuildTool()) && "rewrite-core".equals(it.getDependencyArtifactId()))
-                        .hasSize(1);
-                    assertThat(rows)
-                        .filteredOn(it -> "Gradle".equals(it.getBuildTool()) && "rewrite-core".equals(it.getDependencyArtifactId()))
-                        .hasSize(1);
-                }),
-            //language=groovy
-            buildGradle(
-                """
+          spec -> spec
+            .beforeRecipe(withToolingApi())
+            .dataTable(DependencyListReport.Row.class, rows -> {
+                assertThat(rows)
+                  .filteredOn(it -> "Maven".equals(it.getBuildTool()) && "rewrite-core".equals(it.getDependencyArtifactId()))
+                  .hasSize(1);
+                assertThat(rows)
+                  .filteredOn(it -> "Gradle".equals(it.getBuildTool()) && "rewrite-core".equals(it.getDependencyArtifactId()))
+                  .hasSize(1);
+            }),
+          //language=groovy
+          buildGradle(
+            """
               plugins {
                   id 'java'
               }
-              
+                            
               repositories {
                   mavenCentral()
               }
-              
+                            
               dependencies {
                   implementation('org.openrewrite:rewrite-core:7.39.0')
               }
-              """),
-            //language=xml
-            pomXml(
-                """
+              """
+          ),
+          //language=xml
+          pomXml(
+            """
               <project>
                 <groupId>com.mycompany.app</groupId>
                 <artifactId>my-app</artifactId>
@@ -76,7 +76,8 @@ class DependencyListTest implements RewriteTest {
                   </dependency>
                 </dependencies>
               </project>
-              """)
+              """
+          )
         );
     }
 }

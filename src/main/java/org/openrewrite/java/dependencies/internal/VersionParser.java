@@ -16,16 +16,13 @@
 
 package org.openrewrite.java.dependencies.internal;
 
-import com.google.common.collect.Maps;
-import com.google.common.primitives.Longs;
-import org.openrewrite.internal.lang.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class VersionParser {
-    private final Map<String, Version> cache = Maps.newConcurrentMap();
+    private final Map<String, Version> cache = new ConcurrentHashMap<>();
 
     public VersionParser() {
     }
@@ -39,7 +36,6 @@ public class VersionParser {
         boolean digit = false;
         int startPart = 0;
         int pos = 0;
-        int endBase = 0;
         int endBaseStr = 0;
         for (; pos < original.length(); pos++) {
             char ch = original.charAt(pos);
@@ -48,13 +44,11 @@ public class VersionParser {
                 startPart = pos + 1;
                 digit = false;
                 if (ch != '.' && endBaseStr == 0) {
-                    endBase = parts.size();
                     endBaseStr = pos;
                 }
             } else if (ch >= '0' && ch <= '9') {
                 if (!digit && pos > startPart) {
                     if (endBaseStr == 0) {
-                        endBase = parts.size() + 1;
                         endBaseStr = pos;
                     }
                     parts.add(original.substring(startPart, pos));
@@ -64,7 +58,6 @@ public class VersionParser {
             } else {
                 if (digit) {
                     if (endBaseStr == 0) {
-                        endBase = parts.size() + 1;
                         endBaseStr = pos;
                     }
                     parts.add(original.substring(startPart, pos));
@@ -76,27 +69,24 @@ public class VersionParser {
         if (pos > startPart) {
             parts.add(original.substring(startPart, pos));
         }
-        DefaultVersion base = null;
-        if (endBaseStr > 0) {
-            base = new DefaultVersion(original.substring(0, endBaseStr), parts.subList(0, endBase), null);
-        }
-        return new DefaultVersion(original, parts, base);
+        return new DefaultVersion(original, parts);
     }
 
     private static class DefaultVersion implements Version {
         private final String source;
         private final String[] parts;
         private final Long[] numericParts;
-        private final DefaultVersion baseVersion;
 
-        public DefaultVersion(String source, List<String> parts, @Nullable DefaultVersion baseVersion) {
+        public DefaultVersion(String source, List<String> parts) {
             this.source = source;
             this.parts = parts.toArray(new String[0]);
             this.numericParts = new Long[this.parts.length];
             for (int i = 0; i < parts.size(); i++) {
-                this.numericParts[i] = Longs.tryParse(this.parts[i]);
+                try {
+                    this.numericParts[i] = Long.parseLong(this.parts[i]);
+                } catch (NumberFormatException ignored) {
+                }
             }
-            this.baseVersion = baseVersion == null ? this : baseVersion;
         }
 
         @Override

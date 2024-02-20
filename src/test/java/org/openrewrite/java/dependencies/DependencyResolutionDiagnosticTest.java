@@ -59,22 +59,23 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             }),
           //language=groovy
           buildGradle(
-                """
-            plugins {
-                id("java")
-            }
-            repositories {
-                mavenLocal()
-                mavenCentral()
-                maven {
-                    url "https://nonexistent.moderne.io/maven2"
-                }
-            }
-                        
-            dependencies {
-                implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
-            }
-            """)
+            """
+              plugins {
+                  id("java")
+              }
+              repositories {
+                  mavenLocal()
+                  mavenCentral()
+                  maven {
+                      url "https://nonexistent.moderne.io/maven2"
+                  }
+              }
+                          
+              dependencies {
+                  implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
+              }
+              """
+          )
         );
     }
 
@@ -94,20 +95,21 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             }),
           //language=groovy
           buildGradle(
-                """
-            plugins {
-                id("java")
-            }
-            repositories {
-                maven {
-                    url "https://nonexistent.moderne.io/maven2"
-                }
-            }
-                        
-            dependencies {
-                implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
-            }
-            """)
+            """
+              plugins {
+                  id("java")
+              }
+              repositories {
+                  maven {
+                      url "https://nonexistent.moderne.io/maven2"
+                  }
+              }
+                          
+              dependencies {
+                  implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
+              }
+              """
+          )
         );
     }
 
@@ -119,18 +121,18 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               MavenSettings settings = MavenSettings.parse(new Parser.Input(Paths.get("settings.xml"), () -> new ByteArrayInputStream(
                 //language=xml
                 """
-                      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-                          <mirrors>
-                              <mirror>
-                                  <mirrorOf>*</mirrorOf>
-                                  <name>mirrored-repo</name>
-                                  <url>https://nonexistent.moderne.io/maven2</url>
-                                  <id>repo</id>
-                              </mirror>
-                          </mirrors>
-                      </settings>
+                  <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+                      <mirrors>
+                          <mirror>
+                              <mirrorOf>*</mirrorOf>
+                              <name>mirrored-repo</name>
+                              <url>https://nonexistent.moderne.io/maven2</url>
+                              <id>repo</id>
+                          </mirror>
+                      </mirrors>
+                  </settings>
                   """.getBytes())), ctx);
               ctx.setMavenSettings(settings);
               spec.beforeRecipe(withToolingApi())
@@ -144,13 +146,14 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
           },
           //language=xml
           pomXml(
-                """
-            <project>
-                <groupId>com.example</groupId>
-                <artifactId>test</artifactId>
-                <version>0.1.0</version>
-            </project>
-            """)
+            """
+              <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>test</artifactId>
+                  <version>0.1.0</version>
+              </project>
+              """
+          )
         );
     }
 
@@ -168,7 +171,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             }),
           //language=xml
           pomXml(
-                """
+            """
               <project>
                   <groupId>com.example</groupId>
                   <artifactId>test</artifactId>
@@ -181,7 +184,8 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                       </repository>
                    </repositories>
               </project>
-              """)
+              """
+          )
         );
     }
 
@@ -189,18 +193,19 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     @Test
     void gradleNoMarker() {
         rewriteRun(
-            //language=groovy
-            buildGradle(
-                """
-                plugins {
-                    id("java")
-                }
-                """,
+          //language=groovy
+          buildGradle(
+            """
+              plugins {
+                  id("java")
+              }
+              """,
+            """
+              /*~~(build.gradle is a Gradle build file, but it is missing a GradleProject marker.)~~>*/plugins {
+                  id("java")
+              }
               """
-                /*~~(build.gradle is a Gradle build file, but it is missing a GradleProject marker.)~~>*/plugins {
-                    id("java")
-                }
-                """)
+          )
         );
     }
 
@@ -209,22 +214,24 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
         rewriteRun(
           spec -> spec.recipe(new DependencyResolutionDiagnostic("org.nonexistent", "nonexistent", "0"))
             .beforeRecipe(withToolingApi())
-            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2",
-                    "", "", 200, "org.openrewrite.maven.MavenDownloadingException",
-                    "org.nonexistent:nonexistent:0 failed. Unable to download POM. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404"));
-            }),
+            .dataTable(RepositoryAccessibilityReport.Row.class, rows ->
+              assertThat(rows).contains(
+                new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2",
+                  "", "", 200, "org.openrewrite.maven.MavenDownloadingException",
+                  "org.nonexistent:nonexistent:0 failed. Unable to download POM. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404")
+              )
+            ),
           //language=groovy
           buildGradle(
-                """
-                plugins {
-                    id("java")
-                }
-                repositories {
-                    mavenCentral()
-                }
-                """)
+            """
+              plugins {
+                  id("java")
+              }
+              repositories {
+                  mavenCentral()
+              }
+              """
+          )
         );
     }
 }

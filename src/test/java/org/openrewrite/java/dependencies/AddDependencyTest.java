@@ -31,13 +31,12 @@ import static org.openrewrite.java.Assertions.*;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class AddDependencyTest implements RewriteTest {
+
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.parser(JavaParser.fromJavaVersion()
-          .classpath("junit-jupiter-api", "guava", "jackson-databind", "jackson-core", "lombok"));
+        spec.parser(JavaParser.fromJavaVersion().classpath("guava"));
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     @Language("java")
     private final String usingGuavaIntMath = """
           import com.google.common.math.IntMath;
@@ -58,12 +57,13 @@ class AddDependencyTest implements RewriteTest {
             srcTestJava(
               java(usingGuavaIntMath)
             ),
+            //language=groovy
             buildGradle(
               """
                 plugins {
                     id "java-library"
                 }
-                
+                                
                 repositories {
                     mavenCentral()
                 }
@@ -72,11 +72,11 @@ class AddDependencyTest implements RewriteTest {
                 plugins {
                     id "java-library"
                 }
-                
+                                
                 repositories {
                     mavenCentral()
                 }
-                
+                                
                 dependencies {
                     testImplementation "com.google.guava:guava:29.0-jre"
                 }
@@ -96,28 +96,29 @@ class AddDependencyTest implements RewriteTest {
             srcMainJava(
               java(usingGuavaIntMath)
             ),
+            //language=xml
             pomXml(
               """
-                    <project>
-                        <groupId>com.mycompany.app</groupId>
-                        <artifactId>my-app</artifactId>
-                        <version>1</version>
-                    </project>
+                <project>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                </project>
                 """,
               """
-                    <project>
-                        <groupId>com.mycompany.app</groupId>
-                        <artifactId>my-app</artifactId>
-                        <version>1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>doesnotexist</groupId>
-                                <artifactId>doesnotexist</artifactId>
-                                <version>1</version>
-                                <scope>system</scope>
-                            </dependency>
-                        </dependencies>
-                    </project>
+                <project>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>doesnotexist</groupId>
+                            <artifactId>doesnotexist</artifactId>
+                            <version>1</version>
+                            <scope>system</scope>
+                        </dependency>
+                    </dependencies>
+                </project>
                 """
             )
           )

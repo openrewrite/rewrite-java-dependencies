@@ -31,16 +31,17 @@ class RemoveDependencyTest implements RewriteTest {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
             .recipe(new RemoveDependency("org.springframework.boot", "spring-boot*", null, null)),
+          //language=groovy
           buildGradle(
             """
               plugins {
                   id 'java-library'
               }
-              
+                            
               repositories {
                   mavenCentral()
               }
-              
+                            
               dependencies {
                   implementation("org.springframework.boot:spring-boot-starter-web:2.7.0") {
                       exclude group: "junit"
@@ -52,11 +53,11 @@ class RemoveDependencyTest implements RewriteTest {
               plugins {
                   id 'java-library'
               }
-              
+                            
               repositories {
                   mavenCentral()
               }
-              
+                            
               dependencies {
                   testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
               }
@@ -70,6 +71,7 @@ class RemoveDependencyTest implements RewriteTest {
     void removeMavenDependency() {
         rewriteRun(
           spec -> spec.recipe(new RemoveDependency("junit", "junit", null, null)),
+          //language=xml
           pomXml(
             """
               <project>

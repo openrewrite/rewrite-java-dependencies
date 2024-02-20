@@ -16,9 +16,8 @@
 
 package org.openrewrite.java.dependencies.internal;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,12 +28,18 @@ import java.util.Map;
  * One example where this comparator is inappropriate is if versions should be retained in a TreeMap/TreeSet.
  */
 public class StaticVersionComparator implements Comparator<Version> {
-    static final Map<String, Integer> SPECIAL_MEANINGS = ImmutableMap.<String, Integer>builderWithExpectedSize(7)
-                                                                            .put("dev", -1)
-                                                                            .put("rc", 1)
-                                                                            .put("snapshot", 2)
-                                                                            .put("final", 3).put("ga", 4).put("release", 5)
-                                                                            .put("sp", 6).build();
+    static final Map<String, Integer> SPECIAL_MEANINGS = new HashMap<>();
+
+    static {
+        SPECIAL_MEANINGS.put("dev", -1);
+        SPECIAL_MEANINGS.put("rc", 1);
+        SPECIAL_MEANINGS.put("snapshot", 2);
+        SPECIAL_MEANINGS.put("final", 3);
+        SPECIAL_MEANINGS.put("ga", 4);
+        SPECIAL_MEANINGS.put("release", 5);
+        SPECIAL_MEANINGS.put("sp", 6);
+    }
+
     /**
      * Compares 2 versions. Algorithm is inspired by PHP version_compare one.
      */

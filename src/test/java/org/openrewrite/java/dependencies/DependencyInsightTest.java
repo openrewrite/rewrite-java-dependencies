@@ -35,7 +35,7 @@ class DependencyInsightTest implements RewriteTest {
         rewriteRun(
           //language=xml
           pomXml(
-                """
+            """
               <project>
                 <groupId>com.example</groupId>
                 <artifactId>foo</artifactId>
@@ -64,7 +64,8 @@ class DependencyInsightTest implements RewriteTest {
                   </dependency>
                 </dependencies>
               </project>
-              """)
+              """
+          )
         );
     }
 }

@@ -34,13 +34,12 @@ dependencies {
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
     testRuntimeOnly("org.projectlombok:lombok:latest.release")
 
-    implementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
-
     implementation("com.google.guava:guava:latest.release")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+    testImplementation("org.openrewrite.gradle.tooling:model:$rewriteVersion")
     testRuntimeOnly("org.gradle:gradle-tooling-api:latest.release")
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")

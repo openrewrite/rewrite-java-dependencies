@@ -8,6 +8,7 @@ on:
 
 jobs:
   update-advisories:
+    if: github.event_name != 'schedule' || github.repository_owner == 'openrewrite'
     runs-on: ubuntu-latest
     steps:
       # Checkout and build parser

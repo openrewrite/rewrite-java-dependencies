@@ -17,8 +17,11 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.Validated;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
@@ -100,6 +103,70 @@ class ChangeDependencyTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void changeMavenDependencyManagementPomImport() {
+        rewriteRun(
+          spec -> spec.recipe(new ChangeDependency(
+            "org.springframework.boot", "spring-boot-dependencies",
+            "io.micronaut.platform", "micronaut-parent",
+            "4.3.4", null, null
+          )),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencyManagement>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.springframework.boot</groupId>
+                              <artifactId>spring-boot-dependencies</artifactId>
+                              <version>2.5.0</version>
+                              <type>pom</type>
+                              <scope>import</scope>
+                          </dependency>
+                      </dependencies>
+                  </dependencyManagement>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencyManagement>
+                      <dependencies>
+                          <dependency>
+                              <groupId>io.micronaut.platform</groupId>
+                              <artifactId>micronaut-parent</artifactId>
+                              <version>4.3.4</version>
+                              <type>pom</type>
+                              <scope>import</scope>
+                          </dependency>
+                      </dependencies>
+                  </dependencyManagement>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void validateCascadesToRecipes() {
+        Validated<Object> validate = new ChangeDependency(
+          "org.springframework.boot", "spring-boot-dependencies",
+          "org.springframework.boot", "spring-boot-dependencies",
+          "3.2.2", null, null
+        ).validate(new InMemoryExecutionContext());
+        assertThat(validate.failures())
+          .hasSize(2)
+          .allMatch(failure -> failure.getMessage().contains("must be different"));
     }
 
     @Test

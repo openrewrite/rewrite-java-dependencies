@@ -82,14 +82,17 @@ public class ChangeDependency extends Recipe {
     }
 
     @Override
+    public Validated<Object> validate(ExecutionContext ctx) {
+        return super.validate(ctx)
+                .and(getChangeDependencyRecipeGradle().validate())
+                .and(getChangeDependencyRecipeMaven().validate());
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            private final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
-                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)
-                    .getVisitor();
-            private final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                    oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, null)
-                    .getVisitor();
+            private final TreeVisitor<?, ExecutionContext> gradleVisitor = getChangeDependencyRecipeGradle().getVisitor();
+            private final TreeVisitor<?, ExecutionContext> mavenVisitor = getChangeDependencyRecipeMaven().getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -105,5 +108,15 @@ public class ChangeDependency extends Recipe {
                 return s;
             }
         };
+    }
+
+    private Recipe getChangeDependencyRecipeGradle() {
+        return new org.openrewrite.gradle.ChangeDependency(
+                oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion);
+    }
+
+    private Recipe getChangeDependencyRecipeMaven() {
+        return new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
+                oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, null);
     }
 }

@@ -218,7 +218,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               assertThat(rows).contains(
                 new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2",
                   "", "", 200, "org.openrewrite.maven.MavenDownloadingException",
-                  "org.nonexistent:nonexistent:0 failed. Unable to download POM. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404")
+                  "org.nonexistent:nonexistent:0 failed. Unable to download POM: org.nonexistent:nonexistent:0. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404")
               )
             ),
           //language=groovy

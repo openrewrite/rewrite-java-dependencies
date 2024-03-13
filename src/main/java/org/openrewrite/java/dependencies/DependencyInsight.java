@@ -40,12 +40,12 @@ public class DependencyInsight extends Recipe {
 
     @Option(displayName = "Group pattern",
             description = "Group ID glob pattern used to match dependencies.",
-            example = "com.fasterxml.jackson.module")
+            example = "com.fasterxml.jackson*")
     String groupIdPattern;
 
     @Option(displayName = "Artifact pattern",
             description = "Artifact ID glob pattern used to match dependencies.",
-            example = "jackson-module-*")
+            example = "jackson-*")
     String artifactIdPattern;
 
     @Option(displayName = "Version",

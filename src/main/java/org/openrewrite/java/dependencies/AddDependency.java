@@ -19,109 +19,111 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.openrewrite.*;
 import org.openrewrite.internal.lang.Nullable;
+import org.openrewrite.maven.tree.Scope;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Group ID",
-        description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
-        example = "com.google.guava")
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
+            example = "com.google.guava")
     String groupId;
 
     @Option(displayName = "Artifact ID",
-        description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`",
-        example = "guava")
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`",
+            example = "guava")
     String artifactId;
 
     @Option(displayName = "Version",
-        description = "An exact version number or node-style semver selector used to select the version number.",
-        example = "29.X",
-        required = false)
+            description = "An exact version number or node-style semver selector used to select the version number.",
+            example = "29.X",
+            required = false)
     @Nullable
     String version;
 
     @Option(displayName = "Version pattern",
-        description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
-                      "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
-        example = "-jre",
-        required = false)
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+            example = "-jre",
+            required = false)
     @Nullable
     String versionPattern;
 
     @Option(displayName = "Only if using",
-        description = "Used to determine if the dependency will be added and in which scope it should be placed.",
-        example = "org.junit.jupiter.api.*",
-        required = false)
+            description = "Used to determine if the dependency will be added and in which scope it should be placed.",
+            example = "org.junit.jupiter.api.*",
+            required = false)
     @Nullable
     String onlyIfUsing;
 
     @Option(displayName = "Classifier",
-        description = "A classifier to add. Commonly used to select variants of a library.",
-        example = "test",
-        required = false)
+            description = "A classifier to add. Commonly used to select variants of a library.",
+            example = "test",
+            required = false)
     @Nullable
     String classifier;
 
     @Option(displayName = "Family pattern",
-        description = "A pattern, applied to groupIds, used to determine which other dependencies should have aligned version numbers. " +
-                      "Accepts '*' as a wildcard character.",
-        example = "com.fasterxml.jackson*",
-        required = false)
+            description = "A pattern, applied to groupIds, used to determine which other dependencies should have aligned version numbers. " +
+                          "Accepts '*' as a wildcard character.",
+            example = "com.fasterxml.jackson*",
+            required = false)
     @Nullable
     String familyPattern;
 
     // Gradle only parameters
     @Option(displayName = "Extension",
-        description = "For Gradle only, The extension of the dependency to add. If omitted Gradle defaults to assuming the type is \"jar\".",
-        example = "jar",
-        required = false)
+            description = "For Gradle only, The extension of the dependency to add. If omitted Gradle defaults to assuming the type is \"jar\".",
+            example = "jar",
+            required = false)
     @Nullable
     String extension;
 
-
-    @Option(displayName = "Configuration",
-        description = "For Gradle only, A configuration to use when it is not what can be inferred from usage. Most of the time this will be left empty, but " +
-                      "is used when adding a new as of yet unused dependency.",
-        example = "implementation",
-        required = false)
+    @Option(displayName = "Gradle configuration",
+            description = "The Gradle dependency configuration name within which to place the dependency. " +
+                          "When omitted the configuration will be determined by the Maven scope parameter. " +
+                          "If that parameter is also omitted, configuration will be determined based on where types " +
+                          "matching `onlyIfUsing` appear in source code.",
+            example = "implementation",
+            required = false)
     @Nullable
     String configuration;
 
     // Maven only parameters
-    @Option(displayName = "Scope",
-        description = "For Maven only, A scope to use when it is not what can be inferred from usage. Most of the time this will be left empty, but " +
-                      "is used when adding a runtime, provided, or import dependency.",
-        example = "runtime",
-        valid = {"import", "runtime", "provided"},
-        required = false)
+    @Option(displayName = "Maven scope",
+            description = "The Maven scope within which to place the dependency. " +
+                          "When omitted scope will be determined based on where types matching `onlyIfUsing` appear in source code.",
+            example = "runtime",
+            valid = {"compile", "provided", "runtime", "test"},
+            required = false)
     @Nullable
     String scope;
 
     @Option(displayName = "Releases only",
-        description = "For Maven only, Whether to exclude snapshots from consideration when using a semver selector",
-        required = false)
+            description = "For Maven only, Whether to exclude snapshots from consideration when using a semver selector",
+            required = false)
     @Nullable
     Boolean releasesOnly;
 
     @Option(displayName = "Type",
-        description = "For Maven only, The type of dependency to add. If omitted Maven defaults to assuming the type is \"jar\".",
-        valid = {"jar", "pom", "war"},
-        example = "jar",
-        required = false)
+            description = "For Maven only, The type of dependency to add. If omitted Maven defaults to assuming the type is \"jar\".",
+            valid = {"jar", "pom", "war"},
+            example = "jar",
+            required = false)
     @Nullable
     String type;
 
     @Option(displayName = "Optional",
-        description = "Set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
-        required = false)
+            description = "Set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
+            required = false)
     @Nullable
     Boolean optional;
 
     @Option(displayName = "Accept transitive",
-        description = "Default false. If enabled, the dependency will not be added if it is already on the classpath as a transitive dependency.",
-        example = "true",
-        required = false)
+            description = "Default false. If enabled, the dependency will not be added if it is already on the classpath as a transitive dependency.",
+            example = "true",
+            required = false)
     @Nullable
     Boolean acceptTransitive;
 
@@ -159,16 +161,17 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gradleAddDep = gradleAddDep().getVisitor(acc.gradleAccumulator);
             final TreeVisitor<?, ExecutionContext> mavenAddDep = mavenAddDep().getVisitor(acc.mavenAccumulator);
+
             @Override
             public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(!(tree instanceof SourceFile)) {
+                if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
                 Tree t = tree;
-                if(gradleAddDep.isAcceptable((SourceFile) t, ctx)) {
+                if (gradleAddDep.isAcceptable((SourceFile) t, ctx)) {
                     t = gradleAddDep.visitNonNull(tree, ctx);
                 }
-                if(mavenAddDep.isAcceptable((SourceFile) t, ctx)) {
+                if (mavenAddDep.isAcceptable((SourceFile) t, ctx)) {
                     t = mavenAddDep.visitNonNull(tree, ctx);
                 }
                 return t;
@@ -183,8 +186,28 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     }
 
     private org.openrewrite.gradle.AddDependency gradleAddDep() {
+        String configurationName = null;
+        if(configuration != null) {
+            configurationName = configuration;
+        } else if(scope != null) {
+            switch(Scope.fromName(scope)) {
+                case None:
+                case Compile:
+                    configurationName = "implementation";
+                    break;
+                case Runtime:
+                    configurationName = "runtimeOnly";
+                    break;
+                case Provided:
+                    configurationName = "compileOnly";
+                    break;
+                case Test:
+                    configurationName = "testImplementation";
+                    break;
+            }
+        }
         return new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
-                configuration, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
+                configurationName, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
     }
 
     private org.openrewrite.maven.AddDependency mavenAddDep() {

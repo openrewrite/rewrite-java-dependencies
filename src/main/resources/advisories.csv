@@ -1411,7 +1411,7 @@ CVE-2017-5645,2020-01-06T18:43:38Z,"Deserialization of Untrusted Data in Log4j",
 CVE-2017-5645,2020-01-06T18:43:38Z,"Deserialization of Untrusted Data in Log4j","org.apache.logging.log4j:log4j-core",2.0,2.8.2,CRITICAL,CWE-502
 CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,6.0.0,6.0.53,HIGH,CWE-200
 CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.77,HIGH,CWE-200
-CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,8.0.0,8.0.42,HIGH,CWE-200
+CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,8.0.0,8.0.43,HIGH,CWE-200
 CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,8.5.0,8.5.13,HIGH,CWE-200
 CVE-2017-5647,2022-05-14T01:10:16Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Tomcat",org.apache.tomcat:tomcat,9.0.0.M1,9.0.0.M19,HIGH,CWE-200
 CVE-2017-5648,2022-05-13T01:25:13Z,"Exposure of Resource to Wrong Sphere in Apache Tomcat",org.apache.tomcat:tomcat,7.0.0,7.0.76,CRITICAL,CWE-668
@@ -2086,8 +2086,9 @@ CVE-2018-7489,2018-10-16T17:45:18Z,"FasterXML jackson-databind allows unauthenti
 CVE-2018-7489,2018-10-16T17:45:18Z,"FasterXML jackson-databind allows unauthenticated remote code execution ","com.fasterxml.jackson.core:jackson-databind",2.8.0,2.8.11.1,CRITICAL,CWE-184;CWE-502
 CVE-2018-7489,2018-10-16T17:45:18Z,"FasterXML jackson-databind allows unauthenticated remote code execution ","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.5,CRITICAL,CWE-184;CWE-502
 CVE-2018-8006,2018-10-30T20:48:58Z,"Apache ActiveMQ web console vulnerable to Cross-site Scripting","org.apache.activemq:activemq-web-console",5.0.0,5.15.6,MODERATE,CWE-79
-CVE-2018-8008,2018-10-16T17:35:24Z,"Moderate severity vulnerability that affects org.apache.storm:storm-core","org.apache.storm:storm-core",0,1.1.3,MODERATE,CWE-22
-CVE-2018-8008,2018-10-16T17:35:24Z,"Moderate severity vulnerability that affects org.apache.storm:storm-core","org.apache.storm:storm-core",1.2.0,1.2.2,MODERATE,CWE-22
+CVE-2018-8008,2018-10-16T17:35:24Z,"ZipSlip in org.apache.storm:storm-core","org.apache.storm:storm-core",0,1.0.7,MODERATE,CWE-22
+CVE-2018-8008,2018-10-16T17:35:24Z,"ZipSlip in org.apache.storm:storm-core","org.apache.storm:storm-core",1.1.0,1.1.3,MODERATE,CWE-22
+CVE-2018-8008,2018-10-16T17:35:24Z,"ZipSlip in org.apache.storm:storm-core","org.apache.storm:storm-core",1.2.0,1.2.2,MODERATE,CWE-22
 CVE-2018-8009,2018-12-21T17:50:29Z,"Path Traversal in Hadoop","org.apache.hadoop:hadoop-main",0,2.7.7,HIGH,CWE-22
 CVE-2018-8009,2018-12-21T17:50:29Z,"Path Traversal in Hadoop","org.apache.hadoop:hadoop-main",2.8.0,2.8.5,HIGH,CWE-22
 CVE-2018-8009,2018-12-21T17:50:29Z,"Path Traversal in Hadoop","org.apache.hadoop:hadoop-main",2.9.0,2.9.2,HIGH,CWE-22
@@ -2491,6 +2492,7 @@ CVE-2019-10393,2022-05-24T16:55:58Z,"Sandbox bypass vulnerability in Script Secu
 CVE-2019-10394,2022-05-24T16:55:59Z,"Sandbox bypass vulnerability in Jenkins Script Security Plugin","org.jenkins-ci.plugins:script-security",0,1.63,MODERATE,
 CVE-2019-10395,2022-05-24T16:55:59Z,"Jenkins Build Environment Plugin vulnerable to Cross-site Scripting","org.jenkins-ci.plugins:build-environment",0,1.7,MODERATE,CWE-79
 CVE-2019-10396,2022-05-24T16:55:59Z,"Jenkins Dashboard View Plugin vulnerable to Cross-site Scripting","org.jenkins-ci.plugins:dashboard-view",0,2.12,MODERATE,CWE-79
+CVE-2019-10397,2022-05-24T16:55:59Z,"Jenkins Aqua Security Serverless Scanner Plugin showed plain text password in job configuration form fields ","org.jenkins-ci.plugins:aqua-serverless",0,1.0.5,LOW,CWE-319
 CVE-2019-10398,2022-05-24T16:55:59Z,"Jenkins Beaker Builder Plugin has Insufficiently Protected Credentials","org.jenkins-ci.plugins:beaker-builder",0,1.10,LOW,CWE-522
 CVE-2019-10399,2022-05-24T16:55:59Z,"Sandbox bypass vulnerability in Jenkins Script Security Plugin","org.jenkins-ci.plugins:script-security",0,1.63,MODERATE,
 CVE-2019-10400,2022-05-24T16:55:59Z,"Sandbox bypass vulnerability in Jenkins Script Security Plugin","org.jenkins-ci.plugins:script-security",0,1.63,MODERATE,
@@ -2943,7 +2945,7 @@ CVE-2020-11976,2021-05-07T15:54:15Z,"Exposure of Sensitive Information to an Una
 CVE-2020-11976,2021-05-07T15:54:15Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Wicket","org.apache.wicket:wicket-core",9.0.0-M4,9.0.0,HIGH,CWE-200;CWE-552
 CVE-2020-11976,2021-05-07T15:54:15Z,"Exposure of Sensitive Information to an Unauthorized Actor in Apache Wicket","org.apache.wicket:wicket-core",9.0.0-M5,9.0.0,HIGH,CWE-200;CWE-552
 CVE-2020-11977,2021-06-16T17:19:12Z,"Shell command injection in Apache Syncope","org.apache.syncope:syncope",2.1.0,2.1.7,HIGH,CWE-78
-CVE-2020-11979,2021-02-03T19:16:35Z,"Code injection in Apache Ant",org.apache.ant:ant,0,1.10.9,HIGH,CWE-74;CWE-94
+CVE-2020-11979,2021-02-03T19:16:35Z,"Code injection in Apache Ant",org.apache.ant:ant,1.10.8,1.10.9,HIGH,CWE-74;CWE-94
 CVE-2020-11980,2022-02-10T23:04:32Z,"Server-Side Request Forgery in Karaf","org.apache.karaf.management:org.apache.karaf.management.server",0,4.2.9,MODERATE,CWE-918
 CVE-2020-11987,2022-01-06T20:35:54Z,"Server-side request forgery (SSRF) in Apache Batik","org.apache.xmlgraphics:batik-svgbrowser",0,1.14,HIGH,CWE-20;CWE-918
 CVE-2020-11988,2022-02-09T00:45:56Z,"Server-side request forgery (SSRF) in Apache XmlGraphics Commons","org.apache.xmlgraphics:xmlgraphics-commons",0,2.6,HIGH,CWE-20;CWE-918
@@ -5647,8 +5649,9 @@ CVE-2022-4725,2022-12-27T15:30:19Z,"AWS SDK is vulnerable to server-side request
 CVE-2022-47500,2022-12-19T12:30:23Z,"Apache Helix UI vulnerable to Open Redirect",org.apache.helix:helix,0.8.0,1.1.0,MODERATE,CWE-601
 CVE-2022-47551,2023-01-03T12:28:06Z,"Apiman has potential permissions bypass","io.apiman:apiman-manager-api-rest-impl",1.5.7,3.0.0.Final,HIGH,
 CVE-2022-4772,2022-12-28T00:30:22Z,"Widoco Path Traversal vulnerability","com.github.dgarijo:Widoco",0,,HIGH,CWE-22
-CVE-2022-47937,2023-05-15T12:30:16Z,"Apache Sling Commons JSON bundle vulnerable to Improper Input Validation","org.apache.sling:org.apache.sling.commons.json",0,,MODERATE,CWE-20
+CVE-2022-47937,2023-05-15T12:30:16Z,"Apache Sling Commons JSON bundle vulnerable to Improper Input Validation","org.apache.sling:org.apache.sling.commons.json",0,,CRITICAL,CWE-20
 CVE-2022-4903,2023-02-10T15:30:28Z,"CodenameOne Pending Intent vulnerability","com.codenameone:codenameone-core",0,7.0.71,CRITICAL,CWE-668;CWE-927
+CVE-2022-4963,2024-03-21T03:36:44Z,"SQL injection in Folio Spring Module Core","org.folio:spring-module-core",0,2.0.0,MODERATE,CWE-89
 CVE-2023-0044,2023-02-23T21:30:16Z,"Cross-site Scripting in Quarkus","io.quarkus:quarkus-vertx-http",0,2.13.7.Final,MODERATE,CWE-79
 CVE-2023-0091,2023-01-12T23:39:39Z,"Keycloak has lack of validation of access token on client registrations endpoint","org.keycloak:keycloak-core",0,20.0.3,MODERATE,CWE-284;CWE-863
 CVE-2023-0100,2023-03-15T15:30:22Z,"Improper Input Validation In Eclipse BIRT","org.eclipse.birt:org.eclipse.birt.report.viewer",2.6.2,4.13,HIGH,CWE-20
@@ -6284,7 +6287,7 @@ CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-ext-jdk16",0,1.73,MODERATE,CWE-400
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk14",0,1.73,MODERATE,CWE-400
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk15",0,1.73,MODERATE,CWE-400
-CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk15on",0,1.73,MODERATE,CWE-400
+CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk15on",0,,MODERATE,CWE-400
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk15to18",0,1.73,MODERATE,CWE-400
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk16",0,1.73,MODERATE,CWE-400
 CVE-2023-33202,2023-11-23T18:30:33Z,"Bouncy Castle Denial of Service (DoS)","org.bouncycastle:bcprov-jdk18on",0,1.73,MODERATE,CWE-400
@@ -6580,8 +6583,8 @@ CVE-2023-3815,2023-07-21T06:30:17Z,"RuoYi vulnerable to Cross-site Scripting",co
 CVE-2023-38286,2023-07-14T06:31:00Z,"Thymeleaf, as used in Spring Boot Admin, allows sandbox bypass via crafted HTML","de.codecentric:spring-boot-admin-server",0,3.1.2,HIGH,CWE-77
 CVE-2023-38435,2023-07-25T18:30:32Z,"Cross-site Scripting in healthcheck webconsole plugin","org.apache.felix:org.apache.felix.healthcheck.webconsoleplugin",0,2.1.0,MODERATE,CWE-79
 CVE-2023-38493,2023-07-25T18:24:39Z,"Paths contain matrix variables bypass decorators","com.linecorp.armeria:armeria",0,1.24.3,HIGH,CWE-863
-CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",15.0,15.3-rc-1,MODERATE,
-CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",3.5-milestone-1,14.10.9,MODERATE,
+CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",15.0,15.3-rc-1,MODERATE,CWE-402
+CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",3.5-milestone-1,14.10.9,MODERATE,CWE-402
 CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-core",0,1.3.0,HIGH,CWE-502
 CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-rest",0,1.3.0,HIGH,CWE-502
 CVE-2023-38889,2023-08-15T18:31:32Z,"Alluxio vulnerable to arbitrary code execution","org.alluxio:alluxio-parent",0,,CRITICAL,CWE-94
@@ -6700,6 +6703,7 @@ CVE-2023-41578,2023-09-08T21:30:35Z,"Jeecg boot arbitrary file read vulnerabilit
 CVE-2023-41835,2023-12-05T09:33:27Z,"Apache Struts Improper Control of Dynamically-Managed Code Resources vulnerability","org.apache.struts:struts2-core",0,2.5.32,HIGH,CWE-459
 CVE-2023-41835,2023-12-05T09:33:27Z,"Apache Struts Improper Control of Dynamically-Managed Code Resources vulnerability","org.apache.struts:struts2-core",6.0.0,6.1.2.2,HIGH,CWE-459
 CVE-2023-41835,2023-12-05T09:33:27Z,"Apache Struts Improper Control of Dynamically-Managed Code Resources vulnerability","org.apache.struts:struts2-core",6.2.0,6.3.0.1,HIGH,CWE-459
+CVE-2023-41877,2024-03-20T14:45:21Z,"GeoServer log file path traversal vulnerability",org.geoserver:gs-main,0,,HIGH,CWE-22
 CVE-2023-41886,2023-09-12T13:52:05Z,"OpenRefine vulnerable to arbitrary file read in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,HIGH,CWE-89
 CVE-2023-41887,2023-09-12T13:52:54Z,"OpenRefine Remote Code execution in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,CRITICAL,CWE-89
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",10.0.0,10.0.16,LOW,CWE-1390;CWE-287
@@ -6786,6 +6790,10 @@ CVE-2023-43961,2023-10-25T18:32:23Z,"SaToken authentication bypass vulnerability
 CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",0,2.2.6,MODERATE,CWE-532
 CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",2.3.0,2.3.4,MODERATE,CWE-532
 CVE-2023-44483,2023-10-20T12:31:04Z,"Apache Santuario - XML Security for Java are vulnerable to private key disclosure","org.apache.santuario:xmlsec",3.0.0,3.0.3,MODERATE,CWE-532
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","com.typesafe.akka:akka-http-core",0,10.5.3,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","com.typesafe.akka:akka-http-core_2.11",0,,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","com.typesafe.akka:akka-http-core_2.12",0,10.5.3,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","com.typesafe.akka:akka-http-core_2.13",0,10.5.3,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",10.0.0,10.1.14,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",11.0.0-M1,11.0.0-M12,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",8.5.0,8.5.94,MODERATE,CWE-400
@@ -7095,6 +7103,11 @@ CVE-2023-51437,2024-02-07T12:30:25Z,"Apache Pulsar SASL Authentication Provider 
 CVE-2023-51437,2024-02-07T12:30:25Z,"Apache Pulsar SASL Authentication Provider observable timing discrepancy vulnerability","org.apache.pulsar:pulsar-broker-auth-sasl",3.1.0,3.1.1,HIGH,CWE-200;CWE-203
 CVE-2023-51441,2024-01-06T12:30:34Z,"Apache Axis Improper Input Validation vulnerability",axis:axis,0,,HIGH,CWE-20;CWE-918
 CVE-2023-51441,2024-01-06T12:30:34Z,"Apache Axis Improper Input Validation vulnerability",org.apache.axis:axis,0,,HIGH,CWE-20;CWE-918
+CVE-2023-51444,2024-03-20T14:54:59Z,"Arbitrary file upload vulnerability in GeoServer's REST Coverage Store API","org.geoserver:gs-platform",0,2.23.4,HIGH,CWE-20;CWE-434
+CVE-2023-51444,2024-03-20T14:54:59Z,"Arbitrary file upload vulnerability in GeoServer's REST Coverage Store API","org.geoserver:gs-platform",2.24.0,2.24.1,HIGH,CWE-20;CWE-434
+CVE-2023-51444,2024-03-20T14:54:59Z,"Arbitrary file upload vulnerability in GeoServer's REST Coverage Store API","org.geoserver:gs-restconfig",0,2.23.4,HIGH,CWE-20;CWE-434
+CVE-2023-51444,2024-03-20T14:54:59Z,"Arbitrary file upload vulnerability in GeoServer's REST Coverage Store API","org.geoserver:gs-restconfig",2.24.0,2.24.1,HIGH,CWE-20;CWE-434
+CVE-2023-51445,2024-03-20T14:58:17Z,"Stored Cross-Site Scripting (XSS) vulnerability in GeoServer's REST Resources API","org.geoserver:gs-restconfig",0,2.23.3,MODERATE,CWE-79
 CVE-2023-51518,2024-02-27T09:31:16Z,"Apache James server: Privilege escalation via JMX pre-authentication deserialization","org.apache.james:james-server",0,3.7.5,MODERATE,CWE-502
 CVE-2023-51518,2024-02-27T09:31:16Z,"Apache James server: Privilege escalation via JMX pre-authentication deserialization","org.apache.james:james-server",3.8.0,3.8.1,MODERATE,CWE-502
 CVE-2023-51656,2023-12-21T12:30:29Z,"Apache IoTDB: Unsafe deserialize map in Sync Tool","org.apache.iotdb:iotdb-parent",0.13.0,1.2.2,HIGH,CWE-502
@@ -7110,6 +7123,7 @@ CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability
 CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability",io.crate:crate,5.5.0,5.5.2,HIGH,CWE-287
 CVE-2023-52428,2024-02-11T06:30:27Z,"Denial of Service in Connect2id Nimbus JOSE+JWT","com.nimbusds:nimbus-jose-jwt",0,9.37.2,MODERATE,CWE-400
 CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-runtime_2.12",0,0.23.1,HIGH,CWE-22
+CVE-2023-5685,2024-03-22T21:30:56Z,"XNIO denial of service vulnerability",org.jboss.xnio:xnio-api,0,,HIGH,CWE-400
 CVE-2023-5720,2023-11-15T15:30:21Z,"Quarkus does not properly sanitize artifacts created from its use of the Gradle plugin, allowing certain build system information to remain","io.quarkus:quarkus-project",3.0.0.CR1,,HIGH,CWE-526
 CVE-2023-5763,2023-11-03T09:32:49Z,"Eclipse Glassfish remote code execution issue","org.glassfish.main.orb:orb-connector",5.0.0,7.0.0,MODERATE,CWE-20;CWE-913
 CVE-2023-6038,2023-11-16T18:30:31Z,"H2O local file inclusion vulnerability",ai.h2o:h2o-core,0,,CRITICAL,CWE-29;CWE-862
@@ -7148,7 +7162,11 @@ CVE-2023-6911,2023-12-22T18:30:30Z,"WSO2 Registry Stored Cross Site Scripting (X
 CVE-2023-6927,2023-12-19T00:30:21Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-parent",0,,MODERATE,CWE-601
 CVE-2023-7148,2023-12-29T03:30:29Z,"ShifuML shifu code injection vulnerability",ml.shifu:shifu,0,,MODERATE,CWE-94
 CVE-2024-0758,2024-01-19T21:30:36Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
+CVE-2024-1023,2024-03-27T09:30:40Z,"Eclipse Vert.x memory leak",io.vertx:vertx-core,4.4.5,4.4.7,MODERATE,CWE-200
+CVE-2024-1023,2024-03-27T09:30:40Z,"Eclipse Vert.x memory leak",io.vertx:vertx-core,4.5.0,4.5.2,MODERATE,CWE-200
 CVE-2024-1143,2024-02-02T16:55:25Z,"Central Dogma Authentication Bypass Vulnerability via Session Leakage","com.linecorp.centraldogma:centraldogma-server",0,0.64.1,CRITICAL,
+CVE-2024-1300,2024-04-02T09:30:42Z,"Eclipse Vert.x vulnerable to a memory leak in TCP servers",io.vertx:vertx-core,4.3.4,4.4.8,MODERATE,CWE-400
+CVE-2024-1300,2024-04-02T09:30:42Z,"Eclipse Vert.x vulnerable to a memory leak in TCP servers",io.vertx:vertx-core,4.5.0,4.5.3,MODERATE,CWE-400
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",0,42.2.28,CRITICAL,CWE-89
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",42.3.0,42.3.9,CRITICAL,CWE-89
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",42.4.0,42.4.4,CRITICAL,CWE-89
@@ -7158,6 +7176,8 @@ CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL 
 CVE-2024-1722,2024-02-29T03:33:17Z,"Keycloak DoS via account lockout","org.keycloak:keycloak-core",0,,LOW,CWE-645
 CVE-2024-1735,2024-02-26T20:04:37Z,"Armeria SAML authentication bypass due to missing validation on unsigned SAML messages","com.linecorp.armeria:armeria-saml",0,1.27.2,CRITICAL,CWE-304
 CVE-2024-1979,2024-03-13T12:31:06Z,"In Quarkus, git credentials could be inadvertently published","io.quarkus:quarkus-kubernetes-deployment",0,3.7.3,LOW,CWE-200
+CVE-2024-20925,2024-02-17T03:30:29Z,"Vulnerability affecting the org.openjfx:javafx-media maven component of the OpenJFX project",org.openjfx:javafx-media,0,17.0.10,LOW,
+CVE-2024-20925,2024-02-17T03:30:29Z,"Vulnerability affecting the org.openjfx:javafx-media maven component of the OpenJFX project",org.openjfx:javafx-media,18,21.0.2,LOW,
 CVE-2024-21490,2024-02-10T06:30:19Z,"angular vulnerable to super-linear runtime due to backtracking","org.webjars.bower:angular",1.3.0,,HIGH,CWE-1333
 CVE-2024-21490,2024-02-10T06:30:19Z,"angular vulnerable to super-linear runtime due to backtracking",org.webjars.npm:angular,1.3.0,,HIGH,CWE-1333
 CVE-2024-21634,2024-01-03T22:04:08Z,"Ion Java StackOverflow vulnerability",com.amazon.ion:ion-java,0,1.10.5,HIGH,CWE-770
@@ -7193,6 +7213,15 @@ CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or S
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",5.3.0,5.3.32,HIGH,
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",6.0.0,6.0.17,HIGH,
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",6.1.0,6.1.4,HIGH,
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",0,5.7.12,HIGH,CWE-287
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",5.8.0,5.8.11,HIGH,CWE-287
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.0.0,6.1.8,HIGH,CWE-287
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.2.0,6.2.3,HIGH,CWE-287
+CVE-2024-22258,2024-03-20T15:32:28Z,"Improper Authentication in Spring Authorization Server","org.springframework.security:spring-security-oauth2-authorization-server",0,1.1.6,MODERATE,CWE-287
+CVE-2024-22258,2024-03-20T15:32:28Z,"Improper Authentication in Spring Authorization Server","org.springframework.security:spring-security-oauth2-authorization-server",1.2.0,1.2.3,MODERATE,CWE-287
+CVE-2024-22259,2024-03-16T06:30:27Z,"Spring Framework URL Parsing with Host Validation Vulnerability","org.springframework:spring-web",0,5.3.33,HIGH,CWE-601
+CVE-2024-22259,2024-03-16T06:30:27Z,"Spring Framework URL Parsing with Host Validation Vulnerability","org.springframework:spring-web",6.0.0,6.0.18,HIGH,CWE-601
+CVE-2024-22259,2024-03-16T06:30:27Z,"Spring Framework URL Parsing with Host Validation Vulnerability","org.springframework:spring-web",6.1.0,6.1.5,HIGH,CWE-601
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",3.0.0,3.21.4,HIGH,CWE-502
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",3.22.0,3.22.1,HIGH,CWE-502
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",4.0.0,4.0.4,HIGH,CWE-502
@@ -7216,11 +7245,23 @@ CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",4.0.0,4.0.4,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",4.1.0,4.4.0,HIGH,CWE-502
 CVE-2024-23320,2024-02-23T18:30:59Z,"Apache DolphinScheduler vulnerable to arbitrary JavaScript execution as root for authenticated users","org.apache.dolphinscheduler:dolphinscheduler",0,3.2.1,CRITICAL,CWE-20
+CVE-2024-23449,2024-03-29T12:30:42Z,"Elasticsearch Uncaught Exception leading to crash","org.elasticsearch:elasticsearch",8.4.0,8.11.1,MODERATE,CWE-248
+CVE-2024-23450,2024-03-27T18:32:38Z,"Elasticsearch Uncontrolled Resource Consumption vulnerability","org.elasticsearch:elasticsearch",7.0.0,7.17.19,MODERATE,CWE-400
+CVE-2024-23450,2024-03-27T18:32:38Z,"Elasticsearch Uncontrolled Resource Consumption vulnerability","org.elasticsearch:elasticsearch",8.0.0,8.13.0,MODERATE,CWE-400
+CVE-2024-23451,2024-03-27T18:32:39Z,"Elasticsearch Incorrect Authorization vulnerability","org.elasticsearch:elasticsearch",8.10.0,8.13.0,MODERATE,CWE-863
+CVE-2024-23634,2024-03-20T15:01:48Z,"GeoServer Arbitrary file renaming vulnerability in REST Coverage/Data Store API","org.geoserver:gs-restconfig",0,2.23.5,MODERATE,CWE-20;CWE-73
+CVE-2024-23634,2024-03-20T15:01:48Z,"GeoServer Arbitrary file renaming vulnerability in REST Coverage/Data Store API","org.geoserver:gs-restconfig",2.24.0,2.24.2,MODERATE,CWE-20;CWE-73
 CVE-2024-23635,2024-02-02T18:10:04Z,"Malicious input can provoke XSS when preserving comments","org.owasp.antisamy:antisamy",0,1.7.5,MODERATE,CWE-79
 CVE-2024-23636,2024-01-23T20:10:20Z,"Remote Command Execution in SOFARPC","com.alipay.sofa:rpc-sofa-boot-starter",0,5.12.0,CRITICAL,CWE-502
 CVE-2024-23639,2024-02-09T15:19:15Z,"Micronaut management endpoints vulnerable to drive-by localhost attack","io.micronaut:micronaut-http-server",0,3.8.3,MODERATE,CWE-15;CWE-610;CWE-664
 CVE-2024-23639,2024-02-09T15:19:15Z,"Micronaut management endpoints vulnerable to drive-by localhost attack","io.micronaut:micronaut-http-server-netty",0,3.8.3,MODERATE,CWE-15;CWE-610;CWE-664
 CVE-2024-23639,2024-02-09T15:19:15Z,"Micronaut management endpoints vulnerable to drive-by localhost attack","io.micronaut:micronaut-http-server-tck",0,3.8.3,MODERATE,CWE-15;CWE-610;CWE-664
+CVE-2024-23640,2024-03-20T15:06:03Z,"GeoServer's Style Publisher vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-main,0,2.23.3,MODERATE,CWE-79
+CVE-2024-23640,2024-03-20T15:06:03Z,"GeoServer's Style Publisher vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-ows,0,2.23.3,MODERATE,CWE-79
+CVE-2024-23642,2024-03-20T15:08:29Z,"GeoServer's Simple SVG Renderer vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-wms,0,2.23.4,MODERATE,CWE-79
+CVE-2024-23642,2024-03-20T15:08:29Z,"GeoServer's Simple SVG Renderer vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-wms,2.24.0,2.24.1,MODERATE,CWE-79
+CVE-2024-23643,2024-03-20T15:13:29Z,"GeoServer's GWC Seed Form vulnerable to Stored Cross-Site Scripting (XSS)","org.geoserver:gs-gwc-rest",0,2.23.2,MODERATE,CWE-79
+CVE-2024-23643,2024-03-20T15:13:29Z,"GeoServer's GWC Seed Form vulnerable to Stored Cross-Site Scripting (XSS)","org.geoserver:gs-gwc-rest",2.24.0,2.24.1,MODERATE,CWE-79
 CVE-2024-23672,2024-03-13T18:31:34Z,"Denial of Service via incomplete cleanup vulnerability in Apache Tomcat",org.apache.tomcat:tomcat,10.1.0-M1,10.1.19,MODERATE,CWE-459
 CVE-2024-23672,2024-03-13T18:31:34Z,"Denial of Service via incomplete cleanup vulnerability in Apache Tomcat",org.apache.tomcat:tomcat,11.0.0-M1,11.0.0-M17,MODERATE,CWE-459
 CVE-2024-23672,2024-03-13T18:31:34Z,"Denial of Service via incomplete cleanup vulnerability in Apache Tomcat",org.apache.tomcat:tomcat,8.5.0,8.5.99,MODERATE,CWE-459
@@ -7243,6 +7284,12 @@ CVE-2024-23687,2024-01-20T00:30:27Z,"Hard-coded credentials in org.folio:mod-dat
 CVE-2024-23689,2024-01-19T21:30:36Z,"Exposure of sensitive information in ClickHouse","com.clickhouse:clickhouse-client",0,0.4.6,HIGH,CWE-209
 CVE-2024-23689,2024-01-19T21:30:36Z,"Exposure of sensitive information in ClickHouse","com.clickhouse:clickhouse-jdbc",0,0.4.6,HIGH,CWE-209
 CVE-2024-23689,2024-01-19T21:30:36Z,"Exposure of sensitive information in ClickHouse","com.clickhouse:clickhouse-r2dbc",0,0.4.6,HIGH,CWE-209
+CVE-2024-23818,2024-03-20T15:15:17Z,"GeoServer's WMS OpenLayers Format vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-wms,0,2.23.3,MODERATE,CWE-79
+CVE-2024-23818,2024-03-20T15:15:17Z,"GeoServer's WMS OpenLayers Format vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-wms,2.24.0,2.24.1,MODERATE,CWE-79
+CVE-2024-23819,2024-03-20T15:16:53Z,"GeoServer's MapML HTML Page vulnerable to Stored Cross-Site Scripting (XSS)","org.geoserver.extension:gs-mapml",0,2.23.4,MODERATE,CWE-79
+CVE-2024-23819,2024-03-20T15:16:53Z,"GeoServer's MapML HTML Page vulnerable to Stored Cross-Site Scripting (XSS)","org.geoserver.extension:gs-mapml",2.24.0,2.24.1,MODERATE,CWE-79
+CVE-2024-23821,2024-03-20T15:18:21Z,"GeoServer's GWC Demos Page vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-gwc,0,2.23.4,MODERATE,CWE-79
+CVE-2024-23821,2024-03-20T15:18:21Z,"GeoServer's GWC Demos Page vulnerable to Stored Cross-Site Scripting (XSS)",org.geoserver:gs-gwc,2.24.0,2.24.1,MODERATE,CWE-79
 CVE-2024-23833,2024-02-12T15:08:48Z,"OpenRefine JDBC Attack Vulnerability",org.openrefine:database,0,3.7.8,HIGH,CWE-22
 CVE-2024-23897,2024-01-24T18:31:02Z,"Arbitrary file read vulnerability through the Jenkins CLI can lead to RCE","org.jenkins-ci.main:jenkins-core",1.606,2.426.3,CRITICAL,
 CVE-2024-23897,2024-01-24T18:31:02Z,"Arbitrary file read vulnerability through the Jenkins CLI can lead to RCE","org.jenkins-ci.main:jenkins-core",2.427,2.440.1,CRITICAL,
@@ -7259,6 +7306,7 @@ CVE-2024-23905,2024-01-24T18:31:02Z,"Content-Security-Policy disabled by Red Hat
 CVE-2024-23944,2024-03-15T12:30:37Z,"Apache ZooKeeper vulnerable to information disclosure in persistent watchers handling","org.apache.zookeeper:zookeeper",3.6.0,,MODERATE,CWE-200
 CVE-2024-23944,2024-03-15T12:30:37Z,"Apache ZooKeeper vulnerable to information disclosure in persistent watchers handling","org.apache.zookeeper:zookeeper",3.8.0,3.8.4,MODERATE,CWE-200
 CVE-2024-23944,2024-03-15T12:30:37Z,"Apache ZooKeeper vulnerable to information disclosure in persistent watchers handling","org.apache.zookeeper:zookeeper",3.9.0,3.9.2,MODERATE,CWE-200
+CVE-2024-24042,2024-03-19T09:30:32Z,"Path traversal in flaskcode Devan-Kerman ARRP",net.devtech:arrp,0,0.8.2,HIGH,CWE-22
 CVE-2024-24113,2024-02-08T15:30:27Z,"XXL-JOB vulnerable to Server-Side Request Forgery",com.xuxueli:xxl-job,0,,HIGH,CWE-918
 CVE-2024-24549,2024-03-13T18:31:34Z,"Apache Tomcat Denial of Service due to improper input validation vulnerability for HTTP/2 requests","org.apache.tomcat.embed:tomcat-embed-core",10.1.0-M1,10.1.19,MODERATE,CWE-20
 CVE-2024-24549,2024-03-13T18:31:34Z,"Apache Tomcat Denial of Service due to improper input validation vulnerability for HTTP/2 requests","org.apache.tomcat.embed:tomcat-embed-core",11.0.0-M1,11.0.0-M17,MODERATE,CWE-20
@@ -7272,6 +7320,7 @@ CVE-2024-24565,2024-01-30T20:57:16Z,"CrateDB database has an arbitrary file read
 CVE-2024-24565,2024-01-30T20:57:16Z,"CrateDB database has an arbitrary file read vulnerability",io.crate:crate,5.4.0,5.4.8,MODERATE,CWE-22
 CVE-2024-24565,2024-01-30T20:57:16Z,"CrateDB database has an arbitrary file read vulnerability",io.crate:crate,5.5.0,5.5.4,MODERATE,CWE-22
 CVE-2024-24565,2024-01-30T20:57:16Z,"CrateDB database has an arbitrary file read vulnerability",io.crate:crate,5.6.0,5.6.1,MODERATE,CWE-22
+CVE-2024-24683,2024-03-19T09:30:33Z,"Improper Input Validation vulnerability in Apache Hop Engine",org.apache.hop:hop,0,2.8.0,MODERATE,CWE-20
 CVE-2024-24823,2024-02-07T18:24:20Z,"Graylog session fixation vulnerability through cookie injection","org.graylog2:graylog2-server",4.3.0,5.1.11,MODERATE,CWE-384
 CVE-2024-24823,2024-02-07T18:24:20Z,"Graylog session fixation vulnerability through cookie injection","org.graylog2:graylog2-server",5.2.0-alpha.1,5.2.4,MODERATE,CWE-384
 CVE-2024-24824,2024-02-07T18:23:43Z,"Graylog vulnerable to instantiation of arbitrary classes triggered by API request","org.graylog2:graylog2-server",2.0.0,5.1.11,HIGH,CWE-284
@@ -7301,6 +7350,8 @@ CVE-2024-25151,2024-02-21T06:30:32Z,"Liferay Portal Calendar module and Liferay 
 CVE-2024-25152,2024-02-21T03:30:37Z,"Liferay Portal Message Board widget and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp17,CRITICAL,CWE-79
 CVE-2024-25152,2024-02-21T03:30:37Z,"Liferay Portal Message Board widget and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-25152,2024-02-21T03:30:37Z,"Liferay Portal Message Board widget and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.portal.bom",0,,CRITICAL,CWE-79
+CVE-2024-25420,2024-03-26T21:30:47Z,"Ignite Realtime Openfire privilege escalation vulnerability","org.igniterealtime.openfire:xmppserver",0,4.8.1,HIGH,CWE-863
+CVE-2024-25421,2024-03-26T21:30:47Z,"Ignite Realtime Openfire privilege escalation vulnerability","org.igniterealtime.openfire:xmppserver",0,4.8.1,HIGH,CWE-863
 CVE-2024-25601,2024-02-21T03:30:37Z,"Liferay Portal Expando module and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp17,CRITICAL,CWE-79
 CVE-2024-25601,2024-02-21T03:30:37Z,"Liferay Portal Expando module and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-25601,2024-02-21T03:30:37Z,"Liferay Portal Expando module and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.portal.bom",0,,CRITICAL,CWE-79
@@ -7337,6 +7388,10 @@ CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Ar
 CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Archive Extraction Vulnerability Allows Unauthorized File Modification","org.apache.pulsar:pulsar-functions-worker",3.0.0,3.0.3,HIGH,CWE-22
 CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Archive Extraction Vulnerability Allows Unauthorized File Modification","org.apache.pulsar:pulsar-functions-worker",3.1.0,3.1.3,HIGH,CWE-22
 CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Archive Extraction Vulnerability Allows Unauthorized File Modification","org.apache.pulsar:pulsar-functions-worker",3.2.0,3.2.1,HIGH,CWE-22
+CVE-2024-27439,2024-03-19T12:30:40Z,"Cross-Site Request Forgery in Apache Wicket",org.apache.wicket:wicket,10.0.0-M1,10.0.0,MODERATE,CWE-352
+CVE-2024-27439,2024-03-19T12:30:40Z,"Cross-Site Request Forgery in Apache Wicket",org.apache.wicket:wicket,9.1.0,9.17.0,MODERATE,CWE-352
+CVE-2024-27609,2024-04-01T00:30:43Z,"Bonita cross-site scripting vulnerability","org.bonitasoft.console:bonita-web-server",0,10.1.0.W11,MODERATE,CWE-79
+CVE-2024-27609,2024-04-01T00:30:43Z,"Bonita cross-site scripting vulnerability","org.bonitasoft.platform:platform-resources",0,10.1.0.W11,MODERATE,CWE-79
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",2.11.0,2.11.4,HIGH,CWE-20
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",2.4.0,2.10.6,HIGH,CWE-20
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",3.0.0,3.0.3,HIGH,CWE-20
@@ -7365,6 +7420,10 @@ CVE-2024-28213,2024-03-07T06:30:31Z,"nGrinder vulnerable to unsafe Java objects 
 CVE-2024-28752,2024-03-15T12:30:37Z,"SSRF vulnerability using the Aegis DataBinding in Apache CXF",org.apache.cxf:cxf-core,0,3.5.8,MODERATE,CWE-918
 CVE-2024-28752,2024-03-15T12:30:37Z,"SSRF vulnerability using the Aegis DataBinding in Apache CXF",org.apache.cxf:cxf-core,3.6.0,3.6.3,MODERATE,CWE-918
 CVE-2024-28752,2024-03-15T12:30:37Z,"SSRF vulnerability using the Aegis DataBinding in Apache CXF",org.apache.cxf:cxf-core,4.0.0,4.0.4,MODERATE,CWE-918
+CVE-2024-29025,2024-03-25T19:40:50Z,"Netty's HttpPostRequestDecoder can OOM","io.netty:netty-codec-http",0,4.1.108.Final,MODERATE,CWE-770
+CVE-2024-29131,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError adding property in AbstractListDelimiterHandler.flattenIterator()","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
+CVE-2024-29133,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError calling ListDelimiterHandler.flatten(Object, int) with a cyclical object tree","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
+CVE-2024-31033,2024-04-01T03:30:38Z,"Withdrawn: JJWT improperly generates signing keys","io.jsonwebtoken:jjwt-impl",0,,MODERATE,CWE-327
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

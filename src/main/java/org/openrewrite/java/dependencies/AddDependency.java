@@ -190,21 +190,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
         if(configuration != null) {
             configurationName = configuration;
         } else if(scope != null) {
-            switch(Scope.fromName(scope)) {
-                case None:
-                case Compile:
-                    configurationName = "implementation";
-                    break;
-                case Runtime:
-                    configurationName = "runtimeOnly";
-                    break;
-                case Provided:
-                    configurationName = "compileOnly";
-                    break;
-                case Test:
-                    configurationName = "testImplementation";
-                    break;
-            }
+            configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
         }
         return new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
                 configurationName, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);

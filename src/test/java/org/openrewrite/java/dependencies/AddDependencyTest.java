@@ -63,7 +63,7 @@ class AddDependencyTest implements RewriteTest {
                 plugins {
                     id "java-library"
                 }
-                                
+                
                 repositories {
                     mavenCentral()
                 }
@@ -72,11 +72,11 @@ class AddDependencyTest implements RewriteTest {
                 plugins {
                     id "java-library"
                 }
-                                
+                
                 repositories {
                     mavenCentral()
                 }
-                                
+                
                 dependencies {
                     testImplementation "com.google.guava:guava:29.0-jre"
                 }

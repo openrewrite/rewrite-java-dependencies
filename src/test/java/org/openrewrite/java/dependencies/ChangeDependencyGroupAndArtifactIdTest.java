@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -23,7 +24,7 @@ import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
-public class ChangeDependencyGroupAndArtifactIdTest implements RewriteTest {
+class ChangeDependencyGroupAndArtifactIdTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -32,8 +33,9 @@ public class ChangeDependencyGroupAndArtifactIdTest implements RewriteTest {
     }
 
 
+    @DocumentExample
     @Test
-    public void gradle() {
+    void gradle() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi()),
           //language=groovy
@@ -69,7 +71,7 @@ public class ChangeDependencyGroupAndArtifactIdTest implements RewriteTest {
     }
 
     @Test
-    public void maven() {
+    void maven() {
         rewriteRun(
           //language=xml
           pomXml(

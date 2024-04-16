@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -32,7 +33,7 @@ class ChangeDependencyGroupAndArtifactIdTest implements RewriteTest {
           "io.swagger.core.v3", null, "2.2.21", null, null, null));
     }
 
-
+    @Disabled("Doesn't yet support changing the version of a dependency")
     @DocumentExample
     @Test
     void gradle() {

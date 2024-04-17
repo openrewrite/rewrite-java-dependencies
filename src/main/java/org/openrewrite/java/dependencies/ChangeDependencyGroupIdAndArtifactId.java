@@ -18,7 +18,7 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.openrewrite.*;
-import org.openrewrite.gradle.ChangeDependencyGroupId;
+import org.openrewrite.gradle.ChangeDependency;
 import org.openrewrite.internal.lang.Nullable;
 
 @Value
@@ -95,11 +95,7 @@ public class ChangeDependencyGroupIdAndArtifactId extends Recipe {
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(oldGroupId, oldArtifactId, newGroupId,
                 newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency).getVisitor();
-        //noinspection DataFlowIssue
-        TreeVisitor<?, ExecutionContext> gradleChangeArtifact = new org.openrewrite.gradle.ChangeDependencyArtifactId(oldGroupId, oldArtifactId, newArtifactId, null)
-                .getVisitor();
-        //noinspection DataFlowIssue
-        TreeVisitor<?, ExecutionContext> gradleChangeGroup = new ChangeDependencyGroupId(oldGroupId, oldArtifactId, newGroupId, null)
+        TreeVisitor<?, ExecutionContext> gradleVisitor = new ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern,  overrideManagedVersion)
                 .getVisitor();
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
@@ -111,13 +107,8 @@ public class ChangeDependencyGroupIdAndArtifactId extends Recipe {
                 if(mavenVisitor.isAcceptable(t, ctx)) {
                     t = (SourceFile) mavenVisitor.visitNonNull(t, ctx);
                 }
-                //noinspection ConstantValue
-                if(gradleChangeArtifact.isAcceptable(t, ctx) && newArtifactId != null) {
-                    t = (SourceFile) gradleChangeArtifact.visitNonNull(t, ctx);
-                }
-                //noinspection ConstantValue
-                if(gradleChangeGroup.isAcceptable(t, ctx) && newGroupId != null) {
-                    t = (SourceFile) gradleChangeGroup.visitNonNull(t, ctx);
+                if(gradleVisitor.isAcceptable(t, ctx)) {
+                    t = (SourceFile) gradleVisitor.visitNonNull(t, ctx);
                 }
                 return t;
             }

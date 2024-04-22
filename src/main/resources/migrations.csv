@@ -417,11 +417,20 @@ org.jdtaus.core.monitor,"jdtaus-core-client-monitoring",org.jdtaus.core.monitor,
 org.jdtaus.core.monitor,"jdtaus-core-server-monitoring",org.jdtaus.core.monitor,jdtaus-core-task-monitor,
 org.jooby,,io.jooby,,
 org.jszip.jruby,sass-gems,org.jszip.gems,sass-lang,
-org.jvnet.jaxb2.maven2,maven-jaxb2-plugin,org.jvnet.jaxb,jaxb-maven-plugin,
-org.jvnet.jaxb2.maven2,maven-jaxb20-plugin,org.jvnet.jaxb,jaxb-maven-plugin,
-org.jvnet.jaxb2.maven2,maven-jaxb21-plugin,org.jvnet.jaxb,jaxb-maven-plugin,
-org.jvnet.jaxb2.maven2,maven-jaxb22-plugin,org.jvnet.jaxb,jaxb-maven-plugin,
-org.jvnet.jaxb2.maven2,maven-jaxb23-plugin,org.jvnet.jaxb,jaxb-maven-plugin,
+org.jvnet.jaxb2.maven2,maven-jaxb2-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2.maven2,maven-jaxb20-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2.maven2,maven-jaxb21-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2.maven2,maven-jaxb22-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2.maven2,maven-jaxb23-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2_commons,jaxb2-basics,org.jvnet.jaxb,jaxb2-basics,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2_commons,jaxb2-basics-runtime,org.jvnet.jaxb,jaxb2-basics-runtime,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.annox,annox,org.jvnet.jaxb,annox,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb2_commons,jaxb2-basics-annotate,org.jvnet.jaxb,jaxb-basics-annotate,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.hyperjaxb3,hyperjaxb3-ejb-plugin,org.jvnet.jaxb,hyperjaxb3-ejb-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
+org.jvnet.jaxb,jaxb2-basics,org.jvnet.jaxb,jaxb-plugins,"Migration from v2 to v3 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-v2-to-v3"
+org.jvnet.jaxb,jaxb2-basics-runtime,org.jvnet.jaxb,jaxb-plugins-runtime,"Migration from v2 to v3 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-v2-to-v3"
+org.jvnet.jaxb,jaxb2-basics-tools,org.jvnet.jaxb,jaxb-plugins-tools,"Migration from v2 to v3 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-v2-to-v3"
+org.jvnet.jaxb,jaxb-basics-annotate,org.jvnet.jaxb,jaxb-plugin-annotate,"Migration from v2 to v3 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-v2-to-v3"
 org.jvnet.jax-ws-commons,jaxws-maven-plugin,com.sun.xml.ws,jaxws-maven-plugin,"The original version of this was developed in the codehaus mojo project, in March 2007, the project was moved to jax-ws-commons, but as of December 2018, the project is moved to Eclipse Foundation and plugin's group id is changed to com.sun.xml.ws."
 org.kitesdk,kite-data-hcatalog,org.kitesdk,kite-data-hive,
 org.kravemir.svg.labels,svg-labels,org.kravemir.svg.labels,lablie,

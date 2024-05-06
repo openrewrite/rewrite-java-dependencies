@@ -301,7 +301,8 @@ CVE-2012-0838,2022-05-14T01:51:59Z,"Apache Struts Code injection due to conversi
 CVE-2012-0881,2020-06-15T18:51:38Z,"Denial of service in Apache Xerces2",xerces:xercesImpl,0,2.12.0,HIGH,CWE-400
 CVE-2012-1006,2022-05-17T01:49:11Z,"Apache Struts Multiple Cross-site Scripting Vulnerabilities","org.apache.struts:struts2-parent",0,2.1.2,MODERATE,CWE-79
 CVE-2012-1006,2022-05-17T01:49:11Z,"Apache Struts Multiple Cross-site Scripting Vulnerabilities","org.apache.struts:struts2-parent",2.2,2.2.3.1,MODERATE,CWE-79
-CVE-2012-1007,2022-05-14T02:21:24Z,"Apache Struts XSS","org.apache.struts:struts2-parent",0,,MODERATE,CWE-79
+CVE-2012-1007,2022-05-14T02:21:24Z,"Apache Struts XSS","org.apache.struts:struts-core",0,,MODERATE,CWE-79
+CVE-2012-1007,2022-05-14T02:21:24Z,"Apache Struts XSS",struts:struts,0,,MODERATE,CWE-79
 CVE-2012-1094,2022-04-23T00:40:48Z,"JBoss AS may expose root content if excluded-contexts list is mismatched","org.jboss.as:jboss-as-server",7.0.0.Alpha1,7.1.1.Final,HIGH,CWE-200
 CVE-2012-1154,2022-05-17T05:18:47Z,"Improper Access Control in JBoss mod_cluster","org.jboss.mod_cluster:mod_cluster",1.1.0,1.1.4,MODERATE,CWE-284
 CVE-2012-1574,2022-05-17T02:54:07Z,"Apache Hadoop allows impersonation of arbitrary cluster user accounts","org.apache.hadoop:hadoop-main",0.23,0.23.2,MODERATE,CWE-287
@@ -6262,7 +6263,7 @@ CVE-2023-32071,2023-05-09T17:46:22Z,"XWiki Platform vulnerable to RXSS via edito
 CVE-2023-32081,2023-05-12T20:20:19Z,"Vert.x STOMP server process client frames that would not send initially a connect frame",io.vertx:vertx-stomp,3.1.0,3.9.16,MODERATE,CWE-287
 CVE-2023-32081,2023-05-12T20:20:19Z,"Vert.x STOMP server process client frames that would not send initially a connect frame",io.vertx:vertx-stomp,4.0.0,4.4.2,MODERATE,CWE-287
 CVE-2023-32200,2023-07-12T09:30:53Z,"Apache Jena Expression Language Injection vulnerability",org.apache.jena:jena,3.7.0,4.9.0,HIGH,CWE-917
-CVE-2023-3223,2023-09-27T15:30:35Z,"Undertow vulnerable to denial of service","io.undertow:undertow-parent",0,2.2.24.Final,HIGH,CWE-400
+CVE-2023-3223,2023-09-27T15:30:35Z,"Undertow vulnerable to denial of service","io.undertow:undertow-parent",0,2.2.24.Final,HIGH,CWE-400;CWE-789
 CVE-2023-32261,2023-07-19T18:30:55Z,"Missing permission check in Jenkins Dimensions Plugin allows enumerating credentials IDs","org.jenkins-ci.plugins:dimensionsscm",0,0.9.3.1,MODERATE,
 CVE-2023-32262,2023-07-19T18:30:56Z,"Exposure of system-scoped credentials in Jenkins Dimensions Plugin","org.jenkins-ci.plugins:dimensionsscm",0,0.9.3.1,MODERATE,
 CVE-2023-32263,2023-07-19T18:30:56Z,"Potential leak of credentials in Micro Focus Dimensions CM Jenkins Plugin","org.jenkins-ci.plugins:dimensionsscm",0.8.17,0.9.3.1,LOW,
@@ -6493,6 +6494,7 @@ CVE-2023-35162,2023-06-20T17:42:16Z,"XWiki Platform vulnerable to cross-site scr
 CVE-2023-35162,2023-06-20T17:42:16Z,"XWiki Platform vulnerable to cross-site scripting via xcontinue parameter in previewactions template","org.xwiki.platform:xwiki-platform-flamingo-skin-resources",6.1-rc-1,14.10.5,CRITICAL,CWE-79
 CVE-2023-35166,2023-06-20T19:55:36Z,"XWiki Platform vulnerable to privilege escalation (PR) from account through TipsPanel","org.xwiki.platform:xwiki-platform-help-ui",15.0-rc-1,15.1-rc-1,HIGH,CWE-863
 CVE-2023-35166,2023-06-20T19:55:36Z,"XWiki Platform vulnerable to privilege escalation (PR) from account through TipsPanel","org.xwiki.platform:xwiki-platform-help-ui",8.1-milestone-1,14.10.5,HIGH,CWE-863
+CVE-2023-35701,2024-05-03T09:30:52Z,"Apache Hive Code Injection vulnerability","org.apache.hive:hive-jdbc",4.0.0-alpha-1,4.0.0,MODERATE,CWE-94
 CVE-2023-35839,2023-06-19T03:30:18Z,"Solon vulnerable to deserialization of untrusted data",org.noear:solon,0,2.3.3,CRITICAL,CWE-502
 CVE-2023-35887,2023-07-10T18:30:49Z,"Apache MINA SSHD information disclosure vulnerability","org.apache.sshd:sshd-common",2.1.0,2.9.3,MODERATE,CWE-200;CWE-22
 CVE-2023-35887,2023-07-10T18:30:49Z,"Apache MINA SSHD information disclosure vulnerability","org.apache.sshd:sshd-core",1.0.0,2.1.0,MODERATE,CWE-200;CWE-22
@@ -7166,7 +7168,7 @@ CVE-2023-52428,2024-02-11T06:30:27Z,"Denial of Service in Connect2id Nimbus JOSE
 CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-runtime_2.12",0,0.23.1,HIGH,CWE-22
 CVE-2023-5675,2024-04-25T18:30:39Z,"Quarkus: authorization flaw in quarkus resteasy reactive and classic","io.quarkus:quarkus-resteasy-reactive-common",0,3.9.0.CR1,MODERATE,CWE-285
 CVE-2023-5675,2024-04-25T18:30:39Z,"Quarkus: authorization flaw in quarkus resteasy reactive and classic","io.quarkus:quarkus-resteasy-reactive-common-deployment",0,3.9.0.CR1,MODERATE,CWE-285
-CVE-2023-5685,2024-03-22T21:30:56Z,"XNIO denial of service vulnerability",org.jboss.xnio:xnio-api,0,,HIGH,CWE-400
+CVE-2023-5685,2024-03-22T21:30:56Z,"XNIO denial of service vulnerability",org.jboss.xnio:xnio-api,0,3.8.14.Final,HIGH,CWE-400
 CVE-2023-5720,2023-11-15T15:30:21Z,"Quarkus does not properly sanitize artifacts created from its use of the Gradle plugin, allowing certain build system information to remain","io.quarkus:quarkus-project",3.0.0.CR1,,HIGH,CWE-526
 CVE-2023-5763,2023-11-03T09:32:49Z,"Eclipse Glassfish remote code execution issue","org.glassfish.main.orb:orb-connector",5.0.0,7.0.0,MODERATE,CWE-20;CWE-913
 CVE-2023-6038,2023-11-16T18:30:31Z,"H2O local file inclusion vulnerability",ai.h2o:h2o-core,0,,CRITICAL,CWE-29;CWE-862
@@ -7520,7 +7522,8 @@ CVE-2024-31464,2024-04-10T17:07:27Z,"XWiki Platform: Password hash might be leak
 CVE-2024-31465,2024-04-10T17:11:32Z,"XWiki Platform: Remote code execution from account via SearchSuggestSourceSheet","org.xwiki.platform:xwiki-platform-search-ui",15.0-rc-1,15.5.4,CRITICAL,CWE-95
 CVE-2024-31465,2024-04-10T17:11:32Z,"XWiki Platform: Remote code execution from account via SearchSuggestSourceSheet","org.xwiki.platform:xwiki-platform-search-ui",15.6-rc-1,15.10-rc-1,CRITICAL,CWE-95
 CVE-2024-31465,2024-04-10T17:11:32Z,"XWiki Platform: Remote code execution from account via SearchSuggestSourceSheet","org.xwiki.platform:xwiki-platform-search-ui",5.2-milestone-2,14.10.20,CRITICAL,CWE-95
-CVE-2024-31860,2024-04-09T09:31:12Z,"Apache Zeppelin Path Traversal vulnerability","org.apache.zeppelin:zeppelin-server",0.9.0,0.11.0,MODERATE,CWE-22
+CVE-2024-31573,2024-05-01T16:40:01Z,"XMLUnit for Java has Insecure Defaults when Processing XSLT Stylesheets",org.xmlunit:xmlunit-core,0,2.10.0,LOW,
+CVE-2024-31860,2024-04-09T09:31:12Z,"Apache Zeppelin Path Traversal vulnerability","org.apache.zeppelin:zeppelin-server",0.9.0,0.11.0,MODERATE,CWE-20;CWE-22
 CVE-2024-31862,2024-04-09T12:30:47Z,"Apache Zeppelin: Denial of service with invalid notebook name","org.apache.zeppelin:zeppelin-server",0.10.1,0.11.0,MODERATE,CWE-20
 CVE-2024-31863,2024-04-09T12:30:47Z,"Apache Zeppelin: Replacing other users notebook, bypassing any permissions","org.apache.zeppelin:zeppelin-server",0.10.1,0.11.0,MODERATE,CWE-290
 CVE-2024-31864,2024-04-09T18:30:22Z,"Apache Zeppelin remote code execution by adding malicious JDBC connection string","org.apache.zeppelin:zeppelin-jdbc",0,0.11.1,CRITICAL,CWE-94
@@ -7557,9 +7560,21 @@ CVE-2024-31996,2024-04-10T17:16:37Z,"XWiki Commons missing escaping of `{` in Ve
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",0,14.10.19,CRITICAL,CWE-862
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",15.0-rc-1,15.5.4,CRITICAL,CWE-862
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",15.6-rc-1,15.9-rc-1,CRITICAL,CWE-862
+CVE-2024-32114,2024-05-02T09:30:48Z,"Apache ActiveMQ's default configuration doesn't secure the API web context","org.apache.activemq:apache-activemq",6.0.0,6.1.2,HIGH,CWE-1188
 CVE-2024-32656,2024-04-22T15:51:59Z,"Ant Media Server vulnerable to a local privilege escalation","io.antmedia:ant-media-server",2.6.0,2.9.0,HIGH,CWE-862
 CVE-2024-3366,2024-04-06T12:30:56Z,"Xuxueli xxl-job template injection vulnerability",com.xuxueli:xxl-job-core,0,,LOW,CWE-74
+CVE-2024-34144,2024-05-02T15:30:35Z,"Jenkins Script Security Plugin has sandbox bypass vulnerability involving crafted constructor bodies","org.jenkins-ci.plugins:script-security",0,1336.vf33a,HIGH,
+CVE-2024-34145,2024-05-02T15:30:35Z,"Jenkins Script Security Plugin sandbox bypass vulnerability","org.jenkins-ci.plugins:script-security",0,1336.vf33a,MODERATE,
+CVE-2024-34146,2024-05-02T15:30:35Z,"Jenkins Git server Plugin does not perform a permission check","org.jenkins-ci.plugins:git-server",0,117.veb,MODERATE,
+CVE-2024-34147,2024-05-02T15:30:35Z,"Jenkins Telegram Bot Plugin stores the Telegram Bot token in plaintext","org.jenkins-ci.plugins:telegrambot",0,,LOW,
+CVE-2024-34148,2024-05-02T15:30:35Z,"Jenkins Subversion Partial Release Manager Plugin programmatically disables the fix for CVE-2016-3721 ","org.jenkins-ci.plugins:partial-release-manager",0,,MODERATE,
+CVE-2024-34447,2024-05-03T18:30:37Z,"Bouncy Castle Java Cryptography API vulnerable to DNS poisoning","org.bouncycastle:bcprov-jdk12",0,1.78,LOW,
+CVE-2024-34447,2024-05-03T18:30:37Z,"Bouncy Castle Java Cryptography API vulnerable to DNS poisoning","org.bouncycastle:bcprov-jdk13",0,1.78,LOW,
+CVE-2024-34447,2024-05-03T18:30:37Z,"Bouncy Castle Java Cryptography API vulnerable to DNS poisoning","org.bouncycastle:bcprov-jdk14",0,1.78,LOW,
+CVE-2024-34447,2024-05-03T18:30:37Z,"Bouncy Castle Java Cryptography API vulnerable to DNS poisoning","org.bouncycastle:bcprov-jdk15to18",0,1.78,LOW,
+CVE-2024-34447,2024-05-03T18:30:37Z,"Bouncy Castle Java Cryptography API vulnerable to DNS poisoning","org.bouncycastle:bcprov-jdk18on",0,1.78,LOW,
 CVE-2024-3825,2024-04-17T15:30:43Z,"BlazeMeter Jenkins plugin vulnerable to Cross-Site Request Forgery","com.blazemeter.plugins:BlazeMeterJenkinsPlugin",0,4.22,MODERATE,CWE-352
+CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

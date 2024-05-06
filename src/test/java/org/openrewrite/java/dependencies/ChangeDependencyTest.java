@@ -33,18 +33,18 @@ class ChangeDependencyTest implements RewriteTest {
     void changeGradleDependency() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null)),
+            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=groovy
           buildGradle(
             """
               plugins {
                   id "java-library"
               }
-                            
+              
               repositories {
                   mavenCentral()
               }
-                            
+              
               dependencies {
                   implementation "commons-lang:commons-lang:2.6"
               }
@@ -53,11 +53,11 @@ class ChangeDependencyTest implements RewriteTest {
               plugins {
                   id "java-library"
               }
-                            
+              
               repositories {
                   mavenCentral()
               }
-                            
+              
               dependencies {
                   implementation "org.apache.commons:commons-lang3:3.11"
               }
@@ -70,7 +70,7 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeMavenDependency() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null)),
+          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=xml
           pomXml(
             """
@@ -111,7 +111,7 @@ class ChangeDependencyTest implements RewriteTest {
           spec -> spec.recipe(new ChangeDependency(
             "org.springframework.boot", "spring-boot-dependencies",
             "io.micronaut.platform", "micronaut-parent",
-            "4.3.4", null, null
+            "4.3.4", null, null, null
           )),
           //language=xml
           pomXml(
@@ -162,7 +162,7 @@ class ChangeDependencyTest implements RewriteTest {
         Validated<Object> validate = new ChangeDependency(
           "org.springframework.boot", "spring-boot-dependencies",
           "org.springframework.boot", "spring-boot-dependencies",
-          "3.2.2", null, null
+          "3.2.2", null, null, null
         ).validate(new InMemoryExecutionContext());
         assertThat(validate.failures())
           .hasSize(2)
@@ -174,7 +174,7 @@ class ChangeDependencyTest implements RewriteTest {
         rewriteRun(
           spec -> spec
             .beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, null)),
+            .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, null, null)),
           //language=groovy
           buildGradle(
             """
@@ -183,11 +183,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-                            
+              
               repositories {
                  mavenCentral()
               }
-                            
+              
               dependencies {
                   runtimeOnly 'mysql:mysql-connector-java'
               }
@@ -198,11 +198,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-                            
+              
               repositories {
                  mavenCentral()
               }
-                            
+              
               dependencies {
                   runtimeOnly 'com.mysql:mysql-connector-j'
               }
@@ -216,7 +216,7 @@ class ChangeDependencyTest implements RewriteTest {
         rewriteRun(
           spec -> spec
             .beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, true)),
+            .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, true, null)),
           //language=groovy
           buildGradle(
             """
@@ -225,11 +225,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-                            
+              
               repositories {
                  mavenCentral()
               }
-                            
+              
               dependencies {
                   runtimeOnly 'mysql:mysql-connector-java'
               }
@@ -240,11 +240,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-                            
+              
               repositories {
                  mavenCentral()
               }
-                            
+              
               dependencies {
                   runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
               }

@@ -2756,7 +2756,7 @@ CVE-2019-16574,2022-05-24T17:03:49Z,"Jenkins Alauda DevOps Pipeline Plugin allow
 CVE-2019-16575,2022-05-24T17:03:49Z,"Cross-Site Request Forgery in Jenkins Alauda Kubernetes Suport Plugin","io.alauda.jenkins.plugins:alauda-kubernetes-support",0,,HIGH,CWE-352
 CVE-2019-16576,2022-05-24T17:03:49Z,"Improper Authorization in Jenkins Alauda Kubernetes Suport Plugin","io.alauda.jenkins.plugins:alauda-kubernetes-support",0,,MODERATE,CWE-862
 CVE-2019-16771,2019-12-05T18:40:51Z,"Low severity vulnerability that affects com.linecorp.armeria:armeria","com.linecorp.armeria:armeria",0.50.0,0.97.0,MODERATE,CWE-113
-CVE-2019-16869,2019-10-11T18:41:23Z,"HTTP Request Smuggling in Netty",io.netty:netty-all,0,4.1.42.Final,HIGH,CWE-444
+CVE-2019-16869,2019-10-11T18:41:23Z,"HTTP Request Smuggling in Netty",io.netty:netty-all,4.0.0.Alpha1,4.1.42.Final,HIGH,CWE-444
 CVE-2019-16869,2019-10-11T18:41:23Z,"HTTP Request Smuggling in Netty",org.jboss.netty:netty,0,,HIGH,CWE-444
 CVE-2019-16942,2019-10-28T20:51:15Z,"Polymorphic Typing in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.0.0,2.6.7.3,CRITICAL,CWE-502
 CVE-2019-16942,2019-10-28T20:51:15Z,"Polymorphic Typing in FasterXML jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,CRITICAL,CWE-502
@@ -3100,8 +3100,8 @@ CVE-2020-17510,2021-04-22T16:13:23Z,"Authentication bypass in Apache Shiro","org
 CVE-2020-17516,2022-02-09T01:01:22Z,"Authentication Bypass in Apache Cassandra","org.apache.cassandra:cassandra-all",2.1.0,3.0.24,HIGH,CWE-290
 CVE-2020-17516,2022-02-09T01:01:22Z,"Authentication Bypass in Apache Cassandra","org.apache.cassandra:cassandra-all",3.11.0,3.11.10,HIGH,CWE-290
 CVE-2020-17518,2022-02-09T22:29:52Z,"Upload of file to arbitrary path in Apache Flink","org.apache.flink:flink-runtime",1.5.1,1.11.3,HIGH,CWE-22;CWE-23
-CVE-2020-17519,2021-01-06T20:01:34Z,"Path Traversal in Apache Flink","org.apache.flink:flink-runtime_2.11",1.11.0,1.11.3,MODERATE,CWE-22;CWE-552
-CVE-2020-17519,2021-01-06T20:01:34Z,"Path Traversal in Apache Flink","org.apache.flink:flink-runtime_2.12",1.11.0,1.11.3,MODERATE,CWE-22;CWE-552
+CVE-2020-17519,2021-01-06T20:01:34Z,"Path Traversal in Apache Flink","org.apache.flink:flink-runtime_2.11",1.11.0,1.11.3,HIGH,CWE-22;CWE-552
+CVE-2020-17519,2021-01-06T20:01:34Z,"Path Traversal in Apache Flink","org.apache.flink:flink-runtime_2.12",1.11.0,1.11.3,HIGH,CWE-22;CWE-552
 CVE-2020-17521,2020-12-09T19:03:03Z,"Information Disclosure in Apache Groovy","org.codehaus.groovy:groovy",2.0.0,2.4.21,MODERATE,CWE-379
 CVE-2020-17521,2020-12-09T19:03:03Z,"Information Disclosure in Apache Groovy","org.codehaus.groovy:groovy",2.5.0,2.5.14,MODERATE,CWE-379
 CVE-2020-17521,2020-12-09T19:03:03Z,"Information Disclosure in Apache Groovy","org.codehaus.groovy:groovy",3.0.0,3.0.7,MODERATE,CWE-379
@@ -4956,6 +4956,7 @@ CVE-2022-29885,2022-05-13T00:01:12Z,"Apache Tomcat EncryptInterceptor error lead
 CVE-2022-29885,2022-05-13T00:01:12Z,"Apache Tomcat EncryptInterceptor error leads to Uncontrolled Resource Consumption",org.apache.tomcat:tomcat,9.0.13,9.0.63,HIGH,CWE-400
 CVE-2022-30126,2022-05-17T00:00:37Z,"Regular expression denial of service in apache tika",org.apache.tika:tika,1.17,1.28.2,MODERATE,CWE-1333
 CVE-2022-30126,2022-05-17T00:00:37Z,"Regular expression denial of service in apache tika",org.apache.tika:tika,2.0.0,2.4.0,MODERATE,CWE-1333
+CVE-2022-30187,2022-07-13T00:00:39Z,"Microsoft: CBC Padding Oracle in Azure Blob Storage Encryption Library","com.azure:azure-storage-blob",0,12.18.0,MODERATE,CWE-668
 CVE-2022-30500,2022-05-27T00:00:48Z,"SQL injection in jflyfox jfinal","com.jflyfox:jflyfox_jfinal",0,,HIGH,CWE-89
 CVE-2022-30506,2022-06-03T00:01:08Z,"Code injection in MCMS",net.mingsoft:ms-mcms,0,,CRITICAL,CWE-434;CWE-74
 CVE-2022-30945,2022-05-18T00:00:39Z,"Sandbox bypass vulnerability through implicitly allowlisted platform Groovy files in Jenkins Pipeline: Groovy Plugin","org.jenkins-ci.plugins.workflow:workflow-cps",0,2692.v76b,HIGH,CWE-434;CWE-552
@@ -5730,7 +5731,9 @@ CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of se
 CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-expression",5.3.0,5.3.27,HIGH,CWE-400;CWE-770;CWE-917
 CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-expression",6.0.0,6.0.8,HIGH,CWE-400;CWE-770;CWE-917
 CVE-2023-20866,2023-04-13T21:30:27Z,"Spring Session session ID can be logged to the standard output stream","org.springframework.session:spring-session-core",3.0.0,3.0.1,MODERATE,CWE-200
-CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",0,2.7.11,CRITICAL,
+CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.5.0,2.5.15,CRITICAL,
+CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.6.0,2.6.15,CRITICAL,
+CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.7.0,2.7.11,CRITICAL,
 CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",3.0.0,3.0.6,CRITICAL,
 CVE-2023-20883,2023-05-26T18:30:21Z,"Spring Boot Welcome Page Denial of Service","org.springframework.boot:spring-boot-autoconfigure",0,2.5.15,HIGH,CWE-400
 CVE-2023-20883,2023-05-26T18:30:21Z,"Spring Boot Welcome Page Denial of Service","org.springframework.boot:spring-boot-autoconfigure",2.6.0,2.6.15,HIGH,CWE-400
@@ -6922,6 +6925,7 @@ CVE-2023-46243,2023-11-07T23:02:57Z,"XWiki Platform vulnerable to privilege esca
 CVE-2023-46244,2023-11-07T23:03:57Z,"XWiki Platform privilege escalation from script right to programming right through title displayer","org.xwiki.platform:xwiki-platform-display-api",15.0,15.2-rc-1,CRITICAL,CWE-863
 CVE-2023-46244,2023-11-07T23:03:57Z,"XWiki Platform privilege escalation from script right to programming right through title displayer","org.xwiki.platform:xwiki-platform-display-api",3.2-milestone-3,14.10.7,CRITICAL,CWE-863
 CVE-2023-46279,2023-12-15T09:30:17Z,"Apache Dubbo: Bypass deny serialize list check in Apache Dubbo",org.apache.dubbo:dubbo,3.1.5,3.1.6,CRITICAL,CWE-502
+CVE-2023-46442,2024-05-24T20:09:40Z,"Soot Infinite Loop vulnerability",org.soot-oss:soot,0,4.4.1,HIGH,CWE-835
 CVE-2023-46502,2023-10-31T00:31:00Z,"OpenCRX allows a remote attacker to execute arbitrary code via a crafted request","org.opencrx:opencrx-client",0,5.3.0,CRITICAL,CWE-611;CWE-918
 CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat.embed:tomcat-embed-core",10.1.0-M1,10.1.16,HIGH,CWE-20;CWE-444
 CVE-2023-46589,2023-11-28T18:30:23Z,"Apache Tomcat Improper Input Validation vulnerability","org.apache.tomcat.embed:tomcat-embed-core",11.0.0-M1,11.0.0-M11,HIGH,CWE-20;CWE-444
@@ -7310,13 +7314,14 @@ CVE-2024-22496,2024-01-23T18:31:11Z,"Cross-site Scripting in JFinal",com.jfinal:
 CVE-2024-22497,2024-01-23T21:30:20Z,"Cross-site Scripting in JFinal",com.jfinal:jfinal,0,,MODERATE,CWE-79
 CVE-2024-22533,2024-02-02T03:30:32Z,"Beetl Server-Side Template Injection vulnerability",com.ibeetl:beetl-core,0,3.15.13.RELEASE,CRITICAL,CWE-94
 CVE-2024-22567,2024-02-05T21:30:31Z,"mingSoft MCMS File Upload vulnerability",net.mingsoft:ms-mcms,0,,HIGH,CWE-434
+CVE-2024-22588,2024-05-24T19:00:28Z,"Kwik does not discard unused encryption keys",tech.kwik:kwik,0,0.8,MODERATE,CWE-327
 CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.12.0-alpha1,1.12.0-alpha9,MODERATE,
 CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.7.0,1.11.2,MODERATE,
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",3.0.0,3.21.4,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",3.22.0,3.22.1,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",4.0.0,4.0.4,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",4.1.0,4.4.0,HIGH,CWE-502
-CVE-2024-23320,2024-02-23T18:30:59Z,"Apache DolphinScheduler vulnerable to arbitrary JavaScript execution as root for authenticated users","org.apache.dolphinscheduler:dolphinscheduler",0,3.2.1,CRITICAL,CWE-20
+CVE-2024-23320,2024-02-23T18:30:59Z,"Apache DolphinScheduler vulnerable to arbitrary JavaScript execution as root for authenticated users","org.apache.dolphinscheduler:dolphinscheduler-master",0,3.2.1,CRITICAL,CWE-20
 CVE-2024-23449,2024-03-29T12:30:42Z,"Elasticsearch Uncaught Exception leading to crash","org.elasticsearch:elasticsearch",8.4.0,8.11.1,MODERATE,CWE-248
 CVE-2024-23450,2024-03-27T18:32:38Z,"Elasticsearch Uncontrolled Resource Consumption vulnerability","org.elasticsearch:elasticsearch",7.0.0,7.17.19,MODERATE,CWE-400
 CVE-2024-23450,2024-03-27T18:32:38Z,"Elasticsearch Uncontrolled Resource Consumption vulnerability","org.elasticsearch:elasticsearch",8.0.0,8.13.0,MODERATE,CWE-400
@@ -7490,6 +7495,12 @@ CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For T
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",3.0.0,3.0.3,MODERATE,CWE-863
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",3.1.0,3.1.3,MODERATE,CWE-863
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",3.2.0,3.2.1,MODERATE,CWE-863
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files","org.verapdf:core-arlington",0,1.25.127,HIGH,CWE-91
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files","org.verapdf:library-arlington",0,1.25.127,HIGH,CWE-91
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files","org.verapdf:library-jakarta",0,1.24.2,HIGH,CWE-91
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files",org.verapdf:core,0,1.24.2,HIGH,CWE-91
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files",org.verapdf:core-jakarta,0,1.24.2,HIGH,CWE-91
+CVE-2024-28109,2024-05-20T14:57:07Z,"veraPDF has potential XSLT injection vulnerability when using policy files",org.verapdf:library,0,1.24.2,HIGH,CWE-91
 CVE-2024-28149,2024-03-06T18:30:38Z,"Jenkins HTML Publisher Plugin does not properly sanitize input","org.jenkins-ci.plugins:htmlpublisher",1.16,1.32.1,HIGH,
 CVE-2024-28150,2024-03-06T18:30:38Z,"Jenkins HTML Publisher Plugin Stored XSS vulnerability","org.jenkins-ci.plugins:htmlpublisher",0,1.32.1,HIGH,
 CVE-2024-28151,2024-03-06T18:30:38Z,"Jenkins HTML Publisher Plugin Path traversal vulnerability","org.jenkins-ci.plugins:htmlpublisher",0,1.32.1,MODERATE,
@@ -7514,6 +7525,7 @@ CVE-2024-28848,2024-04-24T17:06:02Z,"OpenMetadata vulnerable to a SpEL Injection
 CVE-2024-29025,2024-03-25T19:40:50Z,"Netty's HttpPostRequestDecoder can OOM","io.netty:netty-codec-http",0,4.1.108.Final,MODERATE,CWE-770
 CVE-2024-29131,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError adding property in AbstractListDelimiterHandler.flattenIterator()","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
 CVE-2024-29133,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError calling ListDelimiterHandler.flatten(Object, int) with a cyclical object tree","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
+CVE-2024-29392,2024-05-22T18:30:40Z,"Silverpeas Core vulnerable to Cross Site Scripting","org.silverpeas:silverpeas-core",0,,MODERATE,CWE-79
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.11.0,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.7.1,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.0.0,3.0.4,MODERATE,CWE-863
@@ -7565,6 +7577,7 @@ CVE-2024-31862,2024-04-09T12:30:47Z,"Apache Zeppelin: Denial of service with inv
 CVE-2024-31863,2024-04-09T12:30:47Z,"Apache Zeppelin: Replacing other users notebook, bypassing any permissions","org.apache.zeppelin:zeppelin-server",0.10.1,0.11.0,MODERATE,CWE-290
 CVE-2024-31864,2024-04-09T18:30:22Z,"Apache Zeppelin remote code execution by adding malicious JDBC connection string","org.apache.zeppelin:zeppelin-jdbc",0,0.11.1,CRITICAL,CWE-94
 CVE-2024-31865,2024-04-09T18:30:22Z,"Apache Zeppelin: Cron arbitrary user impersonation with improper privileges","org.apache.zeppelin:zeppelin-server",0.8.2,0.11.1,MODERATE,CWE-20;CWE-862
+CVE-2024-31866,2024-04-09T18:30:22Z,"Improper escaping in Apache Zeppelin","org.apache.zeppelin:zeppelin-interpreter",0.8.2,0.11.1,MODERATE,CWE-116
 CVE-2024-31867,2024-04-09T18:30:28Z,"Apache Zeppelin: LDAP search filter query Injection Vulnerability","org.apache.zeppelin:zeppelin-server",0.8.2,0.11.1,MODERATE,CWE-20;CWE-90
 CVE-2024-31868,2024-04-09T18:30:22Z,"Apache Zeppelin vulnerable to cross-site scripting in the helium module","org.apache.zeppelin:zeppelin-interpreter",0.8.2,0.11.1,MODERATE,CWE-116;CWE-79
 CVE-2024-31981,2024-04-10T17:11:45Z,"XWiki Platform: Privilege escalation (PR) from user registration through PDFClass","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.4,CRITICAL,CWE-862
@@ -7619,6 +7632,9 @@ CVE-2024-3825,2024-04-17T15:30:43Z,"BlazeMeter Jenkins plugin vulnerable to Cros
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
+CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
+CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
+CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vulnerability","org.jenkins-ci.plugins:report-info",0,,MODERATE,CWE-22
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

@@ -25,11 +25,15 @@ import org.openrewrite.internal.lang.Nullable;
 @JsonPropertyOrder({"oldGroupId", "oldArtifactId", "newGroupId", "newArtifactId", "context"})
 public class Migration {
     String oldGroupId;
+
     @Nullable
     String oldArtifactId;
+
     String newGroupId;
+
     @Nullable
     String newArtifactId;
+
     @Nullable
     String context;
 }

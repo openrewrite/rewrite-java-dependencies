@@ -112,8 +112,10 @@ class Definitions {
 class DefinitionMigration {
     @JsonProperty("old")
     String oldGav;
+
     @JsonProperty("new")
     String newGav;
+
     @Nullable
     String context;
 }
@@ -127,7 +129,9 @@ class UnofficialDefinitions {
 class ProposedMigration {
     @JsonProperty("old")
     String oldGav;
+
     List<String> proposal;
+
     @Nullable
     String context;
 }

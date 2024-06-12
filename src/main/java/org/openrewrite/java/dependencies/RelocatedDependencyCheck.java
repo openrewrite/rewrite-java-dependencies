@@ -75,6 +75,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     @Value
     static class GroupArtifact {
         String groupId;
+
         @Nullable
         String artifactId;
     }

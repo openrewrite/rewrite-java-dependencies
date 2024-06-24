@@ -4501,6 +4501,7 @@ CVE-2021-46385,2022-01-27T00:00:52Z,"Mingsoft MCMS SQL injection vulnerability",
 CVE-2021-46386,2022-01-27T00:01:00Z,"Mingsoft MCMS vulnerable to Remote Code Execution via file upload.",net.mingsoft:ms-mcms,0,,CRITICAL,CWE-434
 CVE-2021-46877,2023-03-19T00:30:25Z,"jackson-databind possible Denial of Service if using JDK serialization to serialize JsonNode","com.fasterxml.jackson.core:jackson-databind",2.10.0,2.12.6,HIGH,
 CVE-2021-46877,2023-03-19T00:30:25Z,"jackson-databind possible Denial of Service if using JDK serialization to serialize JsonNode","com.fasterxml.jackson.core:jackson-databind",2.13.0,2.13.1,HIGH,
+CVE-2021-47621,2024-06-21T06:31:12Z,"ClassGraph XML External Entity Reference","io.github.classgraph:classgraph",0,4.8.112,MODERATE,CWE-611
 CVE-2022-0084,2022-08-27T00:00:44Z,"XNIO `notifyReadClosed` method logging message to unexpected end",org.jboss.xnio:xnio-all,0,,HIGH,CWE-770
 CVE-2022-0198,2022-01-14T21:07:23Z,"XML External Entity Reference in edu.stanford.nlp:stanford-corenlp","edu.stanford.nlp:stanford-corenlp",0,,MODERATE,CWE-611
 CVE-2022-0219,2022-01-21T18:13:42Z,"Improper Restriction of XML External Entity Reference in skylot/jadx","io.github.skylot:jadx-core",0,1.3.2,MODERATE,CWE-611
@@ -7188,7 +7189,7 @@ CVE-2023-6134,2023-12-18T19:31:02Z,"Keycloak vulnerable to reflected XSS via wil
 CVE-2023-6147,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for Policy Compliance XML External Entity vulnerability","com.qualys.plugins:qualys-pc",0,1.0.6,MODERATE,CWE-611
 CVE-2023-6148,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for Policy Compliance Cross-site Scripting vulnerability","com.qualys.plugins:qualys-pc",0,1.0.6,MODERATE,CWE-79
 CVE-2023-6149,2024-01-09T09:30:29Z,"Qualys Jenkins Plugin for WAS XML External Entity vulnerability","com.qualys.plugins:qualys-was",0,2.0.12,MODERATE,CWE-611
-CVE-2023-6236,2024-04-10T15:30:37Z,"WildFly Elytron: OIDC app attempting to access the second tenant, the user should be prompted to log","org.wildfly.security:wildfly-elytron-http-oidc",0,,HIGH,CWE-345
+CVE-2023-6236,2024-04-10T15:30:37Z,"WildFly Elytron: OIDC app attempting to access the second tenant, the user should be prompted to log","org.wildfly.security:wildfly-elytron-http-oidc",0,2.2.5.Final,HIGH,CWE-345
 CVE-2023-6267,2024-01-25T21:32:14Z,"Quarkus Improper Handling of Insufficient Permissions or Privileges and Improper Handling of Exceptional Conditions vulnerability","io.quarkus.resteasy.reactive:resteasy-reactive",0,2.13.9.Final,HIGH,CWE-280;CWE-755
 CVE-2023-6267,2024-01-25T21:32:14Z,"Quarkus Improper Handling of Insufficient Permissions or Privileges and Improper Handling of Exceptional Conditions vulnerability","io.quarkus.resteasy.reactive:resteasy-reactive",3.0.0.Final,3.2.9.Final,HIGH,CWE-280;CWE-755
 CVE-2023-6291,2023-12-21T18:25:30Z,"The redirect_uri validation logic allows for bypassing explicitly allowed hosts that would otherwise be restricted","org.keycloak:keycloak-services",0,23.0.3,HIGH,CWE-20
@@ -7644,10 +7645,18 @@ CVE-2024-36124,2024-06-04T17:38:31Z,"iq80 Snappy out-of-bounds read when uncompr
 CVE-2024-36263,2024-06-12T15:31:45Z,"Apache Submarine Server Core has a SQL Injection Vulnerability","org.apache.submarine:submarine-server-core",0,,HIGH,CWE-89
 CVE-2024-36264,2024-06-12T15:31:44Z,"Apache Submarine Commons Utils has a hard-coded secret","org.apache.submarine:submarine-commons-utils",0,,MODERATE,CWE-287
 CVE-2024-36265,2024-06-12T15:31:45Z,"Apache Submarine Server Core Incorrect Authorization vulnerability","org.apache.submarine:submarine-server-core",0,,CRITICAL,CWE-863
+CVE-2024-36543,2024-06-17T21:31:10Z,"STRIMZI incorrect access control",io.strimzi:strimzi,0,,HIGH,CWE-306
 CVE-2024-3656,2024-06-11T20:22:40Z,"Keycloak's admin API allows low privilege users to use administrative functions","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-269;CWE-284
 CVE-2024-37280,2024-06-13T18:31:58Z,"Elasticsearch StackOverflow vulnerability","org.elasticsearch:elasticsearch",8.13.1,8.14.0,MODERATE,CWE-122
 CVE-2024-37309,2024-06-13T19:39:06Z,"CrateDB has a Client initialized Session-Renegotiation DoS",io.crate:crate,0,5.7.2,MODERATE,CWE-770
+CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",13.10.3,14.10.21,CRITICAL,CWE-266;CWE-94
+CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",13.4.7,14.10.21,CRITICAL,CWE-266;CWE-94
+CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.5,CRITICAL,CWE-266;CWE-94
+CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",15.6-rc-1,15.10.6,CRITICAL,CWE-266;CWE-94
+CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",16.0.0-rc-1,16.0.0,CRITICAL,CWE-266;CWE-94
+CVE-2024-37902,2024-06-17T21:20:44Z,"DeepJavaLibrary API absolute path traversal",ai.djl:api,0.1.0,0.28.0,CRITICAL,CWE-22
 CVE-2024-3825,2024-04-17T15:30:43Z,"BlazeMeter Jenkins plugin vulnerable to Cross-Site Request Forgery","com.blazemeter.plugins:BlazeMeterJenkinsPlugin",0,4.22,MODERATE,CWE-352
+CVE-2024-38460,2024-06-16T15:30:44Z,"SonarQube logs sensitive information","org.sonarsource.sonarqube:sonar-web",0,9.9.4,MODERATE,CWE-532
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
@@ -7655,6 +7664,10 @@ CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scrip
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
 CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vulnerability","org.jenkins-ci.plugins:report-info",0,,MODERATE,CWE-22
 CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",org.opencms:opencms-core,16.0,17.0,MODERATE,CWE-79
+CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",0,22.0.12,LOW,CWE-276
+CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",23.0.0,24.0.6,LOW,CWE-276
+CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",25.0.0,25.0.1,LOW,CWE-276
+CVE-2024-6162,2024-06-20T15:31:19Z,"Undertow's url-encoded request path information can be broken on ajp-listener","io.undertow:undertow-core",0,2.3.14.Final,HIGH,CWE-400
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74
@@ -7733,6 +7746,7 @@ GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certif
 GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certificate password exposure in client exception","com.clickhouse:clickhouse-jdbc",0,0.4.6,MODERATE,
 GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certificate password exposure in client exception","com.clickhouse:clickhouse-r2dbc",0,0.4.6,MODERATE,
 GHSA-g8q2-24jh-5hpc,2018-07-27T14:47:52Z,"High severity vulnerability that affects jquery-ui","org.webjars.npm:jquery-ui",0,1.12.0,HIGH,
+GHSA-gmrm-8fx4-66x7,2024-06-18T12:30:42Z,"Duplicate Advisory: Keycloak: Leak of configured LDAP bind credentials","org.keycloak:keycloak-core",0,,LOW,CWE-276
 GHSA-h6wq-jw7q-grxv,2021-02-24T19:38:21Z,"Elliptic Curve Key Disclosure",org.bitbucket.b_c:jose4j,0.3.6,0.5.5,HIGH,
 GHSA-hvp5-5x4f-33fq,2024-04-22T15:56:04Z,"JADX file override vulnerability","io.github.skylot:jadx-core",0,1.5.0,LOW,CWE-22
 GHSA-hw7r-qrhp-5pff,2021-08-30T16:16:46Z,"Unauthorized property update in CheckboxGroup component in Vaadin 12-14 and 15-20",com.vaadin:vaadin-bom,12.0.0,14.6.8,MODERATE,

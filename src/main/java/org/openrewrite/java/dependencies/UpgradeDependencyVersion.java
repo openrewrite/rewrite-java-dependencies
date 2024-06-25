@@ -149,7 +149,7 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
 
     @Data
     public static final class Accumulator {
-        private final Set<GroupArtifact> mavenAccumulator;
+        private final org.openrewrite.maven.UpgradeDependencyVersion.Accumulator mavenAccumulator;
         private final org.openrewrite.gradle.UpgradeDependencyVersion.DependencyVersionState gradleAccumulator;
     }
 }

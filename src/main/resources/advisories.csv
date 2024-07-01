@@ -2700,9 +2700,9 @@ CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious ob
 CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.7.0,2.8.11.5,HIGH,CWE-200;CWE-502
 CVE-2019-14892,2020-05-15T18:58:58Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,HIGH,CWE-200;CWE-502
 CVE-2019-14893,2020-05-15T18:59:07Z,"Polymorphic deserialization of malicious object in jackson-databind","com.fasterxml.jackson.core:jackson-databind",2.9.0,2.9.10,HIGH,CWE-502
-CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.infinispan:infinispan-hibernate-cache-v53",0,5.3.18,MODERATE,CWE-89
-CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.infinispan:infinispan-hibernate-cache-v53",5.4.0,5.4.18,MODERATE,CWE-89
-CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.infinispan:infinispan-hibernate-cache-v53",5.5.0.Alpha1,5.5.0,MODERATE,CWE-89
+CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.hibernate:hibernate-core",0,5.3.18,MODERATE,CWE-89
+CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.hibernate:hibernate-core",5.4.0,5.4.18,MODERATE,CWE-89
+CVE-2019-14900,2022-02-10T23:05:04Z,"SQL Injection in Hibernate ORM","org.hibernate:hibernate-core",5.5.0.Alpha1,5.5.0.Beta1,MODERATE,CWE-89
 CVE-2019-14909,2022-05-24T17:02:40Z,"Keycloak Authentication Error","org.keycloak:keycloak-parent",7.0.0,,HIGH,CWE-287;CWE-305
 CVE-2019-14910,2022-05-24T17:02:42Z,"Keycloak Authentication Error","org.keycloak:keycloak-parent",7.0.0,,CRITICAL,CWE-278;CWE-295
 CVE-2019-15477,2019-08-27T17:40:33Z,"Cross-site Scripting in Jooby",org.jooby:jooby,0,1.6.4,MODERATE,CWE-79
@@ -6389,11 +6389,11 @@ CVE-2023-34042,2024-02-06T00:30:25Z,"Spring Security's spring-security.xsd file 
 CVE-2023-34047,2023-09-20T12:30:22Z,"Spring for GraphQL may be exposed to GraphQL context with values from a different session","org.springframework.graphql:spring-graphql",1.1.0,1.1.6,LOW,
 CVE-2023-34047,2023-09-20T12:30:22Z,"Spring for GraphQL may be exposed to GraphQL context with values from a different session","org.springframework.graphql:spring-graphql",1.2.0,1.2.3,LOW,
 CVE-2023-34053,2023-11-28T09:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-webmvc",6.0.0,6.0.14,HIGH,
-CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-http",1.0.0,1.0.39,HIGH,
-CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-http",1.1.0,1.1.13,HIGH,
-CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",0,2.7.18,MODERATE,
-CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",3.0.0,3.0.13,MODERATE,
-CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot denial of service vulnerability","org.springframework.boot:spring-boot",3.1.0,3.1.6,MODERATE,
+CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-core",1.0.0,1.0.39,HIGH,
+CVE-2023-34054,2023-11-28T09:30:27Z,"Reactor Netty HTTP Server denial of service vulnerability","io.projectreactor.netty:reactor-netty-core",1.1.0,1.1.13,HIGH,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot Actuator denial of service vulnerability","org.springframework.boot:spring-boot-actuator",0,2.7.18,MODERATE,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot Actuator denial of service vulnerability","org.springframework.boot:spring-boot-actuator",3.0.0,3.0.13,MODERATE,
+CVE-2023-34055,2023-11-28T09:30:27Z,"Spring Boot Actuator denial of service vulnerability","org.springframework.boot:spring-boot-actuator",3.1.0,3.1.6,MODERATE,
 CVE-2023-34062,2023-11-15T12:30:30Z,"In Reactor Netty HTTP Server a malicious user can send a request using a specially crafted URL that can lead to a directory traversal attack","io.projectreactor.netty:reactor-netty-http",1.0.0,1.0.39,HIGH,CWE-22
 CVE-2023-34062,2023-11-15T12:30:30Z,"In Reactor Netty HTTP Server a malicious user can send a request using a specially crafted URL that can lead to a directory traversal attack","io.projectreactor.netty:reactor-netty-http",1.1.0,1.1.13,HIGH,CWE-22
 CVE-2023-3414,2023-07-26T21:30:18Z,"Credential leakage in Jenkins Plug-in for ServiceNow ","io.jenkins.plugins:servicenow-devops",0,1.38.1,MODERATE,CWE-200;CWE-352
@@ -7473,6 +7473,7 @@ CVE-2024-27135,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Input Validation in
 CVE-2024-27135,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Input Validation in Pulsar Function Worker allows Remote Code Execution","org.apache.pulsar:pulsar-functions-worker",3.0.0,3.0.3,HIGH,CWE-20
 CVE-2024-27135,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Input Validation in Pulsar Function Worker allows Remote Code Execution","org.apache.pulsar:pulsar-functions-worker",3.1.0,3.1.3,HIGH,CWE-20
 CVE-2024-27135,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Input Validation in Pulsar Function Worker allows Remote Code Execution","org.apache.pulsar:pulsar-functions-worker",3.2.0,3.2.1,HIGH,CWE-20
+CVE-2024-27136,2024-06-24T09:30:53Z,"Cross site scripting in Apache JSPWiki","org.apache.jspwiki:jspwiki-main",0,2.12.2,MODERATE,CWE-79
 CVE-2024-27138,2024-03-01T18:30:23Z,"Apache Archiva Incorrect Authorization vulnerability","org.apache.archiva:archiva",0,,MODERATE,CWE-863
 CVE-2024-27139,2024-03-01T18:30:23Z,"Apache Archiva Incorrect Authorization vulnerability","org.apache.archiva:archiva",2.0.0,,MODERATE,CWE-863
 CVE-2024-27140,2024-03-01T18:30:23Z,"Apache Archiva Reflected Cross-site Scripting vulnerability","org.apache.archiva:archiva-common",2.0.0,,MODERATE,CWE-79
@@ -7656,7 +7657,13 @@ CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",16.0.0-rc-1,16.0.0,CRITICAL,CWE-266;CWE-94
 CVE-2024-37902,2024-06-17T21:20:44Z,"DeepJavaLibrary API absolute path traversal",ai.djl:api,0.1.0,0.28.0,CRITICAL,CWE-22
 CVE-2024-3825,2024-04-17T15:30:43Z,"BlazeMeter Jenkins plugin vulnerable to Cross-Site Request Forgery","com.blazemeter.plugins:BlazeMeterJenkinsPlugin",0,4.22,MODERATE,CWE-352
+CVE-2024-38364,2024-06-25T17:07:32Z,"DSpace Cross Site Scripting (XSS) via a deposited HTML/XML document","org.dspace:dspace-server-webapp",7.0,7.6.2,LOW,CWE-79
+CVE-2024-38369,2024-06-24T18:00:16Z,"XWiki programming rights may be inherited by inclusion","org.xwiki.platform:xwiki-platform-rendering-macro-include",0,15.0-rc-1,CRITICAL,CWE-863
+CVE-2024-38374,2024-06-24T20:44:48Z,"Improper Restriction of XML External Entity Reference in org.cyclonedx:cyclonedx-core-java","org.cyclonedx:cyclonedx-core-java",2.1.0,9.0.4,HIGH,CWE-611
 CVE-2024-38460,2024-06-16T15:30:44Z,"SonarQube logs sensitive information","org.sonarsource.sonarqube:sonar-web",0,9.9.4,MODERATE,CWE-532
+CVE-2024-39458,2024-06-26T18:30:28Z,"Exposure of secrets through system log in Jenkins Structs Plugin","org.jenkins-ci.plugins:structs",0,338.v848422169819,LOW,CWE-200
+CVE-2024-39459,2024-06-26T18:30:28Z,"Secret file credentials stored unencrypted in rare cases by Plain Credentials Plugin ","org.jenkins-ci.plugins:plain-credentials",0,183.va,MODERATE,CWE-319
+CVE-2024-39460,2024-06-26T18:30:28Z,"Bitbucket OAuth access token exposed in the build log by Bitbucket Branch Source Plugin ","org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source",0,887.va,MODERATE,CWE-532
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22

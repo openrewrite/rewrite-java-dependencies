@@ -111,6 +111,7 @@ com.microsoft.azure,"azure-spring-boot-dependencies",com.microsoft.azure,"azure-
 com.microsoft.azure,azure-storage,com.azure,azure-storage,
 com.microsoft.azure,spring-data-documentdb,com.microsoft.azure,spring-data-cosmosdb,
 "com.microsoft.windowsazure.storage","microsoft-windowsazure-storage-sdk",com.microsoft.azure,azure-storage,
+commons-dbcp,commons-dbcp,org.apache.commons,commons-dbcp2,
 commons-collections,commons-collections,org.apache.commons,commons-collections4,
 commons-compress,commons-compress,org.apache.commons,commons-compress,
 commons-configuration,commons-configuration,org.apache.commons,commons-configuration2,
@@ -118,6 +119,7 @@ commons-email,commons-email,org.apache.commons,commons-email,
 commons-httpclient,commons-httpclient,"org.apache.httpcomponents",httpclient,"HttpComponents Client is a successor of and replacement for Commons HttpClient 3.x. Users of Commons HttpClient are strongly encouraged to upgrade."
 commons-lang,commons-lang,org.apache.commons,commons-lang3,
 commons-math,commons-math,org.apache.commons,commons-math,"Check https://issues.apache.org/jira/browse/MATH-339 for more details"
+commons-pool,commons-pool,org.apache.commons,commons-pool2,
 com.mtvi.plateng.maven,maven-hudson-plugin,org.jvnet.hudson.tools,maven-hudson-plugin,
 com.mysema.maven,maven-apt-plugin,com.mysema.maven,apt-maven-plugin,
 com.mysema.querydsl,,com.querydsl,,

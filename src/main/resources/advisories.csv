@@ -128,6 +128,8 @@ CVE-2008-6505,2022-05-17T05:52:21Z,"Apache Struts directory traversal vulnerabil
 CVE-2008-6505,2022-05-17T05:52:21Z,"Apache Struts directory traversal vulnerability","org.apache.struts:struts2-core",2.1.0,2.1.3,MODERATE,CWE-22
 CVE-2008-6682,2022-05-17T05:52:45Z,"Apache Struts is vulnerable to Cross-site Scripting","org.apache.struts:struts2-core",2.0.0,2.0.11.1,MODERATE,CWE-79
 CVE-2008-6682,2022-05-17T05:52:45Z,"Apache Struts is vulnerable to Cross-site Scripting","org.apache.struts:struts2-core",2.1.0,2.1.1,MODERATE,CWE-79
+CVE-2008-7227,2022-05-17T05:51:58Z,"PartialBufferOutputStream2 flush issues","org.geoserver.web:gs-web-app",0,1.6.1,MODERATE,CWE-119
+CVE-2008-7227,2022-05-17T05:51:58Z,"PartialBufferOutputStream2 flush issues",org.geoserver:gs-main,0,1.6.1,MODERATE,CWE-119
 CVE-2009-0026,2022-05-02T03:12:28Z,"Apache Jackrabbit contains Cross-site Scripting","org.apache.jackrabbit:jackrabbit",0,1.5.2,MODERATE,CWE-79
 CVE-2009-0033,2022-05-02T03:12:29Z,"Apache Tomcat Denial of Service via Malformed Request Headers",org.apache.tomcat:tomcat,4.1.0,,MODERATE,CWE-20;CWE-400
 CVE-2009-0033,2022-05-02T03:12:29Z,"Apache Tomcat Denial of Service via Malformed Request Headers",org.apache.tomcat:tomcat,5.5.0,,MODERATE,CWE-20;CWE-400
@@ -5733,7 +5735,7 @@ CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of se
 CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-expression",5.3.0,5.3.27,HIGH,CWE-400;CWE-770;CWE-917
 CVE-2023-20863,2023-04-13T21:30:27Z,"Spring Framework vulnerable to denial of service","org.springframework:spring-expression",6.0.0,6.0.8,HIGH,CWE-400;CWE-770;CWE-917
 CVE-2023-20866,2023-04-13T21:30:27Z,"Spring Session session ID can be logged to the standard output stream","org.springframework.session:spring-session-core",3.0.0,3.0.1,MODERATE,CWE-200
-CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.5.0,2.5.15,CRITICAL,
+CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",0,2.5.15,CRITICAL,
 CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.6.0,2.6.15,CRITICAL,
 CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",2.7.0,2.7.11,CRITICAL,
 CVE-2023-20873,2023-04-20T21:33:27Z,"Spring Boot Security Bypass with Wildcard Pattern Matching on Cloud Foundry","org.springframework.boot:spring-boot-actuator-autoconfigure",3.0.0,3.0.6,CRITICAL,
@@ -7305,6 +7307,8 @@ CVE-2024-22259,2024-03-16T06:30:27Z,"Spring Framework URL Parsing with Host Vali
 CVE-2024-22262,2024-04-16T06:30:28Z,"Spring Framework URL Parsing with Host Validation","org.springframework:spring-web",0,5.3.34,HIGH,
 CVE-2024-22262,2024-04-16T06:30:28Z,"Spring Framework URL Parsing with Host Validation","org.springframework:spring-web",6.0.0,6.0.19,HIGH,
 CVE-2024-22262,2024-04-16T06:30:28Z,"Spring Framework URL Parsing with Host Validation","org.springframework:spring-web",6.1.0,6.1.6,HIGH,
+CVE-2024-22271,2024-07-09T15:30:53Z,"Spring Cloud Function Framework vulnerable to Denial of Service","org.springframework.cloud:spring-cloud-function-context",4.0.0,4.0.8,HIGH,CWE-20
+CVE-2024-22271,2024-07-09T15:30:53Z,"Spring Cloud Function Framework vulnerable to Denial of Service","org.springframework.cloud:spring-cloud-function-context",4.1.0,4.1.2,HIGH,CWE-20
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",3.0.0,3.21.4,HIGH,CWE-502
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",3.22.0,3.22.1,HIGH,CWE-502
 CVE-2024-22369,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel SQL","org.apache.camel:camel-sql",4.0.0,4.0.4,HIGH,CWE-502
@@ -7671,10 +7675,16 @@ CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability i
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,0,2.23.6,CRITICAL,CWE-94;CWE-95
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,2.24.0,2.24.4,CRITICAL,CWE-94;CWE-95
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,2.25.0,2.25.2,CRITICAL,CWE-94;CWE-95
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",10.0.0-M1,10.1.0,HIGH,CWE-74
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",8.0.0,8.16.0,HIGH,CWE-74
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",9.0.0,9.18.0,HIGH,CWE-74
+CVE-2024-3653,2024-07-09T00:31:40Z,"Undertow Missing Release of Memory after Effective Lifetime vulnerability","io.undertow:undertow-core",0,,MODERATE,CWE-401
 CVE-2024-36543,2024-06-17T21:31:10Z,"STRIMZI incorrect access control",io.strimzi:strimzi,0,,HIGH,CWE-306;CWE-400
 CVE-2024-3656,2024-06-11T20:22:40Z,"Keycloak's admin API allows low privilege users to use administrative functions","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-269;CWE-284
 CVE-2024-37280,2024-06-13T18:31:58Z,"Elasticsearch StackOverflow vulnerability","org.elasticsearch:elasticsearch",8.13.1,8.14.0,MODERATE,CWE-122
 CVE-2024-37309,2024-06-13T19:39:06Z,"CrateDB has a Client initialized Session-Renegotiation DoS",io.crate:crate,0,5.7.2,MODERATE,CWE-770
+CVE-2024-37389,2024-07-08T09:32:22Z,"Apache NiFi vulnerable to Cross-site Scripting","org.apache.nifi:nifi-web-ui",1.10.0,1.27.0,MODERATE,CWE-79
+CVE-2024-37389,2024-07-08T09:32:22Z,"Apache NiFi vulnerable to Cross-site Scripting","org.apache.nifi:nifi-web-ui",2.0.0-M1,2.0.0-M4,MODERATE,CWE-79
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",13.10.3,14.10.21,CRITICAL,CWE-266;CWE-94
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",13.4.7,14.10.21,CRITICAL,CWE-266;CWE-94
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.5,CRITICAL,CWE-266;CWE-94
@@ -7686,9 +7696,12 @@ CVE-2024-38364,2024-06-25T17:07:32Z,"DSpace Cross Site Scripting (XSS) via a dep
 CVE-2024-38369,2024-06-24T18:00:16Z,"XWiki programming rights may be inherited by inclusion","org.xwiki.platform:xwiki-platform-rendering-macro-include",0,15.0-rc-1,CRITICAL,CWE-863
 CVE-2024-38374,2024-06-24T20:44:48Z,"Improper Restriction of XML External Entity Reference in org.cyclonedx:cyclonedx-core-java","org.cyclonedx:cyclonedx-core-java",2.1.0,9.0.4,HIGH,CWE-611
 CVE-2024-38460,2024-06-16T15:30:44Z,"SonarQube logs sensitive information","org.sonarsource.sonarqube:sonar-web",0,9.9.4,MODERATE,CWE-532
+CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-rs",0,,MODERATE,CWE-79
+CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-seb",0,,MODERATE,CWE-79
 CVE-2024-39458,2024-06-26T18:30:28Z,"Exposure of secrets through system log in Jenkins Structs Plugin","org.jenkins-ci.plugins:structs",0,338.v848422169819,LOW,CWE-200
 CVE-2024-39459,2024-06-26T18:30:28Z,"Secret file credentials stored unencrypted in rare cases by Plain Credentials Plugin ","org.jenkins-ci.plugins:plain-credentials",0,183.va,MODERATE,CWE-319
 CVE-2024-39460,2024-06-26T18:30:28Z,"Bitbucket OAuth access token exposed in the build log by Bitbucket Branch Source Plugin ","org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source",0,887.va,MODERATE,CWE-532
+CVE-2024-39901,2024-07-10T16:04:08Z,"OpenSearch Observability does not properly restrict access to private tenant resources","org.opensearch.plugin:opensearch-observability",0,2.14.0.0,MODERATE,CWE-639
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
@@ -7699,6 +7712,7 @@ CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",0,22.0.12,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",23.0.0,24.0.6,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",25.0.0,25.0.1,LOW,CWE-276
+CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","io.undertow:undertow-core",0,,HIGH,CWE-674
 CVE-2024-6162,2024-06-20T15:31:19Z,"Undertow's url-encoded request path information can be broken on ajp-listener","io.undertow:undertow-core",0,2.3.14.Final,HIGH,CWE-400
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79

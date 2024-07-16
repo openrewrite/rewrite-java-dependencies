@@ -24,8 +24,7 @@ import java.util.List;
 public class Range {
     List<Event> events;
 
-    @Nullable
-    public String getIntroduced() {
+    public @Nullable String getIntroduced() {
         for (Event event : events) {
             if (event.getIntroduced() != null) {
                 return event.getIntroduced();
@@ -34,8 +33,7 @@ public class Range {
         return null;
     }
 
-    @Nullable
-    public String getFixed() {
+    public @Nullable String getFixed() {
         for (Event event : events) {
             if (event.getFixed() != null) {
                 return event.getFixed();

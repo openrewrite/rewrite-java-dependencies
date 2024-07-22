@@ -3944,6 +3944,8 @@ CVE-2021-22060,2022-01-12T23:04:06Z,"Log entry injection in Spring Framework","o
 CVE-2021-22060,2022-01-12T23:04:06Z,"Log entry injection in Spring Framework","org.springframework:spring-core",5.3.0,5.3.14,MODERATE,
 CVE-2021-22095,2021-12-01T00:00:40Z,"Deserialization of Untrusted Data in Spring AMQP","org.springframework.amqp:spring-amqp",2.2.0,2.2.20,MODERATE,CWE-502
 CVE-2021-22095,2021-12-01T00:00:40Z,"Deserialization of Untrusted Data in Spring AMQP","org.springframework.amqp:spring-amqp",2.3.0,2.3.11,MODERATE,CWE-502
+CVE-2021-22096,2022-05-24T19:19:04Z,"Improper Output Neutralization for Logs in Spring Framework","org.springframework:spring",5.2.0,5.2.18,MODERATE,CWE-117
+CVE-2021-22096,2022-05-24T19:19:04Z,"Improper Output Neutralization for Logs in Spring Framework","org.springframework:spring",5.3.0,5.3.11,MODERATE,CWE-117
 CVE-2021-22096,2022-05-24T19:19:04Z,"Improper Output Neutralization for Logs in Spring Framework","org.springframework:spring-core",5.2.0,5.2.18,MODERATE,CWE-117
 CVE-2021-22096,2022-05-24T19:19:04Z,"Improper Output Neutralization for Logs in Spring Framework","org.springframework:spring-core",5.3.0,5.3.11,MODERATE,CWE-117
 CVE-2021-22097,2022-05-24T19:19:03Z,"Deserialization of Untrusted Data in Spring AMQP","org.springframework.amqp:spring-amqp",2.2.0,2.2.19,MODERATE,CWE-502
@@ -6762,6 +6764,7 @@ CVE-2023-41887,2023-09-12T13:52:54Z,"OpenRefine Remote Code execution in project
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",10.0.0,10.0.16,LOW,CWE-1390;CWE-287
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",11.0.0,11.0.16,LOW,CWE-1390;CWE-287
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",9.4.21,9.4.52,LOW,CWE-1390;CWE-287
+CVE-2023-41916,2024-07-15T09:36:22Z,"Apache Linkis DataSource allows arbitrary file reading","org.apache.linkis:linkis-datasource",1.4.0,1.6.0,MODERATE,CWE-552
 CVE-2023-41930,2023-09-06T15:30:26Z,"Path traversal in Jenkins Job Configuration History Plugin","org.jenkins-ci.plugins:jobConfigHistory",0,1229.v3039470161a_d,MODERATE,CWE-22
 CVE-2023-41931,2023-09-06T15:30:26Z,"XSS vulnerability in Jenkins Job Configuration History Plugin","org.jenkins-ci.plugins:jobConfigHistory",0,1229.v3039470161a_d,MODERATE,CWE-79
 CVE-2023-41932,2023-09-06T15:30:26Z,"Path traversal allows exploiting XXE vulnerability in Jenkins Job Configuration History Plugin","org.jenkins-ci.plugins:jobConfigHistory",0,1229.v3039470161a_d,MODERATE,CWE-611
@@ -6973,6 +6976,7 @@ CVE-2023-46749,2024-01-15T12:30:19Z,"Apache Shiro vulnerable to path traversal",
 CVE-2023-46749,2024-01-15T12:30:19Z,"Apache Shiro vulnerable to path traversal","org.apache.shiro:shiro-core",2.0.0alpha1,2.0.0-alpha4,MODERATE,CWE-22
 CVE-2023-46750,2023-12-14T09:30:19Z,"Open redirect in Apache Shiro","org.apache.shiro:shiro-web",0,1.13.0,MODERATE,CWE-601
 CVE-2023-46750,2023-12-14T09:30:19Z,"Open redirect in Apache Shiro","org.apache.shiro:shiro-web",2.0.0-alpha-1,2.0.0-alpha-4,MODERATE,CWE-601
+CVE-2023-46801,2024-07-15T09:36:22Z,"Apache Linkis DataSource remote code execution vulnerability","org.apache.linkis:linkis-datasource",1.4.0,1.6.0,HIGH,CWE-502
 CVE-2023-47112,2023-11-16T20:13:06Z,"Authenticated users can view job names and groups they do not have authorization to view",org.rundeck:rundeckapp,4.17.0,4.17.3,MODERATE,CWE-862
 CVE-2023-47320,2023-12-13T15:30:57Z,"Broken access control in Silverpeas","org.silverpeas.core:silverpeas-core-war",0,6.3.2,LOW,CWE-284
 CVE-2023-47320,2023-12-13T15:30:57Z,"Broken access control in Silverpeas","org.silverpeas.core:silverpeas-core-web",0,6.3.2,LOW,CWE-284
@@ -7055,6 +7059,7 @@ CVE-2023-49448,2023-12-05T15:30:38Z,"Cross-Site Request Forgery in JFinalCMS via
 CVE-2023-49485,2023-12-08T15:30:19Z,"Cross-site Scripting in JFinalCMS",com.jfinal:jfinal,0,,MODERATE,CWE-79
 CVE-2023-49486,2023-12-08T15:30:19Z,"Cross-site Scripting in JFinalCMS",com.jfinal:jfinal,0,,MODERATE,CWE-79
 CVE-2023-49487,2023-12-08T15:30:19Z,"Cross-site Scripting in JFinalCMS",com.jfinal:jfinal,0,,MODERATE,CWE-79
+CVE-2023-49566,2024-07-15T09:36:23Z,"Apache Linkis DataSource's JDBC Datasource Module with DB2 has JNDI Injection vulnerability","org.apache.linkis:linkis-datasource",0,1.6.0,HIGH,CWE-502
 CVE-2023-49620,2023-11-30T09:30:32Z,"Apache DolphinScheduler Missing Authorization vulnerability","org.apache.dolphinscheduler:dolphinscheduler-api",0,3.1.0,MODERATE,CWE-862
 CVE-2023-49620,2023-11-30T09:30:32Z,"Apache DolphinScheduler Missing Authorization vulnerability","org.apache.dolphinscheduler:dolphinscheduler-common",0,3.1.0,MODERATE,CWE-862
 CVE-2023-49620,2023-11-30T09:30:32Z,"Apache DolphinScheduler Missing Authorization vulnerability","org.apache.dolphinscheduler:dolphinscheduler-dao",0,3.1.0,MODERATE,CWE-862
@@ -7231,6 +7236,8 @@ CVE-2023-6886,2023-12-17T03:30:19Z,"Xnx3 Wangmarket Cross-Site Scripting vulnera
 CVE-2023-6911,2023-12-22T18:30:30Z,"WSO2 Registry Stored Cross Site Scripting (XSS) vulnerability","org.wso2.carbon.registry:carbon-registry",0,4.7.37,MODERATE,CWE-79
 CVE-2023-6927,2023-12-19T00:30:21Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-parent",0,,MODERATE,CWE-601
 CVE-2023-7148,2023-12-29T03:30:29Z,"ShifuML shifu code injection vulnerability",ml.shifu:shifu,0,,MODERATE,CWE-94
+CVE-2023-7272,2024-07-17T15:30:50Z,"Eclipse Parsson stack overflow when parsing deeply nested input","org.eclipse.parsson:parsson",0,1.0.4,HIGH,CWE-787
+CVE-2023-7272,2024-07-17T15:30:50Z,"Eclipse Parsson stack overflow when parsing deeply nested input","org.eclipse.parsson:parsson",1.1.0,1.1.3,HIGH,CWE-787
 CVE-2024-0758,2024-01-19T21:30:36Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 CVE-2024-1023,2024-03-27T09:30:40Z,"Eclipse Vert.x memory leak",io.vertx:vertx-core,4.4.5,4.4.7,MODERATE,CWE-119;CWE-200
 CVE-2024-1023,2024-03-27T09:30:40Z,"Eclipse Vert.x memory leak",io.vertx:vertx-core,4.5.0,4.5.2,MODERATE,CWE-119;CWE-200
@@ -7542,6 +7549,9 @@ CVE-2024-29025,2024-03-25T19:40:50Z,"Netty's HttpPostRequestDecoder can OOM","io
 CVE-2024-29131,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError adding property in AbstractListDelimiterHandler.flattenIterator()","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
 CVE-2024-29133,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError calling ListDelimiterHandler.flatten(Object, int) with a cyclical object tree","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
 CVE-2024-29392,2024-05-22T18:30:40Z,"Silverpeas Core vulnerable to Cross Site Scripting","org.silverpeas:silverpeas-core",0,,MODERATE,CWE-79
+CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",0,3.5.9,HIGH,CWE-918
+CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",3.6.0,3.6.4,HIGH,CWE-918
+CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",4.0.0,4.0.5,HIGH,CWE-918
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.11.0,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.7.1,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.0.0,3.0.4,MODERATE,CWE-863
@@ -7581,7 +7591,9 @@ CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public 
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-835
 CVE-2024-3046,2024-04-09T12:30:47Z,"Eclipse Kura LogServlet vulnerability","org.eclipse.kura:org.eclipse.kura.web2",2.0.600,,HIGH,CWE-303
+CVE-2024-30471,2024-07-17T09:30:49Z,"Apache StreamPipes potentially allows creation of multiple identical accounts","org.apache.streampipes:streampipes-parent",0,0.95.0,MODERATE,CWE-367
 CVE-2024-31033,2024-04-01T03:30:38Z,"Withdrawn: JJWT improperly generates signing keys","io.jsonwebtoken:jjwt-impl",0,,MODERATE,CWE-327
+CVE-2024-31411,2024-07-17T12:31:11Z,"Apache StreamPipes has potential remote code execution (RCE) via file upload","org.apache.streampipes:streampipes-parent",0,0.95.0,HIGH,CWE-434
 CVE-2024-31464,2024-04-10T17:07:27Z,"XWiki Platform: Password hash might be leaked by diff once the xobject holding them is deleted","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.4,MODERATE,CWE-200
 CVE-2024-31464,2024-04-10T17:07:27Z,"XWiki Platform: Password hash might be leaked by diff once the xobject holding them is deleted","org.xwiki.platform:xwiki-platform-oldcore",15.6-rc-1,15.9-rc-1,MODERATE,CWE-200
 CVE-2024-31464,2024-04-10T17:07:27Z,"XWiki Platform: Password hash might be leaked by diff once the xobject holding them is deleted","org.xwiki.platform:xwiki-platform-oldcore",5.0-rc-1,14.10.19,MODERATE,CWE-200
@@ -7598,6 +7610,7 @@ CVE-2024-31865,2024-04-09T18:30:22Z,"Apache Zeppelin: Cron arbitrary user impers
 CVE-2024-31866,2024-04-09T18:30:22Z,"Improper escaping in Apache Zeppelin","org.apache.zeppelin:zeppelin-interpreter",0.8.2,0.11.1,MODERATE,CWE-116
 CVE-2024-31867,2024-04-09T18:30:28Z,"Apache Zeppelin: LDAP search filter query Injection Vulnerability","org.apache.zeppelin:zeppelin-server",0.8.2,0.11.1,MODERATE,CWE-20;CWE-90
 CVE-2024-31868,2024-04-09T18:30:22Z,"Apache Zeppelin vulnerable to cross-site scripting in the helium module","org.apache.zeppelin:zeppelin-interpreter",0.8.2,0.11.1,MODERATE,CWE-116;CWE-79
+CVE-2024-31979,2024-07-17T09:30:49Z,"Apache StreamPipes has possibility of SSRF in pipeline element installation process","org.apache.streampipes:streampipes-parent",0,0.95.0,MODERATE,CWE-918
 CVE-2024-31981,2024-04-10T17:11:45Z,"XWiki Platform: Privilege escalation (PR) from user registration through PDFClass","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.4,CRITICAL,CWE-862
 CVE-2024-31981,2024-04-10T17:11:45Z,"XWiki Platform: Privilege escalation (PR) from user registration through PDFClass","org.xwiki.platform:xwiki-platform-oldcore",15.6-rc-1,15.10-rc-1,CRITICAL,CWE-862
 CVE-2024-31981,2024-04-10T17:11:45Z,"XWiki Platform: Privilege escalation (PR) from user registration through PDFClass","org.xwiki.platform:xwiki-platform-oldcore",3.0.1,14.10.20,CRITICAL,CWE-862
@@ -7628,6 +7641,9 @@ CVE-2024-31996,2024-04-10T17:16:37Z,"XWiki Commons missing escaping of `{` in Ve
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",0,14.10.19,CRITICAL,CWE-862
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",15.0-rc-1,15.5.4,CRITICAL,CWE-862
 CVE-2024-31997,2024-04-10T17:16:53Z,"XWiki Platform remote code execution from account through UIExtension parameters","org.xwiki.platform:xwiki-platform-uiextension-api",15.6-rc-1,15.9-rc-1,CRITICAL,CWE-862
+CVE-2024-32007,2024-07-19T09:32:06Z,"Apache CXF Denial of Service vulnerability in JOSE","org.apache.cxf:cxf-rt-rs-security-jose",0,3.5.9,MODERATE,CWE-20
+CVE-2024-32007,2024-07-19T09:32:06Z,"Apache CXF Denial of Service vulnerability in JOSE","org.apache.cxf:cxf-rt-rs-security-jose",3.6.0,3.6.4,MODERATE,CWE-20
+CVE-2024-32007,2024-07-19T09:32:06Z,"Apache CXF Denial of Service vulnerability in JOSE","org.apache.cxf:cxf-rt-rs-security-jose",4.0.0,4.0.5,MODERATE,CWE-20
 CVE-2024-32114,2024-05-02T09:30:48Z,"Apache ActiveMQ's default configuration doesn't secure the API web context","org.apache.activemq:apache-activemq",6.0.0,6.1.2,HIGH,CWE-1188
 CVE-2024-32656,2024-04-22T15:51:59Z,"Ant Media Server vulnerable to a local privilege escalation","io.antmedia:ant-media-server",2.6.0,2.9.0,HIGH,CWE-862
 CVE-2024-32888,2024-05-15T17:10:49Z,"Amazon JDBC Driver for Redshift SQL Injection via line comment generation","com.amazon.redshift:redshift-jdbc42",0,2.1.0.28,CRITICAL,CWE-89
@@ -7675,9 +7691,9 @@ CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability i
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,0,2.23.6,CRITICAL,CWE-94;CWE-95
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,2.24.0,2.24.4,CRITICAL,CWE-94;CWE-95
 CVE-2024-36401,2024-07-01T20:34:50Z,"Remote Code Execution (RCE) vulnerability in geoserver",org.geoserver:gs-wms,2.25.0,2.25.2,CRITICAL,CWE-94;CWE-95
-CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",10.0.0-M1,10.1.0,HIGH,CWE-74
-CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",8.0.0,8.16.0,HIGH,CWE-74
-CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-core",9.0.0,9.18.0,HIGH,CWE-74
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-util",10.0.0-M1,10.1.0,HIGH,CWE-74
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-util",8.0.0,8.16.0,HIGH,CWE-74
+CVE-2024-36522,2024-07-12T15:31:26Z,"Apache Wicket: Remote code execution via XSLT injection","org.apache.wicket:wicket-util",9.0.0,9.18.0,HIGH,CWE-74
 CVE-2024-3653,2024-07-09T00:31:40Z,"Undertow Missing Release of Memory after Effective Lifetime vulnerability","io.undertow:undertow-core",0,,MODERATE,CWE-401
 CVE-2024-36543,2024-06-17T21:31:10Z,"STRIMZI incorrect access control",io.strimzi:strimzi,0,,HIGH,CWE-306;CWE-400
 CVE-2024-3656,2024-06-11T20:22:40Z,"Keycloak's admin API allows low privilege users to use administrative functions","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-269;CWE-284
@@ -7701,8 +7717,12 @@ CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulner
 CVE-2024-39458,2024-06-26T18:30:28Z,"Exposure of secrets through system log in Jenkins Structs Plugin","org.jenkins-ci.plugins:structs",0,338.v848422169819,LOW,CWE-200
 CVE-2024-39459,2024-06-26T18:30:28Z,"Secret file credentials stored unencrypted in rare cases by Plain Credentials Plugin ","org.jenkins-ci.plugins:plain-credentials",0,183.va,MODERATE,CWE-319
 CVE-2024-39460,2024-06-26T18:30:28Z,"Bitbucket OAuth access token exposed in the build log by Bitbucket Branch Source Plugin ","org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source",0,887.va,MODERATE,CWE-532
-CVE-2024-39901,2024-07-10T16:04:08Z,"OpenSearch Observability does not properly restrict access to private tenant resources","org.opensearch.plugin:opensearch-observability",0,2.14.0.0,MODERATE,CWE-639
+CVE-2024-39900,2024-07-18T15:22:02Z,"The OpenSearch reporting plugin improperly controls tenancy access to reporting resources","org.opensearch.plugin:opensearch-reports-scheduler",0,2.14.0.0,MODERATE,CWE-639
+CVE-2024-39901,2024-07-10T16:04:08Z,"OpenSearch Observability does not properly restrict access to private tenant resources","org.opensearch.plugin:opensearch-observability",0,2.14.0.0,MODERATE,CWE-285;CWE-639
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
+CVE-2024-40642,2024-07-18T22:14:28Z,"Absent Input Validation in BinaryHttpParser","io.netty.incubator:netty-incubator-codec-bhttp",0,0.0.13.Final,HIGH,CWE-20
+CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",3.6.0,3.6.4,LOW,CWE-401
+CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",4.0.0,4.0.5,LOW,CWE-401
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79

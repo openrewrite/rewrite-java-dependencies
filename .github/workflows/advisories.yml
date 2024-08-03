@@ -19,10 +19,6 @@ jobs:
           cache: 'gradle'
           distribution: 'temurin'
           java-version: '17'
-      - name: Create jar and copy dependencies
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: jar deps
 
       # Update advisories
       - name: Checkout advisory-database
@@ -31,7 +27,7 @@ jobs:
           repository: github/advisory-database
           path: advisory-database
       - name: Update advisories
-        run: java -classpath "build/deps/*:build/libs/*" org.openrewrite.java.dependencies.github.ParseAdvisories advisory-database src/main/resources/advisories.csv
+        run: ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
       - name: Sort advisories
         run: sort --output=src/main/resources/advisories.csv src/main/resources/advisories.csv
 

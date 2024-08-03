@@ -19,10 +19,6 @@ jobs:
           cache: 'gradle'
           distribution: 'temurin'
           java-version: '17'
-      - name: Create jar and copy dependencies
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: jar deps
 
       # Update migrations
       - name: Checkout oga-maven-plugin
@@ -31,7 +27,7 @@ jobs:
           repository: jonathanlermitage/oga-maven-plugin
           path: oga-maven-plugin
       - name: Update migrations
-        run: java -classpath "build/deps/*:build/libs/*" org.openrewrite.java.dependencies.oldgroupids.ParseDefinitionMigrations oga-maven-plugin src/main/resources/migrations.csv
+        run: ./gradlew parseDefinitionMigrations --args="./oga-maven-plugin src/main/resources/migrations.csv"
 
       # Create pull request
       - name: Timestamp

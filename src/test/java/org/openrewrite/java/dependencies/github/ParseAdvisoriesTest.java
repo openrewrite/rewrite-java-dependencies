@@ -29,8 +29,8 @@ class ParseAdvisoriesTest {
 
     @Test
     void parseAdvisories(@TempDir Path tmp) throws Exception {
-        Path output = tmp.resolve("advisories.csv");
-        ParseAdvisories.parseAdvisories(new File("src/test/advisories"), output.toFile());
+        Path output = tmp.resolve("advisories-maven.csv");
+        ParseAdvisories.parseAdvisories(new File("src/test/advisories"), "Maven", output.toFile());
 
         List<String> allLines = Files.readAllLines(output);
         assertThat(allLines).containsExactly("CVE-2023-34150,2023-07-05T09:30:20Z,\"Apache Any23 vulnerable to excessive memory usage\",\"org.apache.any23:apache-any23\",0,,MODERATE,CWE-20;CWE-400");

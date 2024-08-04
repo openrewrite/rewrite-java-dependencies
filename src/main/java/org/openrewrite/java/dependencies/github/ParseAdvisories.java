@@ -120,6 +120,7 @@ public class ParseAdvisories {
 
         private static ObjectMapper getObjectMapper() {
             return new ObjectMapper()
+                    .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                     .registerModule(new JavaTimeModule());
         }

@@ -37,7 +37,7 @@ dependencies {
 }
 
 tasks {
-    // ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories.csv"
+    // ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
     val parseGithubAdvisoryDatabase by registering(JavaExec::class) {
         group = "generate"
         description = "Parse github/advisories-database and generate a CSV file."

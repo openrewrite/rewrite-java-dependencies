@@ -26,6 +26,5 @@ public class DatabaseSpecific {
     @Nullable
     String severity;
 
-    @JsonProperty("cwe_ids")
     List<String> cweIds;
 }

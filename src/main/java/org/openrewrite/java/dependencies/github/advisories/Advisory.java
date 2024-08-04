@@ -29,6 +29,5 @@ public class Advisory {
     List<String> aliases;
     String summary;
 
-    @JsonProperty("database_specific")
     DatabaseSpecific databaseSpecific;
 }

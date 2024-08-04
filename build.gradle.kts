@@ -37,9 +37,22 @@ dependencies {
 }
 
 tasks {
-    val deps by registering(Copy::class) {
-        from(configurations.runtimeClasspath)
-        into("build/deps")
+    // ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
+    val parseGithubAdvisoryDatabase by registering(JavaExec::class) {
+        group = "generate"
+        description = "Parse github/advisories-database and generate a CSV file."
+        mainClass = "org.openrewrite.java.dependencies.github.ParseAdvisories"
+        classpath = sourceSets.getByName("main").runtimeClasspath
+    }
+}
+
+tasks {
+    // ./gradlew parseDefinitionMigrations --args="./oga-maven-plugin src/main/resources/migrations.csv"
+    val parseDefinitionMigrations by registering(JavaExec::class) {
+        group = "generate"
+        description = "Parse oga-maven-plugin and generate a CSV file."
+        mainClass = "org.openrewrite.java.dependencies.oldgroupids.ParseDefinitionMigrations"
+        classpath = sourceSets.getByName("main").runtimeClasspath
     }
 }
 

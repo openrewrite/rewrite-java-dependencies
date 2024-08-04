@@ -40,8 +40,8 @@ import static java.util.Collections.emptySet;
 
 public class ParseAdvisories {
     public static void main(String[] args) throws IOException {
-        if (args.length != 2) {
-            System.err.println("Usage: ParseAdvisories <advisories-repo> <advisories-csv>");
+        if (args.length != 3) {
+            System.err.println("Usage: ParseAdvisories <advisories-repo> <ecosystem> <advisories-csv>");
             System.exit(1);
         }
         File advisoriesRepo = new File(args[0]);
@@ -49,27 +49,30 @@ public class ParseAdvisories {
             System.err.println("Advisories repo " + advisoriesRepo + " not readable");
             System.exit(1);
         }
-        File advisoriesCsv = new File(args[1]);
+        String ecosystem = args[1];
+        File advisoriesCsv = new File(args[2]);
         if (!advisoriesCsv.createNewFile() && !advisoriesCsv.canWrite()) {
             System.err.println("Advisories CSV " + advisoriesCsv + " not writable");
             System.exit(1);
         }
 
-        parseAdvisories(advisoriesRepo, advisoriesCsv);
+        parseAdvisories(advisoriesRepo, ecosystem, advisoriesCsv);
     }
 
-    static void parseAdvisories(File advisoriesRepoInput, File advisoriesCsvOutput) throws IOException {
+    static void parseAdvisories(File advisoriesRepoInput, String ecosystem, File advisoriesCsvOutput) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(advisoriesCsvOutput)) {
-            Files.walkFileTree(advisoriesRepoInput.toPath(), emptySet(), 16, new MavenAdvisoriesVisitor(fos));
+            Files.walkFileTree(advisoriesRepoInput.toPath(), emptySet(), 16, new MavenAdvisoriesVisitor(ecosystem, fos));
         }
     }
 
     private static final class MavenAdvisoriesVisitor extends SimpleFileVisitor<Path> {
+        private final String ecosystem;
         private final FileOutputStream fos;
         private final ObjectMapper reader;
         private final ObjectWriter writer;
 
-        public MavenAdvisoriesVisitor(FileOutputStream fos) {
+        public MavenAdvisoriesVisitor(String ecosystem, FileOutputStream fos) {
+            this.ecosystem = ecosystem;
             this.fos = fos;
             this.reader = getObjectMapper();
             this.writer = getObjectWriter();
@@ -89,7 +92,7 @@ public class ParseAdvisories {
 
                 Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
                 for (Affected affected : advisory.getAffected()) {
-                    if (affected.getPkg().getEcosystem().equalsIgnoreCase("Maven")
+                    if (affected.getPkg().getEcosystem().equalsIgnoreCase(ecosystem)
                             && affected.getRanges() != null
                             && !affected.getRanges().isEmpty()) {
                         Range range = affected.getRanges().iterator().next();
@@ -117,6 +120,7 @@ public class ParseAdvisories {
 
         private static ObjectMapper getObjectMapper() {
             return new ObjectMapper()
+                    .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                     .registerModule(new JavaTimeModule());
         }

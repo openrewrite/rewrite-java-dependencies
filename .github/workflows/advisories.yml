@@ -14,15 +14,13 @@ jobs:
       # Checkout and build parser
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v4
         with:
           cache: 'gradle'
           distribution: 'temurin'
           java-version: '17'
-      - name: Create jar and copy dependencies
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: jar deps
 
       # Update advisories
       - name: Checkout advisory-database
@@ -30,27 +28,32 @@ jobs:
         with:
           repository: github/advisory-database
           path: advisory-database
-      - name: Update advisories
-        run: java -classpath "build/deps/*:build/libs/*" org.openrewrite.java.dependencies.github.ParseAdvisories advisory-database src/main/resources/advisories.csv
-      - name: Sort advisories
-        run: sort --output=src/main/resources/advisories.csv src/main/resources/advisories.csv
 
-      # Create pull request
-      - name: Timestamp
-        run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          base: main
-          branch: advisories/${{ env.NOW }}
-          title: "[Auto] GitHub advisories as of ${{ env.NOW }}"
-          body: |
-            [Auto] GitHub advisories as of ${{ env.NOW }}.
-          commit-message: "[Auto] GitHub advisories as of ${{ env.NOW }}"
-          labels: enhancement
-      - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+      # Commit and push Maven advisories here
+      - name: configure-git-user
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: Create commit message
+        run: |
+          echo "MSG=[Auto] GitHub advisories as of $(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
+      - name: Commit and push to rewrite-java-dependencies
+        run: |
+          ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
+          sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
+          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main
+
+      # Load SSH deploy-key
+      - uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.REWRITE_NODEJS_DEPLOY_KEY }}
+
+      # Commit and push NPM advisories to rewrite-nodejs
+      - name: Commit and push to rewrite-nodejs
+        run: |
+          git clone --depth 1 git@github.com:openrewrite/rewrite-nodejs.git
+          ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database NPM rewrite-nodejs/src/main/resources/advisories-npm.csv"
+          cd rewrite-nodejs/
+          sort --output=src/main/resources/advisories-npm.csv src/main/resources/advisories-npm.csv
+          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main
+

@@ -14,6 +14,8 @@ jobs:
       # Checkout and build parser
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v4
         with:
           cache: 'gradle'
@@ -29,22 +31,13 @@ jobs:
       - name: Update migrations
         run: ./gradlew parseDefinitionMigrations --args="./oga-maven-plugin src/main/resources/migrations.csv"
 
-      # Create pull request
-      - name: Timestamp
-        run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          base: main
-          branch: migrations/${{ env.NOW }}
-          title: "[Auto] Old GroupId migrations as of ${{ env.NOW }}"
-          body: |
-            [Auto] Old GroupId migrations as of ${{ env.NOW }}.
-          commit-message: "[Auto] Old GroupId migrations as of ${{ env.NOW }}"
-          labels: enhancement
-      - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+      # Commit and push
+      - name: configure-git-user
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+      - name: Create timestamp
+        run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
+      - name: Commit and push
+        run: |
+          git diff-index --quiet HEAD src/main/resources/migrations.csv || git commit -m "[Auto] Old GroupId migrations as of ${{ env.NOW }}" src/main/resources/migrations.csv && git push origin main

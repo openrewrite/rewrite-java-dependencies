@@ -28,18 +28,32 @@ jobs:
         with:
           repository: github/advisory-database
           path: advisory-database
-      - name: Update advisories
-        run: ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
-      - name: Sort advisories
-        run: sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
 
-      # Commit and push
+      # Commit and push Maven advisories here
       - name: configure-git-user
         run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-      - name: Create timestamp
-        run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
-      - name: Commit and push
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: Create commit message
         run: |
-          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit -m "[Auto] GitHub advisories as of ${{ env.NOW }}" src/main/resources/advisories-maven.csv && git push origin main
+          echo "MSG=[Auto] GitHub advisories as of $(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
+      - name: Commit and push to rewrite-java-dependencies
+        run: |
+          ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
+          sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
+          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main
+
+      # Load SSH deploy-key
+      - uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.REWRITE_NODEJS_DEPLOY_KEY }}
+
+      # Commit and push NPM advisories to rewrite-nodejs
+      - name: Commit and push to rewrite-nodejs
+        run: |
+          git clone --depth 1 git@github.com:openrewrite/rewrite-nodejs.git
+          ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database NPM rewrite-nodejs/src/main/resources/advisories-npm.csv"
+          cd rewrite-nodejs/
+          sort --output=src/main/resources/advisories-npm.csv src/main/resources/advisories-npm.csv
+          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main
+

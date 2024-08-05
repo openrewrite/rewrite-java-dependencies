@@ -44,7 +44,7 @@ jobs:
           git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main
 
       # Load SSH deploy-key
-      - uses: webfactory/ssh-agent@v0.8.0
+      - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.REWRITE_NODEJS_DEPLOY_KEY }}
 

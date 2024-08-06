@@ -289,6 +289,7 @@ public class Sbom {
         @JacksonXmlProperty(isAttribute = true)
         String ref;
         @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "dependency")
         List<Dependency> dependencies;
     }
 }

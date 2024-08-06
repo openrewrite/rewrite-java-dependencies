@@ -53,6 +53,11 @@ public class SoftwareBillOfMaterials extends ScanningRecipe<SoftwareBillOfMateri
                "Places a file named sbom.xml adjacent to the Gradle or Maven build file.";
     }
 
+    @Override
+    public Set<String> getTags() {
+        return Collections.singleton("CycloneDX");
+    }
+
     public static class Accumulator {
         Set<Path> existingSboms = new LinkedHashSet<>();
         Set<Path> sbomPaths = new LinkedHashSet<>();

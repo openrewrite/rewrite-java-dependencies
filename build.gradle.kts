@@ -28,6 +28,7 @@ dependencies {
     runtimeOnly("org.openrewrite:rewrite-java-17")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     testImplementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")

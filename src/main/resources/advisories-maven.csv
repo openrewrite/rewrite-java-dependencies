@@ -4676,6 +4676,8 @@ CVE-2022-23496,2022-12-08T15:52:54Z,"Yauaa vulnerable to ArrayIndexOutOfBoundsEx
 CVE-2022-23496,2022-12-08T15:52:54Z,"Yauaa vulnerable to ArrayIndexOutOfBoundsException triggered by a crafted Sec-Ch-Ua-Full-Version-List","nl.basjes.parse.useragent:yauaa-trino",7.0.0,7.9.0,HIGH,CWE-755
 CVE-2022-23532,2023-01-13T21:28:46Z,"org.neo4j.procedure:apoc Path Traversal Vulnerability",org.neo4j.procedure:apoc,0,4.3.0.12,HIGH,CWE-22
 CVE-2022-23532,2023-01-13T21:28:46Z,"org.neo4j.procedure:apoc Path Traversal Vulnerability",org.neo4j.procedure:apoc,4.4.0.0,4.4.0.12,HIGH,CWE-22
+CVE-2022-23553,2024-08-05T21:18:58Z,"Alpine allows URL access filter bypass",us.springett:alpine,0,1.10.4,HIGH,CWE-863
+CVE-2022-23554,2024-08-05T21:18:58Z,"Alpine allows Authentication Filter bypass",us.springett:alpine,0,1.10.4,MODERATE,CWE-287;CWE-697
 CVE-2022-23596,2022-02-01T00:47:23Z,"Junrar vulnerable to infinite loop via extracting carefully crafted RAR archive",com.github.junrar:junrar,0,7.4.1,HIGH,CWE-400;CWE-835
 CVE-2022-23615,2022-02-09T21:21:53Z,"Partial authorization bypass on document save in xwiki-platform","org.xwiki.platform:xwiki-platform-oldcore",1.0,13.0,MODERATE,CWE-863
 CVE-2022-23616,2022-02-09T21:32:10Z,"Remote code execution in xwiki-platform","org.xwiki.platform:xwiki-platform-administration-ui",3.1-milestone-1,13.1RC1,HIGH,CWE-74
@@ -6046,6 +6048,7 @@ CVE-2023-28709,2023-07-06T21:14:59Z,"Apache Tomcat - Fix for CVE-2023-24998 was 
 CVE-2023-28709,2023-07-06T21:14:59Z,"Apache Tomcat - Fix for CVE-2023-24998 was incomplete","org.apache.tomcat.embed:tomcat-embed-core",9.0.71,9.0.74,HIGH,CWE-193
 CVE-2023-28709,2023-07-06T21:14:59Z,"Apache Tomcat - Fix for CVE-2023-24998 was incomplete","org.apache.tomcat:tomcat-coyote",8.5.85,8.5.88,HIGH,CWE-193
 CVE-2023-28754,2023-07-19T09:30:54Z,"Apache ShardingSphere-Agent Deserialization of Untrusted Data vulnerability","org.apache.shardingsphere:shardingsphere",0,5.4.0,HIGH,CWE-502
+CVE-2023-28857,2024-08-05T21:18:59Z,"Apereo CAS vulnerable to credential leaks for LDAP authentication","org.apereo.cas:cas-server-support-x509-core",6.5.0,6.6.6,MODERATE,CWE-200;CWE-522
 CVE-2023-28867,2023-03-27T03:30:16Z,"GraphQL Java vulnerable to stack consumption","com.graphql-java:graphql-java",0,"0.0.0-2023-03-20T01-49-44-80e3135",HIGH,CWE-770
 CVE-2023-28867,2023-03-27T03:30:16Z,"GraphQL Java vulnerable to stack consumption","com.graphql-java:graphql-java",1.2,17.5,HIGH,CWE-770
 CVE-2023-28867,2023-03-27T03:30:16Z,"GraphQL Java vulnerable to stack consumption","com.graphql-java:graphql-java",18.0,18.4,HIGH,CWE-770
@@ -6828,6 +6831,7 @@ CVE-2023-42795,2023-10-10T18:31:35Z,"Apache Tomcat Incomplete Cleanup vulnerabil
 CVE-2023-42795,2023-10-10T18:31:35Z,"Apache Tomcat Incomplete Cleanup vulnerability",org.apache.tomcat:tomcat,11.0.0-M1,11.0.0-M12,MODERATE,CWE-459
 CVE-2023-42795,2023-10-10T18:31:35Z,"Apache Tomcat Incomplete Cleanup vulnerability",org.apache.tomcat:tomcat,8.5.0,8.5.94,MODERATE,CWE-459
 CVE-2023-42795,2023-10-10T18:31:35Z,"Apache Tomcat Incomplete Cleanup vulnerability",org.apache.tomcat:tomcat,9.0.0-M1,9.0.81,MODERATE,CWE-459
+CVE-2023-42809,2024-08-05T21:29:22Z,"Redisson vulnerable to Deserialization of Untrusted Data",org.redisson:redisson,0,3.22.0,CRITICAL,CWE-502
 CVE-2023-4301,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin cross-site request forgery vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-352
 CVE-2023-4302,2023-08-22T00:31:10Z,"Jenkins Fortify Plugin missing permission check","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-862
 CVE-2023-4303,2023-08-22T00:31:11Z,"Jenkins Fortify Plugin HTML injection vulnerability","org.jenkins-ci.plugins:fortify",0,22.2.39,MODERATE,CWE-79
@@ -6865,6 +6869,10 @@ CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apa
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",11.0.0-M1,11.0.0-M12,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",8.5.0,8.5.94,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat.embed:tomcat-embed-core",9.0.0,9.0.81,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat:tomcat-coyote",10.0.0,10.1.14,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat:tomcat-coyote",11.0.0-M1,11.0.0-M12,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat:tomcat-coyote",8.5.0,8.5.94,MODERATE,CWE-400
+CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.apache.tomcat:tomcat-coyote",9.0.0,9.0.81,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:http2-common",10.0.0,10.0.17,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:http2-common",11.0.0,11.0.17,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:http2-common",9.3.0,9.4.53,MODERATE,CWE-400
@@ -6873,10 +6881,6 @@ CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.ecl
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:http2-server",9.3.0,9.4.53,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:jetty-http2-common",12.0.0,12.0.2,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:jetty-http2-server",12.0.0,12.0.2,MODERATE,CWE-400
-CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack",org.apache.tomcat:tomcat,10.0.0,10.1.14,MODERATE,CWE-400
-CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack",org.apache.tomcat:tomcat,11.0.0-M1,11.0.0-M12,MODERATE,CWE-400
-CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack",org.apache.tomcat:tomcat,8.5.0,8.5.94,MODERATE,CWE-400
-CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack",org.apache.tomcat:tomcat,9.0.0,9.0.81,MODERATE,CWE-400
 CVE-2023-44794,2023-10-25T18:32:23Z,"SaToken privilege escalation vulnerability",cn.dev33:sa-token-core,0,1.37.0,CRITICAL,CWE-281
 CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",0,3.7.2,CRITICAL,CWE-639
 CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.8.0,3.8.3,CRITICAL,CWE-639
@@ -6895,6 +6899,7 @@ CVE-2023-45137,2023-10-25T21:14:07Z,"XWiki Platform vulnerable to XSS with edit 
 CVE-2023-45137,2023-10-25T21:14:07Z,"XWiki Platform vulnerable to XSS with edit right in the create document form for existing pages","org.xwiki.platform:xwiki-platform-web-templates",15.0-rc-1,15.5-rc-1,CRITICAL,CWE-79
 CVE-2023-45138,2023-10-17T02:19:16Z,"XWiki Change Request Application UI XSS and remote code execution through change request title","org.xwiki.contrib.changerequest:application-changerequest-ui",0.11,1.9.2,CRITICAL,CWE-79
 CVE-2023-45144,2023-10-17T12:51:01Z,"XWiki Identity Oauth Privilege escalation (PR)/remote code execution from login screen through unescaped URL parameter","com.xwiki.identity-oauth:identity-oauth-ui",1.0,1.6,CRITICAL,CWE-79
+CVE-2023-45146,2024-08-05T21:29:22Z,"XXL-RPC Deserialization of Untrusted Data vulnerability",com.xuxueli:xxl-rpc-core,0,,CRITICAL,CWE-502
 CVE-2023-45277,2023-10-19T18:30:30Z,"Yamcs Path Traversal vulnerability",org.yamcs:yamcs,0,5.8.7,HIGH,CWE-22
 CVE-2023-45278,2023-10-19T18:30:30Z,"Yamcs API Directory Traversal vulnerability",org.yamcs:yamcs,0,5.8.7,CRITICAL,CWE-22
 CVE-2023-45279,2023-10-20T00:30:24Z,"Yamcs Cross-site Scripting vulnerability",org.yamcs:yamcs,0,5.8.7,MODERATE,CWE-79
@@ -7700,6 +7705,7 @@ CVE-2024-36042,2024-06-03T06:30:53Z,"Silverpeas authentication bypass","org.silv
 CVE-2024-36114,2024-06-02T22:30:02Z,"Decompressors can crash the JVM and leak memory content in Aircompressor",io.airlift:aircompressor,0,0.27,HIGH,CWE-125;CWE-787
 CVE-2024-36115,2024-08-02T21:12:54Z,"Reposilite artifacts vulnerable to Stored Cross-site Scripting","com.reposilite:reposilite-backend",3.3.0,3.5.12,HIGH,CWE-79
 CVE-2024-36116,2024-08-02T21:13:13Z,"Path traversal in Reposilite javadoc file expansion (arbitrary file creation/overwrite) (`GHSL-2024-073`)","com.reposilite:reposilite-backend",3.3.0,3.5.12,HIGH,CWE-22
+CVE-2024-36117,2024-08-05T21:29:27Z,"Reposilite Arbitrary File Read vulnerability","com.reposilite:reposilite-backend",3.3.0,3.5.12,HIGH,CWE-22
 CVE-2024-36121,2024-06-05T16:53:49Z,"BoringSSLAEADContext in Netty Repeats Nonces","io.netty.incubator:netty-incubator-codec-ohttp",0.0.3.Final,0.0.11.Final,MODERATE,CWE-190;CWE-200
 CVE-2024-36124,2024-06-04T17:38:31Z,"iq80 Snappy out-of-bounds read when uncompressing data, leading to JVM crash",org.iq80.snappy:snappy,0,0.5,MODERATE,CWE-125
 CVE-2024-36263,2024-06-12T15:31:45Z,"Apache Submarine Server Core has a SQL Injection Vulnerability","org.apache.submarine:submarine-server-core",0,,HIGH,CWE-89
@@ -7769,6 +7775,15 @@ CVE-2024-41667,2024-07-25T14:15:32Z,"OpenAM FreeMarker template injection","org.
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",11.8-rc-1,15.10.8,CRITICAL,CWE-79;CWE-80
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",16.0.0-rc-1,16.3.0-rc-1,CRITICAL,CWE-79;CWE-80
 CVE-2024-41948,2024-07-31T18:48:40Z,"biscuit-java vulnerable to public key confusion in third party block",org.biscuitsec:biscuit,3.0.0,4.0.0,LOW,CWE-1259
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",0,2.452.4,CRITICAL,CWE-22
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,CRITICAL,CWE-22
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.470,2.471,CRITICAL,CWE-22
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",0,3206.3208,CRITICAL,CWE-22
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3248,3248.3250,CRITICAL,CWE-22
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3256,3256.3258,CRITICAL,CWE-22
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",0,2.452.4,MODERATE,CWE-285
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,MODERATE,CWE-285
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.470,2.471,MODERATE,CWE-285
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pushed Authorization Requests (PAR)","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-200;CWE-922
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22

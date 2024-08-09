@@ -40,8 +40,7 @@ import static java.util.Collections.singletonList;
 @Value
 public class Sbom {
 
-    @Nullable
-    public static Sbom.Bom sbomFrom(Marker m) {
+    public static @Nullable Sbom.Bom sbomFrom(Marker m) {
         if(m instanceof MavenResolutionResult) {
             return sbomFrom((MavenResolutionResult) m);
         } else if(m instanceof GradleProject) {

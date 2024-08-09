@@ -36,7 +36,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class SoftwareBillOfMaterials extends ScanningRecipe<SoftwareBillOfMaterials.Accumulator> {
 
     @Override
@@ -79,7 +79,7 @@ public class SoftwareBillOfMaterials extends ScanningRecipe<SoftwareBillOfMateri
         //noinspection NullableProblems
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(Tree tree, ExecutionContext executionContext) {
+            public Tree visit(Tree tree, ExecutionContext ctx) {
                 SourceFile s = (SourceFile) tree;
                 if (s.getSourcePath().toString().endsWith("sbom.xml")) {
                     acc.existingSboms.add(s.getSourcePath());

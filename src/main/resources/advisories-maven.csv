@@ -1289,6 +1289,7 @@ CVE-2017-15694,2019-06-26T01:09:35Z,"Argument Injection in Apache Geode server",
 CVE-2017-15695,2022-05-13T01:18:20Z,"Apache Geode vulnerable to Incorrect Authorization","org.apache.geode:geode-core",1.0.0,1.5.0,HIGH,CWE-863
 CVE-2017-15696,2022-05-14T03:37:08Z,"Apache Geode configuration request authorization vulnerability","org.apache.geode:geode-core",1.0.0,1.4.0,HIGH,CWE-200
 CVE-2017-15697,2022-05-14T03:45:22Z,"Apache NiFi XSS issue in context path handling",org.apache.nifi:nifi,1.0.0,1.5.0,CRITICAL,CWE-20
+CVE-2017-15700,2022-05-14T03:53:41Z,"Apache Sling Authentication Service vulnerability","org.apache.sling:org.apache.sling.auth.core",1.4.0,1.4.2,HIGH,CWE-200
 CVE-2017-15701,2018-10-19T16:41:15Z,"Apache Qpid Broker-J vulnerable to Denial of Service (DoS) via uncontrolled resource consumption","org.apache.qpid:qpid-broker",6.1.0,6.1.5,HIGH,CWE-400
 CVE-2017-15702,2018-10-19T16:41:04Z,"Apache Qpid Broker vulnerable to authentication port spoofing","org.apache.qpid:qpid-broker",0.18,6.0.0,CRITICAL,
 CVE-2017-15703,2019-10-25T19:42:50Z,"Denial of service via deserialization attack in nifi","org.apache.nifi:nifi-framework-cluster-protocol",0,1.5.0,MODERATE,CWE-502
@@ -2761,7 +2762,7 @@ CVE-2019-16568,2022-05-24T17:03:48Z,"Jenkins SCTMExecutor Plugin stores credenti
 CVE-2019-16569,2022-05-24T17:03:48Z,"CSRF vulnerability in Jenkins Mantis Plugin ","org.jenkins-ci.plugins:mantis",0,,MODERATE,CWE-352
 CVE-2019-16570,2022-05-24T17:03:48Z,"Jenkins RapidDeploy Plugin Cross-Site Request Forgery plugin","org.jenkins-ci.plugins:rapiddeploy-jenkins",0,,MODERATE,CWE-352
 CVE-2019-16571,2022-05-24T17:03:48Z,"Jenkins RapidDeploy Plugin missing permission check","org.jenkins-ci.plugins:rapiddeploy-jenkins",0,,MODERATE,CWE-285;CWE-862
-CVE-2019-16572,2022-05-24T17:03:49Z,"Jenkins Weibo Plugin stores credentials unencrypted in its global configuration file","org.jenkins-ci.plugins:weibo",0,,LOW,CWE-256;CWE-522
+CVE-2019-16572,2022-05-24T17:03:49Z,"Jenkins Weibo Plugin stores credentials unencrypted in its global configuration file","org.jenkins-ci.plugins:weibo",0,,LOW,CWE-1024;CWE-256;CWE-522
 CVE-2019-16573,2022-05-24T17:03:48Z,"Jenkins Alauda DevOps Pipeline Plugin vulnerable to cross-site request forgery","com.alauda.jenkins.plugins:alauda-devops-pipeline",0,,HIGH,CWE-352
 CVE-2019-16574,2022-05-24T17:03:49Z,"Jenkins Alauda DevOps Pipeline Plugin allows attackers with Overall/Read permission to capture credentials stored in Jenkins","com.alauda.jenkins.plugins:alauda-devops-pipeline",0,,MODERATE,CWE-285;CWE-862
 CVE-2019-16575,2022-05-24T17:03:49Z,"Cross-Site Request Forgery in Jenkins Alauda Kubernetes Suport Plugin","io.alauda.jenkins.plugins:alauda-kubernetes-support",0,,HIGH,CWE-352
@@ -7775,6 +7776,10 @@ CVE-2024-41667,2024-07-25T14:15:32Z,"OpenAM FreeMarker template injection","org.
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",11.8-rc-1,15.10.8,CRITICAL,CWE-79;CWE-80
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",16.0.0-rc-1,16.3.0-rc-1,CRITICAL,CWE-79;CWE-80
 CVE-2024-41948,2024-07-31T18:48:40Z,"biscuit-java vulnerable to public key confusion in third party block",org.biscuitsec:biscuit,3.0.0,4.0.0,LOW,CWE-1259
+CVE-2024-42467,2024-08-09T18:21:07Z,"CometVisu Backend for openHAB affected by SSRF/XSS","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,HIGH,CWE-918
+CVE-2024-42468,2024-08-09T18:24:14Z,"CometVisu Backend for openHAB has a path traversal vulnerability","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,MODERATE,CWE-22
+CVE-2024-42469,2024-08-09T18:24:07Z,"CometVisu Backend for openHAB affected by RCE through path traversal","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,CRITICAL,CWE-22
+CVE-2024-42470,2024-08-09T18:21:22Z,"CometVisu Backend for openHAB has a sensitive information disclosure vulnerability","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,MODERATE,CWE-862
 CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",0,2.452.4,CRITICAL,CWE-22
 CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,CRITICAL,CWE-22
 CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.470,2.471,CRITICAL,CWE-22

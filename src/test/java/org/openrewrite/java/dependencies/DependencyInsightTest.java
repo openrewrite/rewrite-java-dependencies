@@ -40,7 +40,7 @@ class DependencyInsightTest implements RewriteTest {
                 <groupId>com.example</groupId>
                 <artifactId>foo</artifactId>
                 <version>1.0.0</version>
-                
+
                 <dependencies>
                   <dependency>
                     <groupId>org.springframework</groupId>
@@ -55,7 +55,7 @@ class DependencyInsightTest implements RewriteTest {
                 <groupId>com.example</groupId>
                 <artifactId>foo</artifactId>
                 <version>1.0.0</version>
-                
+
                 <dependencies>
                   <!--~~>--><dependency>
                     <groupId>org.springframework</groupId>

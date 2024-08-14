@@ -18,7 +18,7 @@ package org.openrewrite.java.dependencies.oldgroupids;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.openrewrite.internal.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @Data
 @AllArgsConstructor

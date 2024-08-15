@@ -64,11 +64,9 @@ public class RemoveDependency extends Recipe {
                "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
     }
 
-    @Nullable
-    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
+    org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
 
-    @Nullable
-    org.openrewrite.maven.RemoveDependency removeMavenDependency;
+    org.openrewrite.maven.@Nullable RemoveDependency removeMavenDependency;
 
     public RemoveDependency(
         String groupId,

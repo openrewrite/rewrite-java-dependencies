@@ -21,9 +21,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Builder;
 import lombok.Value;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.marker.Marker;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
@@ -40,7 +40,7 @@ import static java.util.Collections.singletonList;
 @Value
 public class Sbom {
 
-    public static @Nullable Sbom.Bom sbomFrom(Marker m) {
+    public static Sbom.@Nullable Bom sbomFrom(Marker m) {
         if(m instanceof MavenResolutionResult) {
             return sbomFrom((MavenResolutionResult) m);
         } else if(m instanceof GradleProject) {

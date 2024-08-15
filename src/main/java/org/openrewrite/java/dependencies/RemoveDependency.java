@@ -17,9 +17,9 @@ package org.openrewrite.java.dependencies;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.Option;
 import org.openrewrite.Recipe;
-import org.openrewrite.internal.lang.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,11 +64,9 @@ public class RemoveDependency extends Recipe {
                "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
     }
 
-    @Nullable
-    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
+    org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
 
-    @Nullable
-    org.openrewrite.maven.RemoveDependency removeMavenDependency;
+    org.openrewrite.maven.@Nullable RemoveDependency removeMavenDependency;
 
     public RemoveDependency(
         String groupId,

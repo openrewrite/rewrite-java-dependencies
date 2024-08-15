@@ -17,7 +17,7 @@ package org.openrewrite.java.dependencies.github.advisories;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
-import org.openrewrite.internal.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

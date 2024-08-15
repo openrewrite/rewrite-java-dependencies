@@ -16,7 +16,7 @@
 package org.openrewrite.java.dependencies.github.advisories;
 
 import lombok.Value;
-import org.openrewrite.internal.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

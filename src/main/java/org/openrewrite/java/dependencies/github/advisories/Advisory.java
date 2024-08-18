@@ -15,7 +15,6 @@
  */
 package org.openrewrite.java.dependencies.github.advisories;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 import java.time.ZonedDateTime;

@@ -3684,7 +3684,7 @@ CVE-2020-7744,2021-04-22T16:15:15Z,"Remote Code Execution and download tracking 
 CVE-2020-7780,2022-02-09T23:06:40Z,"Cross-Site Request Forgery","com.softwaremill.akka-http-session:core_2.11",0,0.5.11,MODERATE,CWE-352
 CVE-2020-7780,2022-02-09T23:06:40Z,"Cross-Site Request Forgery","com.softwaremill.akka-http-session:core_2.12",0,0.5.11,MODERATE,CWE-352
 CVE-2020-7780,2022-02-09T23:06:40Z,"Cross-Site Request Forgery","com.softwaremill.akka-http-session:core_2.13",0,0.5.11,MODERATE,CWE-352
-CVE-2020-7961,2022-05-24T17:12:05Z,"Deserialization of Untrusted Data in Liferay Portal","com.liferay.portal:com.liferay.portal-kernel",0,7.2.1,CRITICAL,CWE-502
+CVE-2020-7961,2022-05-24T17:12:05Z,"Deserialization of Untrusted Data in Liferay Portal","com.liferay.portal:com.liferay.portal.kernel",0,7.2.1,CRITICAL,CWE-502
 CVE-2020-8022,2022-02-09T23:01:49Z,"Incorrect Default Permissions in Apache Tomcat",org.apache.tomcat:tomcat,0,8.0.53,HIGH,CWE-276
 CVE-2020-8022,2022-02-09T23:01:49Z,"Incorrect Default Permissions in Apache Tomcat",org.apache.tomcat:tomcat,9.0.0,9.0.35,HIGH,CWE-276
 CVE-2020-8441,2022-05-24T17:09:22Z,"Deserialization of Untrusted Data in JYaml",org.jyaml:jyaml,0,,CRITICAL,CWE-502
@@ -7195,7 +7195,7 @@ CVE-2023-51656,2023-12-21T12:30:29Z,"Apache IoTDB: Unsafe deserialize map in Syn
 CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",0,3.7.5,MODERATE,CWE-20
 CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",3.8.0,3.8.1,MODERATE,CWE-20
 CVE-2023-51770,2024-02-20T12:31:00Z,"Arbitrary File Read Vulnerability in Apache Dolphinscheduler","org.apache.dolphinscheduler:dolphinscheduler",0,3.2.1,HIGH,CWE-94
-CVE-2023-51775,2024-02-29T03:33:14Z,"jose4j denial of service via specifically crafted JWE",org.bitbucket.b_c:jose4j,0,0.9.4,MODERATE,
+CVE-2023-51775,2024-02-29T03:33:14Z,"jose4j denial of service via specifically crafted JWE",org.bitbucket.b_c:jose4j,0,0.9.4,MODERATE,CWE-400
 CVE-2023-51784,2024-01-03T12:30:21Z,"Apache InLong Manager Remote Code Execution vulnerability","org.apache.inlong:manager-pojo",1.5.0,1.10.0,CRITICAL,CWE-94
 CVE-2023-51785,2024-01-03T12:30:21Z,"Apache InLong Manager Arbitrary File Read Vulnerability","org.apache.inlong:manager-pojo",1.5.0,1.10.0,HIGH,CWE-502
 CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability",io.crate:crate,0,5.2.11,HIGH,CWE-287
@@ -7354,8 +7354,8 @@ CVE-2024-22497,2024-01-23T21:30:20Z,"Cross-site Scripting in JFinal",com.jfinal:
 CVE-2024-22533,2024-02-02T03:30:32Z,"Beetl Server-Side Template Injection vulnerability",com.ibeetl:beetl-core,0,3.15.13.RELEASE,CRITICAL,CWE-94
 CVE-2024-22567,2024-02-05T21:30:31Z,"mingSoft MCMS File Upload vulnerability",net.mingsoft:ms-mcms,0,,HIGH,CWE-434
 CVE-2024-22588,2024-05-24T19:00:28Z,"Kwik does not discard unused encryption keys",tech.kwik:kwik,0,0.8,MODERATE,CWE-327
-CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.12.0-alpha1,1.12.0-alpha9,MODERATE,
-CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.7.0,1.11.2,MODERATE,
+CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.12.0-alpha1,1.12.0-alpha9,HIGH,CWE-502
+CVE-2024-22871,2024-02-29T03:33:18Z,"Reading specially crafted serializable objects from an untrusted source may cause an infinite loop and denial of service",org.clojure:clojure,1.7.0,1.11.2,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",3.0.0,3.21.4,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",3.22.0,3.22.1,HIGH,CWE-502
 CVE-2024-23114,2024-02-20T15:31:06Z,"Deserialization of Untrusted Data in Apache Camel CassandraQL","org.apache.camel:camel-cassandraql",4.0.0,4.0.4,HIGH,CWE-502
@@ -7519,7 +7519,7 @@ CVE-2024-27138,2024-03-01T18:30:23Z,"Apache Archiva Incorrect Authorization vuln
 CVE-2024-27139,2024-03-01T18:30:23Z,"Apache Archiva Incorrect Authorization vulnerability","org.apache.archiva:archiva",2.0.0,,HIGH,CWE-863
 CVE-2024-27140,2024-03-01T18:30:23Z,"Apache Archiva Reflected Cross-site Scripting vulnerability","org.apache.archiva:archiva-common",2.0.0,,MODERATE,CWE-79
 CVE-2024-27181,2024-08-02T12:31:43Z,"Apache Linkis vulnerable to privilege escalation",org.apache.linkis:linkis,0,1.6.0,MODERATE,CWE-269
-CVE-2024-27182,2024-08-02T12:31:43Z,"Apache Linkis arbitrary file deletion vulnerability",org.apache.linkis:linkis,0,1.6.0,HIGH,CWE-552
+CVE-2024-27182,2024-08-02T12:31:43Z,"Apache Linkis arbitrary file deletion vulnerability",org.apache.linkis:linkis,0,1.6.0,MODERATE,CWE-552
 CVE-2024-27309,2024-04-12T09:33:40Z,"Apache Kafka: Potential incorrect access control during migration from ZK mode to KRaft mode","org.apache.kafka:kafka-metadata",3.5.0,3.6.2,MODERATE,CWE-863
 CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Archive Extraction Vulnerability Allows Unauthorized File Modification","org.apache.pulsar:pulsar-functions-worker",2.11.0,2.11.4,HIGH,CWE-22
 CVE-2024-27317,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker's Archive Extraction Vulnerability Allows Unauthorized File Modification","org.apache.pulsar:pulsar-functions-worker",2.4.0,2.10.6,HIGH,CWE-22
@@ -7579,22 +7579,23 @@ CVE-2024-29392,2024-05-22T18:30:40Z,"Silverpeas Core vulnerable to Cross Site Sc
 CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",0,3.5.9,MODERATE,CWE-918
 CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",3.6.0,3.6.4,MODERATE,CWE-918
 CVE-2024-29736,2024-07-19T09:32:06Z,"Apache CXF: SSRF vulnerability via WADL stylesheet parameter","org.apache.cxf:cxf-rt-rs-service-description",4.0.0,4.0.5,MODERATE,CWE-918
+CVE-2024-29831,2024-08-12T15:30:49Z,"Apache DolphinScheduler: RCE by arbitrary js execution","org.apache.dolphinscheduler:dolphinscheduler",0,3.2.2,HIGH,CWE-20
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.11.0,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",2.7.1,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.0.0,3.0.4,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.1.0,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.2.0,3.2.2,MODERATE,CWE-863
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk18on",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk18on",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.",org.bouncycastle:bc-fips,0,1.0.2.5,MODERATE,CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk18on",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk18on",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-125;CWE-400
+CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.",org.bouncycastle:bc-fips,0,1.0.2.5,MODERATE,CWE-125;CWE-400
 CVE-2024-29868,2024-06-24T12:30:38Z,"Apache StreamPipes: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG) in Recovery Token Generation","org.apache.streampipes:streampipes-resource-management",0.69.0,0.95.0,CRITICAL,CWE-338
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-203
@@ -7617,6 +7618,7 @@ CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public 
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-835
+CVE-2024-30188,2024-08-12T15:30:49Z,"Apache DolphinScheduler: Resource File Read And Write Vulnerability","org.apache.dolphinscheduler:dolphinscheduler",3.1.0,3.2.2,HIGH,CWE-20
 CVE-2024-3046,2024-04-09T12:30:47Z,"Eclipse Kura LogServlet vulnerability","org.eclipse.kura:org.eclipse.kura.web2",2.0.600,,HIGH,CWE-303
 CVE-2024-30471,2024-07-17T09:30:49Z,"Apache StreamPipes potentially allows creation of multiple identical accounts","org.apache.streampipes:streampipes-parent",0,0.95.0,MODERATE,CWE-367
 CVE-2024-31033,2024-04-01T03:30:38Z,"Withdrawn: JJWT improperly generates signing keys","io.jsonwebtoken:jjwt-impl",0,,MODERATE,CWE-327
@@ -7773,6 +7775,7 @@ CVE-2024-40642,2024-07-18T22:14:28Z,"Absent Input Validation in BinaryHttpParser
 CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",3.6.0,3.6.4,LOW,CWE-401
 CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",4.0.0,4.0.5,LOW,CWE-401
 CVE-2024-41667,2024-07-25T14:15:32Z,"OpenAM FreeMarker template injection","org.openidentityplatform.openam:openam-oauth2",0,15.0.4,HIGH,CWE-94
+CVE-2024-41909,2024-08-12T18:30:47Z,"Apache MINA SSHD: integrity check bypass","org.apache.sshd:sshd-common",0,2.12.0,HIGH,CWE-354
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",11.8-rc-1,15.10.8,CRITICAL,CWE-79;CWE-80
 CVE-2024-41947,2024-07-31T16:54:36Z,"XWiki Platform vulnerable to Cross-Site Scripting (XSS) through conflict resolution","org.xwiki.platform:xwiki-platform-web-templates",16.0.0-rc-1,16.3.0-rc-1,CRITICAL,CWE-79;CWE-80
 CVE-2024-41948,2024-07-31T18:48:40Z,"biscuit-java vulnerable to public key confusion in third party block",org.biscuitsec:biscuit,3.0.0,4.0.0,LOW,CWE-1259
@@ -7780,15 +7783,16 @@ CVE-2024-42467,2024-08-09T18:21:07Z,"CometVisu Backend for openHAB affected by S
 CVE-2024-42468,2024-08-09T18:24:14Z,"CometVisu Backend for openHAB has a path traversal vulnerability","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,MODERATE,CWE-22
 CVE-2024-42469,2024-08-09T18:24:07Z,"CometVisu Backend for openHAB affected by RCE through path traversal","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,CRITICAL,CWE-22
 CVE-2024-42470,2024-08-09T18:21:22Z,"CometVisu Backend for openHAB has a sensitive information disclosure vulnerability","org.openhab.ui.bundles:org.openhab.ui.cometvisu",0,4.2.1,MODERATE,CWE-862
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",0,2.452.4,CRITICAL,CWE-22
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,CRITICAL,CWE-22
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.470,2.471,CRITICAL,CWE-22
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",0,3206.3208,CRITICAL,CWE-22
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3248,3248.3250,CRITICAL,CWE-22
-CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3256,3256.3258,CRITICAL,CWE-22
-CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",0,2.452.4,MODERATE,CWE-285
-CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,MODERATE,CWE-285
-CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.470,2.471,MODERATE,CWE-285
+CVE-2024-42681,2024-08-15T18:31:51Z,"Improper Preservation of Permissions in xxl-job",com.xuxueli:xxl-job-core,0,,MODERATE,CWE-281
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",0,2.452.4,CRITICAL,CWE-22;CWE-754
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,CRITICAL,CWE-22;CWE-754
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:jenkins-core",2.470,2.471,CRITICAL,CWE-22;CWE-754
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",0,3206.3208,CRITICAL,CWE-22;CWE-754
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3248,3248.3250,CRITICAL,CWE-22;CWE-754
+CVE-2024-43044,2024-08-07T15:30:42Z,"Jenkins Remoting library arbitrary file read vulnerability","org.jenkins-ci.main:remoting",3256,3256.3258,CRITICAL,CWE-22;CWE-754
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",0,2.452.4,MODERATE,CWE-285;CWE-862
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.460,2.462.1,MODERATE,CWE-285;CWE-862
+CVE-2024-43045,2024-08-07T15:30:42Z,"Jenkins does not perform a permission check in an HTTP endpoint","org.jenkins-ci.main:jenkins-core",2.470,2.471,MODERATE,CWE-285;CWE-862
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pushed Authorization Requests (PAR)","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-200;CWE-922
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
@@ -7801,7 +7805,9 @@ CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credenti
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",25.0.0,25.0.1,LOW,CWE-276
 CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","io.undertow:undertow-core",0,,HIGH,CWE-674
 CVE-2024-6162,2024-06-20T15:31:19Z,"Undertow's url-encoded request path information can be broken on ajp-listener","io.undertow:undertow-core",0,2.3.14.Final,HIGH,CWE-400
+CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,2.0.0,,MODERATE,CWE-79
+CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",4.0.0,,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,4.0.0,,MODERATE,CWE-79
 CVE-2024-6960,2024-07-21T12:30:48Z,"H2O vulnerable to Deserialization of Untrusted Data",ai.h2o:h2o-core,0,,HIGH,CWE-502
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653

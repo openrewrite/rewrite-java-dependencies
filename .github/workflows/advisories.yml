@@ -41,7 +41,7 @@ jobs:
         run: |
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
           sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main
+          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main)
 
       # Load SSH deploy-key
       - uses: webfactory/ssh-agent@v0.9.0
@@ -55,5 +55,5 @@ jobs:
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database NPM rewrite-nodejs/src/main/resources/advisories-npm.csv"
           cd rewrite-nodejs/
           sort --output=src/main/resources/advisories-npm.csv src/main/resources/advisories-npm.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main
+          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main)
 

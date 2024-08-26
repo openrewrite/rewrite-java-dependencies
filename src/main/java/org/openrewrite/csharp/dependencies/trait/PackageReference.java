@@ -16,7 +16,8 @@
 package org.openrewrite.csharp.dependencies.trait;
 
 import lombok.Value;
-import org.openrewrite.*;
+import org.openrewrite.Cursor;
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.trait.SimpleTraitMatcher;
 import org.openrewrite.trait.Trait;
 import org.openrewrite.xml.ChangeTagAttribute;

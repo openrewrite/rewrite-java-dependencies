@@ -17,13 +17,16 @@ package org.openrewrite.csharp.dependencies.trait;
 
 import lombok.Value;
 import org.openrewrite.Cursor;
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.trait.SimpleTraitMatcher;
 import org.openrewrite.trait.Trait;
+import org.openrewrite.xml.ChangeTagAttribute;
 import org.openrewrite.xml.XPathMatcher;
 import org.openrewrite.xml.tree.Xml;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -34,6 +37,18 @@ public class PackageReference implements Trait<Xml.Tag> {
 
     String include;
     String version;
+
+    public Xml.Tag withVersion(String newVersion) {
+        Xml.Tag tag = getTree();
+        if (!Objects.equals(this.version, newVersion)) {
+            InMemoryExecutionContext ctx = new InMemoryExecutionContext();
+            tag = (Xml.Tag) new ChangeTagAttribute("//PackageReference", "Version", newVersion, this.version, null)
+                    .getVisitor().visitNonNull(tag, ctx);
+            tag = (Xml.Tag) new ChangeTagAttribute("/packages/package", "version", newVersion, this.version, null)
+                    .getVisitor().visitNonNull(tag, ctx);
+        }
+        return tag;
+    }
 
     public static class Matcher extends SimpleTraitMatcher<PackageReference> {
         XPathMatcher packageReference = new XPathMatcher("//PackageReference");

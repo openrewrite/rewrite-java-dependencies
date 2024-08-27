@@ -30,12 +30,12 @@ import org.openrewrite.semver.Semver;
 public class DependencyInsight extends Recipe {
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 
-    @Option(displayName = "Artifact pattern",
-            description = "Artifact ID glob pattern used to match dependencies.",
+    @Option(displayName = "Package pattern",
+            description = "Package glob pattern used to match dependencies.",
             example = "Microsoft*",
             required = false)
     @Nullable
-    String artifactIdPattern;
+    String packagePattern;
 
     @Option(displayName = "Version",
             description = "Match only dependencies with the specified version. " +
@@ -68,8 +68,8 @@ public class DependencyInsight extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new PackageReference.Matcher().asVisitor((ref, ctx) -> {
-            if (artifactIdPattern != null &&
-                !StringUtils.matchesGlob(ref.getInclude(), artifactIdPattern)) {
+            if (packagePattern != null &&
+                !StringUtils.matchesGlob(ref.getInclude(), packagePattern)) {
                 return ref.getTree();
             }
 

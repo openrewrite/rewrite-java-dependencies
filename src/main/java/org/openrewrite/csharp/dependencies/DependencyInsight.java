@@ -15,15 +15,36 @@
  */
 package org.openrewrite.csharp.dependencies;
 
-import org.openrewrite.ExecutionContext;
-import org.openrewrite.Recipe;
-import org.openrewrite.TreeVisitor;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+import org.jspecify.annotations.Nullable;
+import org.openrewrite.*;
 import org.openrewrite.csharp.dependencies.trait.PackageReference;
+import org.openrewrite.internal.StringUtils;
 import org.openrewrite.marker.SearchResult;
 import org.openrewrite.maven.table.DependenciesInUse;
+import org.openrewrite.semver.Semver;
 
+@Value
+@EqualsAndHashCode(callSuper = false)
 public class DependencyInsight extends Recipe {
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
+
+    @Option(displayName = "Artifact pattern",
+            description = "Artifact ID glob pattern used to match dependencies.",
+            example = "Microsoft*",
+            required = false)
+    @Nullable
+    String artifactIdPattern;
+
+    @Option(displayName = "Version",
+            description = "Match only dependencies with the specified version. " +
+                          "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used. " +
+                          "All versions are searched by default.",
+            example = "1.x",
+            required = false)
+    @Nullable
+    String version;
 
     @Override
     public String getDisplayName() {
@@ -36,8 +57,27 @@ public class DependencyInsight extends Recipe {
     }
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> v = super.validate();
+        if (version != null) {
+            v = v.and(Semver.validate(version, null));
+        }
+        return v;
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new PackageReference.Matcher().asVisitor((ref, ctx) -> {
+            if (artifactIdPattern != null &&
+                !StringUtils.matchesGlob(ref.getInclude(), artifactIdPattern)) {
+                return ref.getTree();
+            }
+
+            if (version != null &&
+                !Semver.validate(version, null).getValue().isValid(null, ref.getVersion())) {
+                return ref.getTree();
+            }
+
             dependenciesInUse.insertRow(ctx, new DependenciesInUse.Row(
                     null,
                     null,

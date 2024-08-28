@@ -44,7 +44,7 @@ public class PackageReference implements Trait<Xml.Tag> {
             InMemoryExecutionContext ctx = new InMemoryExecutionContext();
             tag = (Xml.Tag) new ChangeTagAttribute("//PackageReference", "Version", newVersion, this.version, null)
                     .getVisitor().visitNonNull(tag, ctx);
-            tag = (Xml.Tag) new ChangeTagAttribute("/packages/package", "version", newVersion, this.version, null)
+            tag = (Xml.Tag) new ChangeTagAttribute("//package", "version", newVersion, this.version, null)
                     .getVisitor().visitNonNull(tag, ctx);
         }
         return tag;

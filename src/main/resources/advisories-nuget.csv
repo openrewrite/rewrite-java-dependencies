@@ -2164,12 +2164,12 @@ CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment f
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Host,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209
 CVE-2024-43377,2024-08-20T18:32:26Z,"Umbraco CMS Improper Access Control vulnerability",Umbraco.Cms,14.0.0,14.1.2,MODERATE,CWE-284
-CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","Serilog.Enrichers.ClientInfo",0,2.1.0,MODERATE,CWE-348
+CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","Serilog.Enrichers.ClientInfo",0,2.1.0,MODERATE,CWE-348;CWE-79
 CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-93
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,2.0.0,,MODERATE,CWE-79
-CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,,MODERATE,CWE-79
-CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,4.0.0,,MODERATE,CWE-79
+CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,5.0.0,MODERATE,CWE-79
+CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,4.0.0,5.0.0,MODERATE,CWE-79
 GHSA-259p-rvjx-ffwg,2024-02-08T18:24:21Z,"Panel::Software Customized WiX .be TEMP folder is vulnerable to DLL redirection attacks that allow the attacker to escalate privileges",PanelSW.Custom.WiX,0,3.15.0-a44,HIGH,CWE-426
 GHSA-2m65-m22p-9wjw,2022-08-10T00:00:18Z,"Duplicate Advisory: .NET Information Disclosure Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",3.1.0,3.1.28,MODERATE,
 GHSA-2m65-m22p-9wjw,2022-08-10T00:00:18Z,"Duplicate Advisory: .NET Information Disclosure Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",6.0.0,6.0.8,MODERATE,

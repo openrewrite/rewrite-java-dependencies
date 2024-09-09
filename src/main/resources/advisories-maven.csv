@@ -6670,7 +6670,7 @@ CVE-2023-39010,2023-07-28T15:30:23Z,"Code injection in BoofCV",org.boofcv:boofcv
 CVE-2023-39013,2023-07-28T15:30:23Z,"Code injection in Duke","no.priv.garshol.duke:duke",0,,CRITICAL,CWE-74;CWE-94
 CVE-2023-39015,2023-07-28T15:30:23Z,"Code injection in webmagic-core","us.codecraft:webmagic-core",0,,CRITICAL,CWE-94
 CVE-2023-39018,2023-07-28T15:30:23Z,"FFmpeg discovered to contain a code injection vulnerability in the component net.bramp.ffmpeg.FFmpeg.<constructor>",net.bramp.ffmpeg:ffmpeg,0,,CRITICAL,CWE-94
-CVE-2023-39020,2023-07-28T15:30:23Z,"Code injection in stanford-parser","edu.stanford.nlp:stanford-parser",0,,CRITICAL,CWE-94
+CVE-2023-39020,2023-07-28T15:30:23Z,"Code injection in stanford-parser","edu.stanford.nlp:stanford-parser",0,4.5.5,CRITICAL,CWE-94
 CVE-2023-39021,2023-07-28T15:30:23Z,"Code injection in wix-embedded-mysql","com.wix:wix-embedded-mysql",0,,CRITICAL,CWE-94
 CVE-2023-39022,2023-07-28T15:30:23Z,"Code injection in oscore",opensymphony:oscore,0,,CRITICAL,CWE-94
 CVE-2023-39106,2023-08-21T18:31:23Z,"Nacos Spring vulnerable to Unsafe Deserialization","com.alibaba.nacos:nacos-spring-context",0,,HIGH,CWE-502
@@ -7546,7 +7546,7 @@ CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allo
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",3.0.0,3.0.3,HIGH,CWE-20
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",3.1.0,3.1.3,HIGH,CWE-20
 CVE-2024-27894,2024-03-12T21:30:59Z,"Apache Pulsar: Pulsar Functions Worker Allows Unauthorized File Access and Unauthorized HTTP/HTTPS Proxying","org.apache.pulsar:pulsar-functions-worker",3.2.0,3.2.1,HIGH,CWE-20
-CVE-2024-28087,2024-05-15T18:30:35Z,"Bonitasoft Runtime Community edition's contains an insecure direct object references vulnerability","org.bonitasoft.engine:bonita-server",0,10.1.0.W11,MODERATE,CWE-639
+CVE-2024-28087,2024-05-15T18:30:35Z,"Bonitasoft Runtime Community edition's contains an insecure direct object references vulnerability","org.bonitasoft.engine:bonita-server",0,10.1.0.W11,MODERATE,CWE-284;CWE-639
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",2.11.0,2.11.4,MODERATE,CWE-863
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",2.7.1,2.10.6,MODERATE,CWE-863
 CVE-2024-28098,2024-03-12T21:30:59Z,"Apache Pulsar: Improper Authorization For Topic-Level Policy Management","org.apache.pulsar:pulsar-broker",3.0.0,3.0.3,MODERATE,CWE-863
@@ -7752,13 +7752,13 @@ CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",15.0-rc-1,15.5.5,CRITICAL,CWE-266;CWE-94
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",15.6-rc-1,15.10.6,CRITICAL,CWE-266;CWE-94
 CVE-2024-37899,2024-06-20T16:19:14Z,"XWiki Platform allows remote code execution from user account","org.xwiki.platform:xwiki-platform-oldcore",16.0.0-rc-1,16.0.0,CRITICAL,CWE-266;CWE-94
-CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",15.0-rc-1,15.5.5,MODERATE,CWE-96
-CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",15.6-rc-1,15.10.6,MODERATE,CWE-96
-CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",16.0.0-rc-1,16.0.0,MODERATE,CWE-96
-CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",4.2-milestone-3,14.10.21,MODERATE,CWE-96
-CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",15.0-rc-1,15.5.5,CRITICAL,CWE-862;CWE-95
-CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",15.6-rc-1,15.10.2,CRITICAL,CWE-862;CWE-95
-CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",9.2-rc-1,14.10.21,CRITICAL,CWE-862;CWE-95
+CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",15.0-rc-1,15.5.5,MODERATE,CWE-94;CWE-96
+CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",15.6-rc-1,15.10.6,MODERATE,CWE-94;CWE-96
+CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",16.0.0-rc-1,16.0.0,MODERATE,CWE-94;CWE-96
+CVE-2024-37900,2024-07-31T15:21:06Z,"XWiki Platform vulnerable to Cross-site Scripting through attachment filename in uploader","org.xwiki.platform:xwiki-platform-web-war",4.2-milestone-3,14.10.21,MODERATE,CWE-94;CWE-96
+CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",15.0-rc-1,15.5.5,CRITICAL,CWE-862;CWE-94;CWE-95
+CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",15.6-rc-1,15.10.2,CRITICAL,CWE-862;CWE-94;CWE-95
+CVE-2024-37901,2024-07-31T15:24:37Z,"XWiki Platform vulnerable to remote code execution from account via SearchSuggestConfigSheet","org.xwiki.platform:xwiki-platform-search-ui",9.2-rc-1,14.10.21,CRITICAL,CWE-862;CWE-94;CWE-95
 CVE-2024-37902,2024-06-17T21:20:44Z,"DeepJavaLibrary API absolute path traversal",ai.djl:api,0.1.0,0.28.0,CRITICAL,CWE-22
 CVE-2024-3825,2024-04-17T15:30:43Z,"BlazeMeter Jenkins plugin vulnerable to Cross-Site Request Forgery","com.blazemeter.plugins:BlazeMeterJenkinsPlugin",0,4.22,MODERATE,CWE-352
 CVE-2024-38364,2024-06-25T17:07:32Z,"DSpace Cross Site Scripting (XSS) via a deposited HTML/XML document","org.dspace:dspace-server-webapp",7.0,7.6.2,LOW,CWE-79
@@ -7822,8 +7822,15 @@ CVE-2024-43400,2024-08-19T21:49:07Z,"XWiki Platform allows XSS through XClass na
 CVE-2024-43400,2024-08-19T21:49:07Z,"XWiki Platform allows XSS through XClass name in string properties","org.xwiki.platform:xwiki-platform-oldcore",16.0.0-rc-1,16.0.0,CRITICAL,CWE-79;CWE-96
 CVE-2024-43401,2024-08-19T21:49:15Z,"In XWiki Platform, payloads stored in content is executed when a user with script/programming right edit them","org.xwiki.platform:xwiki-platform-web-templates",0,15.10-rc-1,CRITICAL,CWE-269;CWE-862
 CVE-2024-44076,2024-08-19T03:30:48Z,"Microcks's POST /api/import and POST /api/export endpoints allow non-administrator access","io.github.microcks:microcks-app",0,1.10.0,MODERATE,CWE-269;CWE-863
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.dstu2016may",0,6.3.23,HIGH,CWE-611
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.dstu3",0,6.3.23,HIGH,CWE-611
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r4",0,6.3.23,HIGH,CWE-611
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r4b",0,6.3.23,HIGH,CWE-611
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r5",0,6.3.23,HIGH,CWE-611
+CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.utilities",0,6.3.23,HIGH,CWE-611
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pushed Authorization Requests (PAR)","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-200;CWE-922
+CVE-2024-4629,2024-09-03T21:31:12Z,"Keycloak has a brute force login protection bypass","org.keycloak:keycloak-services",0,24.0.4,MODERATE,CWE-837
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
@@ -7836,10 +7843,13 @@ CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","i
 CVE-2024-6162,2024-06-20T15:31:19Z,"Undertow's url-encoded request path information can be broken on ajp-listener","io.undertow:undertow-core",0,2.3.14.Final,HIGH,CWE-400
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,2.0.0,,MODERATE,CWE-79
-CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",4.0.0,,MODERATE,CWE-79
-CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,4.0.0,,MODERATE,CWE-79
+CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",4.0.0,5.0.0,MODERATE,CWE-79
+CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,4.0.0,5.0.0,MODERATE,CWE-79
 CVE-2024-6960,2024-07-21T12:30:48Z,"H2O vulnerable to Deserialization of Untrusted Data",ai.h2o:h2o-core,0,,HIGH,CWE-502
 CVE-2024-7885,2024-08-21T15:30:54Z,"Undertow vulnerable to Race Condition","io.undertow:undertow-core",0,,HIGH,CWE-362
+CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,HIGH,CWE-297
+CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-client",4.3.0,4.5.10,MODERATE,CWE-770
+CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-server",4.3.0,4.5.10,MODERATE,CWE-770
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74

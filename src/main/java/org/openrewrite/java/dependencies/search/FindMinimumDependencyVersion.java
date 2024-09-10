@@ -184,7 +184,8 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                                         Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
         StaticVersionComparator versionComparator = new StaticVersionComparator();
         for (ResolvedDependency dep : resolved) {
-            if (StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern)) {
+            if (StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern) &&
+                StringUtils.matchesGlob(dep.getArtifactId(), artifactIdPattern)) {
                 acc.merge(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()),
                         dep.getGav(), (d1, d2) -> versionComparator.compare(
                                 versionParser.transform(d1.getVersion()),

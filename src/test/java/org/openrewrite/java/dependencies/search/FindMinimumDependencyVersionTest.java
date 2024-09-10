@@ -28,7 +28,7 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new FindMinimumDependencyVersion("com.fasterxml.jackson*", "*", "2.14-2.16"));
+        spec.recipe(new FindMinimumDependencyVersion("com.fasterxml.jackson*", "jackson-core", "2.14-2.16"));
     }
 
     @Test
@@ -117,10 +117,7 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
                 }
                 """,
               """
-                /*~~(com.fasterxml.jackson.core:jackson-annotations:2.14.0
-                com.fasterxml.jackson.core:jackson-core:2.14.0
-                com.fasterxml.jackson.core:jackson-databind:2.14.0
-                com.fasterxml.jackson:jackson-bom:2.14.0)~~>*/plugins { id 'java' }
+                /*~~(com.fasterxml.jackson.core:jackson-core:2.14.0)~~>*/plugins { id 'java' }
                 repositories { mavenCentral() }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'

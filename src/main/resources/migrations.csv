@@ -77,6 +77,7 @@ com.graphql-java,"graphql-spring-boot-test-autoconfigure","com.graphql-java-kick
 com.graphql-java,"voyager-spring-boot-autoconfigure","com.graphql-java-kickstart","voyager-spring-boot-autoconfigure",
 com.graphql-java,"voyager-spring-boot-starter","com.graphql-java-kickstart","voyager-spring-boot-starter",
 com.hotels.beans,bean-utils-library,com.hotels.beans,bull-bean-transformer,
+com.hp.hpl.jena,,org.apache.jena,,"Jena was originally developed by researchers in HP Labs. (...) The project team successfully applied to have Jena adopted by the Apache Software Foundation in November 2010"
 com.ibatis,ibatis-common,com.ibatis,ibatis2-common,
 com.ibatis,ibatis-dao,com.ibatis,ibatis2-dao,
 com.ibatis,ibatis-sqlmap,com.ibatis,ibatis2-sqlmap,

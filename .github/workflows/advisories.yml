@@ -37,11 +37,16 @@ jobs:
       - name: Create commit message
         run: |
           echo "MSG=[Auto] GitHub advisories as of $(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
-      - name: Commit and push to rewrite-java-dependencies
+      - name: Commit and push Maven dependency vulnerabilities to rewrite-java-dependencies
         run: |
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
           sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main
+          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main)
+      - name: Commit and push Nuget dependency vulnerabilities to rewrite-java-dependencies
+        run: |
+          ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Nuget src/main/resources/advisories-nuget.csv"
+          sort --output=src/main/resources/advisories-nuget.csv src/main/resources/advisories-nuget.csv
+          git diff-index --quiet HEAD src/main/resources/advisories-nuget.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-nuget.csv && git push origin main)
 
       # Load SSH deploy-key
       - uses: webfactory/ssh-agent@v0.9.0
@@ -49,11 +54,11 @@ jobs:
           ssh-private-key: ${{ secrets.REWRITE_NODEJS_DEPLOY_KEY }}
 
       # Commit and push NPM advisories to rewrite-nodejs
-      - name: Commit and push to rewrite-nodejs
+      - name: Commit and push Npm dependency vulnerabilities to rewrite-nodejs
         run: |
           git clone --depth 1 git@github.com:openrewrite/rewrite-nodejs.git
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database NPM rewrite-nodejs/src/main/resources/advisories-npm.csv"
           cd rewrite-nodejs/
           sort --output=src/main/resources/advisories-npm.csv src/main/resources/advisories-npm.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main
+          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main)
 

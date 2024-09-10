@@ -26,7 +26,7 @@ class DependencyInsightTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyInsight());
+        spec.recipe(new DependencyInsight(null, null));
     }
 
     @Test
@@ -99,6 +99,89 @@ class DependencyInsightTest implements RewriteTest {
                 <!--~~(NuGet.Server:2.11.2)~~>--><package id="NuGet.Server" version="2.11.2" targetFramework="net46" />
                 <!--~~(RouteMagic:1.3)~~>--><package id="RouteMagic" version="1.3" targetFramework="net46" />
                 <!--~~(WebActivatorEx:2.1.0)~~>--><package id="WebActivatorEx" version="2.1.0" targetFramework="net46" />
+              </packages>
+              """,
+            spec -> spec.path("packages.config")
+          )
+        );
+    }
+
+    @Test
+    void matchesArtifactId() {
+        // Taken from https://learn.microsoft.com/en-us/nuget/reference/packages-config
+        rewriteRun(
+          spec -> spec.recipe(new DependencyInsight("Microsoft.*", null)),
+          xml(
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <package id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" version="1.0.0" targetFramework="net46" />
+                <package id="Newtonsoft.Json" version="8.0.3" allowedVersions="[8,10)" targetFramework="net46" />
+              </packages>
+              """,
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <!--~~(Microsoft.CodeDom.Providers.DotNetCompilerPlatform:1.0.0)~~>--><package id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" version="1.0.0" targetFramework="net46" />
+                <package id="Newtonsoft.Json" version="8.0.3" allowedVersions="[8,10)" targetFramework="net46" />
+              </packages>
+              """,
+            spec -> spec.path("packages.config")
+          )
+        );
+    }
+
+    @Test
+    void matchesVersion() {
+        // Taken from https://learn.microsoft.com/en-us/nuget/reference/packages-config
+        rewriteRun(
+          spec -> spec.recipe(new DependencyInsight(null, "2.1.x")),
+          xml(
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <package id="Microsoft.Web.Xdt" version="2.1.1" targetFramework="net46" />
+                <package id="NuGet.Core" version="2.11.1" targetFramework="net46" />
+                <package id="WebActivatorEx" version="2.1.0" targetFramework="net46" />
+              </packages>
+              """,
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <!--~~(Microsoft.Web.Xdt:2.1.1)~~>--><package id="Microsoft.Web.Xdt" version="2.1.1" targetFramework="net46" />
+                <package id="NuGet.Core" version="2.11.1" targetFramework="net46" />
+                <!--~~(WebActivatorEx:2.1.0)~~>--><package id="WebActivatorEx" version="2.1.0" targetFramework="net46" />
+              </packages>
+              """,
+            spec -> spec.path("packages.config")
+          )
+        );
+    }
+
+    @Test
+    void matchesArtifactIdAndVersion() {
+        // Taken from https://learn.microsoft.com/en-us/nuget/reference/packages-config
+        rewriteRun(
+          spec -> spec.recipe(new DependencyInsight("Microsoft.*", "2.1.x")),
+          xml(
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <package id="Microsoft.Web.Xdt" version="2.1.1" targetFramework="net46" />
+                <package id="WebActivatorEx" version="2.1.0" targetFramework="net46" />
+              </packages>
+              """,
+            //language=xml
+            """
+              <?xml version="1.0" encoding="utf-8"?>
+              <packages>
+                <!--~~(Microsoft.Web.Xdt:2.1.1)~~>--><package id="Microsoft.Web.Xdt" version="2.1.1" targetFramework="net46" />
+                <package id="WebActivatorEx" version="2.1.0" targetFramework="net46" />
               </packages>
               """,
             spec -> spec.path("packages.config")

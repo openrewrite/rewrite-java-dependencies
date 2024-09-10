@@ -60,20 +60,20 @@ public class DependencyInsight extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern,  version,null)
+            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null)
                     .getVisitor();
             final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, null, version, false)
                     .getVisitor();
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(!(tree instanceof SourceFile)) {
+                if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
                 SourceFile s = (SourceFile) tree;
-                if(gdi.isAcceptable(s, ctx)) {
+                if (gdi.isAcceptable(s, ctx)) {
                     s = (SourceFile) gdi.visitNonNull(s, ctx);
-                }
-                if(mdi.isAcceptable(s, ctx)) {
+                } else if (mdi.isAcceptable(s, ctx)) {
                     s = (SourceFile) mdi.visitNonNull(s, ctx);
                 }
                 return s;

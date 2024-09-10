@@ -4,7 +4,7 @@ name: Update the Old GroupId migrations CSV
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: 0 11 * * MON
+    - cron: 0 10 * * MON
 
 jobs:
   update-migrations:
@@ -40,4 +40,4 @@ jobs:
         run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
       - name: Commit and push
         run: |
-          git diff-index --quiet HEAD src/main/resources/migrations.csv || git commit -m "[Auto] Old GroupId migrations as of ${{ env.NOW }}" src/main/resources/migrations.csv && git push origin main
+          git diff-index --quiet HEAD src/main/resources/migrations.csv || (git commit -m "[Auto] Old GroupId migrations as of ${{ env.NOW }}" src/main/resources/migrations.csv && git push origin main)

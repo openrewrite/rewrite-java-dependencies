@@ -6783,7 +6783,7 @@ CVE-2023-41886,2023-09-12T13:52:05Z,"OpenRefine vulnerable to arbitrary file rea
 CVE-2023-41887,2023-09-12T13:52:54Z,"OpenRefine Remote Code execution in project import with mysql jdbc url attack",org.openrefine:database,0,3.7.5,CRITICAL,CWE-89
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",10.0.0,10.0.16,LOW,CWE-1390;CWE-287
 CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",11.0.0,11.0.16,LOW,CWE-1390;CWE-287
-CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",9.4.21,9.4.52,LOW,CWE-1390;CWE-287
+CVE-2023-41900,2023-09-15T13:36:10Z,"Jetty's OpenId Revoked authentication allows one request","org.eclipse.jetty:jetty-openid",9.4.21,9.4.52.v20230823,LOW,CWE-1390;CWE-287
 CVE-2023-41916,2024-07-15T09:36:22Z,"Apache Linkis DataSource allows arbitrary file reading","org.apache.linkis:linkis-datasource",1.4.0,1.6.0,MODERATE,CWE-552
 CVE-2023-41930,2023-09-06T15:30:26Z,"Path traversal in Jenkins Job Configuration History Plugin","org.jenkins-ci.plugins:jobConfigHistory",0,1229.v3039470161a_d,MODERATE,CWE-22
 CVE-2023-41931,2023-09-06T15:30:26Z,"XSS vulnerability in Jenkins Job Configuration History Plugin","org.jenkins-ci.plugins:jobConfigHistory",0,1229.v3039470161a_d,MODERATE,CWE-79
@@ -7033,7 +7033,7 @@ CVE-2023-48241,2023-11-20T21:00:44Z,"Whole content of all documents of all wikis
 CVE-2023-48241,2023-11-20T21:00:44Z,"Whole content of all documents of all wikis exposed to anybody with view right on Solr suggest service","org.xwiki.platform:xwiki-platform-search-solr-query",6.3-milestone-2,14.10.15,HIGH,CWE-285
 CVE-2023-48292,2023-11-20T21:01:07Z,"Run Shell Command allows Cross-Site Request Forgery","org.xwiki.contrib:xwiki-application-admintools",4.4,4.5.1,CRITICAL,CWE-352
 CVE-2023-48293,2023-11-20T21:01:25Z,"Cross-Site Request Forgery with QueryOnXWiki allows arbitrary database queries","org.xwiki.contrib:xwiki-application-admintools",0,4.5.1,HIGH,CWE-352
-CVE-2023-48362,2024-07-24T09:30:40Z,"XML External Entity Reference (XXE) in the XML Format Plugin in Apache Drill","org.apache.drill.exec:drill-java-exec",1.19.0,1.21.2,MODERATE,CWE-611
+CVE-2023-48362,2024-07-24T09:30:40Z,"XML External Entity Reference (XXE) in the XML Format Plugin in Apache Drill","org.apache.drill.exec:drill-java-exec",1.19.0,1.21.2,HIGH,CWE-611
 CVE-2023-48396,2024-07-30T09:32:05Z,"Apache SeaTunnel Web Authentication vulnerability","org.apache.seatunnel:seatunnel-web",0,1.0.1,HIGH,CWE-290
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-csrf-reactive",0,2.16.11.Final,HIGH,CWE-148;CWE-863
 CVE-2023-4853,2023-09-20T12:30:22Z,"Quarkus HTTP vulnerable to incorrect evaluation of permissions","io.quarkus:quarkus-csrf-reactive",3.0.0,3.2.6.Final,HIGH,CWE-148;CWE-863
@@ -7259,6 +7259,7 @@ CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Ent
 CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Entity attack",org.wso2.am:wso2am,0,4.0.0-beta,MODERATE,CWE-611
 CVE-2023-6837,2023-12-15T12:30:25Z,"Multiple WSO2 products vulnerable to perform user impersonatoin using JIT provisioning","org.wso2.carbon.identity.framework:org.wso2.carbon.identity.application.authentication.framework",0,5.20.254,HIGH,
 CVE-2023-6837,2023-12-15T12:30:25Z,"Multiple WSO2 products vulnerable to perform user impersonatoin using JIT provisioning","org.wso2.identity.apps:authentication-portal",0,1.6.179.1,HIGH,
+CVE-2023-6841,2024-09-10T18:30:44Z,"Keycloak Denial of Service vulnerability","org.keycloak:keycloak-core",0,,MODERATE,CWE-231
 CVE-2023-6886,2023-12-17T03:30:19Z,"Xnx3 Wangmarket Cross-Site Scripting vulnerability","com.xnx3.wangmarket:wangmarket",0,,MODERATE,CWE-79
 CVE-2023-6911,2023-12-22T18:30:30Z,"WSO2 Registry Stored Cross Site Scripting (XSS) vulnerability","org.wso2.carbon.registry:carbon-registry",0,4.7.37,MODERATE,CWE-79
 CVE-2023-6927,2023-12-19T00:30:21Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-parent",0,,MODERATE,CWE-601
@@ -7593,9 +7594,6 @@ CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For N
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.0.0,3.0.4,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.1.0,,MODERATE,CWE-863
 CVE-2024-29834,2024-04-02T21:30:27Z,"Apache Pulsar: Improper Authorization For Namespace and Topic Management Endpoints","org.apache.pulsar:pulsar-broker",3.2.0,3.2.2,MODERATE,CWE-863
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-125;CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-125;CWE-400
-CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcpkix-jdk18on",0,1.78,MODERATE,CWE-125;CWE-400
 CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-125;CWE-400
 CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-125;CWE-400
 CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-125;CWE-400
@@ -7605,9 +7603,6 @@ CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues ca
 CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-125;CWE-400
 CVE-2024-29857,2024-05-14T15:32:54Z,"Bouncy Castle certificate parsing issues cause high CPU usage during parameter evaluation.",org.bouncycastle:bc-fips,0,1.0.2.5,MODERATE,CWE-125;CWE-400
 CVE-2024-29868,2024-06-24T12:30:38Z,"Apache StreamPipes: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG) in Recovery Token Generation","org.apache.streampipes:streampipes-resource-management",0.69.0,0.95.0,CRITICAL,CWE-338
-CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-203
-CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-203
-CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcpkix-jdk18on",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-203
@@ -7616,9 +7611,6 @@ CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-chann
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-203
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcpkix-jdk14",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcpkix-jdk15to18",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcpkix-jdk18on",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-835
 CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-835
@@ -7765,8 +7757,8 @@ CVE-2024-38364,2024-06-25T17:07:32Z,"DSpace Cross Site Scripting (XSS) via a dep
 CVE-2024-38369,2024-06-24T18:00:16Z,"XWiki programming rights may be inherited by inclusion","org.xwiki.platform:xwiki-platform-rendering-macro-include",0,15.0-rc-1,CRITICAL,CWE-863
 CVE-2024-38374,2024-06-24T20:44:48Z,"Improper Restriction of XML External Entity Reference in org.cyclonedx:cyclonedx-core-java","org.cyclonedx:cyclonedx-core-java",2.1.0,9.0.4,HIGH,CWE-611
 CVE-2024-38460,2024-06-16T15:30:44Z,"SonarQube logs sensitive information","org.sonarsource.sonarqube:sonar-web",0,9.9.4,MODERATE,CWE-532
-CVE-2024-38503,2024-07-22T12:30:37Z,"Apache Syncope Improper Input Validation vulnerability","org.apache.syncope.client.idrepo:syncope-client-idrepo-common-ui",2.1.0,3.0.8,MODERATE,CWE-20
-CVE-2024-38503,2024-07-22T12:30:37Z,"Apache Syncope Improper Input Validation vulnerability","org.apache.syncope.client.idrepo:syncope-client-idrepo-console",2.1.0,3.0.8,MODERATE,CWE-20
+CVE-2024-38503,2024-07-22T12:30:37Z,"Apache Syncope Improper Input Validation vulnerability","org.apache.syncope.client.idrepo:syncope-client-idrepo-common-ui",2.1.0,3.0.8,MODERATE,CWE-20;CWE-79
+CVE-2024-38503,2024-07-22T12:30:37Z,"Apache Syncope Improper Input Validation vulnerability","org.apache.syncope.client.idrepo:syncope-client-idrepo-console",2.1.0,3.0.8,MODERATE,CWE-20;CWE-79
 CVE-2024-38807,2024-08-23T09:30:35Z,"Signature forgery in Spring Boot's Loader","org.springframework.boot:spring-boot-loader",2.7.0,2.7.22,MODERATE,CWE-347
 CVE-2024-38807,2024-08-23T09:30:35Z,"Signature forgery in Spring Boot's Loader","org.springframework.boot:spring-boot-loader",3.0.0,3.0.17,MODERATE,CWE-347
 CVE-2024-38807,2024-08-23T09:30:35Z,"Signature forgery in Spring Boot's Loader","org.springframework.boot:spring-boot-loader",3.1.0,3.1.13,MODERATE,CWE-347
@@ -7830,6 +7822,8 @@ CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `or
 CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.utilities",0,6.3.23,HIGH,CWE-611
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
 CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pushed Authorization Requests (PAR)","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-200;CWE-922
+CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",1.8.0,15.10.9,MODERATE,CWE-359;CWE-862
+CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",16.0.0-rc-1,16.3.0-rc-1,MODERATE,CWE-359;CWE-862
 CVE-2024-4629,2024-09-03T21:31:12Z,"Keycloak has a brute force login protection bypass","org.keycloak:keycloak-services",0,24.0.4,MODERATE,CWE-837
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
@@ -7846,6 +7840,11 @@ CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnera
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",4.0.0,5.0.0,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,4.0.0,5.0.0,MODERATE,CWE-79
 CVE-2024-6960,2024-07-21T12:30:48Z,"H2O vulnerable to Deserialization of Untrusted Data",ai.h2o:h2o-core,0,,HIGH,CWE-502
+CVE-2024-7260,2024-09-09T21:31:22Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-core",0,24.0.7,MODERATE,CWE-601
+CVE-2024-7318,2024-09-09T21:31:22Z,"Keycloak Uses a Key Past its Expiration Date","org.keycloak:keycloak-core",0,24.0.7,MODERATE,CWE-324
+CVE-2024-7341,2024-09-09T21:31:22Z,"Keycloak Session Fixation vulnerability","org.keycloak:keycloak-services",0,22.0.12,HIGH,CWE-384
+CVE-2024-7341,2024-09-09T21:31:22Z,"Keycloak Session Fixation vulnerability","org.keycloak:keycloak-services",23.0.0,24.0.7,HIGH,CWE-384
+CVE-2024-7341,2024-09-09T21:31:22Z,"Keycloak Session Fixation vulnerability","org.keycloak:keycloak-services",25.0.0,,HIGH,CWE-384
 CVE-2024-7885,2024-08-21T15:30:54Z,"Undertow vulnerable to Race Condition","io.undertow:undertow-core",0,,HIGH,CWE-362
 CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,HIGH,CWE-297
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-client",4.3.0,4.5.10,MODERATE,CWE-770
@@ -7864,7 +7863,7 @@ GHSA-4vrx-8phj-x3mg,2024-06-03T18:30:50Z,"Duplicate Advisory: Keycloak exposes s
 GHSA-54r5-wr8x-x5v3,2022-12-20T00:30:27Z,"Apiman has insufficient checks for read permissions","io.apiman:apiman-manager-api-rest-impl",1.5.7,3.0.0.Final,HIGH,CWE-276;CWE-280
 GHSA-55xh-53m6-936r,2021-06-01T21:17:36Z,"Improper Verification of Cryptographic Signature in aws-encryption-sdk-java","com.amazonaws:aws-encryption-sdk-java",0,1.9.0,MODERATE,CWE-347
 GHSA-55xh-53m6-936r,2021-06-01T21:17:36Z,"Improper Verification of Cryptographic Signature in aws-encryption-sdk-java","com.amazonaws:aws-encryption-sdk-java",2.0.0,2.2.0,MODERATE,CWE-347
-GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",0,9.4.52,LOW,CWE-611
+GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",0,9.4.52.v20230823,LOW,CWE-611
 GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",10.0.0-alpha0,10.0.16,LOW,CWE-611
 GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",11.0.0-alpha0,11.0.16,LOW,CWE-611
 GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",12.0.0.alpha0,12.0.0,LOW,CWE-611

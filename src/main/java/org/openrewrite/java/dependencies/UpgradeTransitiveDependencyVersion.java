@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.gradle.UpgradeDependencyVersion;
 import org.openrewrite.maven.AddManagedDependency;
 
 @Value
@@ -85,6 +84,13 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
     @Nullable
     String versionPattern;
 
+    @Option(displayName = "Because",
+            description = "The reason for upgrading the transitive dependency. For example, we could be responding to a vulnerability.",
+            required = false,
+            example = "CVE-2021-1234")
+    @Nullable
+    String because;
+
     @Option(displayName = "Releases only",
             description = "Whether to exclude snapshots from consideration when using a semver selector",
             required = false)
@@ -107,28 +113,28 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
 
     @Override
     public AddManagedDependency.Scanned getInitialValue(ExecutionContext ctx) {
-        return getMavenUpgradeDependencyVersion().getInitialValue(ctx);
+        return getMavenUpgradeTransitive().getInitialValue(ctx);
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(AddManagedDependency.Scanned acc) {
-        return getMavenUpgradeDependencyVersion().getScanner(acc);
+        return getMavenUpgradeTransitive().getScanner(acc);
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(AddManagedDependency.Scanned acc) {
-        TreeVisitor<?, ExecutionContext> gradleUDV = new UpgradeDependencyVersion(groupId, artifactId, version, versionPattern).getVisitor();
-        TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeDependencyVersion().getVisitor(acc);
+        TreeVisitor<?, ExecutionContext> gradleUDV = getGradleUpgradeTransitive().getVisitor();
+        TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeTransitive().getVisitor(acc);
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if(!(tree instanceof SourceFile)) {
+                if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
                 SourceFile t = (SourceFile) tree;
-                if(gradleUDV.isAcceptable(t, ctx)) {
+                if (gradleUDV.isAcceptable(t, ctx)) {
                     t = (SourceFile) gradleUDV.visitNonNull(t, ctx);
-                } else if(mavenUTDV.isAcceptable(t, ctx)) {
+                } else if (mavenUTDV.isAcceptable(t, ctx)) {
                     t = (SourceFile) mavenUTDV.visitNonNull(t, ctx);
                 }
                 return t;
@@ -136,8 +142,11 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
         };
     }
 
-    private org.openrewrite.maven.UpgradeTransitiveDependencyVersion getMavenUpgradeDependencyVersion() {
-        return new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, versionPattern,
-                scope, type, versionPattern, releasesOnly, onlyIfUsing, addToRootPom);
+    private org.openrewrite.gradle.UpgradeTransitiveDependencyVersion getGradleUpgradeTransitive() {
+        return new org.openrewrite.gradle.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, versionPattern, because, null);
+    }
+
+    private org.openrewrite.maven.UpgradeTransitiveDependencyVersion getMavenUpgradeTransitive() {
+        return new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, scope, type, classifier, versionPattern, releasesOnly, onlyIfUsing, addToRootPom);
     }
 }

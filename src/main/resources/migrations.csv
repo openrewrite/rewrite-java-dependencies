@@ -11,6 +11,7 @@ bouncycastle,,org.bouncycastle,,
 bsh,bsh,org.beanshell,bsh,
 c3p0,c3p0,com.mchange,c3p0,
 cactus,cactus-ant,cactus,cactus-ant-13,
+ch.qos.logback,logback-access,ch.qos.logback.access,common,"The 1.5.x continues the 1.4.x series but with logback-access relocated to its own repository."
 clover,clover,com.cenqua.clover,clover,
 cobertura,,"net.sourceforge.cobertura",,
 com.actionbarsherlock,library,com.actionbarsherlock,actionbarsherlock,
@@ -82,6 +83,7 @@ com.ibatis,ibatis-common,com.ibatis,ibatis2-common,
 com.ibatis,ibatis-dao,com.ibatis,ibatis2-dao,
 com.ibatis,ibatis-sqlmap,com.ibatis,ibatis2-sqlmap,
 com.indeed,java-dogstatsd-client,com.datadoghq,java-dogstatsd-client,"This project has merged with datadog/java-dogstatsd-client and now lives in a new home at: http://datadog/java-dogstatsd-client"
+com.intuit.karate,,io.karatelabs,,"Since version v1.5.0 the groupId has changed, see https://github.com/karatelabs/karate/releases/tag/v1.5.0"
 com.javaslang,,io.javaslang,,
 "com.jayway.maven.plugins.android.generation2",maven-android-plugin,"com.jayway.maven.plugins.android.generation2",android-maven-plugin,
 com.jayway.restassured,rest-assured,io.rest-assured,rest-assured,
@@ -137,6 +139,7 @@ com.sun.mail,javax.mail,com.sun.mail,jakarta.mail,
 com.sun.xml,saaj-impl,"com.sun.xml.messaging.saaj",saaj-impl,
 com.typesafe,slick_2.10,com.typesafe.slick,slick_2.10,
 com.typesafe,slick-testkit_2.10,com.typesafe.slick,slick-testkit_2.10,
+com.typesafe.play,,org.playframework,,"With Play 3.0, we changed the groupId from com.typesafe.play to org.playframework to emphasize that Play is fully community-driven."
 com.vladmihalcea,,io.hypersistence,,
 com.wandrell.archetypes,library,"com.wandrell.maven.archetypes",library,
 com.wandrell.maven,archetype-pom,com.bernardomg.maven,archetype-pom,
@@ -196,6 +199,7 @@ io.github.lukehutch,fast-classpath-scanner,io.github.classgraph,classgraph,
 io.github.openfeign,feign-java8,io.github.openfeign,feign-core,
 io.javaslang,,io.vavr,,
 io.jenkins.tools,"git-changelist-maven-extension","io.jenkins.tools.incrementals","git-changelist-maven-extension",
+io.opentelemetry,"opentelemetry-extension-annotations","io.opentelemetry.instrumentation","opentelemetry-instrumentation-annotations","Deprecated with v1.17.0 and moved to new coordinates"
 "io.quee.ktx.framework.dependencies","ktx-business-dependencies",io.quee.ktx.radix,ktx-radix-dependencies,
 io.quee.ktx.framework,ktx-business-adapter,io.quee.ktx.radix,ktx-radix-adapter,
 io.quee.ktx.framework,"ktx-business-adapter-shared",io.quee.ktx.radix,"ktx-business-adapter-shared",
@@ -225,6 +229,7 @@ io.smallrye,smallrye-config-docs,io.smallrye.config,smallrye-config-docs,
 io.smallrye,smallrye-config,io.smallrye.config,smallrye-config,
 io.smallrye,smallrye-config-parent,io.smallrye.config,smallrye-config-parent,
 io.smallrye,smallrye-config-release,io.smallrye.config,smallrye-config-release,
+io.swagger,,io.swagger.core.v3,,
 io.wcm,io.wcm.testing.aem-mock,io.wcm,"io.wcm.testing.aem-mock.junit4",
 itext,itext,com.lowagie,itext,
 jaas,jaas,javax.security,jaas,
@@ -563,3 +568,4 @@ com.apollographql.apollo,,"com.apollographql.apollo3",,"See https://www.apollogr
 com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
 com.github.javafaker,javafaker,net.datafaker,datafaker,"This library is a modern fork of java-faker, built on Java 8, with up to date libraries and several newly added Fake Generators. See https://github.com/datafaker-net/datafaker/"
 de.jollyday,jollyday,de.focus-shift,jollyday,"The old jollyday project is no longer maintained. This is a modern fork with jakarta dependencies and based on java 11."
+com.google.code.findbugs,,com.github.spotbugs,,"SpotBugs is a fork of FindBugs (which is now an abandoned project), carrying on from the point where it left off with support of its community."

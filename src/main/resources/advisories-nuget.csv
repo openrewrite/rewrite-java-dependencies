@@ -2158,8 +2158,8 @@ CVE-2024-40636,2024-07-17T16:00:10Z,"Steeltoe Leaks Basic Auth Credentials to Lo
 CVE-2024-40636,2024-07-17T16:00:10Z,"Steeltoe Leaks Basic Auth Credentials to Logs After Fetch Registry Error","Steeltoe.Discovery.EurekaBase",0,,LOW,CWE-532
 CVE-2024-41131,2024-07-22T17:42:07Z,"SixLabors ImageSharp Out-of-bounds Write",SixLabors.ImageSharp,0,2.1.9,HIGH,CWE-787
 CVE-2024-41131,2024-07-22T17:42:07Z,"SixLabors ImageSharp Out-of-bounds Write",SixLabors.ImageSharp,3.0.0,3.1.5,HIGH,CWE-787
-CVE-2024-41132,2024-07-22T17:42:33Z,"SixLabors ImageSharp has Excessive Memory Allocation in Gif Decoder",SixLabors.ImageSharp,0,2.1.9,MODERATE,CWE-789
-CVE-2024-41132,2024-07-22T17:42:33Z,"SixLabors ImageSharp has Excessive Memory Allocation in Gif Decoder",SixLabors.ImageSharp,3.0.0,3.1.5,MODERATE,CWE-789
+CVE-2024-41132,2024-07-22T17:42:33Z,"SixLabors ImageSharp has Excessive Memory Allocation in Gif Decoder",SixLabors.ImageSharp,0,2.1.9,MODERATE,CWE-770;CWE-789
+CVE-2024-41132,2024-07-22T17:42:33Z,"SixLabors ImageSharp has Excessive Memory Allocation in Gif Decoder",SixLabors.ImageSharp,3.0.0,3.1.5,MODERATE,CWE-770;CWE-789
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Api,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Host,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209

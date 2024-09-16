@@ -3009,7 +3009,7 @@ CVE-2020-13692,2022-02-10T00:30:07Z,"Improper Restriction of XML External Entity
 CVE-2020-13697,2021-02-25T16:32:34Z,"NanoHTTPD Cross-site Scripting vulnerability","org.nanohttpd:nanohttpd-nanolets",0,,MODERATE,CWE-79
 CVE-2020-13920,2022-02-09T22:15:00Z,"Improper Authentication in Apache ActiveMQ","org.apache.activemq:activemq-parent",0,5.15.12,MODERATE,CWE-306
 CVE-2020-13921,2021-05-07T15:53:31Z,"SQL Injection in Apache SkyWalking","org.apache.skywalking:oap-server",0,8.1.0,CRITICAL,CWE-89
-CVE-2020-13922,2022-02-09T22:26:32Z,"Incorrect Default Permissions in Apache DolphinScheduler","org.apache.dolphinscheduler:dolphinscheduler",0,1.3.2,MODERATE,CWE-276
+CVE-2020-13922,2022-02-09T22:26:32Z,"Incorrect Default Permissions in Apache DolphinScheduler","org.apache.dolphinscheduler:dolphinscheduler-api",0,1.3.2,MODERATE,CWE-276
 CVE-2020-13925,2020-07-27T22:51:37Z,"Command Injection in Kylin","org.apache.kylin:kylin-server-base",0,3.1.0,CRITICAL,CWE-78
 CVE-2020-13926,2020-07-27T22:51:40Z,"SQL Injection in Kylin","org.apache.kylin:kylin-server-base",0,3.1.0,CRITICAL,CWE-89
 CVE-2020-13928,2022-02-10T20:51:46Z,"Cross-site scripting in Apache Atlas","org.apache.atlas:apache-atlas",0,2.1.0,MODERATE,CWE-79
@@ -5595,7 +5595,9 @@ CVE-2022-4350,2022-12-08T12:30:26Z,"Mingsoft MCMS vulnerable to Cross-site Scrip
 CVE-2022-4361,2023-06-30T20:30:50Z,"Keycloak vulnerable to cross-site scripting when validating URI-schemes on SAML and OIDC","org.keycloak:keycloak-services",0,21.1.2,CRITICAL,CWE-79;CWE-81
 CVE-2022-43670,2022-11-02T19:00:31Z,"Apache Sling App CMS vulnerable to Cross-site Scripting","org.apache.sling:org.apache.sling.cms",0,1.1.2,MODERATE,CWE-79
 CVE-2022-4375,2022-12-09T09:30:30Z,"Mingsoft MCMS vulnerable to SQL Injection",net.mingsoft:ms-mcms,0,5.2.10,CRITICAL,CWE-89
-CVE-2022-43766,2022-10-26T19:00:39Z,"Apache IoTDB subject to ReDOS with Java 8","org.apache.iotdb:iotdb-parent",0.12.2,0.13.3,HIGH,CWE-400
+CVE-2022-43766,2022-10-26T19:00:39Z,"Apache IoTDB subject to ReDOS with Java 8","org.apache.iotdb:flink-tsfile-connector",0.12.2,0.13.3,HIGH,CWE-400
+CVE-2022-43766,2022-10-26T19:00:39Z,"Apache IoTDB subject to ReDOS with Java 8","org.apache.iotdb:iotdb-server",0.12.2,0.13.3,HIGH,CWE-400
+CVE-2022-43766,2022-10-26T19:00:39Z,"Apache IoTDB subject to ReDOS with Java 8",org.apache.iotdb:tsfile,0.12.2,0.13.3,HIGH,CWE-400
 CVE-2022-44244,2022-11-10T12:01:09Z,"Lin CMS vulnerable to Improper Authentication","io.github.talelin:lin-cms-core",0,,MODERATE,CWE-287
 CVE-2022-44262,2022-12-01T06:30:26Z,"ff4j is vulnerable to Remote Code Execution (RCE)",org.ff4j:ff4j-core,1.8.1,1.9,CRITICAL,CWE-94
 CVE-2022-44621,2022-12-30T12:30:25Z,"Apache Kylin vulnerable to Command injection by Diagnosis Controller","org.apache.kylin:kylin-server-base",2.0.0,4.0.3,CRITICAL,CWE-77
@@ -6887,7 +6889,7 @@ CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.ecl
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:http2-server",9.3.0,9.4.53,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:jetty-http2-common",12.0.0,12.0.2,MODERATE,CWE-400
 CVE-2023-44487,2023-10-10T21:28:24Z,"HTTP/2 Stream Cancellation Attack","org.eclipse.jetty.http2:jetty-http2-server",12.0.0,12.0.2,MODERATE,CWE-400
-CVE-2023-44794,2023-10-25T18:32:23Z,"SaToken privilege escalation vulnerability",cn.dev33:sa-token-core,0,1.37.0,CRITICAL,CWE-281
+CVE-2023-44794,2023-10-25T18:32:23Z,"SaToken privilege escalation vulnerability",cn.dev33:sa-token-core,0,1.37.0,CRITICAL,CWE-281;CWE-284
 CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",0,3.7.2,CRITICAL,CWE-639
 CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.8.0,3.8.3,CRITICAL,CWE-639
 CVE-2023-44981,2023-10-11T12:30:27Z,"Authorization Bypass Through User-Controlled Key vulnerability in Apache ZooKeeper","org.apache.zookeeper:zookeeper",3.9.0,3.9.1,CRITICAL,CWE-639
@@ -6945,7 +6947,7 @@ CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",4.0.0,4.1.3,MODERATE,CWE-400
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",5.0.0,5.3.4,MODERATE,CWE-400
 CVE-2023-46131,2023-12-20T21:12:09Z,"Grails data binding causes JVM crash and/or other denial of service","org.grails:grails-databinding",6.0.0,6.1.0,MODERATE,CWE-400
-CVE-2023-46226,2024-01-15T12:30:19Z,"Remote Code Execution vulnerability in Apache IoTDB via UDF","org.apache.iotdb:iotdb-core",1.0.0,1.3.0,CRITICAL,
+CVE-2023-46226,2024-01-15T12:30:19Z,"Remote Code Execution vulnerability in Apache IoTDB via UDF","org.apache.iotdb:iotdb-core",1.0.0,1.3.0,HIGH,
 CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-common",1.4.0,1.9.0,HIGH,CWE-502
 CVE-2023-46227,2023-10-19T12:30:23Z,"Apache InLong Deserialization of Untrusted Data Vulnerability","org.apache.inlong:manager-pojo",1.4.0,1.9.0,HIGH,CWE-502
 CVE-2023-46242,2023-11-07T22:35:24Z,"XWiki Platform vulnerable to remote code execution via the edit action because it lacks CSRF token","org.xwiki.platform:xwiki-platform-oldcore",1.0,14.10.7,CRITICAL,CWE-352;CWE-94
@@ -7771,6 +7773,9 @@ CVE-2024-38807,2024-08-23T09:30:35Z,"Signature forgery in Spring Boot's Loader",
 CVE-2024-38807,2024-08-23T09:30:35Z,"Signature forgery in Spring Boot's Loader","org.springframework.boot:spring-boot-loader-classic",3.3.0,3.3.3,MODERATE,CWE-347
 CVE-2024-38808,2024-08-20T09:30:28Z,"Spring Framework vulnerable to Denial of Service","org.springframework:spring-expression",0,5.3.39,MODERATE,CWE-770
 CVE-2024-38810,2024-08-20T06:31:36Z,"Spring Security Missing Authorization vulnerability","org.springframework.security:spring-security-core",6.3.0,6.3.2,MODERATE,CWE-287
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",0,5.3.40,HIGH,
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.0.0,6.0.24,HIGH,
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.1.0,6.1.13,HIGH,
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-rs",0,,MODERATE,CWE-79
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-seb",0,,MODERATE,CWE-79
 CVE-2024-39458,2024-06-26T18:30:28Z,"Exposure of secrets through system log in Jenkins Structs Plugin","org.jenkins-ci.plugins:structs",0,338.v848422169819,LOW,CWE-200
@@ -7849,6 +7854,8 @@ CVE-2024-7885,2024-08-21T15:30:54Z,"Undertow vulnerable to Race Condition","io.u
 CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,HIGH,CWE-297
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-client",4.3.0,4.5.10,MODERATE,CWE-770
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-server",4.3.0,4.5.10,MODERATE,CWE-770
+CVE-2024-8642,2024-09-11T15:31:12Z,"Eclipse Dataspace Components's ConsumerPullTransferTokenValidationApiController doesn't check for token validit","org.eclipse.edc:transfer-data-plane",0.5.0,0.9.0,MODERATE,CWE-303
+CVE-2024-8646,2024-09-11T15:31:12Z,"Eclipse Glassfish URL redirection vulnerability","org.glassfish.main.web:web-core",0,7.0.10,MODERATE,CWE-601
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74
@@ -7916,7 +7923,8 @@ GHSA-cc4w-3cff-j8fw,2023-11-09T09:30:26Z,"Duplicate Advisory: Eclipse IDE XXE in
 GHSA-cq42-vhv7-xr7p,2024-06-12T19:42:21Z,"Keycloak Denial of Service via account lockout","org.keycloak:keycloak-services",0,24.0.0,LOW,CWE-640
 GHSA-crh4-294p-vcfq,2021-04-19T14:53:20Z,"Regular expression denial of service (ReDoS) in EmailField component in Vaadin 14 and 15-17","com.vaadin:vaadin-text-field-flow",2.0.4,2.3.3,HIGH,CWE-400
 GHSA-crh4-294p-vcfq,2021-04-19T14:53:20Z,"Regular expression denial of service (ReDoS) in EmailField component in Vaadin 14 and 15-17","com.vaadin:vaadin-text-field-flow",3.0.0,4.0.3,HIGH,CWE-400
-GHSA-crjg-w57m-rqqf,2024-07-22T17:30:19Z,"DNSJava vulnerable to KeyTrap - Denial-of-Service Algorithmic Complexity Attacks",dnsjava:dnsjava,0,3.6.0,MODERATE,CWE-770
+GHSA-crjg-w57m-rqqf,2024-07-22T17:30:19Z,"DNSJava vulnerable to KeyTrap - Denial-of-Service Algorithmic Complexity Attacks",dnsjava:dnsjava,3.5.0,3.6.0,MODERATE,CWE-770
+GHSA-crjg-w57m-rqqf,2024-07-22T17:30:19Z,"DNSJava vulnerable to KeyTrap - Denial-of-Service Algorithmic Complexity Attacks",org.jitsi:dnssecjava,0,,MODERATE,CWE-770
 GHSA-f36p-42jv-8rh2,2022-09-30T04:53:37Z,"Lithium vulnerable to Cross Site Scripting in provided Swagger-UI",com.wire.bots:lithium,0,,HIGH,CWE-79
 GHSA-f36p-42jv-8rh2,2022-09-30T04:53:37Z,"Lithium vulnerable to Cross Site Scripting in provided Swagger-UI",com.wire:lithium,0,3.4.2,HIGH,CWE-79
 GHSA-fj2w-wfgv-mwq6,2022-01-21T23:21:48Z,"Denial of service in CBOR library",com.upokecenter:cbor,4.0.0,4.5.1,HIGH,CWE-407
@@ -7950,7 +7958,8 @@ GHSA-mf4f-j588-5xm8,2021-12-14T21:07:14Z,"Apache Log4j Remote Code Execution","o
 GHSA-mf4f-j588-5xm8,2021-12-14T21:07:14Z,"Apache Log4j Remote Code Execution","org.opencastproject:opencast-common",10.0,10.6,CRITICAL,
 GHSA-mhgm-52vg-pvvc,2023-02-16T14:12:04Z,"Privilege escalation in Strongbox","com.schibsted.security:strongbox-sdk",0,0.5.0,MODERATE,CWE-269
 GHSA-mm44-wc5p-wqhq,2020-07-07T16:45:24Z,"Denial of service due to reference expansion in versions earlier than 4.0",com.upokecenter:cbor,0,4.0.0,HIGH,
-GHSA-mmwx-rj87-vfgr,2024-07-22T14:46:59Z,"DNSJava affected by KeyTrap - NSEC3 closest encloser proof can exhaust CPU resources",dnsjava:dnsjava,0,3.6.0,MODERATE,CWE-400
+GHSA-mmwx-rj87-vfgr,2024-07-22T14:46:59Z,"DNSJava affected by KeyTrap - NSEC3 closest encloser proof can exhaust CPU resources",dnsjava:dnsjava,3.5.0,3.6.0,MODERATE,CWE-400
+GHSA-mmwx-rj87-vfgr,2024-07-22T14:46:59Z,"DNSJava affected by KeyTrap - NSEC3 closest encloser proof can exhaust CPU resources",org.jitsi:dnssecjava,0,,MODERATE,CWE-400
 GHSA-mwm4-5qwr-g9pf,2022-04-28T21:00:31Z,"Keycloak is vulnerable to IDN homograph attack","org.keycloak:keycloak-services",0,18.0.0,LOW,CWE-284
 GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive Hazelcast connection caching issue","io.apiman:apiman-distro-vertx",0,3.0.0.Final,HIGH,
 GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive Hazelcast connection caching issue","io.apiman:apiman-gateway-platforms-vertx",0,3.0.0.Final,HIGH,

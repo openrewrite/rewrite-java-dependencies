@@ -57,12 +57,20 @@ public class DependencyInsight extends Recipe {
     @Nullable
     String version;
 
+    @Option(displayName = "Scope",
+            description = "Match dependencies with the specified Maven scope. All scopes are searched by default.",
+            valid = {"compile", "test", "runtime", "provided", "system"},
+            example = "compile",
+            required = false)
+    @Nullable
+    String scope;
+
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null)
                     .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, null, version, false)
+            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, scope, version, false)
                     .getVisitor();
 
             @Override

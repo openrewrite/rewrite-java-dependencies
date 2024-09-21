@@ -92,9 +92,9 @@ public class ParseAdvisories {
 
                 Advisory advisory = reader.readValue(path.toFile(), Advisory.class);
                 for (Affected affected : advisory.getAffected()) {
-                    if (affected.getPkg().getEcosystem().equalsIgnoreCase(ecosystem)
-                            && affected.getRanges() != null
-                            && !affected.getRanges().isEmpty()) {
+                    if (affected.getPkg().getEcosystem().equalsIgnoreCase(ecosystem) &&
+                            affected.getRanges() != null &&
+                            !affected.getRanges().isEmpty()) {
                         Range range = affected.getRanges().iterator().next();
                         String cve = advisory.getAliases().isEmpty() ?
                                 advisory.getId() :

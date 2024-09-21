@@ -26,7 +26,7 @@ class DependencyInsightTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyInsight("org.springframework*", "*", null));
+        spec.recipe(new DependencyInsight("org.springframework*", "*", null, null));
     }
 
     @DocumentExample

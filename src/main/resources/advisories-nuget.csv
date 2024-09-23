@@ -1558,10 +1558,10 @@ CVE-2023-21808,2023-02-14T22:00:54Z,".NET Remote Code Execution Vulnerability ",
 CVE-2023-21808,2023-02-14T22:00:54Z,".NET Remote Code Execution Vulnerability ","Microsoft.NetCore.App.Runtime.win-x64",7.0.0,7.0.3,HIGH,CWE-416
 CVE-2023-21808,2023-02-14T22:00:54Z,".NET Remote Code Execution Vulnerability ","Microsoft.NetCore.App.Runtime.win-x86",6.0.0,6.0.14,HIGH,CWE-416
 CVE-2023-21808,2023-02-14T22:00:54Z,".NET Remote Code Execution Vulnerability ","Microsoft.NetCore.App.Runtime.win-x86",7.0.0,7.0.3,HIGH,CWE-416
-CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET","Oracle.ManagedDataAccess.Core",2.19.0,2.19.180,HIGH,
-CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET","Oracle.ManagedDataAccess.Core",3.21.0,3.21.90,HIGH,
-CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET",Oracle.ManagedDataAccess,19.0.0,19.18.0,HIGH,
-CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET",Oracle.ManagedDataAccess,21.0.0,21.9.0,HIGH,
+CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET","Oracle.ManagedDataAccess.Core",2.19.0,2.19.180,HIGH,CWE-284
+CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET","Oracle.ManagedDataAccess.Core",3.21.0,3.21.90,HIGH,CWE-284
+CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET",Oracle.ManagedDataAccess,19.0.0,19.18.0,HIGH,CWE-284
+CVE-2023-21893,2023-01-18T00:30:16Z,"Component takeover in Oracle Data Provider for .NET",Oracle.ManagedDataAccess,21.0.0,21.9.0,HIGH,CWE-284
 CVE-2023-24895,2023-06-14T17:02:24Z,".NET Remote Code Execution Vulnerability","Microsoft.WindowsDesktop.App.Runtime.win-arm64",6.0.0,6.0.18,HIGH,
 CVE-2023-24895,2023-06-14T17:02:24Z,".NET Remote Code Execution Vulnerability","Microsoft.WindowsDesktop.App.Runtime.win-arm64",7.0.0,7.0.7,HIGH,
 CVE-2023-24895,2023-06-14T17:02:24Z,".NET Remote Code Execution Vulnerability","Microsoft.WindowsDesktop.App.Runtime.win-x64",6.0.0,6.0.18,HIGH,

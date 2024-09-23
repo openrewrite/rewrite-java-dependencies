@@ -6538,6 +6538,10 @@ CVE-2023-35925,2023-06-22T20:00:36Z,"FastAsyncWorldEdit vulnerable to Uncontroll
 CVE-2023-3597,2024-04-17T17:31:50Z,"Keycloak secondary factor bypass in step-up authentication","org.keycloak:keycloak-services",0,22.0.10,MODERATE,CWE-287;CWE-288
 CVE-2023-3597,2024-04-17T17:31:50Z,"Keycloak secondary factor bypass in step-up authentication","org.keycloak:keycloak-services",23.0.0,24.0.3,MODERATE,CWE-287;CWE-288
 CVE-2023-36106,2023-08-17T21:30:53Z,"PowerJob incorrect access control vulnerability",tech.powerjob:powerjob,0,,HIGH,
+CVE-2023-3628,2023-12-30T00:30:23Z,"Infinispan REST Server's bulk read endpoints do not properly evaluate user permissions","org.infinispan:infinispan-server-rest",0,14.0.18.Final,MODERATE,CWE-304
+CVE-2023-3628,2023-12-30T00:30:23Z,"Infinispan REST Server's bulk read endpoints do not properly evaluate user permissions","org.infinispan:infinispan-server-rest",15.0.0.Dev01,15.0.0.Dev04,MODERATE,CWE-304
+CVE-2023-3629,2023-12-30T00:30:23Z," Infinispan REST Server's cache retrieval endpoints do not properly evaluate the necessary admin permissions","org.infinispan:infinispan-server-rest",0,14.0.18.Final,MODERATE,CWE-304
+CVE-2023-3629,2023-12-30T00:30:23Z," Infinispan REST Server's cache retrieval endpoints do not properly evaluate the necessary admin permissions","org.infinispan:infinispan-server-rest",15.0.0.Dev01,15.0.0.Dev04,MODERATE,CWE-304
 CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability","com.squareup.okio:okio-jvm",2.0.0-RC1,3.4.0,MODERATE,CWE-195;CWE-681
 CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability",com.squareup.okio:okio,0,1.17.6,MODERATE,CWE-195;CWE-681
 CVE-2023-3635,2023-07-12T21:30:50Z,"Okio Signed to Unsigned Conversion Error vulnerability",com.squareup.okio:okio,2.0.0-RC1,3.4.0,MODERATE,CWE-195;CWE-681
@@ -7210,8 +7214,25 @@ CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability
 CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability",io.crate:crate,5.3.0,5.3.8,HIGH,CWE-287
 CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability",io.crate:crate,5.4.0,5.4.7,HIGH,CWE-287
 CVE-2023-51982,2024-01-30T03:30:30Z,"CrateDB authentication bypass vulnerability",io.crate:crate,5.5.0,5.5.2,HIGH,CWE-287
+CVE-2023-5236,2023-12-28T21:30:37Z,"Infinispan circular object references causes out of memory errors","org.infinispan.protostream:protostream",0,4.6.2.Final,MODERATE,CWE-1047
 CVE-2023-52428,2024-02-11T06:30:27Z,"Denial of Service in Connect2id Nimbus JOSE+JWT","com.nimbusds:nimbus-jose-jwt",0,9.37.2,MODERATE,CWE-400
 CVE-2023-5245,2023-11-15T15:30:21Z,"Zip slip in mleap","ml.combust.mleap:mleap-runtime_2.12",0,0.23.1,HIGH,CWE-22
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-jdbc",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-jdbc",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-jdbc-common",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-jdbc-common",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-remote",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-remote",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-sql",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-cachestore-sql",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-client-hotrod",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-client-hotrod",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-commons",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-commons",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-core",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-core",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-hotrod",0,14.0.25.Final,LOW,CWE-312
+CVE-2023-5384,2023-12-28T18:30:32Z,"Infinispan caches credentials in clear text","org.infinispan:infinispan-hotrod",15.0.0.Dev01,15.0.0.Dev07,LOW,CWE-312
 CVE-2023-5675,2024-04-25T18:30:39Z,"Quarkus: authorization flaw in quarkus resteasy reactive and classic","io.quarkus:quarkus-resteasy-reactive-common",0,3.2.10.Final,MODERATE,CWE-285;CWE-287
 CVE-2023-5675,2024-04-25T18:30:39Z,"Quarkus: authorization flaw in quarkus resteasy reactive and classic","io.quarkus:quarkus-resteasy-reactive-common",3.3.0,3.6.9,MODERATE,CWE-285;CWE-287
 CVE-2023-5675,2024-04-25T18:30:39Z,"Quarkus: authorization flaw in quarkus resteasy reactive and classic","io.quarkus:quarkus-resteasy-reactive-common",3.7.0,3.7.1,MODERATE,CWE-285;CWE-287
@@ -7261,7 +7282,7 @@ CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Ent
 CVE-2023-6836,2023-12-15T12:30:25Z,"WSO2 products vulnerable to XML External Entity attack",org.wso2.am:wso2am,0,4.0.0-beta,MODERATE,CWE-611
 CVE-2023-6837,2023-12-15T12:30:25Z,"Multiple WSO2 products vulnerable to perform user impersonatoin using JIT provisioning","org.wso2.carbon.identity.framework:org.wso2.carbon.identity.application.authentication.framework",0,5.20.254,HIGH,
 CVE-2023-6837,2023-12-15T12:30:25Z,"Multiple WSO2 products vulnerable to perform user impersonatoin using JIT provisioning","org.wso2.identity.apps:authentication-portal",0,1.6.179.1,HIGH,
-CVE-2023-6841,2024-09-10T18:30:44Z,"Keycloak Denial of Service vulnerability","org.keycloak:keycloak-core",0,,MODERATE,CWE-231
+CVE-2023-6841,2024-09-10T18:30:44Z,"Keycloak Denial of Service vulnerability","org.keycloak:keycloak-core",0,24.0.0,MODERATE,CWE-231
 CVE-2023-6886,2023-12-17T03:30:19Z,"Xnx3 Wangmarket Cross-Site Scripting vulnerability","com.xnx3.wangmarket:wangmarket",0,,MODERATE,CWE-79
 CVE-2023-6911,2023-12-22T18:30:30Z,"WSO2 Registry Stored Cross Site Scripting (XSS) vulnerability","org.wso2.carbon.registry:carbon-registry",0,4.7.37,MODERATE,CWE-79
 CVE-2023-6927,2023-12-19T00:30:21Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-parent",0,,MODERATE,CWE-601
@@ -7288,6 +7309,8 @@ CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL 
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",42.5.0,42.5.5,CRITICAL,CWE-89
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",42.6.0,42.6.1,CRITICAL,CWE-89
 CVE-2024-1597,2024-02-21T23:33:43Z,"org.postgresql:postgresql vulnerable to SQL Injection via line comment generation","org.postgresql:postgresql",42.7.0,42.7.2,CRITICAL,CWE-89
+CVE-2024-1635,2024-02-20T00:30:36Z,"Undertow Uncontrolled Resource Consumption Vulnerability","io.undertow:undertow-core",0,2.2.31.Final,HIGH,CWE-400
+CVE-2024-1635,2024-02-20T00:30:36Z,"Undertow Uncontrolled Resource Consumption Vulnerability","io.undertow:undertow-core",2.3.0.Final,2.3.12.Final,HIGH,CWE-400
 CVE-2024-1722,2024-02-29T03:33:17Z,"Keycloak DoS via account lockout","org.keycloak:keycloak-core",0,24.0.0,LOW,CWE-645
 CVE-2024-1726,2024-04-25T18:30:39Z,"Quarkus: security checks in resteasy reactive may trigger a denial of service","io.quarkus.resteasy.reactive:resteasy-reactive",0,3.2.11.Final,MODERATE,CWE-281
 CVE-2024-1726,2024-04-25T18:30:39Z,"Quarkus: security checks in resteasy reactive may trigger a denial of service","io.quarkus.resteasy.reactive:resteasy-reactive",3.3.0.CR1,3.7.4,MODERATE,CWE-281
@@ -7355,6 +7378,8 @@ CVE-2024-22371,2024-02-26T18:30:30Z,"Apache Camel data exposure vulnerability","
 CVE-2024-22371,2024-02-26T18:30:30Z,"Apache Camel data exposure vulnerability","org.apache.camel:camel-core",3.22.0,3.22.1,LOW,CWE-200
 CVE-2024-22371,2024-02-26T18:30:30Z,"Apache Camel data exposure vulnerability","org.apache.camel:camel-core",4.0.0,4.0.4,LOW,CWE-200
 CVE-2024-22371,2024-02-26T18:30:30Z,"Apache Camel data exposure vulnerability","org.apache.camel:camel-core",4.1.0,4.4.0,LOW,CWE-200
+CVE-2024-22399,2024-09-16T14:37:28Z,"Apache Seata Deserialization of Untrusted Data vulnerability","org.apache.seata:seata-core",1.0.0,1.8.1,HIGH,CWE-502
+CVE-2024-22399,2024-09-16T14:37:28Z,"Apache Seata Deserialization of Untrusted Data vulnerability","org.apache.seata:seata-core",2.0.0,2.1.0,HIGH,CWE-502
 CVE-2024-22490,2024-01-23T18:31:11Z,"Cross-site Scripting in beetl-bbs",com.ibeetl:beetl,0,,MODERATE,CWE-79
 CVE-2024-22491,2024-01-16T21:31:22Z,"Stored Cross Site Scripting in beetl-bbs",com.ibeetl:beetl,0,,MODERATE,CWE-79
 CVE-2024-22492,2024-01-12T18:30:20Z,"Cross-site Scripting in JFinal",com.jfinal:jfinal,0,,MODERATE,CWE-79
@@ -7826,10 +7851,24 @@ CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `or
 CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r5",0,6.3.23,HIGH,CWE-611
 CVE-2024-45294,2024-09-06T19:45:27Z,"XXE vulnerability in XSLT transforms in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.utilities",0,6.3.23,HIGH,CWE-611
 CVE-2024-4536,2024-05-07T15:30:36Z,"Eclipse Dataspace Components vulnerable to OAuth2 client secret disclosure","org.eclipse.edc:connector-core",0.2.1,0.6.3,MODERATE,CWE-201
+CVE-2024-45384,2024-09-17T21:30:32Z,"druid-pac4j, Apache Druid extension, has Padding Oracle vulnerability","org.apache.druid.extensions:druid-pac4j",0.18.0,30.0.1,LOW,CWE-347
 CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pushed Authorization Requests (PAR)","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-200;CWE-922
+CVE-2024-45537,2024-09-17T21:30:32Z,"Apache Druid: Users can provide MySQL JDBC properties not on allow list",org.apache.druid:druid,0,30.0.1,LOW,CWE-20
 CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",1.8.0,15.10.9,MODERATE,CWE-359;CWE-862
 CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",16.0.0-rc-1,16.3.0-rc-1,MODERATE,CWE-359;CWE-862
-CVE-2024-4629,2024-09-03T21:31:12Z,"Keycloak has a brute force login protection bypass","org.keycloak:keycloak-services",0,24.0.4,MODERATE,CWE-837
+CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",0,22.0.12,MODERATE,CWE-307;CWE-837
+CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",23.0.0,24.0.7,MODERATE,CWE-307;CWE-837
+CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",25.0.0,25.0.4,MODERATE,CWE-307;CWE-837
+CVE-2024-46942,2024-09-16T14:37:28Z,"OpenDaylight Model-Driven Service Abstraction Layer (MD-SAL) allows follower controller to set up flow entries","org.opendaylight.mdsal:mdsal-artifacts",0,,MODERATE,CWE-285
+CVE-2024-46943,2024-09-16T14:37:28Z,"OpenDaylight Authentication, Authorization and Accounting (AAA) peer impersonation vulnerability","org.opendaylight.aaa:aaa-artifacts",0,,MODERATE,CWE-285;CWE-287;CWE-520
+CVE-2024-46978,2024-09-18T14:26:16Z,"org.xwiki.platform:xwiki-platform-notifications-ui is missing checks for notification filter preferences editions","org.xwiki.platform:xwiki-platform-notifications-ui",13.2-rc-1,14.10.21,MODERATE,CWE-648
+CVE-2024-46978,2024-09-18T14:26:16Z,"org.xwiki.platform:xwiki-platform-notifications-ui is missing checks for notification filter preferences editions","org.xwiki.platform:xwiki-platform-notifications-ui",15.0-rc-1,15.5.5,MODERATE,CWE-648
+CVE-2024-46978,2024-09-18T14:26:16Z,"org.xwiki.platform:xwiki-platform-notifications-ui is missing checks for notification filter preferences editions","org.xwiki.platform:xwiki-platform-notifications-ui",15.6-rc-1,15.10.1,MODERATE,CWE-648
+CVE-2024-46979,2024-09-18T14:26:20Z,"org.xwiki.platform:xwiki-platform-notifications-ui leaks data of notification filters of users","org.xwiki.platform:xwiki-platform-notifications-ui",13.2-rc-1,14.10.21,MODERATE,CWE-200;CWE-359
+CVE-2024-46979,2024-09-18T14:26:20Z,"org.xwiki.platform:xwiki-platform-notifications-ui leaks data of notification filters of users","org.xwiki.platform:xwiki-platform-notifications-ui",15.0-rc-1,15.5.5,MODERATE,CWE-200;CWE-359
+CVE-2024-46979,2024-09-18T14:26:20Z,"org.xwiki.platform:xwiki-platform-notifications-ui leaks data of notification filters of users","org.xwiki.platform:xwiki-platform-notifications-ui",15.6-rc-1,15.10.1,MODERATE,CWE-200;CWE-359
+CVE-2024-46983,2024-09-19T14:49:20Z,"SOFA Hessian Remote Command Execution (RCE) Vulnerability",com.alipay.sofa:hessian,0,3.5.5,HIGH,CWE-502;CWE-74
+CVE-2024-46984,2024-09-19T14:49:40Z,"Gematik Referenzvalidator has an XXE vulnerability that can lead to a Server Side Request Forgery attack","de.gematik.refv.commons:commons",0,2.5.1,HIGH,CWE-611
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
@@ -7845,6 +7884,18 @@ CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnera
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",4.0.0,5.0.0,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,4.0.0,5.0.0,MODERATE,CWE-79
 CVE-2024-6960,2024-07-21T12:30:48Z,"H2O vulnerable to Deserialization of Untrusted Data",ai.h2o:h2o-core,0,,HIGH,CWE-502
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-java",0,3.25.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-java",4.0.0.rc.1,4.27.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-java",4.28.0.rc.1,4.28.2,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-javalite",0,3.25.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-javalite",4.0.0.rc.1,4.27.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-javalite",4.28.0.rc.1,4.28.2,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin",0,3.25.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin",4.0.0.rc.1,4.27.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin",4.28.0.rc.1,4.28.2,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin-lite",0,3.25.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin-lite",4.0.0.rc.1,4.27.5,HIGH,CWE-20
+CVE-2024-7254,2024-09-19T16:06:03Z,"protobuf-java has potential Denial of Service issue","com.google.protobuf:protobuf-kotlin-lite",4.28.0.rc.1,4.28.2,HIGH,CWE-20
 CVE-2024-7260,2024-09-09T21:31:22Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-core",0,24.0.7,MODERATE,CWE-601
 CVE-2024-7318,2024-09-09T21:31:22Z,"Keycloak Uses a Key Past its Expiration Date","org.keycloak:keycloak-core",0,24.0.7,MODERATE,CWE-324
 CVE-2024-7341,2024-09-09T21:31:22Z,"Keycloak Session Fixation vulnerability","org.keycloak:keycloak-services",0,22.0.12,HIGH,CWE-384
@@ -7854,9 +7905,12 @@ CVE-2024-7885,2024-08-21T15:30:54Z,"Undertow vulnerable to Race Condition","io.u
 CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,HIGH,CWE-297
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-client",4.3.0,4.5.10,MODERATE,CWE-770
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-server",4.3.0,4.5.10,MODERATE,CWE-770
-CVE-2024-8642,2024-09-11T15:31:12Z,"Eclipse Dataspace Components's ConsumerPullTransferTokenValidationApiController doesn't check for token validit","org.eclipse.edc:transfer-data-plane",0.5.0,0.9.0,MODERATE,CWE-303
+CVE-2024-8642,2024-09-11T15:31:12Z,"Eclipse Dataspace Components's ConsumerPullTransferTokenValidationApiController doesn't check for token validit","org.eclipse.edc:transfer-data-plane",0.5.0,0.9.0,MODERATE,CWE-287;CWE-303
 CVE-2024-8646,2024-09-11T15:31:12Z,"Eclipse Glassfish URL redirection vulnerability","org.glassfish.main.web:web-core",0,7.0.10,MODERATE,CWE-601
+CVE-2024-8698,2024-09-19T18:30:52Z,"Keycloak SAML signature validation flaw","org.keycloak:keycloak-saml-core",0,25.0.6,HIGH,CWE-347
+CVE-2024-8883,2024-09-19T18:30:52Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-services",0,25.0.6,MODERATE,CWE-601
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
+GHSA-2gh6-wc3m-g37f,2024-09-17T19:29:24Z,"hermes-management is vulnerable to RCE due to Apache commons-jxpath","pl.allegro.tech.hermes:hermes-management",0,2.2.9,CRITICAL,CWE-1395
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
 GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting') in Armeria","com.linecorp.armeria:armeria",0.85.0,0.97.0,MODERATE,CWE-113;CWE-74
 GHSA-3h5r-928v-mxhh,2021-04-19T14:49:13Z,"Unauthorized client-side property update in UIDL request handler in Vaadin 10 and 11",com.vaadin:vaadin-bom,10.0.0,10.0.8,LOW,CWE-754
@@ -7902,6 +7956,7 @@ GHSA-8hxh-r6f7-jf45,2020-10-16T17:03:43Z,"Memory exhaustion in http4s-async-http
 GHSA-8hxh-r6f7-jf45,2020-10-16T17:03:43Z,"Memory exhaustion in http4s-async-http-client with large or malicious compressed responses","org.http4s:http4s-async-http-client_2.13",0,0.21.8,LOW,CWE-400
 GHSA-8vfw-v2jv-9hwc,2021-06-28T16:52:45Z,"Reflected cross-site scripting in development mode handler in Vaadin",com.vaadin:flow-server,2.0.0,2.6.2,LOW,CWE-172
 GHSA-8vfw-v2jv-9hwc,2021-06-28T16:52:45Z,"Reflected cross-site scripting in development mode handler in Vaadin",com.vaadin:flow-server,3.0.0,6.0.10,LOW,CWE-172
+GHSA-8wm9-24qg-m5qj,2024-09-03T21:31:12Z,"Duplicate Advisory: Keycloak has a brute force login protection bypass","org.keycloak:keycloak-services",0,24.0.4,MODERATE,CWE-837
 GHSA-8wx3-324g-w4qq,2023-10-17T14:24:48Z,"OpenSearch uncontrolled resource consumption","org.opensearch.plugin:opensearch-security",0,1.3.14.0,HIGH,CWE-400
 GHSA-8wx3-324g-w4qq,2023-10-17T14:24:48Z,"OpenSearch uncontrolled resource consumption","org.opensearch.plugin:opensearch-security",2.0.0.0,2.11.0.0,HIGH,CWE-400
 GHSA-94g7-hpv8-h9qm,2021-12-14T21:46:35Z,"Remote code injection in Log4j","com.splunk.logging:splunk-library-javalogging",0,1.11.1,CRITICAL,

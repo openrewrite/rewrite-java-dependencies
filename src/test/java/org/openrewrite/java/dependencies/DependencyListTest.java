@@ -51,11 +51,9 @@ class DependencyListTest implements RewriteTest {
               plugins {
                   id 'java'
               }
-                            
               repositories {
                   mavenCentral()
               }
-                            
               dependencies {
                   implementation('org.openrewrite:rewrite-core:7.39.0')
               }

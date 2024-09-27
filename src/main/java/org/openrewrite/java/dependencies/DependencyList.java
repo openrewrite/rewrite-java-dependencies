@@ -23,8 +23,13 @@ import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
 import org.openrewrite.marker.Markers;
+import org.openrewrite.maven.tree.GroupArtifactVersion;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
+import org.openrewrite.maven.tree.ResolvedGroupArtifactVersion;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -40,9 +45,15 @@ public class DependencyList extends Recipe {
 
     @Option(displayName = "Include transitive dependencies",
             description = "Whether or not to include transitive dependencies in the report. " +
-                    "Defaults to including only direct dependencies.",
+                          "Defaults to including only direct dependencies.",
             example = "true")
     boolean includeTransitive;
+
+    /**
+     * Freestanding gradle script plugins get assigned the same GradleProject marker with the build script in the project.
+     * Keep track of the ones which have been seen to minimize duplicate entries in the report.
+     */
+    transient Set<GroupArtifactVersion> seenGradleProjects = new HashSet<>();
 
     @Override
     public String getDisplayName() {
@@ -52,7 +63,7 @@ public class DependencyList extends Recipe {
     @Override
     public String getDescription() {
         return "Emits a data table detailing all Gradle and Maven dependencies." +
-                "This recipe makes no changes to any source file.";
+               "This recipe makes no changes to any source file.";
     }
 
     @Override
@@ -64,17 +75,20 @@ public class DependencyList extends Recipe {
                     return null;
                 }
                 Markers m = tree.getMarkers();
-                m.findFirst(GradleProject.class).ifPresent(gradle -> {
+                Set<ResolvedGroupArtifactVersion> seen = new HashSet<>();
+                m.findFirst(GradleProject.class)
+                        .filter(gradle -> seenGradleProjects.add(new GroupArtifactVersion(gradle.getGroup(), gradle.getName(), gradle.getVersion())))
+                        .ifPresent(gradle -> {
                     GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
                     if (conf != null) {
                         for (ResolvedDependency dep : conf.getResolved()) {
-                            insertDependency(ctx, gradle, dep, true);
+                            insertDependency(ctx, gradle, seen, dep, true);
                         }
                     }
                 });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
-                        insertDependency(ctx, maven, dep, true);
+                        insertDependency(ctx, maven, seen, dep, true);
                     }
                 });
                 return tree;
@@ -82,12 +96,15 @@ public class DependencyList extends Recipe {
         };
     }
 
-    private void insertDependency(ExecutionContext ctx, GradleProject gradle, ResolvedDependency dep, boolean direct) {
+    private void insertDependency(ExecutionContext ctx, GradleProject gradle, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
+        if (!seen.add(dep.getGav())) {
+            return;
+        }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Gradle",
-                "",
+                gradle.getGroup(),
                 gradle.getName(),
-                "",
+                gradle.getVersion(),
                 dep.getGroupId(),
                 dep.getArtifactId(),
                 dep.getVersion(),
@@ -95,12 +112,15 @@ public class DependencyList extends Recipe {
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, gradle, transitive, false);
+                insertDependency(ctx, gradle, seen, transitive, false);
             }
         }
     }
 
-    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, ResolvedDependency dep, boolean direct) {
+    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
+        if (!seen.add(dep.getGav())) {
+            return;
+        }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Maven",
                 maven.getPom().getGroupId(),
@@ -113,7 +133,7 @@ public class DependencyList extends Recipe {
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, maven, transitive, false);
+                insertDependency(ctx, maven, seen, transitive, false);
             }
         }
     }

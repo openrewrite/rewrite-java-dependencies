@@ -4624,6 +4624,9 @@ CVE-2022-22976,2022-05-20T00:00:38Z,"Integer overflow in BCrypt class in Spring 
 CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-core",0,5.4.11,CRITICAL,CWE-285;CWE-863
 CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-core",5.5.0,5.5.7,CRITICAL,CWE-285;CWE-863
 CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-core",5.6.0,5.6.4,CRITICAL,CWE-285;CWE-863
+CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-web",0,5.4.11,CRITICAL,CWE-285;CWE-863
+CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-web",5.5.0,5.5.7,CRITICAL,CWE-285;CWE-863
+CVE-2022-22978,2022-05-20T00:00:39Z,"Authorization bypass in Spring Security","org.springframework.security:spring-security-web",5.6.0,5.6.4,CRITICAL,CWE-285;CWE-863
 CVE-2022-22979,2022-06-22T00:00:54Z,"Denial of Service in Spring Cloud Function","org.springframework.cloud:spring-cloud-function-parent",0,3.2.6,HIGH,CWE-770
 CVE-2022-22980,2022-06-24T00:00:30Z,"SpEL Injection in Spring Data MongoDB","org.springframework.data:spring-data-mongodb",0,3.3.5,CRITICAL,CWE-917
 CVE-2022-22980,2022-06-24T00:00:30Z,"SpEL Injection in Spring Data MongoDB","org.springframework.data:spring-data-mongodb",3.4.0,3.4.1,CRITICAL,CWE-917
@@ -6666,8 +6669,8 @@ CVE-2023-38435,2023-07-25T18:30:32Z,"Cross-site Scripting in healthcheck webcons
 CVE-2023-38493,2023-07-25T18:24:39Z,"Paths contain matrix variables bypass decorators","com.linecorp.armeria:armeria",0,1.24.3,HIGH,CWE-863
 CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",15.0,15.3-rc-1,MODERATE,CWE-402
 CVE-2023-38509,2023-07-27T19:28:45Z,"Obfuscated email addresses should not be sorted","org.xwiki.platform:xwiki-platform-livetable-ui",3.5-milestone-1,14.10.9,MODERATE,CWE-402
-CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-core",0,1.3.0,HIGH,CWE-502
-CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-rest",0,1.3.0,HIGH,CWE-502
+CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-core",0,1.3.0,CRITICAL,CWE-502
+CVE-2023-38647,2023-07-26T09:30:15Z,"Deserialization vulnerability in Helix workflow and REST","org.apache.helix:helix-rest",0,1.3.0,CRITICAL,CWE-502
 CVE-2023-38889,2023-08-15T18:31:32Z,"Alluxio vulnerable to arbitrary code execution","org.alluxio:alluxio-parent",0,,CRITICAL,CWE-94
 CVE-2023-38905,2023-08-17T21:30:53Z,"Jeecg-boot SQL Injection vulnerability","org.jeecgframework.boot:jeecg-boot-parent",0,,MODERATE,CWE-89
 CVE-2023-3894,2023-08-08T18:30:37Z,"Denial of service in jackson-dataformats-text","com.fasterxml.jackson.dataformat:jackson-dataformats-text",0,2.15.0,HIGH,CWE-20;CWE-400;CWE-787
@@ -7129,12 +7132,12 @@ CVE-2023-50379,2024-02-27T09:31:16Z,"Apache Ambari: authenticated users could pe
 CVE-2023-50380,2024-02-27T18:31:02Z,"Apache Ambari XML External Entity injection","org.apache.ambari.contrib.views:wfmanager",2.7.0,2.7.8,MODERATE,CWE-611
 CVE-2023-50386,2024-02-09T18:31:07Z,"Apache Solr: Backup/Restore APIs allow for  deployment of executables in malicious ConfigSets ","org.apache.solr:solr-core",6.0.0,8.11.3,MODERATE,CWE-434
 CVE-2023-50386,2024-02-09T18:31:07Z,"Apache Solr: Backup/Restore APIs allow for  deployment of executables in malicious ConfigSets ","org.apache.solr:solr-core",9.0.0,9.4.1,MODERATE,CWE-434
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",0,2.17.0,CRITICAL,CWE-269;CWE-639
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",0,2.17.0,CRITICAL,CWE-269;CWE-639
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269;CWE-639
-CVE-2023-50422,2023-12-12T03:31:45Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",0,2.17.0,CRITICAL,CWE-269
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",3.0.0,3.3.0,CRITICAL,CWE-269
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",0,2.17.0,CRITICAL,CWE-269
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",3.0.0,3.3.0,CRITICAL,CWE-269
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269
+CVE-2023-50422,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269
 CVE-2023-50449,2023-12-10T18:30:18Z,"Directory Traversal in JFinalCMS",com.jfinal:jfinal,0,,HIGH,CWE-22
 CVE-2023-50570,2023-12-29T15:30:37Z,"IPAddress Infinite Loop vulnerability (Disputed)","com.github.seancfoley:ipaddress",0,,MODERATE,CWE-835
 CVE-2023-50572,2023-12-29T15:30:37Z,"JLine vulnerable to out of memory error",org.jline:jline-parent,0,3.25.0,MODERATE,CWE-122;CWE-787
@@ -7491,11 +7494,11 @@ CVE-2024-24823,2024-02-07T18:24:20Z,"Graylog session fixation vulnerability thro
 CVE-2024-24824,2024-02-07T18:23:43Z,"Graylog vulnerable to instantiation of arbitrary classes triggered by API request","org.graylog2:graylog2-server",2.0.0,5.1.11,HIGH,CWE-284
 CVE-2024-24824,2024-02-07T18:23:43Z,"Graylog vulnerable to instantiation of arbitrary classes triggered by API request","org.graylog2:graylog2-server",5.2.0-alpha.1,5.2.4,HIGH,CWE-284
 CVE-2024-25125,2024-02-14T15:08:23Z,"Absolute path traversal vulnerability in digdag server",io.digdag:digdag-server,0,0.10.5.1,MODERATE,CWE-22
-CVE-2024-25143,2024-02-07T15:30:50Z,"Liferay Portal denial of service (memory consumption)","com.liferay.portal:release.portal.bom",7.2.0,7.3.7,MODERATE,CWE-400
-CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp19,MODERATE,CWE-834
-CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u6,MODERATE,CWE-834
-CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.4.0,7.4.13.u27,MODERATE,CWE-834
-CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.portal.bom",7.2.0,7.4.3.27,MODERATE,CWE-834
+CVE-2024-25143,2024-02-07T15:30:50Z,"Liferay Portal denial of service (memory consumption)","com.liferay.portal:release.portal.bom",7.2.0,7.3.7,HIGH,CWE-400;CWE-770
+CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp19,MODERATE,CWE-834;CWE-835
+CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u6,MODERATE,CWE-834;CWE-835
+CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.dxp.bom",7.4.0,7.4.13.u27,MODERATE,CWE-834;CWE-835
+CVE-2024-25144,2024-02-08T06:30:23Z,"Liferay Portal denial-of-service vulnerability","com.liferay.portal:release.portal.bom",7.2.0,7.4.3.27,MODERATE,CWE-834;CWE-835
 CVE-2024-25145,2024-02-07T15:30:50Z,"Liferay Portal stored cross-site scripting (XSS) vulnerability","com.liferay.portal:release.dxp.bom",0,7.2.10.fp17,CRITICAL,CWE-79
 CVE-2024-25145,2024-02-07T15:30:50Z,"Liferay Portal stored cross-site scripting (XSS) vulnerability","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-25145,2024-02-07T15:30:50Z,"Liferay Portal stored cross-site scripting (XSS) vulnerability","com.liferay.portal:release.dxp.bom",7.4.0,7.4.3.13u8,CRITICAL,CWE-79
@@ -7506,9 +7509,9 @@ CVE-2024-25146,2024-02-08T06:30:23Z,"Liferay Portal allows attackers to discover
 CVE-2024-25147,2024-02-21T03:30:37Z,"Liferay Portal and Liferay DXP vulnerable to Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp15,CRITICAL,CWE-79
 CVE-2024-25147,2024-02-21T03:30:37Z,"Liferay Portal and Liferay DXP vulnerable to Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-25147,2024-02-21T03:30:37Z,"Liferay Portal and Liferay DXP vulnerable to Cross-site Scripting","com.liferay.portal:release.portal.bom",0,,CRITICAL,CWE-79
-CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp15,HIGH,CWE-200
-CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,HIGH,CWE-200
-CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.portal.bom",7.2.0,7.4.2,HIGH,CWE-200
+CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp15,HIGH,CWE-200;CWE-201
+CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,HIGH,CWE-200;CWE-201
+CVE-2024-25148,2024-02-08T06:30:23Z,"Liferay Portal vulnerable to user impersonation","com.liferay.portal:release.portal.bom",7.2.0,7.4.2,HIGH,CWE-200;CWE-201
 CVE-2024-25151,2024-02-21T06:30:32Z,"Liferay Portal Calendar module and Liferay DXP vulnerable to Cross-site Scripting, content spoofing","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp15,MODERATE,CWE-79
 CVE-2024-25151,2024-02-21T06:30:32Z,"Liferay Portal Calendar module and Liferay DXP vulnerable to Cross-site Scripting, content spoofing","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,MODERATE,CWE-79
 CVE-2024-25151,2024-02-21T06:30:32Z,"Liferay Portal Calendar module and Liferay DXP vulnerable to Cross-site Scripting, content spoofing","com.liferay.portal:release.portal.bom",0,,MODERATE,CWE-79
@@ -7531,6 +7534,7 @@ CVE-2024-25638,2024-07-22T14:33:41Z,"DNSJava DNSSEC Bypass",dnsjava:dnsjava,0,3.
 CVE-2024-25710,2024-02-19T09:30:50Z,"Apache Commons Compress: Denial of service caused by an infinite loop for a corrupted DUMP file","org.apache.commons:commons-compress",1.3,1.26.0,HIGH,CWE-835
 CVE-2024-26138,2024-02-21T18:04:57Z,"XWiki extension license information is public, exposing instance id and license holder details","com.xwiki.licensing:application-licensing-licensor-ui",1.0,1.24.2,MODERATE,CWE-862
 CVE-2024-26140,2024-02-21T00:24:56Z,"Cross-site Scripting Vulnerability in Statement Browser",com.yetanalytics:lrs,0,1.2.17,MODERATE,CWE-79
+CVE-2024-26265,2024-02-20T15:31:03Z,"Liferay Portal vulnerable to Denial of Service","com.liferay.portal:release.portal.bom",0,7.4.3.16,MODERATE,CWE-400;CWE-770
 CVE-2024-26266,2024-02-21T03:30:38Z,"Liferay Portal and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.2.0,7.2.10.fp17,CRITICAL,CWE-79
 CVE-2024-26266,2024-02-21T03:30:38Z,"Liferay Portal and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.3.10.ep3,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-26266,2024-02-21T03:30:38Z,"Liferay Portal and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.4.13.u1,7.4.13.u10,CRITICAL,CWE-79
@@ -7759,7 +7763,7 @@ CVE-2024-3653,2024-07-09T00:31:40Z,"Undertow Missing Release of Memory after Eff
 CVE-2024-36543,2024-06-17T21:31:10Z,"STRIMZI incorrect access control",io.strimzi:strimzi,0,,HIGH,CWE-306;CWE-400
 CVE-2024-3656,2024-06-11T20:22:40Z,"Keycloak's admin API allows low privilege users to use administrative functions","org.keycloak:keycloak-services",0,24.0.5,HIGH,CWE-269;CWE-284
 CVE-2024-37084,2024-07-25T12:32:00Z,"Remote code execution in Spring Cloud Data Flow","org.springframework.cloud:spring-cloud-skipper",0,2.11.4,CRITICAL,CWE-22;CWE-94
-CVE-2024-37280,2024-06-13T18:31:58Z,"Elasticsearch StackOverflow vulnerability","org.elasticsearch:elasticsearch",8.13.1,8.14.0,MODERATE,CWE-122
+CVE-2024-37280,2024-06-13T18:31:58Z,"Elasticsearch StackOverflow vulnerability","org.elasticsearch:elasticsearch",8.13.1,8.14.0,MODERATE,CWE-122;CWE-787
 CVE-2024-37309,2024-06-13T19:39:06Z,"CrateDB has a Client initialized Session-Renegotiation DoS",io.crate:crate,0,5.7.2,MODERATE,CWE-770
 CVE-2024-37389,2024-07-08T09:32:22Z,"Apache NiFi vulnerable to Cross-site Scripting","org.apache.nifi:nifi-web-ui",1.10.0,1.27.0,MODERATE,CWE-79
 CVE-2024-37389,2024-07-08T09:32:22Z,"Apache NiFi vulnerable to Cross-site Scripting","org.apache.nifi:nifi-web-ui",2.0.0-M1,2.0.0-M4,MODERATE,CWE-79
@@ -7861,6 +7865,7 @@ CVE-2024-4540,2024-06-10T18:36:56Z,"Keycloak exposes sensitive information in Pu
 CVE-2024-45537,2024-09-17T21:30:32Z,"Apache Druid: Users can provide MySQL JDBC properties not on allow list",org.apache.druid:druid,0,30.0.1,LOW,CWE-20
 CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",1.8.0,15.10.9,MODERATE,CWE-359;CWE-862
 CVE-2024-45591,2024-09-10T15:53:27Z,"XWiki Platform document history including authors of any page exposed to unauthorized actors","org.xwiki.platform:xwiki-platform-rest-server",16.0.0-rc-1,16.3.0-rc-1,MODERATE,CWE-359;CWE-862
+CVE-2024-45772,2024-09-30T09:30:47Z,"Deserialization of Untrusted Data vulnerability in Apache Lucene Replicator.","org.apache.lucene:lucene-replicator",4.4.0,9.12.0,MODERATE,CWE-502
 CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",0,22.0.12,MODERATE,CWE-307;CWE-837
 CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",23.0.0,24.0.7,MODERATE,CWE-307;CWE-837
 CVE-2024-4629,2024-09-17T22:29:01Z,"Keycloak Services has a potential bypass of brute force protection","org.keycloak:keycloak-services",25.0.0,25.0.4,MODERATE,CWE-307;CWE-837
@@ -7878,6 +7883,15 @@ CVE-2024-46985,2024-09-23T20:27:22Z,"DataEase has an XML External Entity Referen
 CVE-2024-46997,2024-09-23T20:27:11Z,"DataEase's H2 datasource has a remote command execution risk",io.dataease:common,0,2.10.1,CRITICAL,CWE-74
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-47197,2024-09-26T09:31:42Z,"Maven Archetype Plugin: Maven Archetype integration-test may package local settings into the published artifact, possibly containing credentials","org.apache.maven.plugins:maven-archetype-plugin",3.2.1,3.3.0,LOW,CWE-200;CWE-922
+CVE-2024-47554,2024-10-03T12:30:48Z,"Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReader",commons-io:commons-io,2.0,2.14.0,HIGH,CWE-400
+CVE-2024-47561,2024-10-03T12:30:48Z,"Apache Avro Java SDK: Arbitrary Code Execution when reading Avro Data (Java SDK)","org.apache.avro:avro-parent",0,1.11.4,CRITICAL,CWE-502
+CVE-2024-47803,2024-10-02T18:31:32Z,"Jenkins exposes multi-line secrets through error messages","org.jenkins-ci.main:jenkins-core",0,2.462.3,MODERATE,CWE-209
+CVE-2024-47803,2024-10-02T18:31:32Z,"Jenkins exposes multi-line secrets through error messages","org.jenkins-ci.main:jenkins-core",2.466,2.479,MODERATE,CWE-209
+CVE-2024-47804,2024-10-02T18:31:32Z,"Jenkins item creation restriction bypass vulnerability","org.jenkins-ci.main:jenkins-core",0,2.462.3,MODERATE,CWE-863
+CVE-2024-47804,2024-10-02T18:31:32Z,"Jenkins item creation restriction bypass vulnerability","org.jenkins-ci.main:jenkins-core",2.466,2.479,MODERATE,CWE-863
+CVE-2024-47806,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugin lacks audience claim validation","org.jenkins-ci.plugins:oic-auth",0,4.355.v3a,CRITICAL,CWE-287
+CVE-2024-47807,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugin lacks issuer claim validation","org.jenkins-ci.plugins:oic-auth",0,4.355.v3a,CRITICAL,CWE-287
+CVE-2024-47855,2024-10-04T06:30:45Z,"JSON-lib mishandles an unbalanced comment string","org.kordamp.json:json-lib-core",0,3.1.0,MODERATE,
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
 CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vulnerability","org.jenkins-ci.plugins:report-info",0,,MODERATE,CWE-22
@@ -7885,7 +7899,8 @@ CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",0,22.0.12,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",23.0.0,24.0.6,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",25.0.0,25.0.1,LOW,CWE-276
-CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","io.undertow:undertow-core",0,,HIGH,CWE-674
+CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","io.undertow:undertow-core",0,2.2.34.Final,HIGH,CWE-674
+CVE-2024-5971,2024-07-08T21:31:40Z,"Undertow Denial of Service vulnerability","io.undertow:undertow-core",2.3.0.Alpha1,2.3.15.Final,HIGH,CWE-674
 CVE-2024-6162,2024-06-20T15:31:19Z,"Undertow's url-encoded request path information can be broken on ajp-listener","io.undertow:undertow-core",0,2.3.14.Final,HIGH,CWE-400
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability","org.webjars.npm:bootstrap",2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",org.webjars:bootstrap,2.0.0,,MODERATE,CWE-79
@@ -7917,6 +7932,7 @@ CVE-2024-8642,2024-09-11T15:31:12Z,"Eclipse Dataspace Components's ConsumerPullT
 CVE-2024-8646,2024-09-11T15:31:12Z,"Eclipse Glassfish URL redirection vulnerability","org.glassfish.main.web:web-core",0,7.0.10,MODERATE,CWE-601
 CVE-2024-8698,2024-09-19T18:30:52Z,"Keycloak SAML signature validation flaw","org.keycloak:keycloak-saml-core",0,25.0.6,HIGH,CWE-347
 CVE-2024-8883,2024-09-19T18:30:52Z,"Keycloak Open Redirect vulnerability","org.keycloak:keycloak-services",0,25.0.6,HIGH,CWE-601
+CVE-2024-9329,2024-09-30T09:30:47Z,"Eclipse Glassfish improperly handles http parameters","org.glassfish.main.admin:rest-service",0,7.0.17,MODERATE,CWE-233
 GHSA-227w-wv4j-67h4,2022-02-09T22:30:30Z,"Class Loading Vulnerability in Artemis","de.tum.in.ase:artemis-java-test-sandbox",0,1.8.0,HIGH,CWE-501;CWE-653
 GHSA-2gh6-wc3m-g37f,2024-09-17T19:29:24Z,"hermes-management is vulnerable to RCE due to Apache commons-jxpath","pl.allegro.tech.hermes:hermes-management",0,2.2.9,CRITICAL,CWE-1395
 GHSA-2pwh-52h7-7j84,2021-04-16T19:52:49Z,"JavaScript execution via malicious molfiles (XSS)","de.ipb-halle:molecularfaces",0,0.3.0,MODERATE,CWE-79
@@ -7937,12 +7953,6 @@ GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitra
 GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",11.0.0-alpha0,11.0.16,LOW,CWE-611
 GHSA-58qw-p7qm-5rvh,2023-07-10T21:52:39Z,"Eclipse Jetty XmlParser allows arbitrary DOCTYPE declarations","org.eclipse.jetty:jetty-xml",12.0.0.alpha0,12.0.0,LOW,CWE-611
 GHSA-5968-qw33-h47j,2023-12-15T00:31:03Z,"Duplicate Advisory: Keycloak vulnerable to reflected XSS via wildcard in OIDC redirect_uri","org.keycloak:keycloak-services",0,23.0.3,MODERATE,CWE-75
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",0,2.17.0,CRITICAL,CWE-269
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",3.0.0,3.3.0,CRITICAL,CWE-269
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",0,2.17.0,CRITICAL,CWE-269
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",3.0.0,3.3.0,CRITICAL,CWE-269
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269
-GHSA-59c9-pxq8-9c73,2023-12-13T13:33:57Z,"Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269
 GHSA-5c6q-f783-h888,2022-09-30T00:00:20Z,"AWS Redshift JDBC Driver fails to validate class type during object instantiation","com.amazon.redshift:redshift-jdbc42",0,2.1.0.8,HIGH,CWE-704
 GHSA-5vjc-qx43-r747,2022-03-18T23:57:52Z,"Stored Cross-site Scripting in folder-auth plugin","io.jenkins.plugins:folder-auth",0,1.4,MODERATE,CWE-79
 GHSA-5x5q-8cgm-2hjq,2023-03-31T22:44:09Z,"Karate has vulnerable dependency on json-smart package (CVE-2023-1370)","com.intuit.karate:karate-core",1.3.1,1.4.0,HIGH,CWE-674
@@ -7999,6 +8009,12 @@ GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certif
 GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certificate password exposure in client exception","com.clickhouse:clickhouse-jdbc",0,0.4.6,MODERATE,
 GHSA-g8ph-74m6-8m7r,2023-05-12T20:18:51Z,"ClickHouse vulnerable to client certificate password exposure in client exception","com.clickhouse:clickhouse-r2dbc",0,0.4.6,MODERATE,
 GHSA-g8q2-24jh-5hpc,2018-07-27T14:47:52Z,"High severity vulnerability that affects jquery-ui","org.webjars.npm:jquery-ui",0,1.12.0,HIGH,
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",0,2.17.0,CRITICAL,CWE-269;CWE-639;CWE-749
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security.xsuaa:spring-xsuaa",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639;CWE-749
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",0,2.17.0,CRITICAL,CWE-269;CWE-639;CWE-749
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:java-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639;CWE-749
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",0,2.17.0,CRITICAL,CWE-269;CWE-639;CWE-749
+GHSA-gcgw-q47m-prvj,2023-12-12T03:31:45Z,"Duplicate Advisory: Improper JWT Signature Validation in SAP Security Services Library ","com.sap.cloud.security:spring-security",3.0.0,3.3.0,CRITICAL,CWE-269;CWE-639;CWE-749
 GHSA-gmrm-8fx4-66x7,2024-06-18T12:30:42Z,"Duplicate Advisory: Keycloak: Leak of configured LDAP bind credentials","org.keycloak:keycloak-core",0,,LOW,CWE-276
 GHSA-h6wq-jw7q-grxv,2021-02-24T19:38:21Z,"Elliptic Curve Key Disclosure",org.bitbucket.b_c:jose4j,0.3.6,0.5.5,HIGH,
 GHSA-hvp5-5x4f-33fq,2024-04-22T15:56:04Z,"JADX file override vulnerability","io.github.skylot:jadx-core",0,1.5.0,LOW,CWE-22

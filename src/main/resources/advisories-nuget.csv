@@ -2165,7 +2165,7 @@ CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment f
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209
 CVE-2024-43377,2024-08-20T18:32:26Z,"Umbraco CMS Improper Access Control vulnerability",Umbraco.Cms,14.0.0,14.1.2,MODERATE,CWE-284
 CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","Serilog.Enrichers.ClientInfo",0,2.1.0,MODERATE,CWE-348;CWE-79
-CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-93
+CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-74;CWE-93
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,2.0.0,,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,5.0.0,MODERATE,CWE-79

@@ -743,7 +743,7 @@ CVE-2020-5268,2020-04-22T20:59:37Z,"Subject Confirmation Method not validated in
 CVE-2020-5809,2022-05-24T17:37:51Z,"Umbraco CMS vulnerable to stored XSS",UmbracoCms.Core,0,,MODERATE,CWE-79
 CVE-2020-5811,2021-04-13T15:51:33Z,"Authenticated path traversal in Umbraco CMS",UmbracoCms,0,8.9.2,MODERATE,CWE-22
 CVE-2020-7210,2022-05-24T17:07:13Z,"Umbraco CMS vulnerable to CSRF",UmbracoCMS.Core,0,8.5.0,MODERATE,CWE-352
-CVE-2020-7656,2020-05-20T16:18:01Z,"Cross-Site Scripting in jquery",jQuery,0,1.9.0,MODERATE,CWE-79
+CVE-2020-7656,2020-05-20T16:18:01Z,"Cross-Site Scripting in jquery",jQuery,1.2.1,1.9.0,MODERATE,CWE-79
 CVE-2020-7685,2020-07-29T17:29:51Z,"Insecure defaults in UmbracoForms",UmbracoForms,0,,HIGH,CWE-1188
 CVE-2020-7791,2020-12-14T19:50:22Z,"Denial of Service in i18n",i18n,0,2.1.15,HIGH,CWE-20;CWE-400
 CVE-2020-8867,2021-08-02T17:35:42Z,"Insufficient Session Expiration and TOCTOU Race Condition in OPC FOundation UA .Net Standard","OPCFoundation.NetStandard.Opc.Ua",0,1.4.359.31,MODERATE,CWE-367;CWE-613
@@ -1676,8 +1676,8 @@ CVE-2023-29337,2023-06-14T16:44:21Z,"NuGet Client Remote Code Execution Vulnerab
 CVE-2023-29337,2023-06-14T16:44:21Z,"NuGet Client Remote Code Execution Vulnerability",NuGet.Protocol,6.5.0,6.5.1,HIGH,CWE-367
 CVE-2023-29337,2023-06-14T16:44:21Z,"NuGet Client Remote Code Execution Vulnerability",NuGet.Protocol,6.6.0,6.6.1,HIGH,CWE-367
 CVE-2023-30626,2023-04-24T22:39:03Z,"Directory traversal + file write causing arbitrary code execution",Jellyfin.Controller,10.8.0,10.8.10,HIGH,CWE-22
-CVE-2023-31048,2023-05-05T02:19:11Z,"Exposure of Sensitive Information in OPC UA .NET Standard Reference Server","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.4.371.86,MODERATE,CWE-200
-CVE-2023-31048,2023-05-05T02:19:11Z,"Exposure of Sensitive Information in OPC UA .NET Standard Reference Server","OPCFoundation.NetStandard.Opc.Ua.Server",0,1.4.371.86,MODERATE,CWE-200
+CVE-2023-31048,2023-05-05T02:19:11Z,"Exposure of Sensitive Information in OPC UA .NET Standard Reference Server","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.4.371.86,MODERATE,CWE-200;CWE-209
+CVE-2023-31048,2023-05-05T02:19:11Z,"Exposure of Sensitive Information in OPC UA .NET Standard Reference Server","OPCFoundation.NetStandard.Opc.Ua.Server",0,1.4.371.86,MODERATE,CWE-200;CWE-209
 CVE-2023-31285,2023-04-27T03:30:23Z,"Cross Site Scripting (XSS) in Serenity",Serenity.Net.Core,0,6.7.0,MODERATE,CWE-79
 CVE-2023-31285,2023-04-27T03:30:23Z,"Cross Site Scripting (XSS) in Serenity",Serenity.Net.Services,0,6.7.0,MODERATE,CWE-79
 CVE-2023-31286,2023-04-27T03:30:23Z,"User account enumeration in Serenity",Serenity.Net.Core,0,6.7.0,MODERATE,CWE-209
@@ -1818,8 +1818,9 @@ CVE-2023-38180,2023-08-09T12:56:43Z,".NET Denial of Service Vulnerability","Micr
 CVE-2023-38694,2023-12-13T13:17:37Z,"Possible injection of HTML into user invite mails",Umbraco.CMS,11.0.0,12.1.0,LOW,CWE-79
 CVE-2023-38694,2023-12-13T13:17:37Z,"Possible injection of HTML into user invite mails",Umbraco.CMS,8.0.0,8.18.10,LOW,CWE-79
 CVE-2023-38694,2023-12-13T13:17:37Z,"Possible injection of HTML into user invite mails",Umbraco.CMS,9.0.0,10.7.0,LOW,CWE-79
-CVE-2023-41890,2023-09-20T23:01:52Z,"Sustainsys.Saml2 Insufficient Identity Provider Issuer Validation",Sustainsys.Saml2,0,1.0.3,HIGH,CWE-289
-CVE-2023-41890,2023-09-20T23:01:52Z,"Sustainsys.Saml2 Insufficient Identity Provider Issuer Validation",Sustainsys.Saml2,2.0.0,2.9.2,HIGH,CWE-289
+CVE-2023-41890,2023-09-20T23:01:52Z,"Sustainsys.Saml2 Insufficient Identity Provider Issuer Validation",Kentor.AuthServices,0,,HIGH,CWE-289;CWE-294
+CVE-2023-41890,2023-09-20T23:01:52Z,"Sustainsys.Saml2 Insufficient Identity Provider Issuer Validation",Sustainsys.Saml2,0,1.0.3,HIGH,CWE-289;CWE-294
+CVE-2023-41890,2023-09-20T23:01:52Z,"Sustainsys.Saml2 Insufficient Identity Provider Issuer Validation",Sustainsys.Saml2,2.0.0,2.9.2,HIGH,CWE-289;CWE-294
 CVE-2023-44390,2023-10-04T18:52:35Z,"HtmlSanitizer vulnerable to Cross-site Scripting in Foreign Content",HtmlSanitizer,0,8.0.723,MODERATE,CWE-79
 CVE-2023-44390,2023-10-04T18:52:35Z,"HtmlSanitizer vulnerable to Cross-site Scripting in Foreign Content",HtmlSanitizer,8.1.0-beta,8.1.722-beta,MODERATE,CWE-79
 CVE-2023-45814,2023-10-19T16:11:59Z,"Bunkum tokens cached in the AuthenticationService are susceptible to a use-after-free",Bunkum,4.0.0,4.2.1,MODERATE,CWE-772
@@ -2138,6 +2139,30 @@ CVE-2024-38168,2024-08-13T19:27:23Z,"Microsoft Security Advisory CVE-2024-38168 
 CVE-2024-38168,2024-08-13T19:27:23Z,"Microsoft Security Advisory CVE-2024-38168 | .NET Denial of Service Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm64",8.0.0,8.0.8,HIGH,CWE-400
 CVE-2024-38168,2024-08-13T19:27:23Z,"Microsoft Security Advisory CVE-2024-38168 | .NET Denial of Service Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x64",8.0.0,8.0.8,HIGH,CWE-400
 CVE-2024-38168,2024-08-13T19:27:23Z,"Microsoft Security Advisory CVE-2024-38168 | .NET Denial of Service Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x86",8.0.0,8.0.8,HIGH,CWE-400
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-x64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-x64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-x64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-x64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-arm64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-arm64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-x64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-x64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x64",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x64",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x86",8.0.0,8.0.10,HIGH,CWE-362;CWE-416
+CVE-2024-38229,2024-10-08T17:43:46Z,"Microsoft Security Advisory CVE-2024-38229 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x86",9.0.0-preview.1.24081.5,9.0.0-rc.2.24474.3,HIGH,CWE-362;CWE-416
 CVE-2024-38356,2024-06-19T15:07:08Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noneditable_regexp option",TinyMCE,0,5.11.0,MODERATE,CWE-79
 CVE-2024-38356,2024-06-19T15:07:08Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noneditable_regexp option",TinyMCE,6.0.0,6.8.4,MODERATE,CWE-79
 CVE-2024-38356,2024-06-19T15:07:08Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noneditable_regexp option",TinyMCE,7.0.0,7.2.0,MODERATE,CWE-79
@@ -2164,6 +2189,18 @@ CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment f
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Host,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209
 CVE-2024-43377,2024-08-20T18:32:26Z,"Umbraco CMS Improper Access Control vulnerability",Umbraco.Cms,14.0.0,14.1.2,MODERATE,CWE-284
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","System.Security.Cryptography.Cose",8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","System.Security.Cryptography.Cose",9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,6.0.0-preview.1.21102.12,6.0.1,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.Runtime.Caching,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.Runtime.Caching,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
+CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,6.0.0-preview.1.21102.12,6.0.1,HIGH,CWE-407
+CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
+CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
+CVE-2024-43485,2024-10-08T20:25:19Z,"Microsoft Security Advisory CVE-2024-43485 | .NET Denial of Service Vulnerability",System.Text.Json,6.0.0,6.0.10,HIGH,CWE-407
+CVE-2024-43485,2024-10-08T20:25:19Z,"Microsoft Security Advisory CVE-2024-43485 | .NET Denial of Service Vulnerability",System.Text.Json,8.0.0,8.0.5,HIGH,CWE-407
 CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","Serilog.Enrichers.ClientInfo",0,2.1.0,MODERATE,CWE-348;CWE-79
 CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-74;CWE-93
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79

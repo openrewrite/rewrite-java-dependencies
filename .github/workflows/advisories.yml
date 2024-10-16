@@ -41,12 +41,12 @@ jobs:
         run: |
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
           sort --output=src/main/resources/advisories-maven.csv src/main/resources/advisories-maven.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-maven.csv && git push origin main)
+          git diff-index --quiet HEAD src/main/resources/advisories-maven.csv || (git commit --message "${{ env.MSG }} for Maven" src/main/resources/advisories-maven.csv && git push origin main)
       - name: Commit and push Nuget dependency vulnerabilities to rewrite-java-dependencies
         run: |
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Nuget src/main/resources/advisories-nuget.csv"
           sort --output=src/main/resources/advisories-nuget.csv src/main/resources/advisories-nuget.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-nuget.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-nuget.csv && git push origin main)
+          git diff-index --quiet HEAD src/main/resources/advisories-nuget.csv || (git commit --message "${{ env.MSG }} for NuGet" src/main/resources/advisories-nuget.csv && git push origin main)
 
       # Load SSH deploy-key
       - uses: webfactory/ssh-agent@v0.9.0
@@ -60,5 +60,5 @@ jobs:
           ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database NPM rewrite-nodejs/src/main/resources/advisories-npm.csv"
           cd rewrite-nodejs/
           sort --output=src/main/resources/advisories-npm.csv src/main/resources/advisories-npm.csv
-          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || (git commit --message "${{ env.MSG }}" src/main/resources/advisories-npm.csv && git push origin main)
+          git diff-index --quiet HEAD src/main/resources/advisories-npm.csv || (git commit --message "${{ env.MSG }} for NPM" src/main/resources/advisories-npm.csv && git push origin main)
 

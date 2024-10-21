@@ -735,6 +735,8 @@ CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to
 CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack","MessagePack.ReactiveProperty",2.0.0,2.1.90,MODERATE,CWE-121
 CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack,0,1.9.11,MODERATE,CWE-121
 CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack,2.0.0,2.1.90,MODERATE,CWE-121
+CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack.Unity,0,1.9.11,MODERATE,CWE-121
+CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack.Unity,2.0.0,2.1.90,MODERATE,CWE-121
 CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack.UnityShims,0,1.9.11,MODERATE,CWE-121
 CVE-2020-5234,2020-01-31T17:59:20Z,"Untrusted data can lead to DoS attack due to hash collisions and stack overflow in MessagePack",MessagePack.UnityShims,2.0.0,2.1.90,MODERATE,CWE-121
 CVE-2020-5261,2020-03-25T16:52:49Z,"Missing Token Replay Detection in Saml2 Authentication services for ASP.NET",Sustainsys.Saml2,2.0.0,2.5.0,HIGH,CWE-294
@@ -2189,13 +2191,14 @@ CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment f
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Host,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209
 CVE-2024-43377,2024-08-20T18:32:26Z,"Umbraco CMS Improper Access Control vulnerability",Umbraco.Cms,14.0.0,14.1.2,MODERATE,CWE-284
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",6.0.0-preview.1.21102.12,6.0.2,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
+CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","System.Security.Cryptography.Cose",8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","System.Security.Cryptography.Cose",9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,6.0.0-preview.1.21102.12,6.0.1,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.IO.Packaging,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
-CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.Runtime.Caching,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
-CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability",System.Runtime.Caching,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
 CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,6.0.0-preview.1.21102.12,6.0.1,HIGH,CWE-407
 CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
 CVE-2024-43484,2024-10-08T20:24:56Z,"Microsoft Security Advisory CVE-2024-43484 | .NET Denial of Service Vulnerability",System.IO.Packaging,9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
@@ -2203,6 +2206,10 @@ CVE-2024-43485,2024-10-08T20:25:19Z,"Microsoft Security Advisory CVE-2024-43485 
 CVE-2024-43485,2024-10-08T20:25:19Z,"Microsoft Security Advisory CVE-2024-43485 | .NET Denial of Service Vulnerability",System.Text.Json,8.0.0,8.0.5,HIGH,CWE-407
 CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","Serilog.Enrichers.ClientInfo",0,2.1.0,MODERATE,CWE-348;CWE-79
 CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-74;CWE-93
+CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua",0,1.5.374.118,MODERATE,CWE-770
+CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.5.374.118,MODERATE,CWE-770
+CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,0,2.5.187,MODERATE,CWE-328
+CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,2.6.95-alpha,3.0.214-rc.1,MODERATE,CWE-328
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,2.0.0,,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,5.0.0,MODERATE,CWE-79
@@ -2300,6 +2307,8 @@ GHSA-j646-gj5p-p45g,2023-09-21T17:11:42Z,"CefSharp affected by heap buffer overf
 GHSA-j646-gj5p-p45g,2023-09-21T17:11:42Z,"CefSharp affected by heap buffer overflow in WebP",CefSharp.Common.NETCore,0,116.0.230,CRITICAL,
 GHSA-jcmq-5rrv-j2g4,2024-02-02T21:04:47Z,"PowerShell is subject to remote code execution vulnerability",PowerShell,0,7.0.0,HIGH,
 GHSA-jw42-5m4v-9c8g,2024-01-09T18:30:27Z,"Duplicate Advisory: NuGet Client Security Feature Bypass Vulnerability  ",NuGet.CommandLine,6.8.0,6.8.1,CRITICAL,CWE-20
+GHSA-qm9f-c3v9-wphv,2024-10-18T20:04:51Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua",0,1.05.374.54,HIGH,CWE-770
+GHSA-qm9f-c3v9-wphv,2024-10-18T20:04:51Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.05.374.54,HIGH,CWE-770
 GHSA-qrmm-w75w-3wpx,2021-12-09T19:08:38Z,"Server side request forgery in SwaggerUI","Swashbuckle.AspNetCore.SwaggerUI",0,6.3.0,MODERATE,CWE-918
 GHSA-qv8q-v995-72gr,2020-09-09T17:29:38Z,"personnummer/csharp vulnerable to Improper Input Validation",Personnummer,0,3.0.2,LOW,
 GHSA-qxx8-292g-2w66,2021-03-08T15:50:01Z,"Improper Authentication",Microsoft.Bot.Connector,4.10.0,4.10.3,HIGH,CWE-287

@@ -3,10 +3,7 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.ExecutionContext;
-import org.openrewrite.ScanningRecipe;
-import org.openrewrite.Tree;
-import org.openrewrite.TreeVisitor;
+import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.marker.JavaProject;
@@ -69,9 +66,9 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
                     for (ResolvedDependency dependency : dependencies) {
                         GroupArtifact ga = dependency.getGav().asGroupArtifact();
                         if (!acc.isInUse(javaProject, ga)) {
-                            tree = new RemoveDependency(ga.getGroupId(), ga.getArtifactId(), null, null)
-                                    .getVisitor()
-                                    .visitNonNull(tree, ctx);
+                            for (Recipe recipe : new RemoveDependency(ga.getGroupId(), ga.getArtifactId(), null, null).getRecipeList()) {
+                                tree = recipe.getVisitor().visitNonNull(tree, ctx);
+                            }
                         }
                     }
 
@@ -93,7 +90,13 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
         private final Map<String, GroupArtifact> typeFqnToGA = new HashMap<>();
 
         public boolean isInUse(JavaProject project, GroupArtifact ga) {
-            throw new IllegalStateException("not implemented");
+            Set<String> typesInUse = projectToTypesInUse.get(project);
+            for (String type : typesInUse) {
+                if (ga.equals(typeFqnToGA.get(type))) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void recordTypesInUse(JavaSourceFile cu) {

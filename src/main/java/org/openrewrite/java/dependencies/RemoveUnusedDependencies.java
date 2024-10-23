@@ -3,7 +3,10 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.ExecutionContext;
+import org.openrewrite.ScanningRecipe;
+import org.openrewrite.Tree;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.marker.JavaProject;
@@ -66,7 +69,7 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
                     for (ResolvedDependency dependency : dependencies) {
                         GroupArtifact ga = dependency.getGav().asGroupArtifact();
                         if (!acc.isInUse(javaProject, ga)) {
-                            tree = new RemoveDependency(ga.getGroupId(), ga.getArtifactId(), null, null )
+                            tree = new RemoveDependency(ga.getGroupId(), ga.getArtifactId(), null, null)
                                     .getVisitor()
                                     .visitNonNull(tree, ctx);
                         }
@@ -86,8 +89,8 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
     }
 
     public static class Accumulator {
-        Map<JavaProject, Set<String>> projectToTypesInUse = new HashMap<>();
-        private Map<String, GroupArtifact> typeFqnToGA = new HashMap<>();
+        private final Map<JavaProject, Set<String>> projectToTypesInUse = new HashMap<>();
+        private final Map<String, GroupArtifact> typeFqnToGA = new HashMap<>();
 
         public boolean isInUse(JavaProject project, GroupArtifact ga) {
             throw new IllegalStateException("not implemented");
@@ -97,7 +100,7 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
             TypesInUse types = cu.getTypesInUse();
             JavaProject javaProject = cu.getMarkers().findFirst(JavaProject.class).orElse(null);
             JavaSourceSet javaSourceSet = cu.getMarkers().findFirst(JavaSourceSet.class).orElse(null);
-            if(javaSourceSet == null || javaProject == null) {
+            if (javaSourceSet == null || javaProject == null) {
                 return;
             }
             recordTypesInUse(types, javaProject, javaSourceSet);
@@ -122,7 +125,7 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
                 String group = gav[0];
                 String artifact = gav[1];
                 GroupArtifact ga = new GroupArtifact(group, artifact);
-                for(JavaType.FullyQualified type : gavToTypes.getValue()) {
+                for (JavaType.FullyQualified type : gavToTypes.getValue()) {
                     String fqn = type.getFullyQualifiedName();
                     typeFqnToGA.put(fqn, ga);
                 }

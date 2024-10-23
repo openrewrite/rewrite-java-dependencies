@@ -1,6 +1,7 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.marker.JavaSourceSet;
 import org.openrewrite.test.RecipeSpec;
@@ -20,13 +21,15 @@ class RemoveUnusedDependenciesTest implements RewriteTest {
     private static final JavaSourceSet jssWithGuava = JavaSourceSet.build("main",
       JavaParser.dependenciesFromClasspath("guava"));
 
+    @DocumentExample
     @Test
     void mavenRemoveUnused() {
         rewriteRun(
           mavenProject("project",
             //language=xml
-            pomXml("""
-              <project>
+            pomXml(
+              """
+                <project>
                     <groupId>com.mycompany</groupId>
                     <artifactId>app</artifactId>
                     <version>1</version>
@@ -35,13 +38,14 @@ class RemoveUnusedDependenciesTest implements RewriteTest {
                             <groupId>com.google.guava</groupId>
                             <artifactId>guava</artifactId>
                             <version>29.0-jre</version>
-                            <type>pom</type>
                         </dependency>
                     </dependencies>
                 </project>
-              """),
+                """
+            ),
+            //language=java
             srcMainJava(
-              java(//language=java
+              java(
                 """
                   import java.util.List;
                   import java.util.ArrayList;

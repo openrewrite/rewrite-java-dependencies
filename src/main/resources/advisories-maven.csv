@@ -5677,8 +5677,8 @@ CVE-2022-45690,2022-12-13T15:30:26Z,"hutool-json stack overflow vulnerability",c
 CVE-2022-45693,2022-12-13T15:30:27Z,"Jettison Out-of-bounds Write vulnerability","org.codehaus.jettison:jettison",0,1.5.2,HIGH,CWE-787
 CVE-2022-45787,2023-01-06T12:31:34Z,"Apache James MIME4J vulnerable to information disclosure to local users","org.apache.james:apache-mime4j-storage",0,0.8.9,MODERATE,CWE-200;CWE-312
 CVE-2022-45801,2023-05-01T15:30:26Z,"Apache StreamPark LDAP Injection vulnerability","org.apache.streampark:streampark",1.0.0,2.0.0,MODERATE,CWE-74
-CVE-2022-45802,2023-07-06T19:24:19Z,"Apache StreamPark Path Traversal vulnerability","org.apache.streampark:streampark-common_2.11",0,2.0.0,CRITICAL,CWE-22
-CVE-2022-45802,2023-07-06T19:24:19Z,"Apache StreamPark Path Traversal vulnerability","org.apache.streampark:streampark-common_2.12",0,2.0.0,CRITICAL,CWE-22
+CVE-2022-45802,2023-07-06T19:24:19Z,"Apache StreamPark Path Traversal vulnerability","org.apache.streampark:streampark-common_2.11",0,2.0.0,CRITICAL,CWE-22;CWE-434
+CVE-2022-45802,2023-07-06T19:24:19Z,"Apache StreamPark Path Traversal vulnerability","org.apache.streampark:streampark-common_2.12",0,2.0.0,CRITICAL,CWE-22;CWE-434
 CVE-2022-45855,2023-07-12T12:31:35Z,"Apache Ambari Expression Language Injection vulnerability",org.apache.ambari:ambari,2.7.0,2.7.7,HIGH,CWE-917
 CVE-2022-45868,2022-11-23T21:30:31Z,"Password exposure in H2 Database ",com.h2database:h2,1.4.198,2.2.220,HIGH,CWE-200;CWE-312
 CVE-2022-45875,2023-01-04T15:30:19Z,"Apache DolphinScheduler vulnerable to Improper Input Validation","org.apache.dolphinscheduler:dolphinscheduler",0,3.0.2,CRITICAL,CWE-20
@@ -6004,7 +6004,7 @@ CVE-2023-27480,2023-03-08T17:19:30Z,"XWiki Platform vulnerable to data leak via 
 CVE-2023-27480,2023-03-08T17:19:30Z,"XWiki Platform vulnerable to data leak via Improper Restriction of XML External Entity Reference","org.xwiki.platform:xwiki-platform-xar-model",14.0,14.4.7,HIGH,CWE-611
 CVE-2023-27480,2023-03-08T17:19:30Z,"XWiki Platform vulnerable to data leak via Improper Restriction of XML External Entity Reference","org.xwiki.platform:xwiki-platform-xar-model",14.5,14.10-rc-1,HIGH,CWE-611
 CVE-2023-27602,2023-07-06T19:24:13Z,"Apache Linkis Unrestricted File Upload vulnerability",org.apache.linkis:linkis,0,1.3.2,CRITICAL,CWE-434
-CVE-2023-27603,2023-07-06T19:24:13Z,"Apache Linkis Zip Slip issue",org.apache.linkis:linkis,0,1.3.2,CRITICAL,CWE-434
+CVE-2023-27603,2023-07-06T19:24:13Z,"Apache Linkis Zip Slip issue",org.apache.linkis:linkis,0,1.3.2,CRITICAL,CWE-22;CWE-434
 CVE-2023-27898,2023-03-10T21:30:19Z,"Cross-site Scripting vulnerability in Jenkins","org.jenkins-ci.main:jenkins-core",0,2.375.4,HIGH,CWE-79
 CVE-2023-27898,2023-03-10T21:30:19Z,"Cross-site Scripting vulnerability in Jenkins","org.jenkins-ci.main:jenkins-core",2.376,2.394,HIGH,CWE-79
 CVE-2023-27899,2023-03-10T21:30:19Z,"Incorrect Authorization in Jenkins Core","org.jenkins-ci.main:jenkins-core",0,2.375.4,HIGH,CWE-863
@@ -7819,9 +7819,9 @@ CVE-2024-38810,2024-08-20T06:31:36Z,"Spring Security Missing Authorization vulne
 CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",0,5.3.40,HIGH,
 CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.0.0,6.0.24,HIGH,
 CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.1.0,6.1.13,HIGH,
-CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",0,5.3.41,LOW,CWE-178
-CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",6.0.0,6.0.25,LOW,CWE-178
-CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",6.1.0,6.1.14,LOW,CWE-178
+CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",0,5.3.41,MODERATE,CWE-178
+CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",6.0.0,6.0.25,MODERATE,CWE-178
+CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",6.1.0,6.1.14,MODERATE,CWE-178
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-rs",0,,MODERATE,CWE-79
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-seb",0,,MODERATE,CWE-79
 CVE-2024-39458,2024-06-26T18:30:28Z,"Exposure of secrets through system log in Jenkins Structs Plugin","org.jenkins-ci.plugins:structs",0,338.v848422169819,LOW,CWE-200
@@ -7866,6 +7866,7 @@ CVE-2024-43400,2024-08-19T21:49:07Z,"XWiki Platform allows XSS through XClass na
 CVE-2024-43400,2024-08-19T21:49:07Z,"XWiki Platform allows XSS through XClass name in string properties","org.xwiki.platform:xwiki-platform-oldcore",16.0.0-rc-1,16.0.0,CRITICAL,CWE-79;CWE-96
 CVE-2024-43401,2024-08-19T21:49:15Z,"In XWiki Platform, payloads stored in content is executed when a user with script/programming right edit them","org.xwiki.platform:xwiki-platform-web-templates",0,15.10-rc-1,CRITICAL,CWE-269;CWE-862
 CVE-2024-44076,2024-08-19T03:30:48Z,"Microcks's POST /api/import and POST /api/export endpoints allow non-administrator access","io.github.microcks:microcks-app",0,1.10.0,MODERATE,CWE-269;CWE-863
+CVE-2024-45031,2024-10-24T15:31:08Z,"Apache Syncope: Stored XSS in Console and Enduser","org.apache.syncope.client:syncope-client-console",2.1.0,,MODERATE,CWE-20;CWE-79
 CVE-2024-45216,2024-10-16T09:30:31Z,"Improper Authentication vulnerability in Apache Solr",org.apache.solr:solr,5.3.0,8.11.4,CRITICAL,CWE-287;CWE-863
 CVE-2024-45216,2024-10-16T09:30:31Z,"Improper Authentication vulnerability in Apache Solr",org.apache.solr:solr,9.0.0,9.7.0,CRITICAL,CWE-287;CWE-863
 CVE-2024-45217,2024-10-16T09:30:31Z,"Insecure Default Initialization of Resource vulnerability in Apache Solr",org.apache.solr:solr,6.6.0,8.11.4,HIGH,CWE-1188
@@ -7912,6 +7913,13 @@ CVE-2024-47806,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugi
 CVE-2024-47807,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugin lacks issuer claim validation","org.jenkins-ci.plugins:oic-auth",0,4.355.v3a,CRITICAL,CWE-287
 CVE-2024-47855,2024-10-04T06:30:45Z,"JSON-lib mishandles an unbalanced comment string","org.kordamp.json:json-lib-core",0,3.1.0,MODERATE,
 CVE-2024-47876,2024-10-15T14:04:27Z,"SAK-50571 Sakai Kernel users created with type roleview can login as a normal user","org.sakaiproject.kernel:sakai-kernel-impl",23.0,23.3,HIGH,CWE-285
+CVE-2024-47878,2024-10-24T17:54:25Z,"OpenRefine has a reflected cross-site scripting vulnerability (XSS) in GData extension (authorized.vt)","org.openrefine:extensions",0,3.8.3,HIGH,CWE-79
+CVE-2024-47879,2024-10-24T17:58:53Z,"OpenRefine's PreviewExpressionCommand, which is eval, lacks protection against cross-site request forgery (CSRF)",org.openrefine:main,0,3.8.3,HIGH,CWE-352;CWE-94
+CVE-2024-47880,2024-10-24T18:00:06Z,"OpenRefine has a reflected cross-site scripting vulnerability (XSS) from POST request in ExportRowsCommand","org.openrefine:openrefine",0,3.8.3,HIGH,CWE-348;CWE-79
+CVE-2024-47881,2024-10-24T18:11:20Z,"OpenRefine's SQLite integration allows filesystem access, remote code execution (RCE)",org.openrefine:database,3.4-beta,3.8.3,HIGH,
+CVE-2024-47882,2024-10-24T18:13:04Z,"OpenRefine's error page lacks escaping, leading to potential Cross-site Scripting on import of malicious project","org.openrefine:openrefine",0,3.8.3,MODERATE,CWE-79;CWE-81
+CVE-2024-47883,2024-10-24T18:16:43Z,"Butterfly has path/URL confusion in resource handling leading to multiple weaknesses","org.openrefine.dependencies:butterfly",0,1.2.6,CRITICAL,CWE-36;CWE-918
+CVE-2024-49760,2024-10-24T18:32:40Z,"OpenRefine has a path traversal in LoadLanguageCommand","org.openrefine:openrefine",0,3.8.3,HIGH,CWE-22
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
 CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vulnerability","org.jenkins-ci.plugins:report-info",0,,MODERATE,CWE-22
@@ -7978,6 +7986,7 @@ GHSA-35fr-h7jr-hh86,2019-12-06T18:55:47Z,"Improper Neutralization of CRLF Sequen
 GHSA-3h5r-928v-mxhh,2021-04-19T14:49:13Z,"Unauthorized client-side property update in UIDL request handler in Vaadin 10 and 11",com.vaadin:vaadin-bom,10.0.0,10.0.8,LOW,CWE-754
 GHSA-3h5r-928v-mxhh,2021-04-19T14:49:13Z,"Unauthorized client-side property update in UIDL request handler in Vaadin 10 and 11",com.vaadin:vaadin-bom,11.0.0,11.0.3,LOW,CWE-754
 GHSA-3mq5-fq9h-gj7j,2022-09-17T00:00:41Z,"Duplicate Advisory: Denial of Service due to parser crash","com.thoughtworks.xstream:xstream",0,,LOW,
+GHSA-3pg4-qwc8-426r,2024-10-24T18:30:00Z,"OpenRefine leaks Google API credentials in releases","org.openrefine:openrefine",0,3.8.3,HIGH,CWE-522
 GHSA-3qpm-h9ch-px3c,2022-01-06T18:31:23Z,"Remote code injection, Improper Input Validation and Uncontrolled Recursion in Log4j library","org.powernukkit:powernukkit",0,1.5.2.1,CRITICAL,CWE-20;CWE-400;CWE-502
 GHSA-3w6p-8f82-gw8r,2021-12-17T20:42:38Z,"Using JMSAppender in log4j configuration may lead to deserialization of untrusted data","ru.yandex.clickhouse:clickhouse-jdbc-bridge",0,2.0.7,HIGH,CWE-502
 GHSA-4m5p-5w5w-3jcf,2022-10-12T20:13:46Z,"com.enonic.xp:lib-auth vulnerable to Session Fixation",com.enonic.xp:lib-auth,0,7.7.4,CRITICAL,CWE-384
@@ -8080,6 +8089,7 @@ GHSA-mhgm-52vg-pvvc,2023-02-16T14:12:04Z,"Privilege escalation in Strongbox","co
 GHSA-mm44-wc5p-wqhq,2020-07-07T16:45:24Z,"Denial of service due to reference expansion in versions earlier than 4.0",com.upokecenter:cbor,0,4.0.0,HIGH,
 GHSA-mmwx-rj87-vfgr,2024-07-22T14:46:59Z,"DNSJava affected by KeyTrap - NSEC3 closest encloser proof can exhaust CPU resources",dnsjava:dnsjava,3.5.0,3.6.0,MODERATE,CWE-400
 GHSA-mmwx-rj87-vfgr,2024-07-22T14:46:59Z,"DNSJava affected by KeyTrap - NSEC3 closest encloser proof can exhaust CPU resources",org.jitsi:dnssecjava,0,,MODERATE,CWE-400
+GHSA-mpcw-3j5p-p99x,2024-10-24T18:27:50Z,"Butterfly's parseJSON, getJSON functions eval malicious input, leading to remote code execution (RCE)","org.openrefine.dependencies:butterfly",0,1.2.6,MODERATE,CWE-185;CWE-95
 GHSA-mwm4-5qwr-g9pf,2022-04-28T21:00:31Z,"Keycloak is vulnerable to IDN homograph attack","org.keycloak:keycloak-services",0,18.0.0,LOW,CWE-284
 GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive Hazelcast connection caching issue","io.apiman:apiman-distro-vertx",0,3.0.0.Final,HIGH,
 GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive Hazelcast connection caching issue","io.apiman:apiman-gateway-platforms-vertx",0,3.0.0.Final,HIGH,

@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -41,8 +42,9 @@ public class RemoveExpiredSuppressions extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new XmlIsoVisitor<ExecutionContext>() {
+
             @Override
-            public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
+            public  Xml.@Nullable Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
                 Xml.Tag t = super.visitTag(tag, ctx);
                 if (X_PATH_MATCHER.matches(getCursor())) {
                     Optional<Xml.Attribute> untilAttribute = t.getAttributes().stream()

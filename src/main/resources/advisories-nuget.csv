@@ -2208,8 +2208,18 @@ CVE-2024-44930,2024-08-29T18:31:36Z,"Serilog Client IP Spoofing vulnerability","
 CVE-2024-45302,2024-08-29T19:30:51Z,"CRLF Injection in RestSharp's `RestRequest.AddHeader` method",RestSharp,107.0.0-preview.1,112.0.0,MODERATE,CWE-113;CWE-74;CWE-93
 CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua",0,1.5.374.118,MODERATE,CWE-770
 CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.5.374.118,MODERATE,CWE-770
+CVE-2024-47819,2024-10-22T17:50:08Z,"Umbraco CMS vulnerable to stored Cross-site Scripting in the ""dictionary name"" on Dictionary section",Umbraco.Cms.StaticAssets,14.0.0,14.3.1,MODERATE,CWE-79;CWE-80
 CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,0,2.5.187,MODERATE,CWE-328
 CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,2.6.95-alpha,3.0.214-rc.1,MODERATE,CWE-328
+CVE-2024-48925,2024-10-22T17:51:26Z,"Umbraco CMS Improper Access Control Vulnerability Allows Low-Privilege Users to Access Webhook API",Umbraco.CMS,14.0.0,14.3.0,LOW,CWE-284;CWE-863
+CVE-2024-48926,2024-10-22T17:55:01Z,"Umbraco CMS logout page displayed before session expiration",Umbraco.CMS,10.0.0,10.8.7,MODERATE,CWE-613
+CVE-2024-48926,2024-10-22T17:55:01Z,"Umbraco CMS logout page displayed before session expiration",Umbraco.CMS,13.0.0,13.5.2,MODERATE,CWE-613
+CVE-2024-48926,2024-10-22T17:55:01Z,"Umbraco CMS logout page displayed before session expiration",UmbracoCMS,8.0.0,8.18.15,MODERATE,CWE-613
+CVE-2024-48927,2024-10-22T18:12:38Z,"Umbraco has a Potential Code Execution Risk When Viewing SVG Files in Full Screen in Backoffice",Umbraco.Cms,10.0.0,10.8.7,MODERATE,CWE-74
+CVE-2024-48927,2024-10-22T18:12:38Z,"Umbraco has a Potential Code Execution Risk When Viewing SVG Files in Full Screen in Backoffice",Umbraco.Cms,13.0.0,13.5.2,MODERATE,CWE-74
+CVE-2024-48927,2024-10-22T18:12:38Z,"Umbraco has a Potential Code Execution Risk When Viewing SVG Files in Full Screen in Backoffice",UmbracoCms,8.0.0,8.18.15,MODERATE,CWE-74
+CVE-2024-48929,2024-10-22T18:13:47Z,"Umbraco CMS Has Incomplete Server Termination During Explicit Sign-Out",Umbraco.CMS,10.0.0,10.8.7,MODERATE,CWE-384
+CVE-2024-48929,2024-10-22T18:13:47Z,"Umbraco CMS Has Incomplete Server Termination During Explicit Sign-Out",Umbraco.CMS,13.0.0,13.5.2,MODERATE,CWE-384
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,2.0.0,,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,5.0.0,MODERATE,CWE-79

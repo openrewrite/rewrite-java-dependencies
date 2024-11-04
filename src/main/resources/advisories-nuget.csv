@@ -2191,6 +2191,7 @@ CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment f
 CVE-2024-41799,2024-07-29T16:44:15Z,"tgstation-server's DreamMaker environment files outside the deployment directory can be compiled and ran by insufficiently permissioned users",Tgstation.Server.Host,4.0.0,6.8.0,HIGH,CWE-22
 CVE-2024-43376,2024-08-20T18:25:15Z,"Umbraco CMS vulnerable to Generation of Error Message Containing Sensitive Information","Umbraco.Cms.Api.Management",14.0.0,14.1.2,MODERATE,CWE-209
 CVE-2024-43377,2024-08-20T18:32:26Z,"Umbraco CMS Improper Access Control vulnerability",Umbraco.Cms,14.0.0,14.1.2,MODERATE,CWE-284
+CVE-2024-43383,2024-10-31T12:30:32Z,"Apache Lucene.Net.Replicator Deserialization of Untrusted Data vulnerability",Lucene.Net.Replicator,4.8.0-beta00005,4.8.0-beta00017,HIGH,CWE-502
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",6.0.0-preview.1.21102.12,6.0.2,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",8.0.0-preview.1.23110.8,8.0.1,HIGH,CWE-407
 CVE-2024-43483,2024-10-08T20:24:41Z,"Microsoft Security Advisory CVE-2024-43483 | .NET Denial of Service Vulnerability","Microsoft.Extensions.Caching.Memory",9.0.0-preview.1.24080.9,9.0.0-rc.2.24473.5,HIGH,CWE-407
@@ -2220,6 +2221,12 @@ CVE-2024-48927,2024-10-22T18:12:38Z,"Umbraco has a Potential Code Execution Risk
 CVE-2024-48927,2024-10-22T18:12:38Z,"Umbraco has a Potential Code Execution Risk When Viewing SVG Files in Full Screen in Backoffice",UmbracoCms,8.0.0,8.18.15,MODERATE,CWE-74
 CVE-2024-48929,2024-10-22T18:13:47Z,"Umbraco CMS Has Incomplete Server Termination During Explicit Sign-Out",Umbraco.CMS,10.0.0,10.8.7,MODERATE,CWE-384
 CVE-2024-48929,2024-10-22T18:13:47Z,"Umbraco CMS Has Incomplete Server Termination During Explicit Sign-Out",Umbraco.CMS,13.0.0,13.5.2,MODERATE,CWE-384
+CVE-2024-49755,2024-10-28T19:44:10Z,"Duende IdentityServer has insufficient validation of DPoP cnf claim in Local APIs ",Duende.IdentityServer,7.0.0,7.0.8,LOW,CWE-287
+CVE-2024-49771,2024-10-28T18:30:32Z,"MPXJ has a Potential Path Traversal Vulnerability",MPXJ.Net,13.0.0,13.5.1,MODERATE,CWE-22
+CVE-2024-49771,2024-10-28T18:30:32Z,"MPXJ has a Potential Path Traversal Vulnerability",net.sf.mpxj,8.3.5,13.5.1,MODERATE,CWE-22
+CVE-2024-49771,2024-10-28T18:30:32Z,"MPXJ has a Potential Path Traversal Vulnerability",net.sf.mpxj-for-csharp,8.3.5,13.5.1,MODERATE,CWE-22
+CVE-2024-49771,2024-10-28T18:30:32Z,"MPXJ has a Potential Path Traversal Vulnerability",net.sf.mpxj-for-vb,8.3.5,13.5.1,MODERATE,CWE-22
+CVE-2024-50353,2024-10-30T14:40:58Z,"ICG.AspNetCore.Utilities.CloudStorage's Secure Token Durations Different Than Expected","ICG.AspNetCore.Utilities.CloudStorage",0,8.0.0,MODERATE,CWE-284
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,2.0.0,,MODERATE,CWE-79
 CVE-2024-6484,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap.sass,2.0.0,,MODERATE,CWE-79
 CVE-2024-6531,2024-07-11T18:31:14Z,"Bootstrap Cross-Site Scripting (XSS) vulnerability",bootstrap,4.0.0,5.0.0,MODERATE,CWE-79

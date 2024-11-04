@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -31,6 +32,7 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
         spec.recipe(new FindMinimumDependencyVersion("com.fasterxml.jackson*", "jackson-core", "2.14-2.16"));
     }
 
+    @DocumentExample
     @Test
     void minimumMaven() {
         rewriteRun(
@@ -167,6 +169,7 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
     @Test
     void findMultiple() {
         rewriteRun(
+          //language=yaml
           spec -> spec.recipeFromYaml("""
             type: specs.openrewrite.org/v1beta/recipe
             name: org.openrewrite.MyRecipe

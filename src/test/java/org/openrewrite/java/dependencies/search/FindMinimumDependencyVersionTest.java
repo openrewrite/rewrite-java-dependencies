@@ -163,4 +163,65 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
           )
         );
     }
+
+    @Test
+    void findMultiple() {
+        rewriteRun(
+          spec -> spec.recipeFromYaml("""
+            type: specs.openrewrite.org/v1beta/recipe
+            name: org.openrewrite.MyRecipe
+            description: composite recipe finding 2 versions.
+            recipeList:
+              - org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion:
+                  groupIdPattern: com.fasterxml.jackson.core
+                  artifactIdPattern: jackson-core
+                  version: 2.14-2.16
+              - org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion:
+                  groupIdPattern: commons-lang
+                  artifactIdPattern: commons-lang
+                  version: 2.5-2.7
+            """, "org.openrewrite.MyRecipe"),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <groupId>org.openrewrite</groupId>
+                <artifactId>core</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.15.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-lang</groupId>
+                        <artifactId>commons-lang</artifactId>
+                        <version>2.6</version>
+                    </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <!--~~(com.fasterxml.jackson.core:jackson-core:2.15.0)~~>--><!--~~(commons-lang:commons-lang:2.6)~~>--><project>
+                <groupId>org.openrewrite</groupId>
+                <artifactId>core</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.15.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-lang</groupId>
+                        <artifactId>commons-lang</artifactId>
+                        <version>2.6</version>
+                    </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
 }

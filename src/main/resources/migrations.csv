@@ -575,3 +575,4 @@ com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/
 com.github.javafaker,javafaker,net.datafaker,datafaker,"This library is a modern fork of java-faker, built on Java 8, with up to date libraries and several newly added Fake Generators. See https://github.com/datafaker-net/datafaker/"
 de.jollyday,jollyday,de.focus-shift,jollyday,"The old jollyday project is no longer maintained. This is a modern fork with jakarta dependencies and based on java 11."
 com.google.code.findbugs,,com.github.spotbugs,,"SpotBugs is a fork of FindBugs (which is now an abandoned project), carrying on from the point where it left off with support of its community."
+org.easytesting,fest-assert-core,org.assertj,assertj-core,"AssertJ is a fork of Fest and there are very few breaking changes."

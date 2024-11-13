@@ -77,9 +77,8 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
         return new AtomicBoolean(false);
     }
 
-    org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
-
-    org.openrewrite.maven.@Nullable RemoveDependency removeMavenDependency;
+    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
+    org.openrewrite.maven.RemoveDependency removeMavenDependency;
 
     public RemoveDependency(
             String groupId,
@@ -125,18 +124,17 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
             final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
 
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (!(tree instanceof SourceFile)) {
-                    return tree;
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree instanceof SourceFile) {
+                    SourceFile sf = (SourceFile) tree;
+                    if (gradleRemoveDep.isAcceptable(sf, ctx)) {
+                        return gradleRemoveDep.visitNonNull(tree, ctx);
+                    }
+                    if (mavenRemoveDep.isAcceptable(sf, ctx)) {
+                        return mavenRemoveDep.visitNonNull(tree, ctx);
+                    }
                 }
-                SourceFile sf = (SourceFile) tree;
-                if (gradleRemoveDep.isAcceptable(sf, ctx)) {
-                    return gradleRemoveDep.visitNonNull(tree, ctx);
-                }
-                if (mavenRemoveDep.isAcceptable(sf, ctx)) {
-                    return mavenRemoveDep.visitNonNull(tree, ctx);
-                }
-                return sf;
+                return tree;
             }
         };
     }

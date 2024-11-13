@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.Issue;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RewriteTest;
 
@@ -119,6 +120,7 @@ class RemoveDependencyTest implements RewriteTest {
         );
     }
 
+    @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/11")
     @Test
     void doNotRemoveIfInUse() {
         rewriteRun(
@@ -139,7 +141,7 @@ class RemoveDependencyTest implements RewriteTest {
                 }
                 """
             ))
-            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation *", null, null)),
+            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
           mavenProject("example",
             //language=java
             srcMainJava(
@@ -169,6 +171,55 @@ class RemoveDependencyTest implements RewriteTest {
                       <version>1.9.22.1</version>
                     </dependency>
                   </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/11")
+    @Test
+    void doRemoveIfNotInUse() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveDependency("org.aspectj", "aspectjrt", "java.lang.String", null, null)),
+          mavenProject("example",
+            //language=java
+            srcMainJava(
+              java(
+                """
+                  class MyLoggingInterceptor {
+                      // Not using String anywhere here; the dependency should be removed
+                  }
+                  """
+              )
+            ),
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.aspectj</groupId>
+                      <artifactId>aspectjrt</artifactId>
+                      <version>1.9.22.1</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
                 </project>
                 """
             )

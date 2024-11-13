@@ -19,9 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.java.MethodMatcher;
-import org.openrewrite.java.tree.JavaSourceFile;
-import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.search.UsesType;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -76,7 +74,7 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override
     public AtomicBoolean getInitialValue(ExecutionContext ctx) {
-        return unlessUsing == null ? new AtomicBoolean(true) : new AtomicBoolean(false);
+        return new AtomicBoolean(false);
     }
 
     org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
@@ -99,18 +97,17 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean acc) {
-        MethodMatcher methodMatcher = acc.get() ? null : new MethodMatcher(unlessUsing);
+    public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean usageFound) {
+        if (unlessUsing == null) {
+            return TreeVisitor.noop();
+        }
+        UsesType<ExecutionContext> usesType = new UsesType<>(unlessUsing, true);
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public Tree preVisit(Tree tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                if (tree instanceof JavaSourceFile && !acc.get()) {
-                    for (JavaType.Method type : ((JavaSourceFile) tree).getTypesInUse().getUsedMethods()) {
-                        if (methodMatcher.matches(type)) {
-                            acc.set(true);
-                        }
-                    }
+                if (!usageFound.get()) {
+                    usageFound.set(tree != usesType.visit(tree, ctx));
                 }
                 return tree;
             }
@@ -118,7 +115,11 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean acc) {
+    public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean usageFound) {
+        if (usageFound.get()) {
+            return TreeVisitor.noop();
+        }
+
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gradleRemoveDep = removeGradleDependency.getVisitor();
             final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
@@ -128,16 +129,14 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
                 if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
-                Tree t = tree;
-                if (acc.get()) {
-                    if (gradleRemoveDep.isAcceptable((SourceFile) t, ctx)) {
-                        t = gradleRemoveDep.visitNonNull(tree, ctx);
-                    }
-                    if (mavenRemoveDep.isAcceptable((SourceFile) t, ctx)) {
-                        t = mavenRemoveDep.visitNonNull(tree, ctx);
-                    }
+                SourceFile sf = (SourceFile) tree;
+                if (gradleRemoveDep.isAcceptable(sf, ctx)) {
+                    return gradleRemoveDep.visitNonNull(tree, ctx);
                 }
-                return t;
+                if (mavenRemoveDep.isAcceptable(sf, ctx)) {
+                    return mavenRemoveDep.visitNonNull(tree, ctx);
+                }
+                return sf;
             }
         };
     }

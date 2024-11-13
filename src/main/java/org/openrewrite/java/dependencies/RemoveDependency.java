@@ -18,38 +18,46 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
+import org.openrewrite.*;
+import org.openrewrite.java.search.UsesType;
 
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class RemoveDependency extends Recipe {
+public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     @Option(displayName = "Group ID",
-        description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
-        example = "com.fasterxml.jackson*")
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
+            example = "com.fasterxml.jackson*")
     String groupId;
 
     @Option(displayName = "Artifact ID",
-        description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
-        example = "jackson-module*")
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
+            example = "jackson-module*")
     String artifactId;
 
+    @Option(displayName = "Unless using",
+            description = "Do not remove if type is in use. Supports glob expressions.",
+            example = "org.aspectj.lang.*",
+            required = false)
+    @Nullable
+    String unlessUsing;
+
     // Gradle only parameter
-    @Option(displayName = "The dependency configuration", description = "The dependency configuration to remove from.", example = "api", required = false)
+    @Option(displayName = "The dependency configuration",
+            description = "The dependency configuration to remove from.",
+            example = "api",
+            required = false)
     @Nullable
     String configuration;
 
     // Maven only parameter
     @Option(displayName = "Scope",
-        description = "Only remove dependencies if they are in this scope. If 'runtime', this will" +
-                      "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
-        valid = {"compile", "test", "runtime", "provided"},
-        example = "compile",
-        required = false)
+            description = "Only remove dependencies if they are in this scope. If 'runtime', this will" +
+                          "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
+            valid = {"compile", "test", "runtime", "provided"},
+            example = "compile",
+            required = false)
     @Nullable
     String scope;
 
@@ -64,17 +72,23 @@ public class RemoveDependency extends Recipe {
                "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
     }
 
-    org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
+    @Override
+    public AtomicBoolean getInitialValue(ExecutionContext ctx) {
+        return new AtomicBoolean(false);
+    }
 
-    org.openrewrite.maven.@Nullable RemoveDependency removeMavenDependency;
+    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
+    org.openrewrite.maven.RemoveDependency removeMavenDependency;
 
     public RemoveDependency(
-        String groupId,
-        String artifactId,
-        @Nullable String configuration,
-        @Nullable String scope) {
+            String groupId,
+            String artifactId,
+            @Nullable String unlessUsing,
+            @Nullable String configuration,
+            @Nullable String scope) {
         this.groupId = groupId;
         this.artifactId = artifactId;
+        this.unlessUsing = unlessUsing;
         this.configuration = configuration;
         this.scope = scope;
         removeGradleDependency = new org.openrewrite.gradle.RemoveDependency(groupId, artifactId, configuration);
@@ -82,7 +96,46 @@ public class RemoveDependency extends Recipe {
     }
 
     @Override
-    public List<Recipe> getRecipeList() {
-        return Arrays.asList(removeGradleDependency, removeMavenDependency);
+    public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean usageFound) {
+        if (unlessUsing == null) {
+            return TreeVisitor.noop();
+        }
+        UsesType<ExecutionContext> usesType = new UsesType<>(unlessUsing, true);
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public Tree preVisit(Tree tree, ExecutionContext ctx) {
+                stopAfterPreVisit();
+                if (!usageFound.get()) {
+                    usageFound.set(tree != usesType.visit(tree, ctx));
+                }
+                return tree;
+            }
+        };
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean usageFound) {
+        if (usageFound.get()) {
+            return TreeVisitor.noop();
+        }
+
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            final TreeVisitor<?, ExecutionContext> gradleRemoveDep = removeGradleDependency.getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
+
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree instanceof SourceFile) {
+                    SourceFile sf = (SourceFile) tree;
+                    if (gradleRemoveDep.isAcceptable(sf, ctx)) {
+                        return gradleRemoveDep.visitNonNull(tree, ctx);
+                    }
+                    if (mavenRemoveDep.isAcceptable(sf, ctx)) {
+                        return mavenRemoveDep.visitNonNull(tree, ctx);
+                    }
+                }
+                return tree;
+            }
+        };
     }
 }

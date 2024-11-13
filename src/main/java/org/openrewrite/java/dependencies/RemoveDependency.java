@@ -38,19 +38,25 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
             example = "jackson-module*")
     String artifactId;
 
-    @Option(displayName = "Unless using", description = "If a dependency is used in the code, do not remove it.", example = "org.aspectj.lang.*")
+    @Option(displayName = "Unless using",
+            description = "Do not remove if type is in use. Supports glob expressions.",
+            example = "org.aspectj.lang.*",
+            required = false)
     @Nullable
     String unlessUsing;
 
     // Gradle only parameter
-    @Option(displayName = "The dependency configuration", description = "The dependency configuration to remove from.", example = "api", required = false)
+    @Option(displayName = "The dependency configuration",
+            description = "The dependency configuration to remove from.",
+            example = "api",
+            required = false)
     @Nullable
     String configuration;
 
     // Maven only parameter
     @Option(displayName = "Scope",
             description = "Only remove dependencies if they are in this scope. If 'runtime', this will" +
-                    "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
+                          "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile",
             required = false)
@@ -65,7 +71,7 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     @Override
     public String getDescription() {
         return "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
-                "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
+               "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
     }
 
     @Override

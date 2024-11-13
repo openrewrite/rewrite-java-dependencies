@@ -24,8 +24,6 @@ import org.openrewrite.Recipe;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class RemoveDependency extends Recipe { // TODO Extend ScanningRecipe instead

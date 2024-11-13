@@ -139,7 +139,7 @@ class RemoveDependencyTest implements RewriteTest {
                 }
                 """
             ))
-            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
+            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation *", null, null)),
           mavenProject("example",
             //language=java
             srcMainJava(

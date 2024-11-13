@@ -18,15 +18,16 @@ package org.openrewrite.java.dependencies;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.Option;
-import org.openrewrite.Recipe;
+import org.openrewrite.*;
+import org.openrewrite.java.MethodMatcher;
+import org.openrewrite.java.tree.JavaSourceFile;
+import org.openrewrite.java.tree.JavaType;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class RemoveDependency extends Recipe { // TODO Extend ScanningRecipe instead
+public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
@@ -67,6 +68,11 @@ public class RemoveDependency extends Recipe { // TODO Extend ScanningRecipe ins
                 "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
     }
 
+    @Override
+    public AtomicBoolean getInitialValue(ExecutionContext ctx) {
+        return unlessUsing == null ? new AtomicBoolean(true) : new AtomicBoolean(false);
+    }
+
     org.openrewrite.gradle.@Nullable RemoveDependency removeGradleDependency;
 
     org.openrewrite.maven.@Nullable RemoveDependency removeMavenDependency;
@@ -86,15 +92,47 @@ public class RemoveDependency extends Recipe { // TODO Extend ScanningRecipe ins
         removeMavenDependency = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope);
     }
 
-    // TODO Provide a scanner that looks across java sources to see if `unlessUsing` is used
-    // Optionally look for use in the correct scope and submodule, but for do-no-harm v1 can skip that for now
-
-
-    // TODO remove this method, and instead override getVisitor, as the scanning condition is not evaluated for getRecipeList
     @Override
-    public List<Recipe> getRecipeList() {
-        return Arrays.asList(removeGradleDependency, removeMavenDependency);
+    public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean acc) {
+        MethodMatcher methodMatcher = acc.get() ? null : new MethodMatcher(unlessUsing);
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public Tree preVisit(Tree tree, ExecutionContext ctx) {
+                stopAfterPreVisit();
+                if (tree instanceof JavaSourceFile && !acc.get()) {
+                    for (JavaType.Method type : ((JavaSourceFile) tree).getTypesInUse().getUsedMethods()) {
+                        if (methodMatcher.matches(type)) {
+                            acc.set(true);
+                        }
+                    }
+                }
+                return tree;
+            }
+        };
     }
 
-    // TODO override getVisitor that only calls out to removeGradleDependency or removeMavenDependency if the scanning condition is met
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean acc) {
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            final TreeVisitor<?, ExecutionContext> gradleRemoveDep = removeGradleDependency.getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
+
+            @Override
+            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (!(tree instanceof SourceFile)) {
+                    return tree;
+                }
+                Tree t = tree;
+                if (acc.get()) {
+                    if (gradleRemoveDep.isAcceptable((SourceFile) t, ctx)) {
+                        t = gradleRemoveDep.visitNonNull(tree, ctx);
+                    }
+                    if (mavenRemoveDep.isAcceptable((SourceFile) t, ctx)) {
+                        t = mavenRemoveDep.visitNonNull(tree, ctx);
+                    }
+                }
+                return t;
+            }
+        };
+    }
 }

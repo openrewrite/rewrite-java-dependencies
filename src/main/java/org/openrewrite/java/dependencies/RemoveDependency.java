@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class RemoveDependency extends Recipe {
+public class RemoveDependency extends Recipe { // TODO Extend ScanningRecipe instead
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
@@ -39,9 +39,9 @@ public class RemoveDependency extends Recipe {
             example = "jackson-module*")
     String artifactId;
 
-    @Option(displayName = "Unless using", description = "If a dependency is used in the code, do not remove it.")
+    @Option(displayName = "Unless using", description = "If a dependency is used in the code, do not remove it.", example = "org.aspectj.lang.*")
     @Nullable
-    Boolean unlessUsing;
+    String unlessUsing;
 
     // Gradle only parameter
     @Option(displayName = "The dependency configuration", description = "The dependency configuration to remove from.", example = "api", required = false)
@@ -76,7 +76,7 @@ public class RemoveDependency extends Recipe {
     public RemoveDependency(
             String groupId,
             String artifactId,
-            @Nullable Boolean unlessUsing,
+            @Nullable String unlessUsing,
             @Nullable String configuration,
             @Nullable String scope) {
         this.groupId = groupId;
@@ -88,12 +88,15 @@ public class RemoveDependency extends Recipe {
         removeMavenDependency = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope);
     }
 
+    // TODO Provide a scanner that looks across java sources to see if `unlessUsing` is used
+    // Optionally look for use in the correct scope and submodule, but for do-no-harm v1 can skip that for now
+
+
+    // TODO remove this method, and instead override getVisitor, as the scanning condition is not evaluated for getRecipeList
     @Override
     public List<Recipe> getRecipeList() {
-        if (Boolean.TRUE.equals(unlessUsing)) {
-            // logic to check if code uses the lib, if so ->
-            return emptyList();
-        }
         return Arrays.asList(removeGradleDependency, removeMavenDependency);
     }
+
+    // TODO override getVisitor that only calls out to removeGradleDependency or removeMavenDependency if the scanning condition is met
 }

@@ -3712,7 +3712,7 @@ CVE-2020-8920,2022-05-24T17:35:58Z,"Information leak in Gerrit","com.google.gerr
 CVE-2020-8920,2022-05-24T17:35:58Z,"Information leak in Gerrit","com.google.gerrit:gerrit-plugin-api",3.0.0,3.0.15,LOW,CWE-863
 CVE-2020-8920,2022-05-24T17:35:58Z,"Information leak in Gerrit","com.google.gerrit:gerrit-plugin-api",3.1.0,3.1.10,LOW,CWE-863
 CVE-2020-8920,2022-05-24T17:35:58Z,"Information leak in Gerrit","com.google.gerrit:gerrit-plugin-api",3.2.0,3.2.5,LOW,CWE-863
-CVE-2020-8929,2020-10-16T00:51:24Z,"Ciphertext Malleability Issue in Tink Java","com.google.crypto.tink:tink",0,1.5.0,LOW,CWE-176;CWE-327
+CVE-2020-8929,2020-10-16T00:51:24Z,"Ciphertext Malleability Issue in Tink Java","com.google.crypto.tink:tink",0,1.5.0,MODERATE,CWE-176;CWE-327
 CVE-2020-9296,2022-02-10T23:06:57Z,"Expression Language Injection in Netflix Conductor","com.netflix.conductor:conductor-core",0,2.25.4,CRITICAL,CWE-917
 CVE-2020-9298,2021-05-07T15:54:31Z,"Server-Side Request Forgery in Spinnaker Orca","com.netflix.spinnaker.orca:orca-core",0,8.7.0,HIGH,CWE-918
 CVE-2020-9447,2021-04-22T16:15:33Z,"Cross-site Scripting in GwtUpload","com.googlecode.gwtupload:gwtupload",0,,MODERATE,CWE-79
@@ -7190,8 +7190,8 @@ CVE-2023-50766,2023-12-13T18:31:04Z,"Jenkins Nexus Platform Plugin Cross-Site Re
 CVE-2023-50767,2023-12-13T18:31:04Z,"Jenkins Nexus Platform Plugin missing permission check","org.sonatype.nexus.ci:nexus-jenkins-plugin",0,3.18.1-01,HIGH,CWE-862
 CVE-2023-50768,2023-12-13T18:31:04Z,"Jenkins Nexus Platform Plugin Cross-Site Request Forgery vulnerability","org.sonatype.nexus.ci:nexus-jenkins-plugin",0,3.18.1-01,MODERATE,CWE-352
 CVE-2023-50769,2023-12-13T18:31:04Z,"Jenkins Nexus Platform Plugin missing permission check","org.sonatype.nexus.ci:nexus-jenkins-plugin",0,3.18.1-01,MODERATE,CWE-862
-CVE-2023-50770,2023-12-13T18:31:04Z,"Password stored in a recoverable format by Jenkins OpenId Connect Authentication Plugin ","org.jenkins-ci.plugins:oic-auth",0,,MODERATE,CWE-312;CWE-522
-CVE-2023-50771,2023-12-13T18:31:04Z,"Open redirect vulnerability in Jenkins OpenId Connect Authentication Plugin ","org.jenkins-ci.plugins:oic-auth",0,,MODERATE,CWE-601
+CVE-2023-50770,2023-12-13T18:31:04Z,"Password stored in a recoverable format by Jenkins OpenId Connect Authentication Plugin ","org.jenkins-ci.plugins:oic-auth",0,4.229.vf736b,MODERATE,CWE-312;CWE-522
+CVE-2023-50771,2023-12-13T18:31:04Z,"Open redirect vulnerability in Jenkins OpenId Connect Authentication Plugin ","org.jenkins-ci.plugins:oic-auth",0,3.0,MODERATE,CWE-601
 CVE-2023-50772,2023-12-13T18:31:04Z,"Tokens stored in plain text by Dingding JSON Pusher Plugin ","com.zintow:dingding-json-pusher",0,,MODERATE,CWE-312
 CVE-2023-50773,2023-12-13T18:31:04Z,"Displayed in plain text by Dingding JSON Pusher Plugin ","com.zintow:dingding-json-pusher",0,,MODERATE,CWE-200;CWE-312
 CVE-2023-50774,2023-12-13T18:31:04Z,"Cross-site request forgery vulnerability in Jenkins HTMLResource Plugin","org.jenkins-ci.plugins:htmlresource",0,,HIGH,CWE-352
@@ -7219,8 +7219,8 @@ CVE-2023-51445,2024-03-20T14:58:17Z,"Stored Cross-Site Scripting (XSS) vulnerabi
 CVE-2023-51518,2024-02-27T09:31:16Z,"Apache James server: Privilege escalation via JMX pre-authentication deserialization","org.apache.james:james-server",0,3.7.5,CRITICAL,CWE-502
 CVE-2023-51518,2024-02-27T09:31:16Z,"Apache James server: Privilege escalation via JMX pre-authentication deserialization","org.apache.james:james-server",3.8.0,3.8.1,CRITICAL,CWE-502
 CVE-2023-51656,2023-12-21T12:30:29Z,"Apache IoTDB: Unsafe deserialize map in Sync Tool","org.apache.iotdb:iotdb-parent",0.13.0,1.2.2,HIGH,CWE-502
-CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",0,3.7.5,MODERATE,CWE-20
-CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",3.8.0,3.8.1,MODERATE,CWE-20
+CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",0,3.7.5,HIGH,CWE-20;CWE-290
+CVE-2023-51747,2024-02-27T15:30:31Z,"SMTP smuggling in Apache James","org.apache.james:james-server",3.8.0,3.8.1,HIGH,CWE-20;CWE-290
 CVE-2023-51770,2024-02-20T12:31:00Z,"Arbitrary File Read Vulnerability in Apache Dolphinscheduler","org.apache.dolphinscheduler:dolphinscheduler",0,3.2.1,HIGH,CWE-94
 CVE-2023-51775,2024-02-29T03:33:14Z,"jose4j denial of service via specifically crafted JWE",org.bitbucket.b_c:jose4j,0,0.9.4,MODERATE,CWE-400
 CVE-2023-51784,2024-01-03T12:30:21Z,"Apache InLong Manager Remote Code Execution vulnerability","org.apache.inlong:manager-pojo",1.5.0,1.10.0,CRITICAL,CWE-94
@@ -7336,6 +7336,7 @@ CVE-2024-20925,2024-02-17T03:30:29Z,"Vulnerability affecting the org.openjfx:jav
 CVE-2024-20925,2024-02-17T03:30:29Z,"Vulnerability affecting the org.openjfx:javafx-media maven component of the OpenJFX project",org.openjfx:javafx-media,18,21.0.2,LOW,
 CVE-2024-21490,2024-02-10T06:30:19Z,"angular vulnerable to super-linear runtime due to backtracking","org.webjars.bower:angular",1.3.0,,HIGH,CWE-1333
 CVE-2024-21490,2024-02-10T06:30:19Z,"angular vulnerable to super-linear runtime due to backtracking",org.webjars.npm:angular,1.3.0,,HIGH,CWE-1333
+CVE-2024-21534,2024-10-11T15:30:32Z,"JSONPath Plus Remote Code Execution (RCE) Vulnerability","org.webjars.npm:jsonpath-plus",0,,CRITICAL,CWE-94
 CVE-2024-21634,2024-01-03T22:04:08Z,"Ion Java StackOverflow vulnerability","software.amazon.ion:ion-java",0,,HIGH,CWE-770
 CVE-2024-21634,2024-01-03T22:04:08Z,"Ion Java StackOverflow vulnerability",com.amazon.ion:ion-java,0,1.10.5,HIGH,CWE-770
 CVE-2024-21648,2024-01-08T16:25:58Z,"XWiki has no right protection on rollback action","org.xwiki.platform:xwiki-platform",15.0-rc-1,15.5.3,HIGH,CWE-274
@@ -7370,10 +7371,10 @@ CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or S
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",5.3.0,5.3.32,HIGH,CWE-601
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",6.0.0,6.0.17,HIGH,CWE-601
 CVE-2024-22243,2024-02-23T06:30:31Z,"Spring Web vulnerable to Open Redirect or Server Side Request Forgery","org.springframework:spring-web",6.1.0,6.1.4,HIGH,CWE-601
-CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",0,5.7.12,HIGH,CWE-287
-CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",5.8.0,5.8.11,HIGH,CWE-287
-CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.0.0,6.1.8,HIGH,CWE-287
-CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.2.0,6.2.3,HIGH,CWE-287
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",0,5.7.12,HIGH,CWE-287;CWE-862
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",5.8.0,5.8.11,HIGH,CWE-287;CWE-862
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.0.0,6.1.8,HIGH,CWE-287;CWE-862
+CVE-2024-22257,2024-03-18T15:30:51Z,"Erroneous authentication pass in Spring Security","org.springframework.security:spring-security-core",6.2.0,6.2.3,HIGH,CWE-287;CWE-862
 CVE-2024-22258,2024-03-20T15:32:28Z,"Improper Authentication in Spring Authorization Server","org.springframework.security:spring-security-oauth2-authorization-server",0,1.1.6,MODERATE,CWE-287
 CVE-2024-22258,2024-03-20T15:32:28Z,"Improper Authentication in Spring Authorization Server","org.springframework.security:spring-security-oauth2-authorization-server",1.2.0,1.2.3,MODERATE,CWE-287
 CVE-2024-22259,2024-03-16T06:30:27Z,"Spring Framework URL Parsing with Host Validation Vulnerability","org.springframework:spring-web",0,5.3.33,HIGH,CWE-601
@@ -7617,8 +7618,8 @@ CVE-2024-28157,2024-03-06T18:30:38Z,"Jenkins GitBucket Plugin vulnerable to stor
 CVE-2024-28158,2024-03-06T18:30:38Z,"Jenkins Subversion Partial Release Manager Plugin vulnerable to Cross-Site Request Forgery","org.jenkins-ci.plugins:svn-partial-release-mgr",0,,MODERATE,CWE-352
 CVE-2024-28159,2024-03-06T18:30:39Z,"Jenkins Subversion Partial Release Manager Plugin missing permission check","org.jenkins-ci.plugins:svn-partial-release-mgr",0,,MODERATE,CWE-862
 CVE-2024-28160,2024-03-06T18:30:39Z,"Jenkins iceScrum Plugin vulnerable to stored Cross-site Scripting","org.jenkins-ci.plugins:icescrum",0,,MODERATE,CWE-79
-CVE-2024-28161,2024-03-06T18:30:39Z,"Jenkins Delphix Plugin has SSL/TLS certificate validation disabled by default","org.jenkins-ci.plugins:delphix",3.0.1,3.0.2,MODERATE,
-CVE-2024-28162,2024-03-06T18:30:39Z,"Jenkins Delphix Plugin has improper SSL/TLS certificate validation","org.jenkins-ci.plugins:delphix",3.0.1,3.1.1,MODERATE,
+CVE-2024-28161,2024-03-06T18:30:39Z,"Jenkins Delphix Plugin has SSL/TLS certificate validation disabled by default","org.jenkins-ci.plugins:delphix",3.0.1,3.0.2,MODERATE,CWE-295
+CVE-2024-28162,2024-03-06T18:30:39Z,"Jenkins Delphix Plugin has improper SSL/TLS certificate validation","org.jenkins-ci.plugins:delphix",3.0.1,3.1.1,MODERATE,CWE-295
 CVE-2024-28168,2024-10-09T12:30:52Z,"Apache XML Graphics FOP XML External Entity Reference ('XXE') vulnerability","org.apache.xmlgraphics:fop-core",0,2.10,MODERATE,CWE-611
 CVE-2024-28213,2024-03-07T06:30:31Z,"nGrinder vulnerable to unsafe Java objects deserialization","org.ngrinder:ngrinder-core",0,3.5.9,CRITICAL,CWE-502
 CVE-2024-28253,2024-04-23T21:11:23Z,"OpenMetadata vulnerable to SpEL Injection in `PUT /api/v1/policies` (`GHSL-2023-252`)","org.open-metadata:openmetadata-service",0,1.3.1,CRITICAL,CWE-94
@@ -7628,6 +7629,7 @@ CVE-2024-28752,2024-03-15T12:30:37Z,"SSRF vulnerability using the Aegis DataBind
 CVE-2024-28847,2024-04-24T17:06:00Z,"OpenMetadata vulnerable to a SpEL Injection in `PUT /api/v1/events/subscriptions` (`GHSL-2023-251`)","org.open-metadata:openmetadata-service",0,1.2.4,HIGH,CWE-94
 CVE-2024-28848,2024-04-24T17:06:02Z,"OpenMetadata vulnerable to a SpEL Injection in `GET /api/v1/policies/validation/condition/<expr>` (`GHSL-2023-236`)","org.open-metadata:openmetadata-service",0,1.2.4,HIGH,CWE-94
 CVE-2024-29025,2024-03-25T19:40:50Z,"Netty's HttpPostRequestDecoder can OOM","io.netty:netty-codec-http",0,4.1.108.Final,MODERATE,CWE-770
+CVE-2024-29120,2024-07-17T15:30:52Z,"Apache StreamPark: Information leakage vulnerability","org.apache.streampark:streampark",2.0.0,2.1.4,MODERATE,CWE-212;CWE-922
 CVE-2024-29131,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError adding property in AbstractListDelimiterHandler.flattenIterator()","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
 CVE-2024-29133,2024-03-21T09:31:14Z,"Apache Commons Configuration: StackOverflowError calling ListDelimiterHandler.flatten(Object, int) with a cyclical object tree","org.apache.commons:commons-configuration2",2.0,2.10.1,MODERATE,CWE-787
 CVE-2024-29392,2024-05-22T18:30:40Z,"Silverpeas Core vulnerable to Cross Site Scripting","org.silverpeas:silverpeas-core",0,,MODERATE,CWE-79
@@ -7916,14 +7918,15 @@ CVE-2024-46997,2024-09-23T20:27:11Z,"DataEase's H2 datasource has a remote comma
 CVE-2024-4701,2024-05-09T21:35:23Z,"Genie Path Traversal vulnerability via File Uploads","com.netflix.genie:genie-web",0,4.3.18,CRITICAL,CWE-22
 CVE-2024-47072,2024-11-07T21:51:17Z,"XStream is vulnerable to a Denial of Service attack due to stack overflow from a manipulated binary input stream","com.thoughtworks.xstream:xstream",0,1.4.21,HIGH,CWE-121;CWE-502
 CVE-2024-47197,2024-09-26T09:31:42Z,"Maven Archetype Plugin: Maven Archetype integration-test may package local settings into the published artifact, possibly containing credentials","org.apache.maven.plugins:maven-archetype-plugin",3.2.1,3.3.0,LOW,CWE-200;CWE-922
+CVE-2024-47535,2024-11-12T19:53:17Z,"Denial of Service attack on windows app using netty",io.netty:netty-common,0,4.1.115,HIGH,CWE-400
 CVE-2024-47554,2024-10-03T12:30:48Z,"Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReader",commons-io:commons-io,2.0,2.14.0,HIGH,CWE-400
 CVE-2024-47561,2024-10-03T12:30:48Z,"Apache Avro Java SDK: Arbitrary Code Execution when reading Avro Data (Java SDK)",org.apache.avro:avro,0,1.11.4,CRITICAL,CWE-502
 CVE-2024-47803,2024-10-02T18:31:32Z,"Jenkins exposes multi-line secrets through error messages","org.jenkins-ci.main:jenkins-core",0,2.462.3,MODERATE,CWE-209
 CVE-2024-47803,2024-10-02T18:31:32Z,"Jenkins exposes multi-line secrets through error messages","org.jenkins-ci.main:jenkins-core",2.466,2.479,MODERATE,CWE-209
 CVE-2024-47804,2024-10-02T18:31:32Z,"Jenkins item creation restriction bypass vulnerability","org.jenkins-ci.main:jenkins-core",0,2.462.3,MODERATE,CWE-863
 CVE-2024-47804,2024-10-02T18:31:32Z,"Jenkins item creation restriction bypass vulnerability","org.jenkins-ci.main:jenkins-core",2.466,2.479,MODERATE,CWE-863
-CVE-2024-47805,2024-10-02T18:31:32Z,"Jenkins Credentials plugin reveals encrypted values of credentials to users with Extended Read permission","org.jenkins-ci.plugins:credentials",0,1371.1373.v4eb,MODERATE,CWE-200
-CVE-2024-47805,2024-10-02T18:31:32Z,"Jenkins Credentials plugin reveals encrypted values of credentials to users with Extended Read permission","org.jenkins-ci.plugins:credentials",1372,1381.v2c3a,MODERATE,CWE-200
+CVE-2024-47805,2024-10-02T18:31:32Z,"Jenkins Credentials plugin reveals encrypted values of credentials to users with Extended Read permission","org.jenkins-ci.plugins:credentials",0,1371.1373.v4eb,MODERATE,CWE-200;CWE-522
+CVE-2024-47805,2024-10-02T18:31:32Z,"Jenkins Credentials plugin reveals encrypted values of credentials to users with Extended Read permission","org.jenkins-ci.plugins:credentials",1372,1381.v2c3a,MODERATE,CWE-200;CWE-522
 CVE-2024-47806,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugin lacks audience claim validation","org.jenkins-ci.plugins:oic-auth",0,4.355.v3a,CRITICAL,CWE-287
 CVE-2024-47807,2024-10-02T18:31:32Z,"Jenkins OpenId Connect Authentication Plugin lacks issuer claim validation","org.jenkins-ci.plugins:oic-auth",0,4.355.v3a,CRITICAL,CWE-287
 CVE-2024-47855,2024-10-04T06:30:45Z,"JSON-lib mishandles an unbalanced comment string","org.kordamp.json:json-lib-core",0,3.1.0,MODERATE,
@@ -7948,6 +7951,7 @@ CVE-2024-51132,2024-11-05T18:32:11Z,"HAPI FHIR XML External Entity (XXE) vulnera
 CVE-2024-51132,2024-11-05T18:32:11Z,"HAPI FHIR XML External Entity (XXE) vulnerability","ca.uhn.hapi.fhir:org.hl7.fhir.r5",0,6.4.0,HIGH,CWE-601;CWE-611
 CVE-2024-51132,2024-11-05T18:32:11Z,"HAPI FHIR XML External Entity (XXE) vulnerability","ca.uhn.hapi.fhir:org.hl7.fhir.utilities",0,6.4.0,HIGH,CWE-601;CWE-611
 CVE-2024-51132,2024-11-05T18:32:11Z,"HAPI FHIR XML External Entity (XXE) vulnerability","ca.uhn.hapi.fhir:org.hl7.fhir.validation",0,6.4.0,HIGH,CWE-601;CWE-611
+CVE-2024-51135,2024-11-11T21:31:48Z,"powertac-server XML External Entity vulnerability","org.powertac:server-interface",0,,HIGH,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.0.0,3.4.5,MODERATE,CWE-79
 CVE-2024-5165,2024-05-23T12:31:02Z,"Eclipse Ditto vulnerable to Cross-site Scripting",org.eclipse.ditto:ditto,3.5.0,3.5.6,MODERATE,CWE-79
 CVE-2024-52007,2024-11-08T18:49:15Z,"XXE vulnerability in XSLT parsing in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.dstu2016may",0,6.4.0,HIGH,CWE-611
@@ -7956,6 +7960,12 @@ CVE-2024-52007,2024-11-08T18:49:15Z,"XXE vulnerability in XSLT parsing in `org.h
 CVE-2024-52007,2024-11-08T18:49:15Z,"XXE vulnerability in XSLT parsing in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r4b",0,6.4.0,HIGH,CWE-611
 CVE-2024-52007,2024-11-08T18:49:15Z,"XXE vulnerability in XSLT parsing in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.r5",0,6.4.0,HIGH,CWE-611
 CVE-2024-52007,2024-11-08T18:49:15Z,"XXE vulnerability in XSLT parsing in `org.hl7.fhir.core`","ca.uhn.hapi.fhir:org.hl7.fhir.utilities",0,6.4.0,HIGH,CWE-611
+CVE-2024-52549,2024-11-13T21:30:38Z,"Missing permission check in Jenkins Script Security Plugin ","org.jenkins-ci.plugins:script-security",0,1368.vb,MODERATE,CWE-306;CWE-862
+CVE-2024-52550,2024-11-13T21:30:38Z,"Rebuilding a run with revoked script approval allowed by Jenkins Pipeline: Groovy Plugin ","org.jenkins-ci.plugins.workflow:workflow-cps",0,3993.v3e20a,HIGH,CWE-285
+CVE-2024-52551,2024-11-13T21:30:38Z,"Restarting a run with revoked script approval allowed by Jenkins Pipeline: Declarative Plugin ","org.jenkinsci.plugins:pipeline-model-parent",0,2.2218.v56d0cda,HIGH,CWE-276;CWE-285
+CVE-2024-52552,2024-11-13T21:30:38Z,"Stored XSS vulnerability in Jenkins Authorize Project Plugin ","org.jenkins-ci.plugins:authorize-project",0,1.8.0,HIGH,CWE-79
+CVE-2024-52553,2024-11-13T21:30:38Z,"Session fixation vulnerability in Jenkins OpenId Connect Authentication Plugin","org.jenkins-ci.plugins:oic-auth",0,4.421.v5422614eb,HIGH,CWE-384;CWE-613
+CVE-2024-52554,2024-11-13T21:30:38Z,"Script security bypass vulnerability in Jenkins Shared Library Version Override Plugin ","io.jenkins.plugins:shared-library-version-override",0,19.v3a,HIGH,CWE-862
 CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vulnerability","org.jenkins-ci.plugins:report-info",0,,LOW,CWE-22
 CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",org.opencms:opencms-core,16.0,17.0,MODERATE,CWE-79
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",0,22.0.12,LOW,CWE-276
@@ -7997,7 +8007,7 @@ CVE-2024-8184,2024-10-14T21:08:38Z,"Eclipse Jetty's ThreadLimitHandler.getRemote
 CVE-2024-8184,2024-10-14T21:08:38Z,"Eclipse Jetty's ThreadLimitHandler.getRemote() vulnerable to remote DoS attacks","org.eclipse.jetty:jetty-server",11.0.0,11.0.24,MODERATE,CWE-400;CWE-770
 CVE-2024-8184,2024-10-14T21:08:38Z,"Eclipse Jetty's ThreadLimitHandler.getRemote() vulnerable to remote DoS attacks","org.eclipse.jetty:jetty-server",12.0.0,12.0.9,MODERATE,CWE-400;CWE-770
 CVE-2024-8184,2024-10-14T21:08:38Z,"Eclipse Jetty's ThreadLimitHandler.getRemote() vulnerable to remote DoS attacks","org.eclipse.jetty:jetty-server",9.3.12,9.4.56,MODERATE,CWE-400;CWE-770
-CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,HIGH,CWE-297
+CVE-2024-8285,2024-08-31T00:31:05Z,"Missing hostname validation in Kroxylicious","io.kroxylicious:kroxylicious-runtime",0,0.8.0,MODERATE,CWE-295;CWE-297
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-client",4.3.0,4.5.10,MODERATE,CWE-770
 CVE-2024-8391,2024-09-04T18:30:58Z,"Vertx gRPC server does not limit the maximum message size","io.vertx:vertx-grpc-server",4.3.0,4.5.10,MODERATE,CWE-770
 CVE-2024-8642,2024-09-11T15:31:12Z,"Eclipse Dataspace Components's ConsumerPullTransferTokenValidationApiController doesn't check for token validit","org.eclipse.edc:transfer-data-plane",0.5.0,0.9.0,MODERATE,CWE-287;CWE-303

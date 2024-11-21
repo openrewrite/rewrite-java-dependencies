@@ -22,9 +22,11 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.settingsGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
+@SuppressWarnings("GroovyUnusedAssignment")
 class DependencyListTest implements RewriteTest {
 
     @Override
@@ -76,6 +78,52 @@ class DependencyListTest implements RewriteTest {
               </project>
               """
           )
+        );
+    }
+
+    @Test
+    void directOnly() {
+        rewriteRun(
+          spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false))
+            .beforeRecipe(withToolingApi())
+            .dataTable(DependencyListReport.Row.class, rows -> {
+                assertThat(rows)
+                  .containsExactlyInAnyOrder(
+                    new DependencyListReport.Row("Gradle", "com.test", "test", "1.0.0","io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true),
+                    new DependencyListReport.Row("Maven", "com.test", "test", "1.0.0","io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true));
+            }),
+          settingsGradle("rootProject.name = 'test'"),
+          buildGradle(
+            //language=groovy
+            """
+              plugins {
+                  id 'java'
+              }
+              group = 'com.test'
+              version = '1.0.0'
+              repositories {
+                  mavenCentral()
+              }
+              dependencies {
+                  implementation('io.micrometer.prometheus:prometheus-rsocket-client:1.5.3')
+              }
+              """),
+          pomXml(
+            //language=xml
+            """
+              <project>
+                  <groupId>com.test</groupId>
+                  <artifactId>test</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>io.micrometer.prometheus</groupId>
+                          <artifactId>prometheus-rsocket-client</artifactId>
+                          <version>1.5.3</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """)
         );
     }
 }

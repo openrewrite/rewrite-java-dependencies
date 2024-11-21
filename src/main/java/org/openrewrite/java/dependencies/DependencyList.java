@@ -82,12 +82,18 @@ public class DependencyList extends Recipe {
                     GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
                     if (conf != null) {
                         for (ResolvedDependency dep : conf.getResolved()) {
+                            if (dep.getDepth() > 0) {
+                                continue;
+                            }
                             insertDependency(ctx, gradle, seen, dep, true);
                         }
                     }
                 });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
+                        if (dep.getDepth() > 0) {
+                            continue;
+                        }
                         insertDependency(ctx, maven, seen, dep, true);
                     }
                 });

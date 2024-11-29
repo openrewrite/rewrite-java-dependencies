@@ -32,8 +32,8 @@ jobs:
       # Commit and push Maven advisories here
       - name: configure-git-user
         run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          git config user.email "team@moderne.io"
+          git config user.name "team-moderne[bot]"
       - name: Create commit message
         run: |
           echo "MSG=[Auto] GitHub advisories as of $(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV

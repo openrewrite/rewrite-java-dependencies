@@ -34,8 +34,8 @@ jobs:
       # Commit and push
       - name: configure-git-user
         run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
+          git config user.email "team@moderne.io"
+          git config user.name "team-moderne[bot]"
       - name: Create timestamp
         run: echo "NOW=$(date +'%Y-%m-%dT%H%M')" >> $GITHUB_ENV
       - name: Commit and push

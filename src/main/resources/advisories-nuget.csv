@@ -1883,6 +1883,7 @@ CVE-2024-0057,2024-02-13T21:18:10Z,"NuGet Client Security Feature Bypass Vulnera
 CVE-2024-0057,2024-02-13T21:18:10Z,"NuGet Client Security Feature Bypass Vulnerability ",NuGet.Packaging,6.7.0,6.7.1,CRITICAL,
 CVE-2024-0057,2024-02-13T21:18:10Z,"NuGet Client Security Feature Bypass Vulnerability ",NuGet.Packaging,6.8.0,6.8.1,CRITICAL,
 CVE-2024-10761,2024-11-04T06:30:30Z,"Umbraco CMS Cross-site Scripting vulnerability",Umbraco.Cms.Core,0,,LOW,CWE-707;CWE-79
+CVE-2024-11862,2024-11-27T19:01:01Z,"Devolutions.XTS.NET Vulnerable to Timing Attack on GF Multiplications",Devolutions.XTS.NET,0,2024.11.26,MODERATE,CWE-385
 CVE-2024-21319,2024-01-09T19:35:02Z,"Microsoft ASP.NET Core project templates vulnerable to denial of service","Microsoft.IdentityModel.JsonWebTokens",0,5.7.0,MODERATE,CWE-400
 CVE-2024-21319,2024-01-09T19:35:02Z,"Microsoft ASP.NET Core project templates vulnerable to denial of service","Microsoft.IdentityModel.JsonWebTokens",6.5.0,6.34.0,MODERATE,CWE-400
 CVE-2024-21319,2024-01-09T19:35:02Z,"Microsoft ASP.NET Core project templates vulnerable to denial of service","Microsoft.IdentityModel.JsonWebTokens",7.0.0-preview,7.1.2,MODERATE,CWE-400
@@ -2086,18 +2087,18 @@ CVE-2024-35252,2024-06-11T18:30:50Z,"Azure Storage Movement Client Library Denia
 CVE-2024-35255,2024-06-11T18:30:50Z,"Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability","Microsoft.Identity.Client",4.49.1,4.60.4,MODERATE,CWE-362
 CVE-2024-35255,2024-06-11T18:30:50Z,"Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability","Microsoft.Identity.Client",4.61.0,4.61.3,MODERATE,CWE-362
 CVE-2024-35255,2024-06-11T18:30:50Z,"Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability",Azure.Identity,0,1.11.4,MODERATE,CWE-362
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-x64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-x64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-arm64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-x64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x64",8.0.0,8.0.7,HIGH,CWE-416
-CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x86",8.0.0,8.0.7,HIGH,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-arm64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-arm64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-musl-x64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.linux-x64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-arm64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.osx-x64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-arm64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x64",8.0.0,8.0.7,CRITICAL,CWE-416
+CVE-2024-35264,2024-07-09T21:14:23Z,"Microsoft Security Advisory CVE-2024-35264 | .NET Remote Code Execution Vulnerability","Microsoft.AspNetCore.App.Runtime.win-x86",8.0.0,8.0.7,CRITICAL,CWE-416
 CVE-2024-38081,2024-07-09T21:14:35Z,"Microsoft Security Advisory CVE-2024-38081 | .NET Denial of Service Vulnerability",Microsoft.IO.Redist,4.6.0-preview.18571.3,6.0.1,HIGH,CWE-59
 CVE-2024-38095,2024-07-09T21:14:53Z,"Microsoft Security Advisory CVE-2024-38095 | .NET Denial of Service Vulnerability","Microsoft.NetCore.App.Runtime.linux-arm",6.0.0,6.0.32,HIGH,CWE-20
 CVE-2024-38095,2024-07-09T21:14:53Z,"Microsoft Security Advisory CVE-2024-38095 | .NET Denial of Service Vulnerability","Microsoft.NetCore.App.Runtime.linux-arm",8.0.0,8.0.7,HIGH,CWE-20
@@ -2171,8 +2172,8 @@ CVE-2024-38356,2024-06-19T15:07:08Z,"TinyMCE Cross-Site Scripting (XSS) vulnerab
 CVE-2024-38357,2024-06-19T15:07:03Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noscript elements",TinyMCE,0,5.11.0,MODERATE,CWE-79
 CVE-2024-38357,2024-06-19T15:07:03Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noscript elements",TinyMCE,6.0.0,6.8.4,MODERATE,CWE-79
 CVE-2024-38357,2024-06-19T15:07:03Z,"TinyMCE Cross-Site Scripting (XSS) vulnerability using noscript elements",TinyMCE,7.0.0,7.2.0,MODERATE,CWE-79
-CVE-2024-39677,2024-07-08T14:20:33Z,"NHibernate SQL injection vulnerability in discriminator mappings, static fields referenced in HQL, and some utilities",NHibernate,0,5.4.9,MODERATE,CWE-89
-CVE-2024-39677,2024-07-08T14:20:33Z,"NHibernate SQL injection vulnerability in discriminator mappings, static fields referenced in HQL, and some utilities",NHibernate,5.5.0,5.5.2,MODERATE,CWE-89
+CVE-2024-39677,2024-07-08T14:20:33Z,"NHibernate SQL injection vulnerability in discriminator mappings, static fields referenced in HQL, and some utilities",NHibernate,0,5.4.9,HIGH,CWE-89
+CVE-2024-39677,2024-07-08T14:20:33Z,"NHibernate SQL injection vulnerability in discriminator mappings, static fields referenced in HQL, and some utilities",NHibernate,5.5.0,5.5.2,HIGH,CWE-89
 CVE-2024-39694,2024-07-31T15:28:54Z,"IdentityServer Open Redirect vulnerability",Duende.IdentityServer,6.0.0-preview.1,6.0.5,MODERATE,CWE-601
 CVE-2024-39694,2024-07-31T15:28:54Z,"IdentityServer Open Redirect vulnerability",Duende.IdentityServer,6.1.0-preview.1,6.1.8,MODERATE,CWE-601
 CVE-2024-39694,2024-07-31T15:28:54Z,"IdentityServer Open Redirect vulnerability",Duende.IdentityServer,6.2.0-preview.1,6.2.5,MODERATE,CWE-601
@@ -2213,7 +2214,7 @@ CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standar
 CVE-2024-45526,2024-10-18T20:05:28Z,"Security Update for the OPC UA .NET Standard Stack","OPCFoundation.NetStandard.Opc.Ua.Core",0,1.5.374.118,MODERATE,CWE-770
 CVE-2024-47819,2024-10-22T17:50:08Z,"Umbraco CMS vulnerable to stored Cross-site Scripting in the ""dictionary name"" on Dictionary section",Umbraco.Cms.StaticAssets,14.0.0,14.3.1,MODERATE,CWE-79;CWE-80
 CVE-2024-48510,2024-11-13T15:31:37Z,"DotNetZip Directory Traversal vulnerability",DotNetZip,1.10.1,,HIGH,CWE-22
-CVE-2024-48510,2024-11-13T15:31:37Z,"DotNetZip Directory Traversal vulnerability",ProDotNetZip,0,,HIGH,CWE-22
+CVE-2024-48510,2024-11-13T15:31:37Z,"DotNetZip Directory Traversal vulnerability",ProDotNetZip,0,1.19.0,HIGH,CWE-22
 CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,0,2.5.187,MODERATE,CWE-328
 CVE-2024-48924,2024-10-17T19:30:03Z,"MessagePack allows untrusted data to lead to DoS attack due to hash collisions and stack overflow",MessagePack,2.6.95-alpha,3.0.214-rc.1,MODERATE,CWE-328
 CVE-2024-48925,2024-10-22T17:51:26Z,"Umbraco CMS Improper Access Control Vulnerability Allows Low-Privilege Users to Access Webhook API",Umbraco.CMS,14.0.0,14.3.0,LOW,CWE-284;CWE-863

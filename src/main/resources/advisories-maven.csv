@@ -6947,12 +6947,12 @@ CVE-2023-45648,2023-10-10T21:31:12Z,"Apache Tomcat Improper Input Validation vul
 CVE-2023-45669,2023-10-17T13:23:20Z,"WebAuthn4J Spring Security Improper signature counter value handling","com.webauthn4j:webauthn4j-spring-security-core",0,0.9.1.RELEASE,MODERATE,CWE-287
 CVE-2023-45807,2023-10-17T14:25:36Z,"OpenSearch Issue with tenant read-only permissions","org.opensearch.plugin:opensearch-security",0,1.3.14.0,MODERATE,CWE-281
 CVE-2023-45807,2023-10-17T14:25:36Z,"OpenSearch Issue with tenant read-only permissions","org.opensearch.plugin:opensearch-security",2.0.0.0,2.11.0.0,MODERATE,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,0,,HIGH,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,4.2,,HIGH,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.0,,HIGH,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.1,,HIGH,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.2.0,5.2.5,HIGH,CWE-281
-CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.3.0,5.3.5,HIGH,CWE-281
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,0,,HIGH,CWE-281;CWE-922
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,4.2,,HIGH,CWE-281;CWE-922
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.0,,HIGH,CWE-281;CWE-922
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.1,,HIGH,CWE-281;CWE-922
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.2.0,5.2.5,HIGH,CWE-281;CWE-922
+CVE-2023-45859,2024-02-27T21:54:15Z,"Missing permission checks on Hazelcast client protocol",com.hazelcast:hazelcast,5.3.0,5.3.5,HIGH,CWE-281;CWE-922
 CVE-2023-4586,2023-10-04T12:30:14Z,"Withdrawn Advisory: Netty-handler does not validate host names by default",io.netty:netty-handler,4.1.0.Final,,MODERATE,CWE-295
 CVE-2023-45860,2024-02-16T23:14:45Z,"Hazelcast Platform permission checking in CSV File Source connector","com.hazelcast:hazelcast-enterprise",0,,HIGH,CWE-89
 CVE-2023-45860,2024-02-16T23:14:45Z,"Hazelcast Platform permission checking in CSV File Source connector","com.hazelcast:hazelcast-enterprise",5.2.0,5.2.5,HIGH,CWE-89
@@ -7674,13 +7674,12 @@ CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-chann
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-203
 CVE-2024-30171,2024-05-14T15:32:54Z,"Bouncy Castle affected by timing side-channel for RSA key exchange (""The Marvin Attack"")","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-203
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk14",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk15on",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk15to18",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk18on",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk14",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk15to18",0,1.78,MODERATE,CWE-835
-CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk18on",0,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk14",1.73,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk15to18",1.73,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bcprov-jdk18on",1.73,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk14",1.73,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk15to18",1.73,1.78,MODERATE,CWE-835
+CVE-2024-30172,2024-05-14T15:32:54Z,"Bouncy Castle crafted signature and public key can be used to trigger an infinite loop","org.bouncycastle:bctls-jdk18on",1.73,1.78,MODERATE,CWE-835
 CVE-2024-30188,2024-08-12T15:30:49Z,"Apache DolphinScheduler: Resource File Read And Write Vulnerability","org.apache.dolphinscheduler:dolphinscheduler",3.1.0,3.2.2,HIGH,CWE-20
 CVE-2024-3046,2024-04-09T12:30:47Z,"Eclipse Kura LogServlet vulnerability","org.eclipse.kura:org.eclipse.kura.web2",2.0.600,,HIGH,CWE-303
 CVE-2024-30471,2024-07-17T09:30:49Z,"Apache StreamPipes potentially allows creation of multiple identical accounts","org.apache.streampipes:streampipes-parent",0,0.95.0,MODERATE,CWE-367
@@ -7768,6 +7767,7 @@ CVE-2024-34750,2024-07-03T21:39:44Z,"Apache Tomcat - Denial of Service","org.apa
 CVE-2024-35219,2024-05-28T15:47:57Z,"OpenAPI Generator Online - Arbitrary File Read/Delete","org.openapitools:openapi-generator-online",0,7.6.0,HIGH,CWE-22
 CVE-2024-35255,2024-06-11T18:30:50Z,"Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability","com.microsoft.azure:msal4j",1.14.4-beta,1.15.1,MODERATE,CWE-362
 CVE-2024-35255,2024-06-11T18:30:50Z,"Azure Identity Libraries and Microsoft Authentication Library Elevation of Privilege Vulnerability",com.azure:azure-identity,0,1.12.2,MODERATE,CWE-362
+CVE-2024-35371,2024-11-29T21:31:04Z,"Ant-Media-Server vulnerable to Improper Output Neutralization for Logs","io.antmedia:ant-media-server",0,2.9.0,HIGH,CWE-125
 CVE-2024-36042,2024-06-03T06:30:53Z,"Silverpeas authentication bypass","org.silverpeas.core:silverpeas-core",0,6.3.5,CRITICAL,CWE-288
 CVE-2024-36114,2024-06-02T22:30:02Z,"Decompressors can crash the JVM and leak memory content in Aircompressor",io.airlift:aircompressor,0,0.27,HIGH,CWE-125;CWE-787
 CVE-2024-36115,2024-08-02T21:12:54Z,"Reposilite artifacts vulnerable to Stored Cross-site Scripting","com.reposilite:reposilite-backend",3.3.0,3.5.12,HIGH,CWE-79
@@ -7851,6 +7851,11 @@ CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization
 CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization Bypass of Static Resources in WebFlux Applications","org.springframework.security:spring-security-web",6.1.0,6.1.11,CRITICAL,CWE-285;CWE-770
 CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization Bypass of Static Resources in WebFlux Applications","org.springframework.security:spring-security-web",6.2.0,6.2.7,CRITICAL,CWE-285;CWE-770
 CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization Bypass of Static Resources in WebFlux Applications","org.springframework.security:spring-security-web",6.3.0,6.3.4,CRITICAL,CWE-285;CWE-770
+CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-beans",0,6.1.14,MODERATE,CWE-639
+CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-context",0,6.1.14,MODERATE,CWE-639
+CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-core",0,6.1.14,MODERATE,CWE-639
+CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-expression",0,6.1.14,MODERATE,CWE-639
+CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-jdbc",0,6.1.14,MODERATE,CWE-639
 CVE-2024-38828,2024-11-18T06:30:35Z,"Spring MVC controller vulnerable to a DoS attack","org.springframework:spring-webmvc",0,6.0.0,MODERATE,
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-rs",0,,MODERATE,CWE-79
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-seb",0,,MODERATE,CWE-79
@@ -8006,7 +8011,14 @@ CVE-2024-5273,2024-05-24T18:52:08Z,"Jenkins Report Info Plugin Path Traversal vu
 CVE-2024-52797,2024-11-20T22:46:53Z,"Searching Opencast may cause a denial of service","org.opencastproject:opencast-elasticsearch-impl",11.4,13.10,MODERATE,CWE-770
 CVE-2024-52797,2024-11-20T22:46:53Z,"Searching Opencast may cause a denial of service","org.opencastproject:opencast-elasticsearch-impl",14.0,14.3,MODERATE,CWE-770
 CVE-2024-52797,2024-11-20T22:46:53Z,"Searching Opencast may cause a denial of service","org.opencastproject:opencast-elasticsearch-impl",15.0,,MODERATE,CWE-770
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability","org.verapdf:core-arlington",0,,LOW,CWE-611
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability","org.verapdf:verapdf-library-arlington",0,,LOW,CWE-611
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability","org.verapdf:verapdf-library-jakarta",0,,LOW,CWE-611
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability","org.verapdf:verapdf.library",0,,LOW,CWE-611
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability",org.verapdf:core,0,,LOW,CWE-611
+CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability",org.verapdf:core-jakarta,0,,LOW,CWE-611
 CVE-2024-53267,2024-11-26T16:38:18Z,"sigstore-java has vulnerability with bundle verification","dev.sigstore:sigstore-java",1.0.0,1.1.0,MODERATE,CWE-345;CWE-347
+CVE-2024-53990,2024-12-02T20:04:43Z,"AsyncHttpClient (AHC) library's `CookieStore` replaces explicitly defined `Cookie`s","org.asynchttpclient:async-http-client",3.0.0,3.0.1,CRITICAL,CWE-287
 CVE-2024-54003,2024-11-27T18:34:04Z,"Jenkins Simple Queue Plugin has stored cross-site scripting (XSS) vulnerability","io.jenkins.plugins:simple-queue",0,1.4.5,HIGH,CWE-79
 CVE-2024-54004,2024-11-27T18:34:04Z,"Jenkins Filesystem List Parameter Plugin has Path Traversal vulnerability","aendter.jenkins.plugins:filesystem-list-parameter-plugin",0,0.0.15,MODERATE,CWE-22
 CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",org.opencms:opencms-core,16.0,17.0,MODERATE,CWE-79
@@ -8192,6 +8204,7 @@ GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive H
 GHSA-q2fj-6h62-59m2,2022-12-30T22:13:59Z,"Apiman Vert.x Gateway has Transitive Hazelcast connection caching issue","io.apiman:apiman-gateway-platforms-vertx",0,3.0.0.Final,HIGH,
 GHSA-q2gp-gph3-88x9,2022-08-06T00:00:42Z,"Keycloak allows arbitrary Javascript to be uploaded for SAML protocol mapper even if UPLOAD_SCRIPTS feature disabled","org.keycloak:keycloak-saml-core",0,,HIGH,
 GHSA-q3vw-4jx3-rrr2,2020-09-23T17:20:09Z,"personnummer/java vulnerable to Improper Input Validation","dev.personnummer:personnummer",0,3.3.0,LOW,
+GHSA-q4h9-7rxj-7gx2,2024-12-02T20:03:03Z,"Netty vulnerability included in redis lettuce",io.lettuce:lettuce-core,0,6.5.1.RELEASE,MODERATE,CWE-400
 GHSA-q594-2475-8v9f,2021-02-24T19:33:17Z,"Unencrypted passwords","org.apache.nifi:nifi-standard-processors",0,0.4.0,LOW,
 GHSA-q76j-58cx-wp5v,2020-11-13T17:28:49Z,"Vulnerability in RPKI manifest validation","net.ripe.rpki:rpki-validator-3",0,3.2-2020.10.28.23.06,HIGH,CWE-20
 GHSA-q95j-488q-5q3p,2023-01-09T20:05:31Z,"Apiman Manager API affected by Jackson denial of service vulnerability","io.apiman:apiman-manager-api-impl",0,3.0.0.Final,MODERATE,CWE-787

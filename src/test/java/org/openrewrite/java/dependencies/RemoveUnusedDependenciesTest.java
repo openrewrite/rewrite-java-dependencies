@@ -69,6 +69,98 @@ class RemoveUnusedDependenciesTest implements RewriteTest {
         );
     }
 
+    @DocumentExample
+    @Test
+    void mavenMultiModule() {
+        rewriteRun(
+          mavenProject("root",
+            //language=xml
+            pomXml("""
+              <project>
+                    <groupId>com.mycompany</groupId>
+                    <artifactId>root</artifactId>
+                    <version>1</version>
+                    <modules>
+                        <module>uses-guava</module>
+                        <module>no-guava</module>
+                    </modules>
+              </project>
+              """),
+            mavenProject("uses-guava",
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                      <groupId>com.mycompany</groupId>
+                      <artifactId>uses-guava</artifactId>
+                      <version>1</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>com.google.guava</groupId>
+                              <artifactId>guava</artifactId>
+                              <version>29.0-jre</version>
+                          </dependency>
+                      </dependencies>
+                  </project>
+                  """
+              ),
+              //language=java
+              srcMainJava(
+                java(
+                  """
+                    import com.google.common.collect.Lists;
+                    import java.util.List;
+                    public class A {
+                        List<String> a = Lists.newArrayList();
+                    }
+                    """,
+                  spec -> spec.markers(jssWithGuava)
+                )
+              )
+            ),
+            mavenProject("no-guava",
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                      <groupId>com.mycompany</groupId>
+                      <artifactId>no-guava</artifactId>
+                      <version>1</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>com.google.guava</groupId>
+                              <artifactId>guava</artifactId>
+                              <version>29.0-jre</version>
+                          </dependency>
+                      </dependencies>
+                  </project>
+                  """,
+                """
+                  <project>
+                      <groupId>com.mycompany</groupId>
+                      <artifactId>no-guava</artifactId>
+                      <version>1</version>
+                  </project>
+                  """
+              ),
+              //language=java
+              srcMainJava(
+                java(
+                  """
+                    import java.util.List;
+                    import java.util.ArrayList;
+                    public class B {
+                        List<String> b = new ArrayList<>();
+                    }
+                    """,
+                  spec -> spec.markers(jssWithGuava)
+                )
+              )
+            )
+          )
+        );
+    }
+
     @Test
     void mavenRetainGuavaWhenUsed() {
         rewriteRun(

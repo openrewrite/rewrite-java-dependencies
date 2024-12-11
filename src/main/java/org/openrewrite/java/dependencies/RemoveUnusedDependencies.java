@@ -7,16 +7,14 @@ import org.openrewrite.ExecutionContext;
 import org.openrewrite.ScanningRecipe;
 import org.openrewrite.Tree;
 import org.openrewrite.TreeVisitor;
+import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.marker.JavaSourceSet;
 import org.openrewrite.java.tree.JavaSourceFile;
 import org.openrewrite.java.tree.JavaType;
-import org.openrewrite.maven.tree.GroupArtifact;
-import org.openrewrite.maven.tree.MavenResolutionResult;
-import org.openrewrite.maven.tree.ResolvedDependency;
-import org.openrewrite.maven.tree.Scope;
+import org.openrewrite.maven.tree.*;
 
 import java.util.*;
 
@@ -32,7 +30,7 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
     @Override
     public String getDescription() {
         return "Scans through source code collecting references to types and methods, removing any dependencies that " +
-               "are not used from Maven or Gradle build files.";
+                "are not used from Maven or Gradle build files.";
     }
 
     @Override
@@ -78,9 +76,19 @@ public class RemoveUnusedDependencies extends ScanningRecipe<RemoveUnusedDepende
                 }
                 GradleProject gp = tree.getMarkers().findFirst(GradleProject.class).orElse(null);
                 if (gp != null) {
-                    // TODO
                     // Edge case to remember: Freestanding Gradle scripts have a GradleProject marker from only the project they are located in
                     // But such a "dependencies.gradle" script could be included in multiple projects, so we need to be careful
+                    GradleDependencyConfiguration testRuntimeConfiguration = gp.getConfiguration("testRuntimeClasspath");
+                    if (testRuntimeConfiguration != null) {
+                        for (Dependency dependency : testRuntimeConfiguration.getRequested()) {
+                            GroupArtifact ga = dependency.getGav().asGroupArtifact();
+                            if (!acc.isInUse(javaProject, ga)) {
+                                tree = new org.openrewrite.gradle.RemoveDependency(ga.getGroupId(), ga.getArtifactId(), null)
+                                        .getVisitor()
+                                        .visitNonNull(tree, ctx);
+                            }
+                        }
+                    }
                 }
 
                 return tree;

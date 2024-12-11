@@ -2,11 +2,13 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.gradle.toolingapi.Assertions;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.marker.JavaSourceSet;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.java.Assertions.*;
 import static org.openrewrite.maven.Assertions.pomXml;
 
@@ -56,7 +58,6 @@ class RemoveUnusedDependenciesTest implements RewriteTest {
                 """
                   import java.util.List;
                   import java.util.ArrayList;
-                  
                   public class A {
                       List<String> a = new ArrayList<>();
                   }
@@ -95,7 +96,86 @@ class RemoveUnusedDependenciesTest implements RewriteTest {
                 """
                   import com.google.common.collect.Lists;
                   import java.util.List;
-                  
+                  public class A {
+                      List<String> a = Lists.newArrayList();
+                  }
+                  """,
+                spec -> spec.markers(jssWithGuava)
+              )
+            )
+          )
+        );
+    }
+
+    @DocumentExample
+    @Test
+    void gradleRemoveGuavaWhenUnused() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(Assertions.withToolingApi()),
+          mavenProject("project",
+            //language=groovy
+            buildGradle("""
+                plugins {
+                    id 'java'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.google.guava:guava:29.0-jre'
+                }
+                """,
+              """
+                plugins {
+                    id 'java'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                }
+                """),
+            //language=java
+            srcMainJava(
+              java(
+                """
+                  import java.util.List;
+                  import java.util.ArrayList;
+                  public class A {
+                      List<String> a = new ArrayList<>();
+                  }
+                  """,
+                spec -> spec.markers(jssWithGuava)
+              )
+            )
+          )
+        );
+    }
+
+    @DocumentExample
+    @Test
+    void gradleRetainGuavaWhenUsed() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(Assertions.withToolingApi()),
+          mavenProject("project",
+            //language=groovy
+            buildGradle("""
+                plugins {
+                    id 'java'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.google.guava:guava:29.0-jre'
+                }
+                """),
+            //language=java
+            srcMainJava(
+              java(
+                """
+                  import com.google.common.collect.Lists;
+                  import java.util.List;
                   public class A {
                       List<String> a = Lists.newArrayList();
                   }

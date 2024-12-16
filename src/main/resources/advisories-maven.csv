@@ -7328,6 +7328,8 @@ CVE-2024-1132,2024-04-17T18:25:08Z,"Keycloak path traversal vulnerability in red
 CVE-2024-1132,2024-04-17T18:25:08Z,"Keycloak path traversal vulnerability in redirection validation","org.keycloak:keycloak-services",23.0.0,24.0.3,HIGH,CWE-22
 CVE-2024-1143,2024-02-02T16:55:25Z,"Central Dogma Authentication Bypass Vulnerability via Session Leakage","com.linecorp.centraldogma:centraldogma-server",0,0.64.1,CRITICAL,
 CVE-2024-1233,2024-04-09T09:31:10Z,"WildFly Elytron: SSRF security issue","org.wildfly.security:wildfly-elytron-realm-token",0,,HIGH,CWE-918
+CVE-2024-12369,2024-12-09T21:31:02Z,"WildFly Elytron OpenID Connect Client Extension authorization code injection attack","org.wildfly:wildfly-elytron-oidc-client-subsystem",0,,MODERATE,CWE-345
+CVE-2024-12397,2024-12-12T09:31:35Z,"io.quarkus.http/quarkus-http-core: Quarkus HTTP Cookie Smuggling","io.quarkus.http:quarkus-http-core",0,5.3.4,HIGH,CWE-444
 CVE-2024-1249,2024-04-17T18:24:38Z,"Keycloak's unvalidated cross-origin messages in checkLoginIframe leads to DDoS","org.keycloak:keycloak-services",0,22.0.10,HIGH,CWE-346
 CVE-2024-1249,2024-04-17T18:24:38Z,"Keycloak's unvalidated cross-origin messages in checkLoginIframe leads to DDoS","org.keycloak:keycloak-services",23.0.0,24.0.3,HIGH,CWE-346
 CVE-2024-1300,2024-04-02T09:30:42Z,"Eclipse Vert.x vulnerable to a memory leak in TCP servers",io.vertx:vertx-core,4.3.4,4.4.8,MODERATE,CWE-400
@@ -7560,6 +7562,21 @@ CVE-2024-25603,2024-02-21T03:30:38Z,"Liferay Portal's Dynamic Data Mapping modul
 CVE-2024-25603,2024-02-21T03:30:38Z,"Liferay Portal's Dynamic Data Mapping module's DDMForm and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.3.10.ep3,7.3.10.u4,CRITICAL,CWE-79
 CVE-2024-25603,2024-02-21T03:30:38Z,"Liferay Portal's Dynamic Data Mapping module's DDMForm and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.dxp.bom",7.4.13.u1,,CRITICAL,CWE-79
 CVE-2024-25603,2024-02-21T03:30:38Z,"Liferay Portal's Dynamic Data Mapping module's DDMForm and Liferay DXP vulnerable to stored Cross-site Scripting","com.liferay.portal:release.portal.bom",0,,CRITICAL,CWE-79
+CVE-2024-25606,2024-02-20T09:30:32Z,"Liferay Portal has an XXE vulnerability in Java2WsddTask._format","com.liferay.portal:com.liferay.util.java",0,14.0.0,HIGH,CWE-611
+CVE-2024-25606,2024-02-20T09:30:32Z,"Liferay Portal has an XXE vulnerability in Java2WsddTask._format","com.liferay.portal:release.dxp.bom",0,7.2.10.fp20,HIGH,CWE-611
+CVE-2024-25606,2024-02-20T09:30:32Z,"Liferay Portal has an XXE vulnerability in Java2WsddTask._format","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u12,HIGH,CWE-611
+CVE-2024-25606,2024-02-20T09:30:32Z,"Liferay Portal has an XXE vulnerability in Java2WsddTask._format","com.liferay.portal:release.dxp.bom",7.4.0,7.4.13.u4,HIGH,CWE-611
+CVE-2024-25606,2024-02-20T09:30:32Z,"Liferay Portal has an XXE vulnerability in Java2WsddTask._format","com.liferay.portal:release.portal.bom",0,7.4.3.8,HIGH,CWE-611
+CVE-2024-25607,2024-02-20T12:31:00Z,"Liferay Portal defaults to a low work factor for the default password hashing algorithm","com.liferay.portal:com.liferay.portal.kernel",0,38.0.0,HIGH,CWE-916
+CVE-2024-25607,2024-02-20T12:31:00Z,"Liferay Portal defaults to a low work factor for the default password hashing algorithm","com.liferay.portal:release.dxp.bom",0,7.2.10.fp17,HIGH,CWE-916
+CVE-2024-25607,2024-02-20T12:31:00Z,"Liferay Portal defaults to a low work factor for the default password hashing algorithm","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,HIGH,CWE-916
+CVE-2024-25607,2024-02-20T12:31:00Z,"Liferay Portal defaults to a low work factor for the default password hashing algorithm","com.liferay.portal:release.dxp.bom",7.4.0,7.4.13.u16,HIGH,CWE-916
+CVE-2024-25607,2024-02-20T12:31:00Z,"Liferay Portal defaults to a low work factor for the default password hashing algorithm","com.liferay.portal:release.portal.bom",0,7.4.3.14,HIGH,CWE-916
+CVE-2024-25610,2024-02-20T15:31:03Z,"Liferay Portal has a Stored XSS with Blog entries (Insecure defaults)","com.liferay.portal:com.liferay.portal.web",0,5.0.96,CRITICAL,CWE-1188
+CVE-2024-25610,2024-02-20T15:31:03Z,"Liferay Portal has a Stored XSS with Blog entries (Insecure defaults)","com.liferay.portal:release.dxp.bom",0,7.2.10.fp19,CRITICAL,CWE-1188
+CVE-2024-25610,2024-02-20T15:31:03Z,"Liferay Portal has a Stored XSS with Blog entries (Insecure defaults)","com.liferay.portal:release.dxp.bom",7.3.0,7.3.10.u4,CRITICAL,CWE-1188
+CVE-2024-25610,2024-02-20T15:31:03Z,"Liferay Portal has a Stored XSS with Blog entries (Insecure defaults)","com.liferay.portal:release.dxp.bom",7.4.0,7.4.13.u9,CRITICAL,CWE-1188
+CVE-2024-25610,2024-02-20T15:31:03Z,"Liferay Portal has a Stored XSS with Blog entries (Insecure defaults)","com.liferay.portal:release.portal.bom",0,7.4.3.13,CRITICAL,CWE-1188
 CVE-2024-25638,2024-07-22T14:33:41Z,"DNSJava DNSSEC Bypass",dnsjava:dnsjava,0,3.6.0,HIGH,CWE-345;CWE-349
 CVE-2024-25710,2024-02-19T09:30:50Z,"Apache Commons Compress: Denial of service caused by an infinite loop for a corrupted DUMP file","org.apache.commons:commons-compress",1.3,1.26.0,HIGH,CWE-835
 CVE-2024-26138,2024-02-21T18:04:57Z,"XWiki extension license information is public, exposing instance id and license holder details","com.xwiki.licensing:application-licensing-licensor-ui",1.0,1.24.2,MODERATE,CWE-862
@@ -7843,8 +7860,12 @@ CVE-2024-38809,2024-09-24T18:34:43Z,"Spring Framework DoS via conditional HTTP r
 CVE-2024-38809,2024-09-24T18:34:43Z,"Spring Framework DoS via conditional HTTP request","org.springframework:spring-web",6.0.0,6.0.23,MODERATE,CWE-1333;CWE-400
 CVE-2024-38809,2024-09-24T18:34:43Z,"Spring Framework DoS via conditional HTTP request","org.springframework:spring-web",6.1.0,6.1.12,MODERATE,CWE-1333;CWE-400
 CVE-2024-38810,2024-08-20T06:31:36Z,"Spring Security Missing Authorization vulnerability","org.springframework.security:spring-security-core",6.3.0,6.3.2,MODERATE,CWE-287
-CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webflux",0,6.1.13,HIGH,CWE-22
-CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",0,6.1.13,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webflux",5.3.0,,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webflux",6.0.0,,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webflux",6.1.0,6.1.13,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",5.3.0,,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.0.0,,HIGH,CWE-22
+CVE-2024-38816,2024-09-13T06:30:42Z,"Path traversal vulnerability in functional web frameworks","org.springframework:spring-webmvc",6.1.0,6.1.13,HIGH,CWE-22
 CVE-2024-38820,2024-10-18T06:30:32Z,"Spring Framework DataBinder Case Sensitive Match Exception","org.springframework:spring-context",0,6.1.14,MODERATE,CWE-178
 CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization Bypass of Static Resources in WebFlux Applications","org.springframework.security:spring-security-web",0,5.7.13,CRITICAL,CWE-285;CWE-770
 CVE-2024-38821,2024-10-28T09:30:53Z,"Spring Security vulnerable to Authorization Bypass of Static Resources in WebFlux Applications","org.springframework.security:spring-security-web",5.8.0,5.8.15,CRITICAL,CWE-285;CWE-770
@@ -7857,7 +7878,7 @@ CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass f
 CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-core",0,6.1.14,MODERATE,CWE-639
 CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-expression",0,6.1.14,MODERATE,CWE-639
 CVE-2024-38827,2024-12-02T15:31:41Z,"Spring Framework has Authorization Bypass for Case Sensitive Comparisons","org.springframework:spring-jdbc",0,6.1.14,MODERATE,CWE-639
-CVE-2024-38828,2024-11-18T06:30:35Z,"Spring MVC controller vulnerable to a DoS attack","org.springframework:spring-webmvc",0,6.0.0,MODERATE,
+CVE-2024-38828,2024-11-18T06:30:35Z,"Spring MVC controller vulnerable to a DoS attack","org.springframework:spring-webmvc",5.3.0,,MODERATE,
 CVE-2024-38829,2024-12-04T21:30:52Z,"Spring LDAP data exposure vulnerability","org.springframework.ldap:spring-ldap-core",0,2.4.4,MODERATE,CWE-178
 CVE-2024-38829,2024-12-04T21:30:52Z,"Spring LDAP data exposure vulnerability","org.springframework.ldap:spring-ldap-core",3.0.0,3.2.8,MODERATE,CWE-178
 CVE-2024-39031,2024-07-09T21:30:39Z,"Silverpeas Core Cross-site Scripting vulnerability","org.silverpeas.core:silverpeas-core-rs",0,,MODERATE,CWE-79
@@ -7875,6 +7896,7 @@ CVE-2024-40094,2024-07-30T09:31:50Z,"GraphQL Java does not properly consider Exe
 CVE-2024-40094,2024-07-30T09:31:50Z,"GraphQL Java does not properly consider ExecutableNormalizedFields (ENFs) as part of preventing denial of service","com.graphql-java:graphql-java",21.0,21.5,HIGH,CWE-770
 CVE-2024-4029,2024-05-02T15:30:35Z,"Wildfly vulnerable to denial of service","org.wildfly:wildfly-domain-http",0,,MODERATE,CWE-770
 CVE-2024-40642,2024-07-18T22:14:28Z,"Absent Input Validation in BinaryHttpParser","io.netty.incubator:netty-incubator-codec-bhttp",0,0.0.13.Final,HIGH,CWE-20
+CVE-2024-4109,2024-12-12T09:31:36Z,"undertow: information leakage via HTTP/2 request header reuse","io.undertow:undertow-core",0,,HIGH,CWE-200
 CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",3.6.0,3.6.4,MODERATE,CWE-401
 CVE-2024-41172,2024-07-19T09:32:06Z,"Apache CXF allows unrestricted memory consumption in CXF HTTP clients","org.apache.cxf:cxf-rt-transports-http",4.0.0,4.0.5,MODERATE,CWE-401
 CVE-2024-41667,2024-07-25T14:15:32Z,"OpenAM FreeMarker template injection","org.openidentityplatform.openam:openam-oauth2",0,15.0.4,HIGH,CWE-94
@@ -8022,11 +8044,26 @@ CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External
 CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability",org.verapdf:core,0,,LOW,CWE-611
 CVE-2024-52800,2024-12-02T17:15:24Z,"veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability",org.verapdf:core-jakarta,0,,LOW,CWE-611
 CVE-2024-53267,2024-11-26T16:38:18Z,"sigstore-java has vulnerability with bundle verification","dev.sigstore:sigstore-java",1.0.0,1.1.0,MODERATE,CWE-345;CWE-347
-CVE-2024-53990,2024-12-02T20:04:43Z,"AsyncHttpClient (AHC) library's `CookieStore` replaces explicitly defined `Cookie`s","org.asynchttpclient:async-http-client",3.0.0,3.0.1,CRITICAL,CWE-287
+CVE-2024-53677,2024-12-11T18:30:42Z,"Apache Struts file upload logic is flawed","org.apache.struts:struts2-core",0,6.4.0,CRITICAL,CWE-22;CWE-434
+CVE-2024-53990,2024-12-02T20:04:43Z,"AsyncHttpClient (AHC) library's `CookieStore` replaces explicitly defined `Cookie`s","org.asynchttpclient:async-http-client",2.1.0,3.0.1,CRITICAL,CWE-287
 CVE-2024-54003,2024-11-27T18:34:04Z,"Jenkins Simple Queue Plugin has stored cross-site scripting (XSS) vulnerability","io.jenkins.plugins:simple-queue",0,1.4.5,HIGH,CWE-79
 CVE-2024-54004,2024-11-27T18:34:04Z,"Jenkins Filesystem List Parameter Plugin has Path Traversal vulnerability","aendter.jenkins.plugins:filesystem-list-parameter-plugin",0,0.0.15,MODERATE,CWE-22
 CVE-2024-54140,2024-12-05T22:22:49Z,"sigstore-java has a vulnerability with bundle verification","dev.sigstore:sigstore-java",0,1.2.0,LOW,CWE-20
 CVE-2024-5520,2024-05-30T19:49:04Z,"OpenCMS Cross-Site Scripting vulnerability",org.opencms:opencms-core,16.0,17.0,MODERATE,CWE-79
+CVE-2024-55662,2024-12-12T19:23:04Z,"XWiki allows remote code execution through the extension sheet","org.xwiki.platform:xwiki-platform-repository-server-ui",16.0.0-rc-1,16.3.0,CRITICAL,CWE-863;CWE-96
+CVE-2024-55662,2024-12-12T19:23:04Z,"XWiki allows remote code execution through the extension sheet","org.xwiki.platform:xwiki-platform-repository-server-ui",3.3-milestone-1,15.10.9,CRITICAL,CWE-863;CWE-96
+CVE-2024-55663,2024-12-12T19:22:12Z,"XWiki Platform has an SQL injection in getdocuments.vm with sort parameter","org.xwiki.platform:xwiki-platform-distribution-war",11.10.6,13.10.5,HIGH,CWE-116
+CVE-2024-55663,2024-12-12T19:22:12Z,"XWiki Platform has an SQL injection in getdocuments.vm with sort parameter","org.xwiki.platform:xwiki-platform-distribution-war",14.0-rc-1,14.3-rc-1,HIGH,CWE-116
+CVE-2024-55875,2024-12-12T19:22:01Z,"http4k has a potential XXE (XML External Entity Injection) vulnerability","org.http4k:http4k-format-xml",0,4.50.0.0,CRITICAL,CWE-200;CWE-611;CWE-918
+CVE-2024-55875,2024-12-12T19:22:01Z,"http4k has a potential XXE (XML External Entity Injection) vulnerability","org.http4k:http4k-format-xml",5.0.0.0,5.41.0.0,CRITICAL,CWE-200;CWE-611;CWE-918
+CVE-2024-55876,2024-12-12T19:21:16Z,"XWiki's scheduler in subwiki allows scheduling operations for any main wiki user","org.xwiki.platform:xwiki-platform-scheduler-ui",1.2-milestone-2,15.10.9,MODERATE,CWE-862
+CVE-2024-55876,2024-12-12T19:21:16Z,"XWiki's scheduler in subwiki allows scheduling operations for any main wiki user","org.xwiki.platform:xwiki-platform-scheduler-ui",16.0.0-rc-1,16.3.0,MODERATE,CWE-862
+CVE-2024-55877,2024-12-12T19:21:06Z,"XWiki allows remote code execution from account through macro descriptions and XWiki.XWikiSyntaxMacrosList","org.xwiki.platform:xwiki-platform-help-ui",16.0.0-rc-1,16.4.1,CRITICAL,CWE-96
+CVE-2024-55877,2024-12-12T19:21:06Z,"XWiki allows remote code execution from account through macro descriptions and XWiki.XWikiSyntaxMacrosList","org.xwiki.platform:xwiki-platform-help-ui",16.5.0-rc-1,16.5.0,CRITICAL,CWE-96
+CVE-2024-55877,2024-12-12T19:21:06Z,"XWiki allows remote code execution from account through macro descriptions and XWiki.XWikiSyntaxMacrosList","org.xwiki.platform:xwiki-platform-help-ui",9.7-rc-1,15.10.11,CRITICAL,CWE-96
+CVE-2024-55879,2024-12-12T19:20:56Z,"XWiki allows RCE from script right in configurable sections","org.xwiki.platform:xwiki-platform-administration-ui",16.0.0-rc-1,16.3.0,CRITICAL,CWE-862
+CVE-2024-55879,2024-12-12T19:20:56Z,"XWiki allows RCE from script right in configurable sections","org.xwiki.platform:xwiki-platform-administration-ui",2.3,15.10.9,CRITICAL,CWE-862
+CVE-2024-55887,2024-12-13T20:35:57Z,"Ucum-java has an XXE vulnerability in XML parsing",org.fhir:ucum,0,1.0.9,HIGH,CWE-611
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",0,22.0.12,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",23.0.0,24.0.6,LOW,CWE-276
 CVE-2024-5967,2024-06-21T15:52:38Z,"Keycloak leaks configured LDAP bind credentials through the Keycloak admin console","org.keycloak:keycloak-ldap-federation",25.0.0,25.0.1,LOW,CWE-276

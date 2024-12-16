@@ -43,11 +43,11 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               plugins {
                 id 'java-library'
               }
-                            
+
               repositories {
                 mavenCentral()
               }
-                            
+
               dependencies {
                 compileOnly 'com.google.guava:guava:29.0-jre'
                 runtimeOnly ('com.google.guava:guava:29.0-jre')
@@ -58,11 +58,11 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               plugins {
                 id 'java-library'
               }
-                            
+
               repositories {
                 mavenCentral()
               }
-                            
+
               dependencies {
                 compileOnly 'com.google.guava:guava:30.1.1-jre'
                 runtimeOnly ('com.google.guava:guava:30.1.1-jre')
@@ -85,6 +85,62 @@ class UpgradeDependencyVersionTest implements RewriteTest {
                     .filter(dep -> "com.google.guava".equals(dep.getGroupId()) && "guava".equals(dep.getArtifactId()) && "30.1.1-jre".equals(dep.getVersion()))
                     .findAny())
                   .as("GradleProject requested dependencies should have been updated with the new version of guava")
+                  .isPresent();
+            })
+          )
+        );
+    }
+
+    @Test
+    void upgradeMockitoInGradleProject() {
+        rewriteRun(recipeSpec -> {
+              recipeSpec.beforeRecipe(withToolingApi())
+                .recipe(new UpgradeDependencyVersion("org.mockito", "*", "4.x", null, null, null));
+          },
+          buildGradle(
+            """
+              plugins {
+                id 'java-library'
+              }
+
+              repositories {
+                mavenCentral()
+              }
+
+              dependencies {
+                testImplementation("org.mockito:mockito-junit-jupiter:3.12.4")
+              }
+              """,
+            """
+              plugins {
+                id 'java-library'
+              }
+
+              repositories {
+                mavenCentral()
+              }
+
+              dependencies {
+                testImplementation("org.mockito:mockito-junit-jupiter:4.11.0")
+              }
+              """,
+            spec -> spec.afterRecipe(after -> {
+                Optional<GradleProject> maybeGp = after.getMarkers().findFirst(GradleProject.class);
+                assertThat(maybeGp).isPresent();
+                GradleProject gp = maybeGp.get();
+                GradleDependencyConfiguration testCompileClasspath = gp.getConfiguration("testCompileClasspath");
+                assertThat(testCompileClasspath).isNotNull();
+                assertThat(
+                  testCompileClasspath.getRequested().stream()
+                    .filter(dep -> "org.mockito".equals(dep.getGroupId()) && "mockito-junit-jupiter".equals(dep.getArtifactId()))
+                    .findAny())
+                  .as("GradleProject requested dependencies should have been updated with the new version of mockito")
+                  .isPresent();
+                assertThat(
+                  testCompileClasspath.getResolved().stream()
+                    .filter(dep -> "org.mockito".equals(dep.getGroupId()) && "mockito-junit-jupiter".equals(dep.getArtifactId()) && "4.11.0".equals(dep.getVersion()))
+                    .findAny())
+                  .as("GradleProject resolved dependencies should have been updated with the new version of mockito")
                   .isPresent();
             })
           )

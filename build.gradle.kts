@@ -5,19 +5,6 @@ plugins {
 group = "org.openrewrite.recipe"
 description = "A rewrite module automating Java dependency management."
 
-repositories {
-    maven {
-        url = uri("https://repo.gradle.org/gradle/libs-releases/")
-        content {
-            excludeVersionByRegex(".+", ".+", ".+-rc-?[0-9]*")
-        }
-    }
-    // Needed to pick up snapshot versions of rewrite
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-    }
-}
-
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
@@ -36,16 +23,6 @@ dependencies {
     testImplementation(gradleApi())
     testRuntimeOnly("com.google.guava:guava:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
-}
-
-tasks {
-    // ./gradlew parseGithubAdvisoryDatabase --args="./advisory-database Maven src/main/resources/advisories-maven.csv"
-    val parseGithubAdvisoryDatabase by registering(JavaExec::class) {
-        group = "generate"
-        description = "Parse github/advisories-database and generate a CSV file."
-        mainClass = "org.openrewrite.java.dependencies.github.ParseAdvisories"
-        classpath = sourceSets.getByName("main").runtimeClasspath
-    }
 }
 
 tasks {

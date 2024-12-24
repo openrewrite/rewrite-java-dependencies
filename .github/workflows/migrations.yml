@@ -41,4 +41,4 @@ jobs:
       - name: Commit and push
         run: |
           git add src/main/resources/migrations.csv
-          git diff-index --quiet HEAD || (git commit -m "[Auto] Old GroupId migrations as of ${{ env.NOW }}" && git push origin main)
+          git diff --quiet HEAD || (git commit -m "[Auto] Old GroupId migrations as of ${{ env.NOW }}" && git push origin main)

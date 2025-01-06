@@ -15,6 +15,7 @@ ch.qos.logback,logback-access,ch.qos.logback.access,common,"The 1.5.x continues 
 clover,clover,com.cenqua.clover,clover,
 cobertura,,"net.sourceforge.cobertura",,
 com.actionbarsherlock,library,com.actionbarsherlock,actionbarsherlock,
+com.alibaba,fastjson,com.alibaba.fastjson2,fastjson2,
 com.aoindustries,ao-web-page,com.semanticcms,semanticcms-core-model,
 com.aoindustries,ao-web-page-servlet,com.semanticcms,semanticcms-core-servlet,
 com.aoindustries,ao-web-page-taglib,com.semanticcms,semanticcms-core-taglib,
@@ -437,6 +438,7 @@ org.jdtaus.core.monitor,"jdtaus-core-server-monitoring",org.jdtaus.core.monitor,
 org.jetbrains.kotlin,kotlin-stdlib-common,org.jetbrains.kotlin,kotlin-stdlib,
 org.jooby,,io.jooby,,
 org.jszip.jruby,sass-gems,org.jszip.gems,sass-lang,
+org.jusecase,jte,gg.jte,jte,
 org.jvnet.jaxb2.maven2,maven-jaxb2-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
 org.jvnet.jaxb2.maven2,maven-jaxb20-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"
 org.jvnet.jaxb2.maven2,maven-jaxb21-plugin,org.jvnet.jaxb,jaxb-maven-plugin,"Migration from previous version (0.x / 1.x) to v2 https://github.com/highsource/jaxb-tools/wiki/JAXB-Tools-Migration-Guide#migration-from-previous-version-0x--1x-to-v2"

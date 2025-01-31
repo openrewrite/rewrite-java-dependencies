@@ -24,9 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class VersionParser {
     private final Map<String, Version> cache = new ConcurrentHashMap<>();
 
-    public VersionParser() {
-    }
-
     public Version transform(String original) {
         return cache.computeIfAbsent(original, this::parse);
     }

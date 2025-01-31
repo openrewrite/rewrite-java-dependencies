@@ -16,8 +16,6 @@
 
 package org.openrewrite.java.dependencies.internal;
 
-import org.jspecify.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class VersionParser {
     private final Map<String, Version> cache = new ConcurrentHashMap<>();
 
-    public VersionParser() {
-    }
-
-    public @Nullable Version transform(String original) {
+    public Version transform(String original) {
         return cache.computeIfAbsent(original, this::parse);
     }
 

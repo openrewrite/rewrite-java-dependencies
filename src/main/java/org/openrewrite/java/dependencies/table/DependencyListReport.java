@@ -64,5 +64,9 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
                 description = "When `true` the project directly depends on the dependency. When `false` the project " +
                               "depends on the dependency transitively through at least one direct dependency.")
         boolean direct;
+
+        @Column(displayName = "Resolution failure",
+                description = "The reason why the dependency could not be resolved. Blank when resolution was not attempted.")
+        String resolutionFailure;
     }
 }

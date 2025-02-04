@@ -17,21 +17,28 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
+import org.openrewrite.maven.tree.*;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import java.nio.file.Paths;
+import java.util.Collections;
+
+import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.Tree.randomId;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.Assertions.settingsGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
+import static org.openrewrite.xml.Assertions.xml;
 
 @SuppressWarnings("GroovyUnusedAssignment")
 class DependencyListTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new DependencyList(DependencyList.Scope.Compile, true));
+        spec.recipe(new DependencyList(DependencyList.Scope.Compile, true, false));
     }
 
     @Test
@@ -84,13 +91,13 @@ class DependencyListTest implements RewriteTest {
     @Test
     void directOnly() {
         rewriteRun(
-          spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false))
+          spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false, false))
             .beforeRecipe(withToolingApi())
             .dataTable(DependencyListReport.Row.class, rows -> {
                 assertThat(rows)
                   .containsExactlyInAnyOrder(
-                    new DependencyListReport.Row("Gradle", "com.test", "test", "1.0.0","io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true),
-                    new DependencyListReport.Row("Maven", "com.test", "test", "1.0.0","io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true));
+                    new DependencyListReport.Row("Gradle", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""),
+                    new DependencyListReport.Row("Maven", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""));
             }),
           settingsGradle("rootProject.name = 'test'"),
           buildGradle(
@@ -124,6 +131,64 @@ class DependencyListTest implements RewriteTest {
                   </dependencies>
               </project>
               """)
+        );
+    }
+
+    @Test
+    void validateResolvable() {
+        rewriteRun(
+          spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false, true))
+            .dataTable(DependencyListReport.Row.class, rows -> assertThat(rows)
+              .singleElement()
+              .extracting(DependencyListReport.Row::getResolutionFailure)
+              .matches(it -> it.startsWith("org.openrewrite.maven.MavenDownloadingException"))),
+          xml(
+            //language=xml
+            """
+              <project>
+                  <groupId>com.test</groupId>
+                  <artifactId>test</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>com.test</groupId>
+                          <artifactId>doesnotexist</artifactId>
+                          <version>1.0.0</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """,
+            spec -> {
+                // Manually construct a resolution result since, obviously, the above cannot be resolved
+                MavenRepository pretendRepo = MavenRepository.builder()
+                  .id("nonexistent")
+                  .uri("https://nonexistent")
+                  .build();
+                Dependency requested = Dependency.builder()
+                  .gav(new GroupArtifactVersion("com.test", "doesnotexist", "1.0.0"))
+                  .build();
+                ResolvedGroupArtifactVersion rgav = new ResolvedGroupArtifactVersion(pretendRepo.getId(), "com.test", "doesnotexist", "1.0.0", null);
+                spec.path(Paths.get("pom.xml"))
+                  .markers(new MavenResolutionResult(
+                    randomId(),
+                    null,
+                    ResolvedPom.builder()
+                      .requested(Pom.builder()
+                        .gav(rgav)
+                        .build())
+                      .repositories(singletonList(pretendRepo))
+                      .build(),
+                    emptyList(),
+                    null,
+                    singletonMap(Scope.Compile, singletonList(new ResolvedDependency(
+                      pretendRepo,
+                      rgav, requested, emptyList(), emptyList(), null, null, null, 0, null)
+                    )),
+                    null,
+                    Collections.emptyList()
+                  ));
+            }
+          )
         );
     }
 }

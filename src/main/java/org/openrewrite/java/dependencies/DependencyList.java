@@ -21,21 +21,28 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
+import org.openrewrite.internal.ExceptionUtils;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
 import org.openrewrite.marker.Markers;
-import org.openrewrite.maven.tree.GroupArtifactVersion;
-import org.openrewrite.maven.tree.MavenResolutionResult;
-import org.openrewrite.maven.tree.ResolvedDependency;
-import org.openrewrite.maven.tree.ResolvedGroupArtifactVersion;
+import org.openrewrite.maven.MavenDownloadingException;
+import org.openrewrite.maven.MavenExecutionContextView;
+import org.openrewrite.maven.MavenSettings;
+import org.openrewrite.maven.internal.MavenPomDownloader;
+import org.openrewrite.maven.table.MavenMetadataFailures;
+import org.openrewrite.maven.tree.*;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Collections.emptyMap;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class DependencyList extends Recipe {
 
     transient DependencyListReport report = new DependencyListReport(this);
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
     @Option(displayName = "Scope",
             description = "The scope of the dependencies to include in the report.",
@@ -48,6 +55,13 @@ public class DependencyList extends Recipe {
                           "Defaults to including only direct dependencies.",
             example = "true")
     boolean includeTransitive;
+
+    @Option(displayName = "Validate dependencies are resolvable",
+            description = "When enabled the recipe will attempt to download every dependency it encounters, reporting on any failures. " +
+                          "This can be useful for identifying dependencies that have become unavailable since an LST was produced.",
+            valid = {"true", "false"},
+            example = "true")
+    boolean validateResolvable;
 
     /**
      * Freestanding gradle script plugins get assigned the same GradleProject marker with the build script in the project.
@@ -79,16 +93,16 @@ public class DependencyList extends Recipe {
                 m.findFirst(GradleProject.class)
                         .filter(gradle -> seenGradleProjects.add(new GroupArtifactVersion(gradle.getGroup(), gradle.getName(), gradle.getVersion())))
                         .ifPresent(gradle -> {
-                    GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
-                    if (conf != null) {
-                        for (ResolvedDependency dep : conf.getResolved()) {
-                            if (dep.getDepth() > 0) {
-                                continue;
+                            GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
+                            if (conf != null) {
+                                for (ResolvedDependency dep : conf.getResolved()) {
+                                    if (dep.getDepth() > 0) {
+                                        continue;
+                                    }
+                                    insertDependency(ctx, gradle, seen, dep, true);
+                                }
                             }
-                            insertDependency(ctx, gradle, seen, dep, true);
-                        }
-                    }
-                });
+                        });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
                         if (dep.getDepth() > 0) {
@@ -106,6 +120,19 @@ public class DependencyList extends Recipe {
         if (!seen.add(dep.getGav())) {
             return;
         }
+        String resolutionFailure = "";
+        if (validateResolvable) {
+            try {
+                //noinspection DataFlowIssue
+                metadataFailures.insertRows(ctx, () -> new MavenPomDownloader(
+                        emptyMap(), ctx,
+                        null,
+                        null)
+                        .downloadMetadata(new GroupArtifact(gradle.getGroup(), gradle.getName()), null, gradle.getMavenRepositories()));
+            } catch (MavenDownloadingException e) {
+                resolutionFailure = ExceptionUtils.sanitizeStackTrace(e, RecipeScheduler.class);
+            }
+        }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Gradle",
                 gradle.getGroup(),
@@ -114,7 +141,8 @@ public class DependencyList extends Recipe {
                 dep.getGroupId(),
                 dep.getArtifactId(),
                 dep.getVersion(),
-                direct
+                direct,
+                resolutionFailure
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
@@ -127,6 +155,24 @@ public class DependencyList extends Recipe {
         if (!seen.add(dep.getGav())) {
             return;
         }
+        String resolutionFailure = "";
+        if (validateResolvable) {
+            try {
+                MavenExecutionContextView mctx = MavenExecutionContextView.view(ctx);
+                metadataFailures.insertRows(ctx, () -> new MavenPomDownloader(
+                        emptyMap(), ctx,
+                        mctx.getSettings() == null ? maven.getMavenSettings() :
+                                maven.getMavenSettings() == null ? mctx.getSettings() :
+                                        mctx.getSettings().merge(maven.getMavenSettings()),
+                        Optional.ofNullable(mctx.getSettings())
+                                .map(MavenSettings::getActiveProfiles)
+                                .map(MavenSettings.ActiveProfiles::getActiveProfiles)
+                                .orElse(maven.getActiveProfiles()))
+                        .downloadMetadata(new GroupArtifact(maven.getPom().getGroupId(), maven.getPom().getArtifactId()), null, maven.getPom().getRepositories()));
+            } catch (MavenDownloadingException e) {
+                resolutionFailure = ExceptionUtils.sanitizeStackTrace(e, RecipeScheduler.class);
+            }
+        }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Maven",
                 maven.getPom().getGroupId(),
@@ -135,7 +181,8 @@ public class DependencyList extends Recipe {
                 dep.getGroupId(),
                 dep.getArtifactId(),
                 dep.getVersion(),
-                direct
+                direct,
+                resolutionFailure
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {

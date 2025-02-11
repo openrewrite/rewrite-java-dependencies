@@ -21,10 +21,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.maven.tree.GroupArtifact;
 
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 

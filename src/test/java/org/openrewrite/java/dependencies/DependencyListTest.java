@@ -185,7 +185,8 @@ class DependencyListTest implements RewriteTest {
                       rgav, requested, emptyList(), emptyList(), null, null, null, 0, null)
                     )),
                     null,
-                    Collections.emptyList()
+                    Collections.emptyList(),
+                    Collections.emptyMap()
                   ));
             }
           )

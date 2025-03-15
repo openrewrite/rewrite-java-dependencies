@@ -19,13 +19,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.search.UsesType;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.HashMap;
+import java.util.Map;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
+public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> {
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
@@ -73,8 +75,8 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     }
 
     @Override
-    public AtomicBoolean getInitialValue(ExecutionContext ctx) {
-        return new AtomicBoolean(false);
+    public Map<JavaProject, Boolean> getInitialValue(ExecutionContext ctx) {
+        return new HashMap<>();
     }
 
     org.openrewrite.gradle.RemoveDependency removeGradleDependency;
@@ -96,7 +98,7 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean usageFound) {
+    public TreeVisitor<?, ExecutionContext> getScanner(Map<JavaProject, Boolean> projectToInUse) {
         if (unlessUsing == null) {
             return TreeVisitor.noop();
         }
@@ -105,34 +107,37 @@ public class RemoveDependency extends ScanningRecipe<AtomicBoolean> {
             @Override
             public Tree preVisit(Tree tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                if (!usageFound.get()) {
-                    usageFound.set(tree != usesType.visit(tree, ctx));
-                }
+                tree.getMarkers().findFirst(JavaProject.class).ifPresent(javaProject -> {
+                    projectToInUse.compute(javaProject, (jp, foundSoFar) -> Boolean.TRUE.equals(foundSoFar) || tree != usesType.visit(tree, ctx));
+                });
                 return tree;
             }
         };
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean usageFound) {
-        if (usageFound.get()) {
-            return TreeVisitor.noop();
-        }
-
+    public TreeVisitor<?, ExecutionContext> getVisitor(Map<JavaProject, Boolean> projectToInUse) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gradleRemoveDep = removeGradleDependency.getVisitor();
             final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (tree instanceof SourceFile) {
-                    SourceFile sf = (SourceFile) tree;
-                    if (gradleRemoveDep.isAcceptable(sf, ctx)) {
-                        return gradleRemoveDep.visitNonNull(tree, ctx);
+                if (!(tree instanceof SourceFile)) {
+                    return tree;
+                }
+                if (unlessUsing != null) {
+                    JavaProject jp = tree.getMarkers().findFirst(JavaProject.class).orElse(null);
+                    if (jp == null || projectToInUse.get(jp)) {
+                        return tree;
                     }
-                    if (mavenRemoveDep.isAcceptable(sf, ctx)) {
-                        return mavenRemoveDep.visitNonNull(tree, ctx);
-                    }
+                }
+                SourceFile sf = (SourceFile) tree;
+                if (gradleRemoveDep.isAcceptable(sf, ctx)) {
+                    return gradleRemoveDep.visitNonNull(tree, ctx);
+                }
+                if (mavenRemoveDep.isAcceptable(sf, ctx)) {
+                    return mavenRemoveDep.visitNonNull(tree, ctx);
                 }
                 return tree;
             }

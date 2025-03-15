@@ -99,12 +99,12 @@ public class ChangeDependency extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
+            final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
                     oldGroupId, oldArtifactId,
                     newGroupId, newArtifactId,
                     newVersion, versionPattern,
                     overrideManagedVersion, changeManagedDependency).getVisitor();
-            TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
+            final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId,
                     newGroupId, newArtifactId,
                     newVersion, versionPattern,

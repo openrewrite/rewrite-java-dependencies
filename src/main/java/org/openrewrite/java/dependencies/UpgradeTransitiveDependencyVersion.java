@@ -126,6 +126,12 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
         TreeVisitor<?, ExecutionContext> gradleUDV = getGradleUpgradeTransitive().getVisitor();
         TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeTransitive().getVisitor(acc);
         return new TreeVisitor<Tree, ExecutionContext>() {
+
+            @Override
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext executionContext) {
+                return gradleUDV.isAcceptable(sourceFile, executionContext) || mavenUTDV.isAcceptable(sourceFile, executionContext);
+            }
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (!(tree instanceof SourceFile)) {

@@ -123,6 +123,11 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
         TreeVisitor<?, ExecutionContext> mavenVisitor = getUpgradeMavenDependencyVersion().getVisitor(acc.mavenAccumulator);
         TreeVisitor<?, ExecutionContext> gradleVisitor = getUpgradeGradleDependencyVersion().getVisitor(acc.gradleAccumulator);
         return new TreeVisitor<Tree, ExecutionContext>() {
+
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
+                return mavenVisitor.isAcceptable(sourceFile, ctx) || gradleVisitor.isAcceptable(sourceFile, ctx);
+            }
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 Tree t = tree;

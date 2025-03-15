@@ -111,6 +111,11 @@ public class ChangeDependency extends Recipe {
                     overrideManagedVersion).getVisitor();
 
             @Override
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext executionContext) {
+                return mavenVisitor.isAcceptable(sourceFile, executionContext) || gradleVisitor.isAcceptable(sourceFile, executionContext);
+            }
+
+            @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (!(tree instanceof SourceFile)) {
                     return tree;

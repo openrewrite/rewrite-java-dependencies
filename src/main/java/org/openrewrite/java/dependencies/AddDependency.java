@@ -163,7 +163,12 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
             final TreeVisitor<?, ExecutionContext> mavenAddDep = mavenAddDep().getVisitor(acc.mavenAccumulator);
 
             @Override
-            public Tree visit(@SuppressWarnings("NullableProblems") Tree tree, ExecutionContext ctx) {
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
+                return gradleAddDep.isAcceptable(sourceFile, ctx) || mavenAddDep.isAcceptable(sourceFile, ctx);
+            }
+
+            @Override
+            public Tree visit(Tree tree, ExecutionContext ctx) {
                 if (!(tree instanceof SourceFile)) {
                     return tree;
                 }

@@ -45,21 +45,28 @@ public class DependencyList extends Recipe {
     transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
     @Option(displayName = "Scope",
-            description = "The scope of the dependencies to include in the report.",
+            description = "The scope of the dependencies to include in the report." +
+                          "Defaults to \"Compile\"",
             valid = {"Compile", "Runtime", "TestRuntime"},
+            required = false,
             example = "Compile")
+    @Nullable
     Scope scope;
 
     @Option(displayName = "Include transitive dependencies",
             description = "Whether or not to include transitive dependencies in the report. " +
-                          "Defaults to including only direct dependencies.",
+                          "Defaults to including only direct dependencies." +
+                          "Defaults to false.",
+            required = false,
             example = "true")
     boolean includeTransitive;
 
     @Option(displayName = "Validate dependencies are resolvable",
             description = "When enabled the recipe will attempt to download every dependency it encounters, reporting on any failures. " +
-                          "This can be useful for identifying dependencies that have become unavailable since an LST was produced.",
+                          "This can be useful for identifying dependencies that have become unavailable since an LST was produced." +
+                          "Defaults to false.",
             valid = {"true", "false"},
+            required = false,
             example = "true")
     boolean validateResolvable;
 
@@ -93,7 +100,7 @@ public class DependencyList extends Recipe {
                 m.findFirst(GradleProject.class)
                         .filter(gradle -> seenGradleProjects.add(new GroupArtifactVersion(gradle.getGroup(), gradle.getName(), gradle.getVersion())))
                         .ifPresent(gradle -> {
-                            GradleDependencyConfiguration conf = gradle.getConfiguration(scope.asGradleConfigurationName());
+                            GradleDependencyConfiguration conf = gradle.getConfiguration(scope().asGradleConfigurationName());
                             if (conf != null) {
                                 for (ResolvedDependency dep : conf.getResolved()) {
                                     if (dep.getDepth() > 0) {
@@ -104,7 +111,7 @@ public class DependencyList extends Recipe {
                             }
                         });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
-                    for (ResolvedDependency dep : maven.getDependencies().get(scope.asMavenScope())) {
+                    for (ResolvedDependency dep : maven.getDependencies().get(scope().asMavenScope())) {
                         if (dep.getDepth() > 0) {
                             continue;
                         }
@@ -114,6 +121,10 @@ public class DependencyList extends Recipe {
                 return tree;
             }
         };
+    }
+
+    private Scope scope() {
+        return scope == null ? Scope.Compile : scope;
     }
 
     private void insertDependency(ExecutionContext ctx, GradleProject gradle, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {

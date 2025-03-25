@@ -32,12 +32,13 @@ public class StaticVersionComparator implements Comparator<Version> {
 
     static {
         SPECIAL_MEANINGS.put("dev", -1);
-        SPECIAL_MEANINGS.put("rc", 1);
-        SPECIAL_MEANINGS.put("snapshot", 2);
-        SPECIAL_MEANINGS.put("final", 3);
-        SPECIAL_MEANINGS.put("ga", 4);
-        SPECIAL_MEANINGS.put("release", 5);
-        SPECIAL_MEANINGS.put("sp", 6);
+        SPECIAL_MEANINGS.put("m", 1);
+        SPECIAL_MEANINGS.put("rc", 2);
+        SPECIAL_MEANINGS.put("snapshot", 3);
+        SPECIAL_MEANINGS.put("final", 4);
+        SPECIAL_MEANINGS.put("ga", 5);
+        SPECIAL_MEANINGS.put("release", 6);
+        SPECIAL_MEANINGS.put("sp", 7);
     }
 
     /**

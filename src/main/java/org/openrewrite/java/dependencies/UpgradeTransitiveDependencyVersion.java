@@ -128,8 +128,8 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
         return new TreeVisitor<Tree, ExecutionContext>() {
 
             @Override
-            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext executionContext) {
-                return gradleUDV.isAcceptable(sourceFile, executionContext) || mavenUTDV.isAcceptable(sourceFile, executionContext);
+            public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
+                return gradleUDV.isAcceptable(sourceFile, ctx) || mavenUTDV.isAcceptable(sourceFile, ctx);
             }
 
             @Override

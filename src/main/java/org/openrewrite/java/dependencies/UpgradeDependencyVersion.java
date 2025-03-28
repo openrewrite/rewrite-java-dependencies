@@ -124,6 +124,7 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
         TreeVisitor<?, ExecutionContext> gradleVisitor = getUpgradeGradleDependencyVersion().getVisitor(acc.gradleAccumulator);
         return new TreeVisitor<Tree, ExecutionContext>() {
 
+            @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
                 return mavenVisitor.isAcceptable(sourceFile, ctx) || gradleVisitor.isAcceptable(sourceFile, ctx);
             }

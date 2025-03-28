@@ -107,9 +107,8 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
             @Override
             public Tree preVisit(Tree tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                tree.getMarkers().findFirst(JavaProject.class).ifPresent(javaProject -> {
-                    projectToInUse.compute(javaProject, (jp, foundSoFar) -> Boolean.TRUE.equals(foundSoFar) || tree != usesType.visit(tree, ctx));
-                });
+                tree.getMarkers().findFirst(JavaProject.class).ifPresent(javaProject ->
+                    projectToInUse.compute(javaProject, (jp, foundSoFar) -> Boolean.TRUE.equals(foundSoFar) || tree != usesType.visit(tree, ctx)));
                 return tree;
             }
         };

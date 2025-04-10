@@ -15,7 +15,6 @@
  */
 package org.openrewrite.java.dependencies;
 
-import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;

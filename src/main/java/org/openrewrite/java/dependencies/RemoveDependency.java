@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
@@ -71,7 +72,7 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
     @Override
     public String getDescription() {
         return "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
-               "For Maven project, removes a single dependency from the <dependencies> section of the pom.xml.";
+               "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
     }
 
     @Override

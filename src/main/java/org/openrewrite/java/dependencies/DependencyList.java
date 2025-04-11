@@ -83,7 +83,7 @@ public class DependencyList extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Emits a data table detailing all Gradle and Maven dependencies." +
+        return "Emits a data table detailing all Gradle and Maven dependencies. " +
                "This recipe makes no changes to any source file.";
     }
 

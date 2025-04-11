@@ -80,8 +80,8 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
         //language=markdown
         return "For Gradle projects, upgrade the version of a dependency in a `build.gradle` file. " +
                "Supports updating dependency declarations of various forms:\n" +
-               "* `String` notation: `\"group:artifact:version\"` \n" +
-               "* `Map` notation: `group: 'group', name: 'artifact', version: 'version'`\n" +
+               " * `String` notation: `\"group:artifact:version\"` \n" +
+               " * `Map` notation: `group: 'group', name: 'artifact', version: 'version'`\n" +
                "It is possible to update version numbers which are defined earlier in the same file in variable declarations.\n\n" +
                "For Maven projects, upgrade the version of a dependency by specifying a group ID and (optionally) an " +
                "artifact ID using Node Semver advanced range selectors, allowing more precise control over version " +

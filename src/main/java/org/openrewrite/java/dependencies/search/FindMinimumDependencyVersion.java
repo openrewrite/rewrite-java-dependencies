@@ -129,7 +129,6 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 
-    @NotNull
     static TreeVisitor<?, ExecutionContext> applyMarkersForLocatedGavs(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, DependenciesInUse dependenciesInUse) {
         return Preconditions.check(Preconditions.or(new IsBuildGradle<>(), new FindMavenProject().getVisitor()), new TreeVisitor<Tree, ExecutionContext>() {
             @Override

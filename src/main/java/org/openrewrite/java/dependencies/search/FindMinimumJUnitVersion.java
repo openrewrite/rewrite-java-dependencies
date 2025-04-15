@@ -128,27 +128,21 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 
-    private void collectionJUnit5(VersionParser versionParser, List<ResolvedDependency> resolved,
-                                  Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        StaticVersionComparator versionComparator = new StaticVersionComparator();
-        for (ResolvedDependency dep : resolved) {
-            if (StringUtils.matchesGlob(dep.getGroupId(), "org.junit.jupiter") &&
-                StringUtils.matchesGlob(dep.getArtifactId(), "junit-jupiter-api")) {
-                acc.merge(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()),
-                        dep.getGav(), (d1, d2) -> versionComparator.compare(
-                                versionParser.transform(d1.getVersion()),
-                                versionParser.transform(d2.getVersion())) < 0 ?
-                                d1 : d2);
-            }
-        }
-    }
-
     private void collectionJUnit4(VersionParser versionParser, List<ResolvedDependency> resolved,
                                   Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        collectVersion(versionParser, resolved, "junit", "junit", acc);
+    }
+
+    private void collectionJUnit5(VersionParser versionParser, List<ResolvedDependency> resolved,
+                                  Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        collectVersion(versionParser, resolved, "org.junit.jupiter", "junit-jupiter-api", acc);
+    }
+
+    private static void collectVersion(VersionParser versionParser, List<ResolvedDependency> resolved, String groupIdPattern, String artifactIdPattern, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
         StaticVersionComparator versionComparator = new StaticVersionComparator();
         for (ResolvedDependency dep : resolved) {
-            if (StringUtils.matchesGlob(dep.getGroupId(), "junit") &&
-                StringUtils.matchesGlob(dep.getArtifactId(), "junit")) {
+            if (StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern) &&
+                    StringUtils.matchesGlob(dep.getArtifactId(), artifactIdPattern)) {
                 acc.merge(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()),
                         dep.getGav(), (d1, d2) -> versionComparator.compare(
                                 versionParser.transform(d1.getVersion()),
@@ -157,5 +151,4 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
             }
         }
     }
-
 }

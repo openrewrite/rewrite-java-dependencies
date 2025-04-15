@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies.search;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.IsBuildGradle;
@@ -125,6 +126,11 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
 
         acc.entrySet().removeIf(e -> !e.getValue().getVersion().equals(minimumVersion));
 
+        return applyMarkersForLocatedGavs(acc, dependenciesInUse);
+    }
+
+    @NotNull
+    static TreeVisitor<?, ExecutionContext> applyMarkersForLocatedGavs(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, DependenciesInUse dependenciesInUse) {
         return Preconditions.check(Preconditions.or(new IsBuildGradle<>(), new FindMavenProject().getVisitor()), new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

@@ -125,6 +125,10 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
 
         acc.entrySet().removeIf(e -> !e.getValue().getVersion().equals(minimumVersion));
 
+        return applyMarkersForLocatedGavs(acc, dependenciesInUse);
+    }
+
+    static TreeVisitor<?, ExecutionContext> applyMarkersForLocatedGavs(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, DependenciesInUse dependenciesInUse) {
         return Preconditions.check(Preconditions.or(new IsBuildGradle<>(), new FindMavenProject().getVisitor()), new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

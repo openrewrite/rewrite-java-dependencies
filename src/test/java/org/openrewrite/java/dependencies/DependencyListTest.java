@@ -114,7 +114,8 @@ class DependencyListTest implements RewriteTest {
               dependencies {
                   implementation('io.micrometer.prometheus:prometheus-rsocket-client:1.5.3')
               }
-              """),
+              """
+          ),
           pomXml(
             //language=xml
             """
@@ -130,7 +131,8 @@ class DependencyListTest implements RewriteTest {
                       </dependency>
                   </dependencies>
               </project>
-              """)
+              """
+          )
         );
     }
 

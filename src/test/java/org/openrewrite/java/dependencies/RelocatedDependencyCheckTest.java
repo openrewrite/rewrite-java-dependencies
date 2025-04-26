@@ -36,6 +36,11 @@ import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RelocatedDependencyCheckTest implements RewriteTest {
+
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new RelocatedDependencyCheck(null));
+    }
     @Test
     void initialValueParser() {
         Accumulator initialValue = new RelocatedDependencyCheck(null).getInitialValue(new InMemoryExecutionContext());
@@ -45,11 +50,6 @@ class RelocatedDependencyCheckTest implements RewriteTest {
             new Relocation(new GroupArtifact("org.apache.commons", "commons-lang3"), null))
           .containsEntry(new GroupArtifact("org.codehaus.groovy", null),
             new Relocation(new GroupArtifact("org.apache.groovy", null), null));
-    }
-
-    @Override
-    public void defaults(RecipeSpec spec) {
-        spec.recipe(new RelocatedDependencyCheck(null));
     }
 
     @Nested

@@ -41,6 +41,26 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
         spec.recipe(new DependencyResolutionDiagnostic(null, null, null));
     }
 
+    @DocumentExample
+    @Test
+    void gradleNoMarker() {
+        rewriteRun(
+          //language=groovy
+          buildGradle(
+            """
+              plugins {
+                  id("java")
+              }
+              """,
+            """
+              /*~~(build.gradle is a Gradle build file, but it is missing a GradleProject marker.)~~>*/plugins {
+                  id("java")
+              }
+              """
+          )
+        );
+    }
+
     @Test
     void gradle() {
         rewriteRun(
@@ -184,26 +204,6 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                       </repository>
                    </repositories>
               </project>
-              """
-          )
-        );
-    }
-
-    @DocumentExample
-    @Test
-    void gradleNoMarker() {
-        rewriteRun(
-          //language=groovy
-          buildGradle(
-            """
-              plugins {
-                  id("java")
-              }
-              """,
-            """
-              /*~~(build.gradle is a Gradle build file, but it is missing a GradleProject marker.)~~>*/plugins {
-                  id("java")
-              }
               """
           )
         );

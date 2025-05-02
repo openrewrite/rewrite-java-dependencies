@@ -383,6 +383,10 @@ examples:
   - jackson-core
   - 2.14-2.16
   sources:
+  - before: core
+    language: mavenProject
+  - before: server
+    language: mavenProject
   - before: |
       <project>
         <groupId>org.openrewrite</groupId>
@@ -421,8 +425,6 @@ examples:
       </project>
     path: pom.xml
     language: xml
-  - before: core
-    language: mavenProject
   - before: |
       <project>
         <groupId>org.openrewrite</groupId>
@@ -438,5 +440,3 @@ examples:
       </project>
     path: pom.xml
     language: xml
-  - before: server
-    language: mavenProject

@@ -21,7 +21,7 @@ import org.openrewrite.maven.tree.*;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Collections;
 
 import static java.util.Collections.*;
@@ -170,7 +170,7 @@ class DependencyListTest implements RewriteTest {
                   .gav(new GroupArtifactVersion("com.test", "doesnotexist", "1.0.0"))
                   .build();
                 ResolvedGroupArtifactVersion rgav = new ResolvedGroupArtifactVersion(pretendRepo.getId(), "com.test", "doesnotexist", "1.0.0", null);
-                spec.path(Paths.get("pom.xml"))
+                spec.path(Path.of("pom.xml"))
                   .markers(new MavenResolutionResult(
                     randomId(),
                     null,

@@ -26,7 +26,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.io.ByteArrayInputStream;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -138,7 +138,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
         rewriteRun(
           spec -> {
               MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
-              MavenSettings settings = MavenSettings.parse(new Parser.Input(Paths.get("settings.xml"), () -> new ByteArrayInputStream(
+              MavenSettings settings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
                 //language=xml
                 """
                   <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"

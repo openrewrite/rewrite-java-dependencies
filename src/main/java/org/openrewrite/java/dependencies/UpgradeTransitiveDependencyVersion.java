@@ -19,12 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.maven.AddManagedDependency;
-import org.openrewrite.maven.tree.GroupArtifact;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Value
 @EqualsAndHashCode(callSuper = false)

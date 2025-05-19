@@ -19,11 +19,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.maven.AddManagedDependency;
+import org.openrewrite.maven.tree.GroupArtifact;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManagedDependency.Scanned> {
+public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
 
     @Override
     public String getDisplayName() {
@@ -110,26 +115,38 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
     @Nullable
     Boolean addToRootPom;
 
-
-    @Override
-    public AddManagedDependency.Scanned getInitialValue(ExecutionContext ctx) {
-        return getMavenUpgradeTransitive().getInitialValue(ctx);
+    @Value
+    public static class Accumulator {
+        AddManagedDependency.Scanned mavenAccumulator;
+        org.openrewrite.gradle.UpgradeTransitiveDependencyVersion.DependencyVersionState gradleAccumulator;
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(AddManagedDependency.Scanned acc) {
-        return getMavenUpgradeTransitive().getScanner(acc);
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator(getMavenUpgradeTransitive().getInitialValue(ctx), getGradleUpgradeTransitive().getInitialValue(ctx));
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(AddManagedDependency.Scanned acc) {
-        TreeVisitor<?, ExecutionContext> gradleUDV = getGradleUpgradeTransitive().getVisitor();
-        TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeTransitive().getVisitor(acc);
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
+        TreeVisitor<?, ExecutionContext> gradleUTDV = getGradleUpgradeTransitive().getScanner(acc.gradleAccumulator);
+        TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeTransitive().getScanner(acc.mavenAccumulator);
+
+        return delegate(gradleUTDV, mavenUTDV);
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
+        TreeVisitor<?, ExecutionContext> gradleUTDV = getGradleUpgradeTransitive().getVisitor(acc.gradleAccumulator);
+        TreeVisitor<?, ExecutionContext> mavenUTDV = getMavenUpgradeTransitive().getVisitor(acc.mavenAccumulator);
+
+        return delegate(gradleUTDV, mavenUTDV);
+    }
+
+    private TreeVisitor<Tree, ExecutionContext> delegate(TreeVisitor<?, ExecutionContext> gradle, TreeVisitor<?, ExecutionContext> maven) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
-                return gradleUDV.isAcceptable(sourceFile, ctx) || mavenUTDV.isAcceptable(sourceFile, ctx);
+                return gradle.isAcceptable(sourceFile, ctx) || maven.isAcceptable(sourceFile, ctx);
             }
 
             @Override
@@ -138,10 +155,10 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<AddManage
                     return tree;
                 }
                 SourceFile t = (SourceFile) tree;
-                if (gradleUDV.isAcceptable(t, ctx)) {
-                    t = (SourceFile) gradleUDV.visitNonNull(t, ctx);
-                } else if (mavenUTDV.isAcceptable(t, ctx)) {
-                    t = (SourceFile) mavenUTDV.visitNonNull(t, ctx);
+                if (gradle.isAcceptable(t, ctx)) {
+                    t = (SourceFile) gradle.visitNonNull(t, ctx);
+                } else if (maven.isAcceptable(t, ctx)) {
+                    t = (SourceFile) maven.visitNonNull(t, ctx);
                 }
                 return t;
             }

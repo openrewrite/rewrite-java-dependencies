@@ -172,7 +172,8 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                                     dep.getVersion(),
                                     dep.getGav().getDatedSnapshotVersion(),
                                     scope,
-                                    dep.getDepth()));
+                                    dep.getDepth(),
+                                    null));
                         }
                     }
                 }

@@ -583,6 +583,8 @@ com.apollographql.apollo,,"com.apollographql.apollo3",,"See https://www.apollogr
 "com.graphql-java-generator",graphql-java-runtime,"com.graphql-java-generator","graphql-java-client-runtime or com.graphql-java-generator","See https://github.com/graphql-java-generator/graphql-maven-plugin-project/blob/master_2.x/CHANGELOG.md#1181"
 log4j,log4j,org.apache.logging.log4j,"log4j-core or ch.qos.reload4j","log4j-core (Log4j 2) introduces many breaking changes to its predecessor, while reload4j is a unofficial drop-in replacement for Log4j version 1.2.17. See https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html or https://reload4j.qos.ch"
 org.apache.logging.log4j,log4j-slf4j-impl,org.apache.logging.log4j,log4j-slf4j2-impl,
+io.github.openfeign.form,feign-form,io.github.openfeign,feign-form,"feign-form was merged with the main feign project: https://github.com/OpenFeign/feign/issues/2598"
+io.github.openfeign.form,feign-form-spring,io.github.openfeign,feign-form-spring,"feign-form was merged with the main feign project: https://github.com/OpenFeign/feign/issues/2598"
 com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
 com.github.javafaker,javafaker,net.datafaker,datafaker,"This library is a modern fork of java-faker, built on Java 8, with up to date libraries and several newly added Fake Generators. See https://github.com/datafaker-net/datafaker/"
 de.jollyday,jollyday,de.focus-shift,jollyday,"The old jollyday project is no longer maintained. This is a modern fork with jakarta dependencies and based on java 11."

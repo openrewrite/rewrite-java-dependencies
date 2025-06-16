@@ -20,8 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jspecify.annotations.Nullable;
 
-@Data
 @AllArgsConstructor
+@Data
 @JsonPropertyOrder({"oldGroupId", "oldArtifactId", "newGroupId", "newArtifactId", "context"})
 public class Migration {
     String oldGroupId;

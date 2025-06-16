@@ -54,8 +54,8 @@ class RelocatedDependencyCheckTest implements RewriteTest {
 
     @Nested
     class Maven {
-        @Test
         @DocumentExample
+        @Test
         void findRelocatedMavenDependencies() {
             rewriteRun(
               recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(

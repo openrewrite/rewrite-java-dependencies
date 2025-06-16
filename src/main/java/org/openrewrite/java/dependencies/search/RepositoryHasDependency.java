@@ -25,8 +25,8 @@ import org.openrewrite.marker.SearchResult;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override

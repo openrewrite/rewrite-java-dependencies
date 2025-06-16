@@ -38,8 +38,8 @@ import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifact, ResolvedGroupArtifactVersion>> {
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 

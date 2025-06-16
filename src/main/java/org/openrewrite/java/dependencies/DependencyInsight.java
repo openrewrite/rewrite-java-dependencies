@@ -21,8 +21,8 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.table.DependenciesInUse;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class DependencyInsight extends Recipe {
     // Populated by the other DependencyInsight visitors. Listed here so the saas knows to display this when the recipe runs
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);

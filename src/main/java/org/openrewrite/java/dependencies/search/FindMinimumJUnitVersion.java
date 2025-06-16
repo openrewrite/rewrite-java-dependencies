@@ -38,8 +38,8 @@ import java.util.Objects;
 
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.applyMarkersForLocatedGavs;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, ResolvedGroupArtifactVersion>> {
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 

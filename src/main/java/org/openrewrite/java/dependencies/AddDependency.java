@@ -21,8 +21,8 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.tree.Scope;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Group ID",

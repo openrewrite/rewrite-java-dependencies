@@ -37,8 +37,8 @@ import java.util.Set;
 
 import static java.util.Collections.emptyMap;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class DependencyList extends Recipe {
 
     transient DependencyListReport report = new DependencyListReport(this);

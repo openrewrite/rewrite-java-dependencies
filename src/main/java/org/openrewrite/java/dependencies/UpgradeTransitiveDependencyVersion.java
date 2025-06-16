@@ -21,8 +21,8 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.AddManagedDependency;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
 
     @Override

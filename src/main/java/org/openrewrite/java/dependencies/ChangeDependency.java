@@ -21,9 +21,9 @@ import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
-@Getter
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Getter
 public class ChangeDependency extends Recipe {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",

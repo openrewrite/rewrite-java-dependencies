@@ -25,8 +25,8 @@ import org.openrewrite.java.search.UsesType;
 import java.util.HashMap;
 import java.util.Map;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> {
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",

@@ -27,9 +27,9 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVersion.Accumulator> {
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",

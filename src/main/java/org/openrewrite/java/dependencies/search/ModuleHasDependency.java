@@ -27,8 +27,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Override

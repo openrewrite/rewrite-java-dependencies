@@ -41,8 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
     transient RelocatedDependencyReport report = new RelocatedDependencyReport(this);
 

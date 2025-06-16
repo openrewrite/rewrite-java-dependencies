@@ -39,8 +39,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.openrewrite.internal.StringUtils.isBlank;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyResolutionDiagnostic.Accumulator> {
 
     transient RepositoryAccessibilityReport report = new RepositoryAccessibilityReport(this);

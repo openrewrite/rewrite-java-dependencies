@@ -69,7 +69,6 @@ class RemoveDependencyTest implements RewriteTest {
         );
     }
 
-    @DocumentExample("Remove a Maven dependency")
     @Test
     void removeMavenDependency() {
         rewriteRun(

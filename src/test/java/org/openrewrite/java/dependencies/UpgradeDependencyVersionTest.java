@@ -91,7 +91,6 @@ class UpgradeDependencyVersionTest implements RewriteTest {
         );
     }
 
-    @DocumentExample("Upgrade maven dependency version")
     @Test
     void updateManagedDependencyVersion() {
         rewriteRun(

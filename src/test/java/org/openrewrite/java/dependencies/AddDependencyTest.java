@@ -86,7 +86,6 @@ class AddDependencyTest implements RewriteTest {
         );
     }
 
-    @DocumentExample("Add Maven dependency with system scope")
     @Test
     void addMavenDependencyWithSystemScope() {
         rewriteRun(

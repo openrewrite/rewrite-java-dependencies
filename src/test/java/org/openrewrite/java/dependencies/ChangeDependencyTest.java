@@ -66,7 +66,6 @@ class ChangeDependencyTest implements RewriteTest {
         );
     }
 
-    @DocumentExample("Change Maven dependency")
     @Test
     void changeMavenDependency() {
         rewriteRun(

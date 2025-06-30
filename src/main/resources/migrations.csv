@@ -65,6 +65,7 @@ com.google.api-ads,dfa-lib,com.google.api-ads,ads-lib,
 com.google.api-ads,dfp-lib,com.google.api-ads,ads-lib,
 com.google.apis,google-api-services-sql,com.google.apis,"google-api-services-sqladmin",
 "com.google.inject.extensions",guice-multibindings,com.google.inject,guice,"Since Guice 4.2, multibindings support has moved to Guice core, see https://github.com/google/guice/wiki/Multibindings"
+com.google.mockwebserver,mockwebserver,com.squareup.okhttp,mockwebserver,
 com.googlecode.flyway,flyway-core,org.flywaydb,flyway-core,
 com.googlecode.jmockit,jmockit,org.jmockit,jmockit,
 com.googlecode.openpojo,openpojo,com.openpojo,openpojo,

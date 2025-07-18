@@ -70,24 +70,6 @@ class DoesNotIncludeDependencyTest implements RewriteTest {
               </project>
               """
           ),
-          //language=xml
-          pomXml(
-            """
-              <project>
-                <groupId>com.example</groupId>
-                <artifactId>foo</artifactId>
-                <version>1.0.0</version>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                    <version>6.0.0</version>
-                    <scope>compile</scope>
-                  </dependency>
-                </dependencies>
-              </project>
-              """
-          ),
           //language=groovy
           buildGradle(
             """
@@ -111,6 +93,30 @@ class DoesNotIncludeDependencyTest implements RewriteTest {
               dependencies {
                 testImplementation 'org.springframework:spring-beans:6.0.0'
               }
+              """
+          )
+        );
+    }
+
+    @Test
+    void whenIncludesDependencyInCorrectScopeOrConfigurationDoesNotMark() {
+        rewriteRun(
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <groupId>com.example</groupId>
+                <artifactId>foo</artifactId>
+                <version>1.0.0</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                    <version>6.0.0</version>
+                    <scope>compile</scope>
+                  </dependency>
+                </dependencies>
+              </project>
               """
           ),
           //language=groovy

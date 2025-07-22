@@ -146,7 +146,7 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                     return t2;
                 }).orElse(t);
 
-                t = m.findFirst(MavenResolutionResult.class).map(maven -> {
+                return m.findFirst(MavenResolutionResult.class).map(maven -> {
                     Tree t2 = tree;
                     for (Map.Entry<Scope, List<ResolvedDependency>> resolved : maven.getDependencies().entrySet()) {
                         t2 = recordMinimumDependencyUse(ctx, maven.getPom().getArtifactId(),
@@ -154,8 +154,6 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                     }
                     return t2;
                 }).orElse(t);
-
-                return t;
             }
 
             private Tree recordMinimumDependencyUse(ExecutionContext ctx, String projectName, String scope, List<ResolvedDependency> resolved, Tree t) {

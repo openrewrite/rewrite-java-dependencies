@@ -110,7 +110,8 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (mavenScanner.isAcceptable((SourceFile) requireNonNull(tree), ctx)) {
                     return mavenScanner.visit(tree, ctx);
-                } else if (gradleScanner.isAcceptable((SourceFile) tree, ctx)) {
+                }
+                if (gradleScanner.isAcceptable((SourceFile) tree, ctx)) {
                     return gradleScanner.visit(tree, ctx);
                 }
                 return tree;

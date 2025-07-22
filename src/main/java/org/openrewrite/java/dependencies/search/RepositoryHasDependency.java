@@ -111,8 +111,7 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
                     return SearchResult.found(tree, "Repository has dependency: " + groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version));
                 }
             };
-        } else {
-            return TreeVisitor.noop();
         }
+        return TreeVisitor.noop();
     }
 }

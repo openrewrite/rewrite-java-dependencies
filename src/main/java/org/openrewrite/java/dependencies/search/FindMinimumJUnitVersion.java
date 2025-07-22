@@ -123,9 +123,8 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
         } else if (Objects.equals(minimumVersion, "5")) {
             if (hasJUnit4) {
                 return TreeVisitor.noop();
-            } else {
-                acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "org.junit.jupiter", "junit-jupiter-api"));
             }
+            acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "org.junit.jupiter", "junit-jupiter-api"));
         } else {
             if (hasJUnit4 && hasJUnit5) {
                 acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "junit", "junit"));

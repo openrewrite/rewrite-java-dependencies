@@ -79,24 +79,6 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
         return new HashMap<>();
     }
 
-    org.openrewrite.gradle.RemoveDependency removeGradleDependency;
-    org.openrewrite.maven.RemoveDependency removeMavenDependency;
-
-    public RemoveDependency(
-            String groupId,
-            String artifactId,
-            @Nullable String unlessUsing,
-            @Nullable String configuration,
-            @Nullable String scope) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.unlessUsing = unlessUsing;
-        this.configuration = configuration;
-        this.scope = scope;
-        removeGradleDependency = new org.openrewrite.gradle.RemoveDependency(groupId, artifactId, configuration);
-        removeMavenDependency = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope);
-    }
-
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Map<JavaProject, Boolean> projectToInUse) {
         if (unlessUsing == null) {
@@ -117,8 +99,8 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(Map<JavaProject, Boolean> projectToInUse) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gradleRemoveDep = removeGradleDependency.getVisitor();
-            final TreeVisitor<?, ExecutionContext> mavenRemoveDep = removeMavenDependency.getVisitor();
+            final TreeVisitor<?, ExecutionContext> gradleRemoveDep = new org.openrewrite.gradle.RemoveDependency(groupId, artifactId, configuration).getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenRemoveDep = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope).getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

@@ -245,6 +245,70 @@ examples:
     language: groovy
 ---
 type: specs.openrewrite.org/v1beta/example
+recipeName: org.openrewrite.java.dependencies.search.DoesNotIncludeDependency
+examples:
+- description: ''
+  parameters:
+  - org.springframework
+  - spring-beans
+  - 'false'
+  - compile
+  - compileClasspath
+  sources:
+  - before: |
+      plugins {
+        id 'java-library'
+      }
+      repositories {
+        mavenCentral()
+      }
+      dependencies {
+        testImplementation 'org.springframework:spring-beans:6.0.0'
+      }
+    after: |
+      /*~~>*/plugins {
+        id 'java-library'
+      }
+      repositories {
+        mavenCentral()
+      }
+      dependencies {
+        testImplementation 'org.springframework:spring-beans:6.0.0'
+      }
+    path: build.gradle
+    language: groovy
+  - before: |
+      <project>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.0.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>6.0.0</version>
+            <scope>test</scope>
+          </dependency>
+        </dependencies>
+      </project>
+    after: |
+      <!--~~>--><project>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.0.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>6.0.0</version>
+            <scope>test</scope>
+          </dependency>
+        </dependencies>
+      </project>
+    path: pom.xml
+    language: xml
+---
+type: specs.openrewrite.org/v1beta/example
 recipeName: org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion
 examples:
 - description: ''

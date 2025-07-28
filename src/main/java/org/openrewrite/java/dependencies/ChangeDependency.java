@@ -91,7 +91,7 @@ public class ChangeDependency extends Recipe {
     public Validated<Object> validate(ExecutionContext ctx) {
         return super.validate(ctx)
                 .and(((Recipe) new org.openrewrite.gradle.ChangeDependency(
-                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion)).validate())
+                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate())
                 .and(((Recipe) new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
                         oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate());
     }

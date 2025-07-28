@@ -9,11 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.groovy.tree.G;
-import org.openrewrite.java.JavaIsoVisitor;
-import org.openrewrite.java.tree.J;
-import org.openrewrite.kotlin.tree.K;
-import org.openrewrite.xml.tree.Xml;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -60,7 +55,8 @@ public class FindDependency extends Recipe {
     public String getDescription() {
         return "Finds direct dependencies declared in Maven and Gradle build files. " +
                "This does *not* search transitive dependencies. " +
-               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight`" +               "This recipe works for both Maven and Gradle projects.";
+               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight` " +
+               "This recipe works for both Maven and Gradle projects.";
     }
 
     @Override
@@ -77,10 +73,11 @@ public class FindDependency extends Recipe {
                 if (!(tree instanceof SourceFile)) {
                     return tree;
                 }
-                SourceFile s = (SourceFile)tree;
+                SourceFile s = (SourceFile) tree;
                 if (mavenFindDependency.isAcceptable(s, ctx)) {
                     return mavenFindDependency.visitNonNull(tree, ctx);
-                } else if (gradleFindDependency.isAcceptable(s, ctx)) {
+                }
+                if (gradleFindDependency.isAcceptable(s, ctx)) {
                     // Handle Gradle projects
                     return gradleFindDependency.visitNonNull(tree, ctx);
                 }

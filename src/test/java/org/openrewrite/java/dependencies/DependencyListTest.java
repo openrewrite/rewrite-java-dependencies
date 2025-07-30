@@ -22,7 +22,6 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.nio.file.Path;
-import java.util.Collections;
 
 import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -187,8 +186,8 @@ class DependencyListTest implements RewriteTest {
                       rgav, requested, emptyList(), emptyList(), null, null, null, 0, null)
                     )),
                     null,
-                    Collections.emptyList(),
-                    Collections.emptyMap()
+                    emptyList(),
+                    emptyMap()
                   ));
             }
           )

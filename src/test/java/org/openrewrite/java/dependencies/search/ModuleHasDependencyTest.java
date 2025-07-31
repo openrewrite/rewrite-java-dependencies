@@ -46,8 +46,8 @@ class ModuleHasDependencyTest implements RewriteTest {
         spec.beforeRecipe(withToolingApi());
     }
 
-    @ParameterizedTest
     @NullSource
+    @ParameterizedTest
     @ValueSource(booleans = {false})
     void whenModuleHasDirectDependencyMarks(Boolean invertCondition) {
         final String groupId = "org.springframework";
@@ -178,8 +178,8 @@ class ModuleHasDependencyTest implements RewriteTest {
         );
     }
 
-    @ParameterizedTest
     @NullSource
+    @ParameterizedTest
     @ValueSource(booleans = {false})
     void whenModuleHasTransitiveDependencyMarks(Boolean invertCondition) {
         final String groupId = "org.springframework";
@@ -310,8 +310,8 @@ class ModuleHasDependencyTest implements RewriteTest {
         );
     }
 
-    @ParameterizedTest
     @NullSource
+    @ParameterizedTest
     @ValueSource(booleans = {false})
     void whenModuleDoesNotHaveDependencyDoesNotMark(Boolean invertCondition) {
         rewriteRun(

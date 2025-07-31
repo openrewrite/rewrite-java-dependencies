@@ -120,7 +120,8 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 if (shouldInvert && !acc.contains(jp)) {
                     return SearchResult.found(tree, "Module does not have dependency: " + dependencyGav);
-                } else if (!shouldInvert && acc.contains(jp)) {
+                }
+                if (!shouldInvert && acc.contains(jp)) {
                     return SearchResult.found(tree, "Module has dependency: " + dependencyGav);
                 }
                 return tree;

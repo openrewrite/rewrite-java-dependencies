@@ -73,6 +73,12 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     @Nullable
     String version;
 
+    @Option(displayName = "Invert marking",
+            description = "If `true`, will invert the check for whether to mark a file. Defaults to `false`.",
+            required = false)
+    @Nullable
+    Boolean invertMarking;
+
     @Override
     public Set<JavaProject> getInitialValue(ExecutionContext ctx) {
         return new HashSet<>();
@@ -110,8 +116,13 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                     return tree;
                 }
                 JavaProject jp = maybeJp.get();
-                if (acc.contains(jp)) {
-                    return SearchResult.found(tree, "Module has dependency: " + groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version));
+                boolean shouldInvert = invertMarking != null && invertMarking;
+                String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
+                if (shouldInvert && !acc.contains(jp)) {
+                    return SearchResult.found(tree, "Module does not have dependency: " + dependencyGav);
+                }
+                if (!shouldInvert && acc.contains(jp)) {
+                    return SearchResult.found(tree, "Module has dependency: " + dependencyGav);
                 }
                 return tree;
             }

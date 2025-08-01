@@ -56,6 +56,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         mavenCentral()
       }
       """;
+
     @Language("xml")
     private final static String MavenNone = """
       <project>
@@ -64,6 +65,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         <version>1.0.0</version>
       </project>
       """;
+
     @Language("groovy")
     private final static String GradleDirect = """
       plugins {
@@ -76,6 +78,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         implementation 'org.springframework:spring-beans:6.0.0'
       }
       """;
+
     @Language("xml")
     private final static String MavenDirect = """
       <project>
@@ -91,6 +94,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         </dependencies>
       </project>
       """;
+
     @Language("groovy")
     private final static String GradleTransitive = """
       plugins {
@@ -103,6 +107,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.0'
       }
       """;
+
     @Language("xml")
     private final static String MavenTransitive = """
       <project>
@@ -118,6 +123,8 @@ class ModuleHasDependencyTest implements RewriteTest {
         </dependencies>
       </project>
       """;
+
+
     @Language("java")
     private final static String GradleJava = """
       public class AGradle {}

@@ -111,13 +111,16 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
             @Override
             public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 assert tree != null;
+                boolean shouldInvert = invertMarking != null && invertMarking;
+                String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 Optional<JavaProject> maybeJp = tree.getMarkers().findFirst(JavaProject.class);
                 if (!maybeJp.isPresent()) {
+                    if (shouldInvert) {
+                        return SearchResult.found(tree, "No module, so vacuously does not have dependency: " + dependencyGav);
+                    }
                     return tree;
                 }
                 JavaProject jp = maybeJp.get();
-                boolean shouldInvert = invertMarking != null && invertMarking;
-                String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 if (shouldInvert && !acc.contains(jp)) {
                     return SearchResult.found(tree, "Module does not have dependency: " + dependencyGav);
                 }

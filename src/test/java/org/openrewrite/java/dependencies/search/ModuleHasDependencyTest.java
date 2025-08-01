@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies.search;
 
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -30,16 +31,109 @@ import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class ModuleHasDependencyTest implements RewriteTest {
+    private final static String GroupId = "org.springframework";
+    private final static String ArtifactId = "spring-beans";
+
     private final static String PositiveSub = "(Module has dependency: %1$s:%2$s)~~";
     private final static String NegativeSub = "(Module does not have dependency: %1$s:%2$s)~~";
+    private final static String NegativeVacuousSub = "(No module, so vacuously does not have dependency: %1$s:%2$s)~~";
     private final static String JavaMarkerBase = "/*~~%s>*/";
-    private final static String JavaMarkerPositiveBase = JavaMarkerBase.formatted(PositiveSub);
-    private final static String JavaMarkerNegativeBase = JavaMarkerBase.formatted(NegativeSub);
-    private final static String GradleMarkerPositiveBase = JavaMarkerPositiveBase;
-    private final static String GradleMarkerNegativeBase = JavaMarkerNegativeBase;
+    private final static String JavaMarkerPositive = JavaMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
+    private final static String JavaMarkerNegative = JavaMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
+    private final static String JavaMarkerNegativeVacuous = JavaMarkerBase.formatted(NegativeVacuousSub.formatted(GroupId, ArtifactId));
+    private final static String GradleMarkerPositive = JavaMarkerPositive;
+    private final static String GradleMarkerNegative = JavaMarkerNegative;
     private final static String MavenMarkerBase = "<!--~~%s>-->";
-    private final static String MavenMarkerPositiveBase = MavenMarkerBase.formatted(PositiveSub);
-    private final static String MavenMarkerNegativeBase = MavenMarkerBase.formatted(NegativeSub);
+    private final static String MavenMarkerPositive = MavenMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
+    private final static String MavenMarkerNegative = MavenMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
+
+    @Language("groovy")
+    private final static String GradleNone = """
+      plugins {
+        id 'java-library'
+      }
+      repositories {
+        mavenCentral()
+      }
+      """;
+
+    @Language("xml")
+    private final static String MavenNone = """
+      <project>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.0.0</version>
+      </project>
+      """;
+
+    @Language("groovy")
+    private final static String GradleDirect = """
+      plugins {
+        id 'java-library'
+      }
+      repositories {
+        mavenCentral()
+      }
+      dependencies {
+        implementation 'org.springframework:spring-beans:6.0.0'
+      }
+      """;
+
+    @Language("xml")
+    private final static String MavenDirect = """
+      <project>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.0.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>6.0.0</version>
+          </dependency>
+        </dependencies>
+      </project>
+      """;
+
+    @Language("groovy")
+    private final static String GradleTransitive = """
+      plugins {
+        id 'java-library'
+      }
+      repositories {
+        mavenCentral()
+      }
+      dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.0'
+      }
+      """;
+
+    @Language("xml")
+    private final static String MavenTransitive = """
+      <project>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.0.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>3.0.0</version>
+          </dependency>
+        </dependencies>
+      </project>
+      """;
+
+
+    @Language("java")
+    private final static String GradleJava = """
+      public class AGradle {}
+      """;
+
+    @Language("java")
+    private final static String MavenJava = """
+      public class AMaven {}
+      """;
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -49,74 +143,66 @@ class ModuleHasDependencyTest implements RewriteTest {
     @NullSource
     @ParameterizedTest
     @ValueSource(booleans = {false})
-    void whenModuleHasDirectDependencyMarks(Boolean invertCondition) {
-        final String groupId = "org.springframework";
-        final String artifactId = "spring-beans";
+    void whenNoModuleDoesNotMark(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
+          java(GradleJava)
+        );
+    }
+
+    @Test
+    void whenNoModuleButInvertedMarkingMarks() {
+        rewriteRun(
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
+          java(
+            GradleJava,
+            spec -> spec.after(actual ->
+              assertThat(actual)
+                .startsWith(JavaMarkerNegativeVacuous)
+                .actual()
+            )
+          )
+        );
+    }
+
+    @NullSource
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void whenModuleHasDirectDependencyMarks(Boolean invertCondition) {
+        rewriteRun(
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
           mavenProject("project-gradle",
-            //language=groovy
             buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                dependencies {
-                  implementation 'org.springframework:spring-beans:6.0.0'
-                }
-                """,
+              GradleDirect,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(GradleMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(GradleMarkerPositive)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AGradle {}
-                """,
+              GradleJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerPositive)
                   .actual()
               )
             )
           ),
           mavenProject("project-maven",
-            //language=xml
             pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-beans</artifactId>
-                      <version>6.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """,
+              MavenDirect,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(MavenMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(MavenMarkerPositive)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AMaven {}
-                """,
+              MavenJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerPositive)
                   .actual()
               )
             )
@@ -127,53 +213,14 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenModuleHasDirectDependencyButInvertedMarkingDoesNotMark() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency("org.springframework", "spring-beans", null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
           mavenProject("project",
-            //language=groovy
-            buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                dependencies {
-                  implementation 'org.springframework:spring-beans:6.0.0'
-                }
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AGradle {}
-                """
-            )
+            buildGradle(GradleDirect),
+            java(GradleJava)
           ),
           mavenProject("project-maven",
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-beans</artifactId>
-                      <version>6.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AMaven {}
-                """
-            )
+            pomXml(MavenDirect),
+            java(MavenJava)
           )
         );
     }
@@ -182,73 +229,40 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ParameterizedTest
     @ValueSource(booleans = {false})
     void whenModuleHasTransitiveDependencyMarks(Boolean invertCondition) {
-        final String groupId = "org.springframework";
-        final String artifactId = "spring-beans";
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
           mavenProject("project-gradle",
-            //language=groovy
             buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                dependencies {
-                  implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.0'
-                }
-                """,
+              GradleTransitive,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(GradleMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(GradleMarkerPositive)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AGradle {}
-                """,
+              GradleJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerPositive)
                   .actual()
               )
             )
           ),
           mavenProject("project-maven",
-            //language=xml
             pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.boot</groupId>
-                      <artifactId>spring-boot-starter-actuator</artifactId>
-                      <version>3.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """,
+              MavenTransitive,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(MavenMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(MavenMarkerPositive)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AMaven {}
-                """,
+              MavenJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerPositiveBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerPositive)
                   .actual()
               )
             )
@@ -259,53 +273,14 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenModuleHasTransitiveDependencyButInvertedMarkingDoesNotMark() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency("org.springframework", "spring-beans", null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
           mavenProject("project",
-            //language=groovy
-            buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                dependencies {
-                  implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.0'
-                }
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AGradle {}
-                """
-            )
+            buildGradle(GradleTransitive),
+            java(GradleJava)
           ),
           mavenProject("project-maven",
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.boot</groupId>
-                      <artifactId>spring-boot-actuator</artifactId>
-                      <version>3.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AMaven {}
-                """
-            )
+            pomXml(MavenTransitive),
+            java(MavenJava)
           )
         );
     }
@@ -315,106 +290,54 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ValueSource(booleans = {false})
     void whenModuleDoesNotHaveDependencyDoesNotMark(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency("org.springframework", "spring-beans", null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
           mavenProject("project-gradle",
-            //language=groovy
-            buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AGradle {}
-                """
-            )
+            buildGradle(GradleNone),
+            java(GradleJava)
           ),
           mavenProject("project-maven",
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                </project>
-                """
-            ),
-            //language=java
-            java(
-              """
-                public class AMaven {}
-                """
-            )
+            pomXml(MavenNone),
+            java(MavenJava)
           )
         );
     }
 
     @Test
     void whenModuleDoesNotHaveDependencyButInvertedMarkingMarks() {
-        final String groupId = "org.springframework";
-        final String artifactId = "spring-beans";
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
           mavenProject("project",
-            //language=groovy
             buildGradle(
-              """
-                plugins {
-                  id 'java-library'
-                }
-                repositories {
-                  mavenCentral()
-                }
-                """,
+              GradleNone,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(GradleMarkerNegativeBase.formatted(groupId, artifactId))
+                  .startsWith(GradleMarkerNegative)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AGradle {}
-                """,
+              GradleJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerNegativeBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerNegative)
                   .actual()
               )
             )
           ),
           mavenProject("project-maven",
-            //language=xml
             pomXml(
-              """
-                <project>
-                  <groupId>com.example</groupId>
-                  <artifactId>foo</artifactId>
-                  <version>1.0.0</version>
-                </project>
-                """,
+              MavenNone,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(MavenMarkerNegativeBase.formatted(groupId, artifactId))
+                  .startsWith(MavenMarkerNegative)
                   .actual()
               )
             ),
-            //language=java
             java(
-              """
-                public class AMaven {}
-                """,
+              MavenJava,
               spec -> spec.after(actual ->
                 assertThat(actual)
-                  .startsWith(JavaMarkerNegativeBase.formatted(groupId, artifactId))
+                  .startsWith(JavaMarkerNegative)
                   .actual()
               )
             )

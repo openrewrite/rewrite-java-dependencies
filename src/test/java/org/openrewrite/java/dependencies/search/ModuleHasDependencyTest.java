@@ -46,6 +46,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     private final static String MavenMarkerBase = "<!--~~%s>-->";
     private final static String MavenMarkerPositive = MavenMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
     private final static String MavenMarkerNegative = MavenMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
+
     @Language("groovy")
     private final static String GradleNone = """
       plugins {

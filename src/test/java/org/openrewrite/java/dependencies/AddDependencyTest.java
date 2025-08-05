@@ -20,7 +20,6 @@ import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -47,7 +46,6 @@ class AddDependencyTest implements RewriteTest {
           }
       """;
 
-    @DocumentExample("Add Gradle dependency with OnlyIfUsing test scope")
     @ParameterizedTest
     @ValueSource(strings = {"com.google.common.math.*", "com.google.common.math.IntMath"})
     void addGradleDependencyWithOnlyIfUsingTestScope(String onlyIfUsing) {

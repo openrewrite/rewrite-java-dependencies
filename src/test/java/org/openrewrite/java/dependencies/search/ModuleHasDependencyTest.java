@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies.search;
 
 import org.intellij.lang.annotations.Language;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -344,4 +345,135 @@ class ModuleHasDependencyTest implements RewriteTest {
           )
         );
     }
+
+@Nested
+class WithVersionsPattern {
+    @ParameterizedTest
+    @ValueSource(strings = {
+      "6.1.5", // exact
+      "6.1.1-6.1.15", // hyphenated
+      "[6.1.1,6.1.6)", "[6.1.1,6.1.5]", "[6.1.5,6.1.15]", "(6.1.4,6.1.15]", // full range
+      "6.1.X", // X range
+      "~6.1.0", "~6.1", // tilde range
+      "^6.1.0", // caret range
+    })
+    void maven(String versionPattern) {
+        rewriteRun(
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, versionPattern, null)),
+          mavenProject("project-maven",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-core</artifactId>
+                      <version>6.1.5</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-aop</artifactId>
+                      <version>6.2.2</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <!--~~(Module has dependency: org.springframework:*:%s)~~>--><project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-core</artifactId>
+                      <version>6.1.5</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-aop</artifactId>
+                      <version>6.2.2</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """.formatted(versionPattern)
+            )
+          )
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+      "6.1.5", // exact
+      "6.1.1-6.1.15", // hyphenated
+      "[6.1.1,6.1.6)", "[6.1.1,6.1.5]", "[6.1.5,6.1.15]", "(6.1.4,6.1.15]", // full range
+      "6.1.X", // X range
+      "~6.1.0", "~6.1", // tilde range
+      "^6.1.0", // caret range
+    })
+    void gradle(String versionPattern) {
+        rewriteRun(
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, versionPattern, null)),
+          mavenProject("project-maven",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework:spring-core:6.1.5'
+                    implementation 'org.springframework:spring-aop:6.2.2'
+                }
+                """,
+              """
+                /*~~(Module has dependency: org.springframework:*:%s)~~>*/plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework:spring-core:6.1.5'
+                    implementation 'org.springframework:spring-aop:6.2.2'
+                }
+                """.formatted(versionPattern)
+            )
+          )
+        );
+    }
+
+    @Test
+    void noPresentVersion() {
+        rewriteRun(
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null)),
+          mavenProject("project-maven",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework:spring-core:6.1.5'
+                    implementation 'org.springframework:spring-aop:6.2.2'
+                }
+                """
+            )
+          )
+        );
+    }
+}
 }

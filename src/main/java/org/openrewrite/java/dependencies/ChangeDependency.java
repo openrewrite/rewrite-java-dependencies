@@ -95,7 +95,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         return super.validate(ctx)
                 .and((new org.openrewrite.gradle.ChangeDependency(
                         oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate())
-                .and(getMavenChange().validate());
+                .and(getChangeMavenDependency().validate());
     }
 
     @Value
@@ -105,18 +105,18 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
-        return new Accumulator(getMavenChange().getInitialValue(ctx));
+        return new Accumulator(getChangeMavenDependency().getInitialValue(ctx));
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
-        return getMavenChange().getScanner(acc.getMavenAccumulator());
+        return getChangeMavenDependency().getScanner(acc.getMavenAccumulator());
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> mavenVisitor = getMavenChange().getVisitor(acc.getMavenAccumulator());
+            final TreeVisitor<?, ExecutionContext> mavenVisitor = getChangeMavenDependency().getVisitor(acc.getMavenAccumulator());
             final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId,
                     newGroupId, newArtifactId,
@@ -144,7 +144,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         };
     }
 
-    private @NotNull ChangeDependencyGroupIdAndArtifactId getMavenChange() {
+    private @NotNull ChangeDependencyGroupIdAndArtifactId getChangeMavenDependency() {
         return new ChangeDependencyGroupIdAndArtifactId(
                 oldGroupId, oldArtifactId,
                 newGroupId, newArtifactId,

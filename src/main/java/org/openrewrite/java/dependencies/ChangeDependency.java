@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId;
@@ -144,7 +143,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         };
     }
 
-    private @NotNull ChangeDependencyGroupIdAndArtifactId getChangeMavenDependency() {
+    private ChangeDependencyGroupIdAndArtifactId getChangeMavenDependency() {
         return new ChangeDependencyGroupIdAndArtifactId(
                 oldGroupId, oldArtifactId,
                 newGroupId, newArtifactId,

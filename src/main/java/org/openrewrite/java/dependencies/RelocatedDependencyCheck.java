@@ -221,9 +221,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
                                 String newGroupId = relocation.getTo().getGroupId();
                                 String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                doAfterVisit(new ChangeDependency(
-                                        groupId, artifactId, newGroupId, newArtifactId,
-                                        "latest.release", null, null, null).getVisitor());
+                                doAfterVisit(changeDependency(this, groupId, artifactId, newGroupId, newArtifactId, ctx));
                             } else {
                                 return getSearchResultFound(tree, relocation);
                             }
@@ -265,9 +263,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
                                 String newGroupId = relocation.getTo().getGroupId();
                                 String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                doAfterVisit(new ChangeDependency(
-                                        groupId, artifactId, newGroupId, newArtifactId,
-                                        "latest.release", null, null, null).getVisitor());
+                                doAfterVisit(changeDependency(this, groupId, artifactId, newGroupId, newArtifactId, ctx));
                             } else {
                                 return getSearchResultFound(tree, relocation);
                             }
@@ -303,5 +299,13 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 return SearchResult.found(tree, relocatedMessage);
             }
         };
+    }
+
+    private static TreeVisitor<?, ExecutionContext> changeDependency(TreeVisitor<?, ExecutionContext> visitor, String oldGroupId, String oldArtifactId, String newGroupId, String newArtifactId, ExecutionContext ctx) {
+        //call scanner only for the current file as we need the recipe to behave like a non-scanning recipe for now. Later we can change this to support parent poms etc...
+        ChangeDependency changeDependency = new ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, "latest.release", null, null, null);
+        ChangeDependency.Accumulator acc = changeDependency.getInitialValue(ctx);
+        changeDependency.getScanner(acc).visit(visitor.getCursor().firstEnclosingOrThrow(SourceFile.class), ctx);
+        return changeDependency.getVisitor(acc);
     }
 }

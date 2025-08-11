@@ -18,13 +18,16 @@ package org.openrewrite.java.dependencies;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Value;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Getter
-public class ChangeDependency extends Recipe {
+public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
             description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
@@ -90,20 +93,30 @@ public class ChangeDependency extends Recipe {
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {
         return super.validate(ctx)
-                .and(((Recipe) new org.openrewrite.gradle.ChangeDependency(
+                .and((new org.openrewrite.gradle.ChangeDependency(
                         oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate())
-                .and(((Recipe) new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate());
+                .and(getMavenChange().validate());
+    }
+
+    @Value
+    public static class Accumulator {
+        ChangeDependencyGroupIdAndArtifactId.Accumulator mavenAccumulator;
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor() {
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator(getMavenChange().getInitialValue(ctx));
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
+        return getMavenChange().getScanner(acc.getMavenAccumulator());
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                    oldGroupId, oldArtifactId,
-                    newGroupId, newArtifactId,
-                    newVersion, versionPattern,
-                    overrideManagedVersion, changeManagedDependency).getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenVisitor = getMavenChange().getVisitor(acc.getMavenAccumulator());
             final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId,
                     newGroupId, newArtifactId,
@@ -129,5 +142,13 @@ public class ChangeDependency extends Recipe {
                 return s;
             }
         };
+    }
+
+    private @NotNull ChangeDependencyGroupIdAndArtifactId getMavenChange() {
+        return new ChangeDependencyGroupIdAndArtifactId(
+                oldGroupId, oldArtifactId,
+                newGroupId, newArtifactId,
+                newVersion, versionPattern,
+                overrideManagedVersion, changeManagedDependency);
     }
 }

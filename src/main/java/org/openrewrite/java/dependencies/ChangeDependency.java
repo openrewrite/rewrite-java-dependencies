@@ -18,13 +18,15 @@ package org.openrewrite.java.dependencies;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Getter
-public class ChangeDependency extends Recipe {
+public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
             description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
@@ -90,25 +92,30 @@ public class ChangeDependency extends Recipe {
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {
         return super.validate(ctx)
-                .and(((Recipe) new org.openrewrite.gradle.ChangeDependency(
-                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate())
-                .and(((Recipe) new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate());
+                .and(getChangeMavenDependency().validate())
+                .and(getChangeGradleDependency().validate());
+    }
+
+    @Value
+    public static class Accumulator {
+        ChangeDependencyGroupIdAndArtifactId.Accumulator mavenAccumulator;
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor() {
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator(getChangeMavenDependency().getInitialValue(ctx));
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
+        return getChangeMavenDependency().getScanner(acc.getMavenAccumulator());
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> mavenVisitor = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                    oldGroupId, oldArtifactId,
-                    newGroupId, newArtifactId,
-                    newVersion, versionPattern,
-                    overrideManagedVersion, changeManagedDependency).getVisitor();
-            final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
-                    oldGroupId, oldArtifactId,
-                    newGroupId, newArtifactId,
-                    newVersion, versionPattern,
-                    overrideManagedVersion).getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenVisitor = getChangeMavenDependency().getVisitor(acc.getMavenAccumulator());
+            final TreeVisitor<?, ExecutionContext> gradleVisitor = getChangeGradleDependency().getVisitor();
 
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
@@ -121,13 +128,29 @@ public class ChangeDependency extends Recipe {
                     return tree;
                 }
                 SourceFile s = (SourceFile) tree;
-                if (gradleVisitor.isAcceptable(s, ctx)) {
-                    s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
-                } else if (mavenVisitor.isAcceptable(s, ctx)) {
+                if (mavenVisitor.isAcceptable(s, ctx)) {
                     s = (SourceFile) mavenVisitor.visitNonNull(s, ctx);
+                } else if (gradleVisitor.isAcceptable(s, ctx)) {
+                    s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
                 }
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.ChangeDependency getChangeGradleDependency() {
+        return new org.openrewrite.gradle.ChangeDependency(
+                oldGroupId, oldArtifactId,
+                newGroupId, newArtifactId,
+                newVersion, versionPattern,
+                overrideManagedVersion, changeManagedDependency);
+    }
+
+    private ChangeDependencyGroupIdAndArtifactId getChangeMavenDependency() {
+        return new ChangeDependencyGroupIdAndArtifactId(
+                oldGroupId, oldArtifactId,
+                newGroupId, newArtifactId,
+                newVersion, versionPattern,
+                overrideManagedVersion, changeManagedDependency);
     }
 }

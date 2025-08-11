@@ -92,9 +92,8 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {
         return super.validate(ctx)
-                .and((new org.openrewrite.gradle.ChangeDependency(
-                        oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, changeManagedDependency)).validate())
-                .and(getChangeMavenDependency().validate());
+                .and(getChangeMavenDependency().validate())
+                .and(getChangeGradleDependency().validate());
     }
 
     @Value
@@ -116,11 +115,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> mavenVisitor = getChangeMavenDependency().getVisitor(acc.getMavenAccumulator());
-            final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
-                    oldGroupId, oldArtifactId,
-                    newGroupId, newArtifactId,
-                    newVersion, versionPattern,
-                    overrideManagedVersion).getVisitor();
+            final TreeVisitor<?, ExecutionContext> gradleVisitor = getChangeGradleDependency().getVisitor();
 
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
@@ -133,14 +128,22 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
                     return tree;
                 }
                 SourceFile s = (SourceFile) tree;
-                if (gradleVisitor.isAcceptable(s, ctx)) {
-                    s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
-                } else if (mavenVisitor.isAcceptable(s, ctx)) {
+                if (mavenVisitor.isAcceptable(s, ctx)) {
                     s = (SourceFile) mavenVisitor.visitNonNull(s, ctx);
+                } else if (gradleVisitor.isAcceptable(s, ctx)) {
+                    s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
                 }
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.ChangeDependency getChangeGradleDependency() {
+        return new org.openrewrite.gradle.ChangeDependency(
+                oldGroupId, oldArtifactId,
+                newGroupId, newArtifactId,
+                newVersion, versionPattern,
+                overrideManagedVersion, changeManagedDependency);
     }
 
     private ChangeDependencyGroupIdAndArtifactId getChangeMavenDependency() {

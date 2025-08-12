@@ -15,16 +15,11 @@
  */
 package org.openrewrite.java.dependencies;
 
-import org.jspecify.annotations.Nullable;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class DependencyInsightTest implements RewriteTest {

@@ -19,14 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ParseDefinitionMigrationsTest {
     @Test
-    void parseDefinitionMigrations(@TempDir Path tempDir) throws IOException {
+    void parseDefinitionMigrations(@TempDir Path tempDir) throws Exception {
         Path csv = tempDir.resolve("migrations.csv");
         ParseDefinitionMigrations.parseDefinitionMigrations(new File("src/test/resources"), csv.toFile());
         assertThat(csv).hasContent("""

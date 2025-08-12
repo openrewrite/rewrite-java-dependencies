@@ -350,16 +350,14 @@ class ModuleHasDependencyTest implements RewriteTest {
 class WithVersionsPattern {
     @ParameterizedTest
     @ValueSource(strings = {
-      "6.1.5", // exact
-      "6.1.1-6.1.15", // hyphenated
-      "[6.1.1,6.1.6)", "[6.1.1,6.1.5]", "[6.1.5,6.1.15]", "(6.1.4,6.1.15]", // full range
-      "6.1.X", // X range
-      "~6.1.0", "~6.1", // tilde range
-      "^6.1.0", // caret range
+      "1.0.1", // exact
+      "1.0.1-1.0.5", // hyphenated
+      "[1.0.1,1.0.5)", "[1.0.1,1.0.5]", "[1.0.1,1.0.5]", "(1.0.0,1.0.5]", // full range
+      "~1.0.1"// tilde range
     })
     void maven(String versionPattern) {
         rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, versionPattern, null)),
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null)),
           mavenProject("project-maven",
             //language=xml
             pomXml(
@@ -371,34 +369,34 @@ class WithVersionsPattern {
 
                   <dependencies>
                     <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-core</artifactId>
-                      <version>6.1.5</version>
+                      <groupId>jakarta.data</groupId>
+                      <artifactId>jakarta.data-api</artifactId>
+                      <version>1.0.1</version>
                     </dependency>
                     <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-aop</artifactId>
-                      <version>6.2.2</version>
+                      <groupId>jakarta.data</groupId>
+                      <artifactId>jakarta.data-spec</artifactId>
+                      <version>1.0.0</version>
                     </dependency>
                   </dependencies>
                 </project>
                 """,
               """
-                <!--~~(Module has dependency: org.springframework:*:%s)~~>--><project>
+                <!--~~(Module has dependency: jakarta.data:*:%s)~~>--><project>
                   <groupId>com.example</groupId>
                   <artifactId>foo</artifactId>
                   <version>1.0.0</version>
 
                   <dependencies>
                     <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-core</artifactId>
-                      <version>6.1.5</version>
+                      <groupId>jakarta.data</groupId>
+                      <artifactId>jakarta.data-api</artifactId>
+                      <version>1.0.1</version>
                     </dependency>
                     <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-aop</artifactId>
-                      <version>6.2.2</version>
+                      <groupId>jakarta.data</groupId>
+                      <artifactId>jakarta.data-spec</artifactId>
+                      <version>1.0.0</version>
                     </dependency>
                   </dependencies>
                 </project>
@@ -410,16 +408,14 @@ class WithVersionsPattern {
 
     @ParameterizedTest
     @ValueSource(strings = {
-      "6.1.5", // exact
-      "6.1.1-6.1.15", // hyphenated
-      "[6.1.1,6.1.6)", "[6.1.1,6.1.5]", "[6.1.5,6.1.15]", "(6.1.4,6.1.15]", // full range
-      "6.1.X", // X range
-      "~6.1.0", "~6.1", // tilde range
-      "^6.1.0", // caret range
+      "1.0.1", // exact
+      "1.0.1-1.0.5", // hyphenated
+      "[1.0.1,1.0.5)", "[1.0.1,1.0.5]", "[1.0.1,1.0.5]", "(1.0.0,1.0.5]", // full range
+      "~1.0.1"// tilde range
     })
     void gradle(String versionPattern) {
         rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, versionPattern, null)),
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null)),
           mavenProject("project-maven",
             //language=groovy
             buildGradle(
@@ -431,20 +427,20 @@ class WithVersionsPattern {
                     mavenCentral()
                 }
                 dependencies {
-                    implementation 'org.springframework:spring-core:6.1.5'
-                    implementation 'org.springframework:spring-aop:6.2.2'
+                    implementation 'jakarta.data:jakarta.data-api:1.0.1'
+                    implementation 'jakarta.data:jakarta.data-spec:1.0.0'
                 }
                 """,
               """
-                /*~~(Module has dependency: org.springframework:*:%s)~~>*/plugins {
+                /*~~(Module has dependency: jakarta.data:*:%s)~~>*/plugins {
                     id 'java-library'
                 }
                 repositories {
                     mavenCentral()
                 }
                 dependencies {
-                    implementation 'org.springframework:spring-core:6.1.5'
-                    implementation 'org.springframework:spring-aop:6.2.2'
+                    implementation 'jakarta.data:jakarta.data-api:1.0.1'
+                    implementation 'jakarta.data:jakarta.data-spec:1.0.0'
                 }
                 """.formatted(versionPattern)
             )
@@ -468,7 +464,7 @@ class WithVersionsPattern {
                 }
                 dependencies {
                     implementation 'org.springframework:spring-core:6.1.5'
-                    implementation 'org.springframework:spring-aop:6.2.2'
+                    implementation 'org.springframework:spring-aop:6.1.5'
                 }
                 """
             )

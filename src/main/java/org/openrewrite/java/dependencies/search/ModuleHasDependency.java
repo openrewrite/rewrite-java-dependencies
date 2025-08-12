@@ -93,7 +93,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 tree.getMarkers()
                         .findFirst(JavaProject.class)
                         .ifPresent(jp -> {
-                            Tree t = new DependencyInsight(groupIdPattern, artifactIdPattern, scope, version)
+                            Tree t = new DependencyInsight(groupIdPattern, artifactIdPattern, version, scope)
                                     .getVisitor()
                                     .visit(tree, ctx);
                             if (t != tree) {

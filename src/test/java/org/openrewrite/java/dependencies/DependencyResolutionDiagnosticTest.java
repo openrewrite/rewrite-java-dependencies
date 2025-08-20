@@ -68,8 +68,9 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
             // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows).hasSize(4);
-                assertThat(rows).contains(
+                assertThat(rows)
+                        .hasSize(4)
+                        .contains(
                   new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
                 assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
                 assertThat(rows).contains(
@@ -107,10 +108,11 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
             // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows).hasSize(2);
-                assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""));
-                assertThat(rows).contains(
+                assertThat(rows)
+                        .hasSize(2)
+                        .contains(
+                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""))
+                        .contains(
                   new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""));
             }),
           //language=groovy
@@ -157,10 +159,11 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               ctx.setMavenSettings(settings);
               spec.beforeRecipe(withToolingApi())
                 .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                    assertThat(rows).contains(
+                    assertThat(rows)
+                            .contains(
                       new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
-                    );
-                    assertThat(rows).noneMatch(repo -> repo.getUri().contains("https://repo.maven.apache.org/maven2"));
+                    )
+                            .noneMatch(repo -> repo.getUri().contains("https://repo.maven.apache.org/maven2"));
                 })
                 .executionContext(ctx);
           },

@@ -104,7 +104,11 @@ public class ChangeDependency extends Recipe {
                     newGroupId, newArtifactId,
                     newVersion, versionPattern,
                     overrideManagedVersion, changeManagedDependency).getVisitor();
-            final TreeVisitor<?, ExecutionContext> gradleVisitor = new ChangeDependency(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern, overrideManagedVersion, true).getVisitor();
+            final TreeVisitor<?, ExecutionContext> gradleVisitor = new org.openrewrite.gradle.ChangeDependency(
+                    oldGroupId, oldArtifactId,
+                    newGroupId, newArtifactId,
+                    newVersion, versionPattern,
+                    overrideManagedVersion, true).getVisitor();
 
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {

@@ -23,8 +23,10 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradleKts;
+import static org.openrewrite.gradle.Assertions.settingsGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
+import static org.openrewrite.properties.Assertions.properties;
 
 class FindBillOfMaterialsTest implements RewriteTest {
 
@@ -127,6 +129,35 @@ class FindBillOfMaterialsTest implements RewriteTest {
                   )
                 )
               ),
+          //language=properties
+          properties(
+            """
+              # Gradle properties
+
+              quarkusPluginId=io.quarkus
+              quarkusPluginVersion=3.26.1
+              quarkusPlatformGroupId=io.quarkus.platform
+              quarkusPlatformArtifactId=quarkus-bom
+              quarkusPlatformVersion=3.26.1
+              """,
+            spec-> spec.path("gradle.properties")
+          ),
+          //language=kts
+          settingsGradleKts("""
+            pluginManagement {
+                val quarkusPluginVersion: String by settings
+                val quarkusPluginId: String by settings
+                repositories {
+                    mavenCentral()
+                    gradlePluginPortal()
+                    mavenLocal()
+                }
+                plugins {
+                    id(quarkusPluginId) version quarkusPluginVersion
+                }
+            }
+            rootProject.name="code-with-quarkus"
+            """),
           //language=kts
           buildGradleKts(
             """

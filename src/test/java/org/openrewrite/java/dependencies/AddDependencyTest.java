@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -45,6 +46,45 @@ class AddDependencyTest implements RewriteTest {
               }
           }
       """;
+
+    @DocumentExample
+    @Test
+    void addMavenDependencyWithSystemScope() {
+        rewriteRun(
+          spec -> spec
+            .recipe(addDependency("doesnotexist:doesnotexist:1", "com.google.common.math.IntMath", "system")),
+          mavenProject("project",
+            srcMainJava(
+              java(usingGuavaIntMath)
+            ),
+            //language=xml
+            pomXml(
+              """
+                <project>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                </project>
+                """,
+              """
+                <project>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>doesnotexist</groupId>
+                            <artifactId>doesnotexist</artifactId>
+                            <version>1</version>
+                            <scope>system</scope>
+                        </dependency>
+                    </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"com.google.common.math.*", "com.google.common.math.IntMath"})
@@ -78,44 +118,6 @@ class AddDependencyTest implements RewriteTest {
                 dependencies {
                     testImplementation "com.google.guava:guava:29.0-jre"
                 }
-                """
-            )
-          )
-        );
-    }
-
-    @Test
-    void addMavenDependencyWithSystemScope() {
-        rewriteRun(
-          spec -> spec
-            .recipe(addDependency("doesnotexist:doesnotexist:1", "com.google.common.math.IntMath", "system")),
-          mavenProject("project",
-            srcMainJava(
-              java(usingGuavaIntMath)
-            ),
-            //language=xml
-            pomXml(
-              """
-                <project>
-                    <groupId>com.mycompany.app</groupId>
-                    <artifactId>my-app</artifactId>
-                    <version>1</version>
-                </project>
-                """,
-              """
-                <project>
-                    <groupId>com.mycompany.app</groupId>
-                    <artifactId>my-app</artifactId>
-                    <version>1</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>doesnotexist</groupId>
-                            <artifactId>doesnotexist</artifactId>
-                            <version>1</version>
-                            <scope>system</scope>
-                        </dependency>
-                    </dependencies>
-                </project>
                 """
             )
           )

@@ -119,6 +119,7 @@ com.microsoft.azure,"azure-spring-boot-dependencies",com.microsoft.azure,"azure-
 com.microsoft.azure,azure-storage,com.azure,azure-storage,
 com.microsoft.azure,spring-data-documentdb,com.microsoft.azure,spring-data-cosmosdb,
 "com.microsoft.windowsazure.storage","microsoft-windowsazure-storage-sdk",com.microsoft.azure,azure-storage,
+com.rabbitmq,rabbitmq-client,com.rabbitmq,amqp-client,
 commons-dbcp,commons-dbcp,org.apache.commons,commons-dbcp2,
 commons-collections,commons-collections,org.apache.commons,commons-collections4,
 commons-compress,commons-compress,org.apache.commons,commons-compress,
@@ -586,6 +587,15 @@ log4j,log4j,org.apache.logging.log4j,"log4j-core or ch.qos.reload4j","log4j-core
 org.apache.logging.log4j,log4j-slf4j-impl,org.apache.logging.log4j,log4j-slf4j2-impl,
 io.github.openfeign.form,feign-form,io.github.openfeign,feign-form,"feign-form was merged with the main feign project: https://github.com/OpenFeign/feign/issues/2598"
 io.github.openfeign.form,feign-form-spring,io.github.openfeign,feign-form-spring,"feign-form was merged with the main feign project: https://github.com/OpenFeign/feign/issues/2598"
+com.fasterxml.jackson,,tools.jackson,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.core",jackson-core,tools.jackson.core,jackson-core,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.core",jackson-databind,tools.jackson.core,jackson-databind,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.dataformat",,tools.jackson.dataformat,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.datatype",,tools.jackson.datatype,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.jakarta.rs",,tools.jackson.jakarta.rs,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.jaxrs",,tools.jackson.jaxrs,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+com.fasterxml.jackson.jr,,tools.jackson.jr,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
+"com.fasterxml.jackson.module",,tools.jackson.module,,"See https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0"
 com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
 com.github.javafaker,javafaker,net.datafaker,datafaker,"This library is a modern fork of java-faker, built on Java 8, with up to date libraries and several newly added Fake Generators. See https://github.com/datafaker-net/datafaker/"
 de.jollyday,jollyday,de.focus-shift,jollyday,"The old jollyday project is no longer maintained. This is a modern fork with jakarta dependencies and based on java 11."

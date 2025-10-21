@@ -165,6 +165,6 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     }
 
     private org.openrewrite.maven.UpgradeTransitiveDependencyVersion getMavenUpgradeTransitive() {
-        return new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, scope, type, classifier, versionPattern, releasesOnly, onlyIfUsing, addToRootPom);
+        return new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, scope, type, classifier, versionPattern, releasesOnly, onlyIfUsing, addToRootPom, because);
     }
 }

@@ -19,6 +19,8 @@ dependencies {
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
     testImplementation(gradleApi())
+
+    testRuntimeOnly("org.openrewrite:rewrite-java-25")
     testRuntimeOnly("com.google.guava:guava:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
 }

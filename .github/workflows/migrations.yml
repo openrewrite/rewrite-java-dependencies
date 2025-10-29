@@ -20,7 +20,7 @@ jobs:
         with:
           cache: 'gradle'
           distribution: 'temurin'
-          java-version: '25'
+          java-version: '21'
 
       # Update migrations
       - name: Checkout oga-maven-plugin

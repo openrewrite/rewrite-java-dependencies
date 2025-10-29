@@ -12,8 +12,6 @@ dependencies {
     implementation("org.openrewrite:rewrite-gradle")
     implementation("org.openrewrite:rewrite-groovy")
 
-    runtimeOnly("org.openrewrite:rewrite-java-17")
-
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
@@ -21,6 +19,8 @@ dependencies {
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
     testImplementation(gradleApi())
+
+    testRuntimeOnly("org.openrewrite:rewrite-java-21")
     testRuntimeOnly("com.google.guava:guava:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
 }

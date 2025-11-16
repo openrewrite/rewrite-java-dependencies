@@ -75,7 +75,7 @@ public class FindDependency extends Recipe {
 
             final TreeVisitor<?, ExecutionContext> mavenFindDependency = new org.openrewrite.maven.search.FindDependency(groupId,artifactId,version,versionPattern)
                     .getVisitor();
-            final TreeVisitor<?, ExecutionContext> gradleFindDependency = new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration)
+            final TreeVisitor<?, ExecutionContext> gradleFindDependency = new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration, version, versionPattern)
                     .getVisitor();
 
             @Override

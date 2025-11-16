@@ -60,7 +60,6 @@ class FindDependencyTest implements RewriteTest {
         );
     }
 
-    @DocumentExample
     @Test
     void findMavenDependencyDoesNotFindWrongVersion() {
         rewriteRun(

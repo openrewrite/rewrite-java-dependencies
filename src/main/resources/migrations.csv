@@ -589,6 +589,7 @@ xerces,xerces,xerces,xercesImpl,
 xfire,saaj-impl,"com.sun.xml.messaging.saaj",saaj-impl,
 xml-apis,xml-apis,xerces,xmlParserAPIs,
 xmlbeans,xmlbeans,org.apache.xmlbeans,xmlbeans,
+xmlrpc,,org.apache.xmlrpc,,
 xstream,xstream,com.thoughtworks.xstream,xstream,
 pl.project13.maven,git-commit-id-plugin,io.github.git-commit-id,"git-commit-id-maven-plugin","version 5 relocated, see https://github.com/git-commit-id/git-commit-id-maven-plugin#relocation-of-the-project"
 org.codehaus.mojo,dependency-maven-plugin,org.apache.maven.plugins,maven-dependency-plugin,"relocated from Mojo to Apache, see https://maven.apache.org/plugins/maven-dependency-plugin/faq.html#plugin_name"

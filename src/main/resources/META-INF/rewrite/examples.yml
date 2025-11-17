@@ -121,7 +121,7 @@ examples:
   parameters:
   - org.openrewrite
   - rewrite-core
-  - 'null'
+  - 8.0.0
   - 'null'
   - 'null'
   sources:

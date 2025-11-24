@@ -462,6 +462,7 @@ org.kravemir.svg.labels,svg-labels,org.kravemir.svg.labels,lablie,
 org.kravemir.svg.labels,svg-labels-tool,org.kravemir.svg.labels,lablie-tool,
 org.labkey,labkey-client-api,org.labkey.api,labkey-client-api,
 org.mapstruct,mapstruct-jdk8,org.mapstruct,mapstruct,
+org.mockito,mockito-all,org.mockito,mockito-core,"mockito-all is a legacy of old dependency management. mockito-core should be used instead. See https://github.com/mockito/mockito/issues/153 ."
 org.mortbay.jetty,,org.eclipse.jetty,,
 org.mortbay.jetty,maven-jetty-plugin,org.mortbay.jetty,jetty-maven-plugin,
 org.nuiton.js,nuiton-js-angular,org.nuiton.js,nuiton-js-angularjs,

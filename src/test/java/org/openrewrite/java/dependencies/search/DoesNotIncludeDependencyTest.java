@@ -30,7 +30,7 @@ class DoesNotIncludeDependencyTest implements RewriteTest {
     public void defaults(RecipeSpec spec) {
         spec
           .beforeRecipe(withToolingApi())
-          .recipe(new DoesNotIncludeDependency("org.springframework", "spring-beans", false, "compile", "compileClasspath"));
+          .recipe(new DoesNotIncludeDependency("org.springframework", "spring-beans", null, false, "compile", "compileClasspath"));
     }
 
     @DocumentExample

@@ -44,6 +44,15 @@ public class DoesNotIncludeDependency extends Recipe {
             example = "guava")
     String artifactId;
 
+    @Option(displayName = "Version",
+            description = "Match only dependencies with the specified resolved version. " +
+                    "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used. " +
+                    "All versions are searched by default.",
+            example = "1.x",
+            required = false)
+    @Nullable
+    String version;
+
     @Option(displayName = "Only direct dependencies",
             description = "Default false. If enabled, transitive dependencies will not be considered.",
             required = false,
@@ -69,9 +78,11 @@ public class DoesNotIncludeDependency extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdnid = new org.openrewrite.gradle.search.DoesNotIncludeDependency(groupId, artifactId, configuration)
+            final TreeVisitor<?, ExecutionContext> gdnid = new org.openrewrite.gradle.search.DoesNotIncludeDependency(
+                    groupId, artifactId, version, configuration)
                     .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdnid = new org.openrewrite.maven.search.DoesNotIncludeDependency(groupId, artifactId, onlyDirect, scope)
+            final TreeVisitor<?, ExecutionContext> mdnid = new org.openrewrite.maven.search.DoesNotIncludeDependency(
+                    groupId, artifactId, version, onlyDirect, scope)
                     .getVisitor();
 
             @Override

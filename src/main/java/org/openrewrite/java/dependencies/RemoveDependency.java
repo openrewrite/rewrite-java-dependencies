@@ -109,7 +109,7 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
                 }
                 if (unlessUsing != null) {
                     JavaProject jp = tree.getMarkers().findFirst(JavaProject.class).orElse(null);
-                    if (jp == null || projectToInUse.get(jp)) {
+                    if (jp == null || Boolean.TRUE.equals(projectToInUse.get(jp))) {
                         return tree;
                     }
                 }

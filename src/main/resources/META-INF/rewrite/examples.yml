@@ -291,6 +291,7 @@ examples:
   parameters:
   - org.springframework
   - spring-beans
+  - 'null'
   - 'false'
   - compile
   - compileClasspath

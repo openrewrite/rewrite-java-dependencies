@@ -57,7 +57,7 @@ class DependencyInsightTest implements RewriteTest {
                 <version>1.0.0</version>
 
                 <dependencies>
-                  <!--~~>--><dependency>
+                  <!--~~(org.springframework:spring-core:5.2.6.RELEASE,org.springframework:spring-jcl:5.2.6.RELEASE)~~>--><dependency>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-core</artifactId>
                     <version>5.2.6.RELEASE</version>

@@ -40,11 +40,11 @@ class ChangeDependencyTest implements RewriteTest {
               plugins {
                   id "java-library"
               }
-              
+
               repositories {
                   mavenCentral()
               }
-              
+
               dependencies {
                   implementation "commons-lang:commons-lang:2.6"
               }
@@ -53,11 +53,11 @@ class ChangeDependencyTest implements RewriteTest {
               plugins {
                   id "java-library"
               }
-              
+
               repositories {
                   mavenCentral()
               }
-              
+
               dependencies {
                   implementation "org.apache.commons:commons-lang3:3.11"
               }
@@ -78,6 +78,49 @@ class ChangeDependencyTest implements RewriteTest {
                   <artifactId>my-app</artifactId>
                   <version>1</version>
                   <dependencies>
+                      <dependency>
+                          <groupId>commons-lang</groupId>
+                          <artifactId>commons-lang</artifactId>
+                          <version>2.6</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <groupId>com.example.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.apache.commons</groupId>
+                          <artifactId>commons-lang3</artifactId>
+                          <version>3.11</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void changeMavenDependencyToAlreadyPresent() {
+        rewriteRun(
+          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <groupId>com.example.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.apache.commons</groupId>
+                          <artifactId>commons-lang3</artifactId>
+                          <version>3.11</version>
+                      </dependency>
                       <dependency>
                           <groupId>commons-lang</groupId>
                           <artifactId>commons-lang</artifactId>
@@ -182,11 +225,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-              
+
               repositories {
                  mavenCentral()
               }
-              
+
               dependencies {
                   runtimeOnly 'mysql:mysql-connector-java'
               }
@@ -197,11 +240,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-              
+
               repositories {
                  mavenCentral()
               }
-              
+
               dependencies {
                   runtimeOnly 'com.mysql:mysql-connector-j'
               }
@@ -224,11 +267,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-              
+
               repositories {
                  mavenCentral()
               }
-              
+
               dependencies {
                   runtimeOnly 'mysql:mysql-connector-java'
               }
@@ -239,11 +282,11 @@ class ChangeDependencyTest implements RewriteTest {
                 id 'org.springframework.boot' version '2.6.1'
                 id 'io.spring.dependency-management' version '1.0.11.RELEASE'
               }
-              
+
               repositories {
                  mavenCentral()
               }
-              
+
               dependencies {
                   runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
               }

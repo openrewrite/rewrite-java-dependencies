@@ -26,11 +26,9 @@ import static org.openrewrite.maven.Assertions.pomXml;
 
 class RemoveRedundantDependenciesTest implements RewriteTest {
 
-    @DocumentExample("Demonstrate the limitation: when a dependency is declared directly, it cannot be detected as redundant")
+    @DocumentExample
     @Test
-    void noChangeWhenDependencyIsDeclaredDirectly() {
-        // jackson-core is declared directly, so it appears at depth=0 in the resolved tree
-        // and is not in jackson-databind's transitives. The recipe cannot detect this case.
+    void removeRedundantMavenDependency() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
                   "com.fasterxml.jackson.core", "jackson-databind", null, null)),
@@ -54,6 +52,80 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
                       <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void removeMultipleRedundantDependencies() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+                  "com.fasterxml.jackson.core", "jackson-databind", null, null)),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-annotations</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
                       <version>2.17.0</version>
                     </dependency>
                   </dependencies>
@@ -165,8 +237,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
-    void noChangeWhenGradleDependencyIsDeclaredDirectly() {
-        // Same limitation as Maven - declared dependencies appear at depth=0
+    void removeRedundantGradleDependency() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
             .recipe(new RemoveRedundantDependencies(
@@ -186,6 +257,19 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
                     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+
+                repositories {
+                    mavenCentral()
+                }
+
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
                 }
                 """
             )

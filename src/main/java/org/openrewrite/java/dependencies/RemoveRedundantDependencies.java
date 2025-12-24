@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2025 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.openrewrite.maven.tree.*;
 
 import java.util.*;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.*;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -45,21 +45,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             example = "jackson-databind")
     String artifactId;
 
-    @Option(displayName = "Scope",
-            description = "Only remove redundant dependencies from the specified Maven scope. If not specified, all scopes are considered.",
-            valid = {"compile", "runtime", "provided", "test"},
-            example = "compile",
-            required = false)
-    @Nullable
-    String scope;
-
-    @Option(displayName = "Configuration",
-            description = "Only remove redundant dependencies from the specified Gradle configuration. If not specified, all configurations are considered.",
-            example = "implementation",
-            required = false)
-    @Nullable
-    String configuration;
-
     @Override
     public String getDisplayName() {
         return "Remove redundant explicit dependencies";
@@ -68,8 +53,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     @Override
     public String getDescription() {
         return "Remove explicit dependencies that are already provided transitively by a specified dependency. " +
-               "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
-               "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared.";
+                "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
+                "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared.";
     }
 
     @Value
@@ -103,16 +88,17 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             .computeIfAbsent("all", k -> new HashSet<>());
 
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        if (configuration != null && !configuration.equals(conf.getName())) {
-                            continue;
-                        }
                         for (ResolvedDependency dep : conf.getResolved()) {
-                            if (dep.getDepth() == 0 &&
-                                StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
-                                StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
+                            if (dep.isDirect() &&
+                                    StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
+                                    StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
                                 // This is a matching parent dependency, resolve its transitives independently
-                                resolveTransitivesFromPom(dep.getGav(), gradle.getMavenRepositories(),
-                                        downloader, ctx, projectTransitives);
+                                resolveTransitivesFromPom(
+                                        dep.getGav(),
+                                        gradle.getMavenRepositories(),
+                                        downloader,
+                                        ctx,
+                                        projectTransitives);
                             }
                         }
                     }
@@ -121,22 +107,23 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 tree.getMarkers().findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
                     MavenPomDownloader downloader = new MavenPomDownloader(ctx);
-                    List<MavenRepository> repositories = maven.getPom().getRepositories();
 
                     for (Map.Entry<Scope, List<ResolvedDependency>> entry : maven.getDependencies().entrySet()) {
                         Scope depScope = entry.getKey();
-                        if (scope != null && !scope.equalsIgnoreCase(depScope.name())) {
-                            continue;
-                        }
                         for (ResolvedDependency dep : entry.getValue()) {
-                            if (dep.getDepth() == 0 &&
-                                StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
-                                StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
+                            if (dep.isDirect() &&
+                                    StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
+                                    StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
                                 // This is a matching parent dependency, resolve its transitives independently
                                 Set<ResolvedGroupArtifactVersion> transitives = acc.transitivesByProjectAndScope
                                         .computeIfAbsent(projectId, k -> new HashMap<>())
                                         .computeIfAbsent(depScope.name().toLowerCase(), k -> new HashSet<>());
-                                resolveTransitivesFromPom(dep.getGav(), repositories, downloader, ctx, transitives);
+                                resolveTransitivesFromPom(
+                                        dep.getGav(),
+                                        maven.getPom().getRepositories(),
+                                        downloader,
+                                        ctx,
+                                        transitives);
                             }
                         }
                     }
@@ -145,29 +132,23 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return tree;
             }
 
-            private void resolveTransitivesFromPom(ResolvedGroupArtifactVersion gav,
-                                                   List<MavenRepository> repositories,
-                                                   MavenPomDownloader downloader,
-                                                   ExecutionContext ctx,
-                                                   Set<ResolvedGroupArtifactVersion> transitives) {
+            private void resolveTransitivesFromPom(
+                    ResolvedGroupArtifactVersion gav,
+                    List<MavenRepository> repositories,
+                    MavenPomDownloader downloader,
+                    ExecutionContext ctx,
+                    Set<ResolvedGroupArtifactVersion> transitives) {
                 try {
-                    // Download the parent dependency's POM
-                    GroupArtifactVersion parentGav = new GroupArtifactVersion(
-                            gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
-
                     // Ensure we have Maven Central in the repositories
                     List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
                     if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
-                                                                r.getUri().contains("repo1.maven.org"))) {
+                            r.getUri().contains("repo1.maven.org"))) {
                         effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
                     }
 
-                    Pom pom = downloader.download(parentGav, null, null, effectiveRepos);
-
-                    // Resolve the POM to get its full dependency tree
-                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, effectiveRepos, ctx);
-
                     // Get the resolved dependencies for compile scope (which includes most transitives)
+                    Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, effectiveRepos);
+                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, effectiveRepos, ctx);
                     List<ResolvedDependency> resolved = resolvedPom.resolveDependencies(Scope.Compile, downloader, ctx);
 
                     // Collect all dependencies (both direct and transitive of the parent)
@@ -208,7 +189,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     GradleProject gradle = gradleOpt.get();
                     String projectId = gradle.getGroup() + ":" + gradle.getName();
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives =
-                            acc.transitivesByProjectAndScope.getOrDefault(projectId, Collections.emptyMap());
+                            acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
 
                     // For Gradle, use the "all" bucket we created in scanner
                     Set<ResolvedGroupArtifactVersion> transitives = scopeToTransitives.getOrDefault("all", Collections.emptySet());
@@ -217,21 +198,15 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     }
 
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        if (configuration != null && !configuration.equals(conf.getName())) {
-                            continue;
-                        }
-
                         for (ResolvedDependency dep : conf.getResolved()) {
-                            if (dep.getDepth() == 0 &&
-                                isRedundantDependency(dep) &&
-                                isInTransitives(dep, transitives)) {
+                            if (dep.isDirect() &&
+                                    doesNotMatchArguments(dep) &&
+                                    isInTransitives(dep, transitives)) {
                                 // This direct dependency is transitively provided, remove it
                                 // Don't specify configuration - Gradle's resolved config names differ from declaration names
-                                TreeVisitor<?, ExecutionContext> removeDep =
-                                        new org.openrewrite.gradle.RemoveDependency(
-                                                dep.getGroupId(), dep.getArtifactId(), configuration
-                                        ).getVisitor();
-                                result = removeDep.visit(result, ctx);
+                                result = new RemoveDependency(
+                                        dep.getGroupId(), dep.getArtifactId(), null, null, null)
+                                        .getVisitor().visit(result, ctx);
                             }
                         }
                     }
@@ -244,29 +219,24 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     MavenResolutionResult maven = mavenOpt.get();
                     String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives =
-                            acc.transitivesByProjectAndScope.getOrDefault(projectId, Collections.emptyMap());
+                            acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
 
                     for (Map.Entry<Scope, List<ResolvedDependency>> entry : maven.getDependencies().entrySet()) {
-                        Scope depScope = entry.getKey();
-                        if (scope != null && !scope.equalsIgnoreCase(depScope.name())) {
-                            continue;
-                        }
+                        String scope = entry.getKey().name().toLowerCase();
                         Set<ResolvedGroupArtifactVersion> transitives = getCompatibleTransitives(
-                                scopeToTransitives, depScope.name().toLowerCase(), false);
+                                scopeToTransitives, scope);
                         if (transitives.isEmpty()) {
                             continue;
                         }
 
                         for (ResolvedDependency dep : entry.getValue()) {
-                            if (dep.getDepth() == 0 &&
-                                isRedundantDependency(dep) &&
-                                isInTransitives(dep, transitives)) {
+                            if (dep.isDirect() &&
+                                    doesNotMatchArguments(dep) &&
+                                    isInTransitives(dep, transitives)) {
                                 // This direct dependency is transitively provided, remove it
-                                TreeVisitor<?, ExecutionContext> removeDep =
-                                        new org.openrewrite.maven.RemoveDependency(
-                                                dep.getGroupId(), dep.getArtifactId(), depScope.name().toLowerCase()
-                                        ).getVisitor();
-                                result = removeDep.visit(result, ctx);
+                                result = new RemoveDependency(
+                                        dep.getGroupId(), dep.getArtifactId(), null, null, scope)
+                                        .getVisitor().visit(result, ctx);
                             }
                         }
                     }
@@ -276,9 +246,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return tree;
             }
 
-            private boolean isRedundantDependency(ResolvedDependency dep) {
+            private boolean doesNotMatchArguments(ResolvedDependency dep) {
                 return !StringUtils.matchesGlob(dep.getGroupId(), groupId) ||
-                       !StringUtils.matchesGlob(dep.getArtifactId(), artifactId);
+                        !StringUtils.matchesGlob(dep.getArtifactId(), artifactId);
             }
 
             private boolean isInTransitives(ResolvedDependency dep, Set<ResolvedGroupArtifactVersion> transitives) {
@@ -286,8 +256,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 // We match on groupId:artifactId:version exactly
                 for (ResolvedGroupArtifactVersion transitive : transitives) {
                     if (dep.getGroupId().equals(transitive.getGroupId()) &&
-                        dep.getArtifactId().equals(transitive.getArtifactId()) &&
-                        dep.getVersion().equals(transitive.getVersion())) {
+                            dep.getArtifactId().equals(transitive.getArtifactId()) &&
+                            dep.getVersion().equals(transitive.getVersion())) {
                         return true;
                     }
                 }
@@ -301,7 +271,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
              */
             private Set<ResolvedGroupArtifactVersion> getCompatibleTransitives(
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives,
-                    String targetScope, boolean isGradle) {
+                    String targetScope) {
 
                 Set<ResolvedGroupArtifactVersion> result = new HashSet<>();
 
@@ -312,7 +282,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
 
                 // Include transitives from broader scopes
-                List<String> broaderScopes = getBroaderScopes(targetScope, isGradle);
+                List<String> broaderScopes = getBroaderMavenScopes(targetScope);
                 for (String broader : broaderScopes) {
                     Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
                     if (broaderTransitives != null) {
@@ -323,32 +293,32 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return result;
             }
 
-            private List<String> getBroaderScopes(String scope, boolean isGradle) {
-                if (isGradle) {
-                    switch (scope.toLowerCase()) {
-                        case "runtimeonly":
-                        case "runtimeclasspath":
-                            return Arrays.asList("implementation", "api");
-                        case "implementation":
-                            return Collections.singletonList("api");
-                        case "testimplementation":
-                        case "testruntimeonly":
-                            return Arrays.asList("implementation", "api", "testImplementation");
-                        default:
-                            return Collections.emptyList();
-                    }
-                } else {
-                    // Maven scopes
-                    switch (scope.toLowerCase()) {
-                        case "runtime":
-                            return Collections.singletonList("compile");
-                        case "provided":
-                            return Arrays.asList("compile", "runtime");
-                        case "test":
-                            return Arrays.asList("compile", "runtime", "provided");
-                        default:
-                            return Collections.emptyList();
-                    }
+            @SuppressWarnings("unused") // Not used currently, as we map Gradle scopes to a single "all" bucket
+            private List<String> getBroaderGradleScopes(String scope) {
+                switch (scope.toLowerCase()) {
+                    case "runtimeonly":
+                    case "runtimeclasspath":
+                        return Arrays.asList("implementation", "api");
+                    case "implementation":
+                        return singletonList("api");
+                    case "testimplementation":
+                    case "testruntimeonly":
+                        return Arrays.asList("implementation", "api", "testImplementation");
+                    default:
+                        return emptyList();
+                }
+            }
+
+            private List<String> getBroaderMavenScopes(String scope) {
+                switch (scope.toLowerCase()) {
+                    case "runtime":
+                        return singletonList("compile");
+                    case "provided":
+                        return Arrays.asList("compile", "runtime");
+                    case "test":
+                        return Arrays.asList("compile", "runtime", "provided");
+                    default:
+                        return emptyList();
                 }
             }
         };

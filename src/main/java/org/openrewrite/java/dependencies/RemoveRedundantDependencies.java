@@ -81,24 +81,21 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     String projectId = gradle.getGroup() + ":" + gradle.getName();
                     MavenPomDownloader downloader = new MavenPomDownloader(ctx);
 
-                    // For Gradle, store all transitives in a single set per project
-                    // because Gradle's configuration hierarchy is complex
-                    Set<ResolvedGroupArtifactVersion> projectTransitives = acc.transitivesByProjectAndScope
-                            .computeIfAbsent(projectId, k -> new HashMap<>())
-                            .computeIfAbsent("all", k -> new HashSet<>());
-
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
                         for (ResolvedDependency dep : conf.getResolved()) {
                             if (dep.isDirect() &&
                                     StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
                                     StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
                                 // This is a matching parent dependency, resolve its transitives independently
+                                Set<ResolvedGroupArtifactVersion> transitives = acc.transitivesByProjectAndScope
+                                        .computeIfAbsent(projectId, k -> new HashMap<>())
+                                        .computeIfAbsent(conf.getName(), k -> new HashSet<>());
                                 resolveTransitivesFromPom(
                                         dep.getGav(),
                                         gradle.getMavenRepositories(),
                                         downloader,
                                         ctx,
-                                        projectTransitives);
+                                        transitives);
                             }
                         }
                     }
@@ -191,13 +188,13 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives =
                             acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
 
-                    // For Gradle, use the "all" bucket we created in scanner
-                    Set<ResolvedGroupArtifactVersion> transitives = scopeToTransitives.getOrDefault("all", Collections.emptySet());
-                    if (transitives.isEmpty()) {
-                        return result;
-                    }
-
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
+                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleGradleTransitives(
+                                scopeToTransitives, conf.getName());
+                        if (transitives.isEmpty()) {
+                            continue;
+                        }
+
                         for (ResolvedDependency dep : conf.getResolved()) {
                             if (dep.isDirect() &&
                                     doesNotMatchArguments(dep) &&
@@ -223,7 +220,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                     for (Map.Entry<Scope, List<ResolvedDependency>> entry : maven.getDependencies().entrySet()) {
                         String scope = entry.getKey().name().toLowerCase();
-                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleTransitives(
+                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleMavenTransitives(
                                 scopeToTransitives, scope);
                         if (transitives.isEmpty()) {
                             continue;
@@ -265,11 +262,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             /**
-             * Get transitives from this scope and any broader scopes.
-             * For Maven: compile covers runtime; compile/runtime cover provided
-             * For Gradle: api covers implementation; implementation covers runtimeOnly
+             * Get transitives from this Gradle configuration and any broader configurations.
              */
-            private Set<ResolvedGroupArtifactVersion> getCompatibleTransitives(
+            private Set<ResolvedGroupArtifactVersion> getCompatibleGradleTransitives(
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives,
                     String targetScope) {
 
@@ -282,8 +277,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
 
                 // Include transitives from broader scopes
-                List<String> broaderScopes = getBroaderMavenScopes(targetScope);
-                for (String broader : broaderScopes) {
+                for (String broader : getBroaderGradleScopes(targetScope)) {
                     Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
                     if (broaderTransitives != null) {
                         result.addAll(broaderTransitives);
@@ -293,7 +287,32 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return result;
             }
 
-            @SuppressWarnings("unused") // Not used currently, as we map Gradle scopes to a single "all" bucket
+            /**
+             * Get transitives from this Maven scope and any broader scopes.
+             */
+            private Set<ResolvedGroupArtifactVersion> getCompatibleMavenTransitives(
+                    Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives,
+                    String targetScope) {
+
+                Set<ResolvedGroupArtifactVersion> result = new HashSet<>();
+
+                // Always include transitives from the same scope
+                Set<ResolvedGroupArtifactVersion> sameScope = scopeToTransitives.get(targetScope);
+                if (sameScope != null) {
+                    result.addAll(sameScope);
+                }
+
+                // Include transitives from broader scopes
+                for (String broader : getBroaderMavenScopes(targetScope)) {
+                    Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
+                    if (broaderTransitives != null) {
+                        result.addAll(broaderTransitives);
+                    }
+                }
+
+                return result;
+            }
+
             private List<String> getBroaderGradleScopes(String scope) {
                 switch (scope.toLowerCase()) {
                     case "runtimeonly":

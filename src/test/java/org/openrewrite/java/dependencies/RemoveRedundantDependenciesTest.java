@@ -80,6 +80,61 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
+    void removeRedundantMavenDependencyInTestScope() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.junit.jupiter", "junit-jupiter-engine")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-engine</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-api</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-engine</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
     void removeMultipleRedundantDependencies() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
@@ -162,6 +217,47 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                       <groupId>com.fasterxml.jackson.core</groupId>
                       <artifactId>jackson-core</artifactId>
                       <version>2.16.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void doNoRemoveWhenExcluded() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>com.fasterxml.jackson.core</groupId>
+                          <artifactId>jackson-core</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
                     </dependency>
                   </dependencies>
                 </project>

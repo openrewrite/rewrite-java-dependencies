@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
+import org.openrewrite.internal.ListUtils;
 import org.openrewrite.internal.StringUtils;
 import org.openrewrite.maven.MavenDownloadingException;
 import org.openrewrite.maven.MavenDownloadingExceptions;
@@ -92,6 +93,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                         .computeIfAbsent(conf.getName(), k -> new HashSet<>());
                                 resolveTransitivesFromPom(
                                         dep.getGav(),
+                                        dep.getEffectiveExclusions(),
                                         gradle.getMavenRepositories(),
                                         downloader,
                                         ctx,
@@ -117,6 +119,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                         .computeIfAbsent(depScope.name().toLowerCase(), k -> new HashSet<>());
                                 resolveTransitivesFromPom(
                                         dep.getGav(),
+                                        dep.getEffectiveExclusions(),
                                         maven.getPom().getRepositories(),
                                         downloader,
                                         ctx,
@@ -131,6 +134,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
             private void resolveTransitivesFromPom(
                     ResolvedGroupArtifactVersion gav,
+                    List<GroupArtifact> effectiveExclusions,
                     List<MavenRepository> repositories,
                     MavenPomDownloader downloader,
                     ExecutionContext ctx,
@@ -146,7 +150,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     // Get the resolved dependencies for compile scope (which includes most transitives)
                     Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, effectiveRepos);
                     ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, effectiveRepos, ctx);
-                    List<ResolvedDependency> resolved = resolvedPom.resolveDependencies(Scope.Compile, downloader, ctx);
+                    ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
+                    List<ResolvedDependency> resolved = patchedPom.resolveDependencies(Scope.Compile, downloader, ctx);
 
                     // Collect all dependencies (both direct and transitive of the parent)
                     for (ResolvedDependency dep : resolved) {
@@ -156,6 +161,24 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     // If we can't download/resolve the POM, fall back to not detecting redundancies
                     // This is a best-effort approach
                 }
+            }
+
+            private ResolvedPom applyExclusions(ResolvedPom resolvedPom, List<GroupArtifact> effectiveExclusions) {
+                List<Dependency> existingRequested_dependencies = resolvedPom.getRequested().getDependencies();
+                ResolvedPom patchedPom = resolvedPom
+                        .withRequested(
+                                resolvedPom.getRequested().withDependencies(
+                                        ListUtils.filter(
+                                                existingRequested_dependencies,
+                                                d -> effectiveExclusions.stream()
+                                                        .noneMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId()))
+                                        )
+                                )
+                        );
+                patchedPom.getRequestedDependencies()
+                        .removeIf(d -> effectiveExclusions.stream()
+                                .anyMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId())));
+                return patchedPom;
             }
 
             private void collectAllDependencies(ResolvedDependency dep, Set<ResolvedGroupArtifactVersion> transitives) {

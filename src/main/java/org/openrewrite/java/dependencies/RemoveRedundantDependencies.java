@@ -278,9 +278,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
 
                 // Include transitives from broader scopes
-                List<String> broaderScopes = isGradle
-                        ? getBroaderGradleScopes(targetScope)
-                        : getBroaderMavenScopes(targetScope);
+                List<String> broaderScopes = isGradle ?
+                        getBroaderGradleScopes(targetScope) :
+                        getBroaderMavenScopes(targetScope);
                 for (String broader : broaderScopes) {
                     Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
                     if (broaderTransitives != null) {

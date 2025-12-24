@@ -189,8 +189,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
 
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleGradleTransitives(
-                                scopeToTransitives, conf.getName());
+                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleTransitives(
+                                scopeToTransitives, conf.getName(), true);
                         if (transitives.isEmpty()) {
                             continue;
                         }
@@ -220,8 +220,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                     for (Map.Entry<Scope, List<ResolvedDependency>> entry : maven.getDependencies().entrySet()) {
                         String scope = entry.getKey().name().toLowerCase();
-                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleMavenTransitives(
-                                scopeToTransitives, scope);
+                        Set<ResolvedGroupArtifactVersion> transitives = getCompatibleTransitives(
+                                scopeToTransitives, scope, false);
                         if (transitives.isEmpty()) {
                             continue;
                         }
@@ -262,11 +262,12 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             /**
-             * Get transitives from this Gradle configuration and any broader configurations.
+             * Get transitives from this scope/configuration and any broader ones.
              */
-            private Set<ResolvedGroupArtifactVersion> getCompatibleGradleTransitives(
+            private Set<ResolvedGroupArtifactVersion> getCompatibleTransitives(
                     Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives,
-                    String targetScope) {
+                    String targetScope,
+                    boolean isGradle) {
 
                 Set<ResolvedGroupArtifactVersion> result = new HashSet<>();
 
@@ -277,33 +278,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
 
                 // Include transitives from broader scopes
-                for (String broader : getBroaderGradleScopes(targetScope)) {
-                    Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
-                    if (broaderTransitives != null) {
-                        result.addAll(broaderTransitives);
-                    }
-                }
-
-                return result;
-            }
-
-            /**
-             * Get transitives from this Maven scope and any broader scopes.
-             */
-            private Set<ResolvedGroupArtifactVersion> getCompatibleMavenTransitives(
-                    Map<String, Set<ResolvedGroupArtifactVersion>> scopeToTransitives,
-                    String targetScope) {
-
-                Set<ResolvedGroupArtifactVersion> result = new HashSet<>();
-
-                // Always include transitives from the same scope
-                Set<ResolvedGroupArtifactVersion> sameScope = scopeToTransitives.get(targetScope);
-                if (sameScope != null) {
-                    result.addAll(sameScope);
-                }
-
-                // Include transitives from broader scopes
-                for (String broader : getBroaderMavenScopes(targetScope)) {
+                List<String> broaderScopes = isGradle
+                        ? getBroaderGradleScopes(targetScope)
+                        : getBroaderMavenScopes(targetScope);
+                for (String broader : broaderScopes) {
                     Set<ResolvedGroupArtifactVersion> broaderTransitives = scopeToTransitives.get(broader);
                     if (broaderTransitives != null) {
                         result.addAll(broaderTransitives);

@@ -25,24 +25,21 @@ import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RemoveRedundantDependenciesTest implements RewriteTest {
-
     @DocumentExample
     @Test
     void removeRedundantMavenDependency() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
-                  "com.fasterxml.jackson.core", "jackson-databind")),
+            "com.fasterxml.jackson.core", "jackson-databind")),
           mavenProject("my-app",
             //language=xml
             pomXml(
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -60,11 +57,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -90,11 +85,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>org.junit.jupiter</groupId>
@@ -114,11 +107,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>org.junit.jupiter</groupId>
@@ -138,18 +129,16 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     void removeMultipleRedundantDependencies() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
-                  "com.fasterxml.jackson.core", "jackson-databind")),
+            "com.fasterxml.jackson.core", "jackson-databind")),
           mavenProject("my-app",
             //language=xml
             pomXml(
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -172,11 +161,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -195,18 +182,16 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     void doNotRemoveWhenVersionsDiffer() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
-                  "com.fasterxml.jackson.core", "jackson-databind")),
+            "com.fasterxml.jackson.core", "jackson-databind")),
           mavenProject("my-app",
             //language=xml
             pomXml(
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -237,11 +222,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -271,18 +254,16 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     void doNotRemoveDirectDependencyItself() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
-                  "com.fasterxml.jackson.core", "jackson-databind")),
+            "com.fasterxml.jackson.core", "jackson-databind")),
           mavenProject("my-app",
             //language=xml
             pomXml(
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -301,18 +282,16 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     void noMatchingParentDependency() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
-                  "org.nonexistent", "nonexistent")),
+            "org.nonexistent", "nonexistent")),
           mavenProject("my-app",
             //language=xml
             pomXml(
               """
                 <project>
                   <modelVersion>4.0.0</modelVersion>
-
                   <groupId>com.mycompany.app</groupId>
                   <artifactId>my-app</artifactId>
                   <version>1</version>
-
                   <dependencies>
                     <dependency>
                       <groupId>com.fasterxml.jackson.core</groupId>
@@ -337,7 +316,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
             .recipe(new RemoveRedundantDependencies(
-                    "com.fasterxml.jackson.core", "jackson-databind")),
+              "com.fasterxml.jackson.core", "jackson-databind")),
           mavenProject("my-app",
             //language=groovy
             buildGradle(
@@ -345,11 +324,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                 plugins {
                     id 'java-library'
                 }
-
                 repositories {
                     mavenCentral()
                 }
-
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
                     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
@@ -359,11 +336,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                 plugins {
                     id 'java-library'
                 }
-
                 repositories {
                     mavenCentral()
                 }
-
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
                 }

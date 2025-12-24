@@ -164,20 +164,11 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private ResolvedPom applyExclusions(ResolvedPom resolvedPom, List<GroupArtifact> effectiveExclusions) {
-                List<Dependency> existingRequested_dependencies = resolvedPom.getRequested().getDependencies();
-                ResolvedPom patchedPom = resolvedPom
-                        .withRequested(
-                                resolvedPom.getRequested().withDependencies(
-                                        ListUtils.filter(
-                                                existingRequested_dependencies,
-                                                d -> effectiveExclusions.stream()
-                                                        .noneMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId()))
-                                        )
-                                )
-                        );
-                patchedPom.getRequestedDependencies()
-                        .removeIf(d -> effectiveExclusions.stream()
-                                .anyMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId())));
+                ResolvedPom patchedPom = resolvedPom.withRequested(resolvedPom.getRequested().withDependencies(
+                        ListUtils.filter(resolvedPom.getRequested().getDependencies(), d -> effectiveExclusions.stream()
+                                .noneMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId())))));
+                patchedPom.getRequestedDependencies().removeIf(d -> effectiveExclusions.stream()
+                        .anyMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId())));
                 return patchedPom;
             }
 

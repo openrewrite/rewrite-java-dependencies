@@ -1,0 +1,350 @@
+/*
+ * Copyright 2025 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openrewrite.java.dependencies;
+
+import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
+import org.openrewrite.test.RewriteTest;
+
+import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
+import static org.openrewrite.java.Assertions.mavenProject;
+import static org.openrewrite.maven.Assertions.pomXml;
+
+class RemoveRedundantDependenciesTest implements RewriteTest {
+    @DocumentExample
+    @Test
+    void removeRedundantMavenDependency() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void removeRedundantMavenDependencyInTestScope() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.junit.jupiter", "junit-jupiter-engine")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-engine</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-api</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-engine</artifactId>
+                      <version>6.0.1</version>
+                      <scope>test</scope>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void removeMultipleRedundantDependencies() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-annotations</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void doNotRemoveWhenVersionsDiffer() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.16.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void doNoRemoveWhenExcluded() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>com.fasterxml.jackson.core</groupId>
+                          <artifactId>jackson-core</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void doNotRemoveDirectDependencyItself() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void noMatchingParentDependency() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.nonexistent", "nonexistent")),
+          mavenProject("my-app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-databind</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                    <dependency>
+                      <groupId>com.fasterxml.jackson.core</groupId>
+                      <artifactId>jackson-core</artifactId>
+                      <version>2.17.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void removeRedundantGradleDependency() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                }
+                """
+            )
+          )
+        );
+    }
+}

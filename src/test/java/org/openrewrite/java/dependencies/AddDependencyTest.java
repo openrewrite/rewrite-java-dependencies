@@ -49,12 +49,12 @@ class AddDependencyTest implements RewriteTest {
 
     @DocumentExample
     @Test
-    void addMavenDependencyWithSystemScope() {
+    void addMavenDependencyWithOnlyIfUsingTestScope() {
         rewriteRun(
           spec -> spec
-            .recipe(addDependency("doesnotexist:doesnotexist:1", "com.google.common.math.IntMath", "system")),
+            .recipe(addDependency("com.google.guava:guava:29.0-jre", "com.google.common.math.IntMath", "test")),
           mavenProject("project",
-            srcMainJava(
+            srcTestJava(
               java(usingGuavaIntMath)
             ),
             //language=xml
@@ -73,10 +73,10 @@ class AddDependencyTest implements RewriteTest {
                     <version>1</version>
                     <dependencies>
                         <dependency>
-                            <groupId>doesnotexist</groupId>
-                            <artifactId>doesnotexist</artifactId>
-                            <version>1</version>
-                            <scope>system</scope>
+                            <groupId>com.google.guava</groupId>
+                            <artifactId>guava</artifactId>
+                            <version>29.0-jre</version>
+                            <scope>test</scope>
                         </dependency>
                     </dependencies>
                 </project>

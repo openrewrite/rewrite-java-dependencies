@@ -27,16 +27,10 @@ public class DependencyInsight extends Recipe {
     // Populated by the other DependencyInsight visitors. Listed here so the saas knows to display this when the recipe runs
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 
-    @Override
-    public String getDisplayName() {
-        return "Dependency insight for Gradle and Maven";
-    }
+    String displayName = "Dependency insight for Gradle and Maven";
 
-    @Override
-    public String getDescription() {
-        return "Finds dependencies, including transitive dependencies, in both Gradle and Maven projects. " +
+    String description = "Finds dependencies, including transitive dependencies, in both Gradle and Maven projects. " +
                "Matches within all Gradle dependency configurations and Maven scopes.";
-    }
 
     @Option(displayName = "Group pattern",
             description = "Group ID glob pattern used to match dependencies.",

@@ -46,17 +46,11 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             example = "jackson-databind")
     String artifactId;
 
-    @Override
-    public String getDisplayName() {
-        return "Remove redundant explicit dependencies";
-    }
+    String displayName = "Remove redundant explicit dependencies";
 
-    @Override
-    public String getDescription() {
-        return "Remove explicit dependencies that are already provided transitively by a specified dependency. " +
+    String description = "Remove explicit dependencies that are already provided transitively by a specified dependency. " +
                 "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
                 "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared.";
-    }
 
     @Value
     public static class Accumulator {

@@ -76,16 +76,10 @@ public class DependencyList extends Recipe {
      */
     transient Set<GroupArtifactVersion> seenGradleProjects = new HashSet<>();
 
-    @Override
-    public String getDisplayName() {
-        return "Dependency report";
-    }
+    String displayName = "Dependency report";
 
-    @Override
-    public String getDescription() {
-        return "Emits a data table detailing all Gradle and Maven dependencies. " +
+    String description = "Emits a data table detailing all Gradle and Maven dependencies. " +
                "This recipe makes no changes to any source file.";
-    }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {

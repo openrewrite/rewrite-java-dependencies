@@ -25,18 +25,12 @@ import org.openrewrite.maven.AddManagedDependency;
 @Value
 public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
 
-    @Override
-    public String getDisplayName() {
-        return "Upgrade transitive Gradle or Maven dependencies";
-    }
+    String displayName = "Upgrade transitive Gradle or Maven dependencies";
 
-    @Override
-    public String getDescription() {
-        return "Upgrades the version of a transitive dependency in a Maven pom.xml or Gradle build.gradle. " +
+    String description = "Upgrades the version of a transitive dependency in a Maven pom.xml or Gradle build.gradle. " +
                "Leaves direct dependencies unmodified. " +
                "Can be paired with the regular Upgrade Dependency Version recipe to upgrade a dependency everywhere, " +
                "regardless of whether it is direct or transitive.";
-    }
 
     @Option(displayName = "Group",
             description = "The first part of a dependency coordinate 'org.apache.logging.log4j:ARTIFACT_ID:VERSION'.",

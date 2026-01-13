@@ -29,20 +29,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Value
 public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
-    @Override
-    public String getDisplayName() {
-        return "Repository has dependency";
-    }
+    String displayName = "Repository has dependency";
 
-    @Override
-    public String getDescription() {
-        return "Searches for both Gradle and Maven modules that have a dependency matching the specified groupId and artifactId. " +
+    String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified groupId and artifactId. " +
                "Places a `SearchResult` marker on all sources within a repository with a matching dependency. " +
                "This recipe is intended to be used as a precondition for other recipes. " +
                "For example this could be used to limit the application of a spring boot migration to only projects " +
                "that use a springframework dependency, limiting unnecessary upgrading. " +
                "If the search result you want is instead just the build.gradle(.kts) or pom.xml file applying the plugin, use the `FindDependency` recipe instead.";
-    }
 
     @Option(displayName = "Group pattern",
             description = "Group glob pattern used to match dependencies.",

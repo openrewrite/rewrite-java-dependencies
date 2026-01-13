@@ -54,14 +54,9 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
     String minimumVersion;
 
 
-    @Override
-    public String getDisplayName() {
-        return "Find minimum JUnit version";
-    }
+    String displayName = "Find minimum JUnit version";
 
-    @Override
-    public String getDescription() {
-        return "A recipe to find the minimum version of JUnit dependencies. " +
+    String description = "A recipe to find the minimum version of JUnit dependencies. " +
                "This recipe is designed to return the minimum version of JUnit in a project. " +
                "It will search for JUnit 4 and JUnit 5 dependencies in the project. " +
                "If both versions are found, it will return the minimum version of JUnit 4.\n" +
@@ -71,7 +66,6 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
                "the recipe will return JUnit 4.12. If the project has only JUnit 5.7, the recipe will return JUnit 5.7.\n" +
                "Another example: if the minimumVersion is 5, and the project has JUnit 4.12 and JUnit 5.7, " +
                "the recipe will not return any results.";
-    }
 
     @Override
     public Map<GroupArtifact, ResolvedGroupArtifactVersion> getInitialValue(ExecutionContext ctx) {

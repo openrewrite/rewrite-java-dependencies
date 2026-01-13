@@ -127,17 +127,11 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     @Nullable
     Boolean acceptTransitive;
 
-    @Override
-    public String getDisplayName() {
-        return "Add Gradle or Maven dependency";
-    }
+    String displayName = "Add Gradle or Maven dependency";
 
-    @Override
-    public String getDescription() {
-        return "For a Gradle project, add a gradle dependency to a `build.gradle` file in the correct configuration " +
+    String description = "For a Gradle project, add a gradle dependency to a `build.gradle` file in the correct configuration " +
                "based on where it is used. Or For a maven project, Add a Maven dependency to a `pom.xml` file in the " +
                "correct scope based on where it is used.";
-    }
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {

@@ -46,15 +46,9 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
     transient RepositoryAccessibilityReport report = new RepositoryAccessibilityReport(this);
     transient GradleDependencyConfigurationErrors gradleErrors = new GradleDependencyConfigurationErrors(this);
 
-    @Override
-    public String getDisplayName() {
-        return "Dependency resolution diagnostic";
-    }
+    String displayName = "Dependency resolution diagnostic";
 
-    @Override
-    public String getDescription() {
-        //language=markdown
-        return "Recipes which manipulate dependencies must be able to successfully access the artifact repositories " +
+    String description = "Recipes which manipulate dependencies must be able to successfully access the artifact repositories " +
                "and resolve dependencies from them. This recipe produces two data tables used to understand the state " +
                "of dependency resolution. \n\n" +
                "The Repository accessibility report lists all the artifact repositories known to the project and whether " +
@@ -63,7 +57,6 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                "The Gradle dependency configuration errors lists all the dependency configurations that failed to " +
                "resolve one or more dependencies when the project was parsed. This is representative of conditions at " +
                "the time the LST was parsed.";
-    }
 
 
     @Option(displayName = "Group ID",

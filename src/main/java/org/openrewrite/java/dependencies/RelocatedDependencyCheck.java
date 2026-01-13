@@ -52,20 +52,13 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     @Nullable
     Boolean changeDependencies;
 
-    @Override
-    public String getDisplayName() {
-        return "Find relocated dependencies";
-    }
+    String displayName = "Find relocated dependencies";
 
-    @Override
-    public String getDescription() {
-        //language=markdown
-        return "Find Maven and Gradle dependencies and Maven plugins that have relocated to a new `groupId` or `artifactId`. " +
+    String description = "Find Maven and Gradle dependencies and Maven plugins that have relocated to a new `groupId` or `artifactId`. " +
                "Relocation information comes from the [oga-maven-plugin](https://github.com/jonathanlermitage/oga-maven-plugin/) " +
                "maintained by Jonathan Lermitage, Filipe Roque and others.\n\n" +
                "This recipe makes no changes to any source file by default. Add `changeDependencies=true` to change dependencies, " +
                "but note that you might need to run additional recipes to update imports and adopt other breaking changes.";
-    }
 
     @Value
     public static class Accumulator {

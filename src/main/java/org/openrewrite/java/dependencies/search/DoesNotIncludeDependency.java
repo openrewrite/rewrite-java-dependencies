@@ -23,16 +23,10 @@ import org.openrewrite.*;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DoesNotIncludeDependency extends Recipe {
-    @Override
-    public String getDisplayName() {
-        return "Does not include dependency for Gradle and Maven";
-    }
+    String displayName = "Does not include dependency for Gradle and Maven";
 
-    @Override
-    public String getDescription() {
-        return "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
+    String description = "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
                 "For compatibility with multimodule projects, this should most often be applied as a precondition.";
-    }
 
     @Option(displayName = "Group",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",

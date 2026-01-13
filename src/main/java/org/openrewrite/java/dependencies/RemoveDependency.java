@@ -63,16 +63,10 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
     @Nullable
     String scope;
 
-    @Override
-    public String getDisplayName() {
-        return "Remove a Gradle or Maven dependency";
-    }
+    String displayName = "Remove a Gradle or Maven dependency";
 
-    @Override
-    public String getDescription() {
-        return "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
+    String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
                "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
-    }
 
     @Override
     public Map<JavaProject, Boolean> getInitialValue(ExecutionContext ctx) {

@@ -77,15 +77,11 @@ public class ChangeDependency extends Recipe {
     @Nullable
     Boolean changeManagedDependency;
 
-    @Override
-    public String getDisplayName() {
-        return "Change Gradle or Maven dependency";
-    }
+    @Getter
+    final String displayName = "Change Gradle or Maven dependency";
 
-    @Override
-    public String getDescription() {
-        return "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
-    }
+    @Getter
+    final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {

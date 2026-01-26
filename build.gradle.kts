@@ -23,6 +23,8 @@ dependencies {
     testRuntimeOnly("org.openrewrite:rewrite-java-21")
     testRuntimeOnly("com.google.guava:guava:latest.release")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    // For FindDuplicateClasses tests - logback and slf4j-nop both define SLF4J binding classes
+    testRuntimeOnly("org.slf4j:slf4j-nop:1.7.36")
 }
 
 tasks {

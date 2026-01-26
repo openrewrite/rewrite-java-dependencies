@@ -29,9 +29,9 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.joining;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -111,7 +111,7 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                             continue;
                         }
                         String additionalDeps = gavs.size() > 2
-                                ? gavs.subList(2, gavs.size()).stream().collect(Collectors.joining(", "))
+                                ? gavs.subList(2, gavs.size()).stream().collect(joining(", "))
                                 : "";
                         report.insertRow(ctx, new DuplicateClassesReport.Row(
                                 projectName,

@@ -17,15 +17,21 @@ package org.openrewrite.java.dependencies.search;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.ExecutionContext;
+import org.openrewrite.ScanningRecipe;
+import org.openrewrite.SourceFile;
+import org.openrewrite.TreeVisitor;
+import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.dependencies.table.DuplicateClassesReport;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.marker.JavaSourceSet;
+import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -63,32 +69,27 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
-        return new TreeVisitor<Tree, ExecutionContext>() {
+        return new JavaVisitor<ExecutionContext>() {
             @Override
-            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (!(tree instanceof SourceFile)) {
-                    return tree;
-                }
-
-                SourceFile sourceFile = (SourceFile) tree;
-                Optional<JavaSourceSet> maybeSourceSet = sourceFile.getMarkers().findFirst(JavaSourceSet.class);
+            public J visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
+                Optional<JavaSourceSet> maybeSourceSet = cu.getMarkers().findFirst(JavaSourceSet.class);
                 if (!maybeSourceSet.isPresent()) {
-                    return tree;
+                    return cu;
                 }
 
                 JavaSourceSet sourceSet = maybeSourceSet.get();
-                String projectName = sourceFile.getMarkers().findFirst(JavaProject.class)
+                String projectName = cu.getMarkers().findFirst(JavaProject.class)
                         .map(JavaProject::getProjectName)
                         .orElse("<unknown>");
 
                 ProjectSourceSet pss = new ProjectSourceSet(projectName, sourceSet.getName());
                 if (!acc.seen.add(pss)) {
-                    return tree;
+                    return cu;
                 }
 
                 Map<String, List<JavaType.FullyQualified>> gavToTypes = sourceSet.getGavToTypes();
                 if (gavToTypes == null || gavToTypes.isEmpty()) {
-                    return tree;
+                    return cu;
                 }
 
                 // Invert the mapping: type name -> list of GAVs containing that type
@@ -123,13 +124,13 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     }
                 }
 
-                return tree;
+                return cu;
             }
         };
     }
 
     @Override
     public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
-        return Collections.emptyList();
+        return emptyList();
     }
 }

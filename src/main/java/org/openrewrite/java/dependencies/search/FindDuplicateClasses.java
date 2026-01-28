@@ -39,18 +39,12 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
 
     transient DuplicateClassesReport report = new DuplicateClassesReport(this);
 
-    @Override
-    public String getDisplayName() {
-        return "Find duplicate classes on the classpath";
-    }
+    String displayName = "Find duplicate classes on the classpath";
 
-    @Override
-    public String getDescription() {
-        return "Detects classes that appear in multiple dependencies on the classpath. " +
-               "This is similar to what the Maven duplicate-finder-maven-plugin does. " +
-               "Duplicate classes can cause runtime issues when different versions " +
-               "of the same class are loaded.";
-    }
+    String description = "Detects classes that appear in multiple dependencies on the classpath. " +
+            "This is similar to what the Maven duplicate-finder-maven-plugin does. " +
+            "Duplicate classes can cause runtime issues when different versions " +
+            "of the same class are loaded.";
 
     public static class Accumulator {
         Set<ProjectSourceSet> seen = new HashSet<>();
@@ -110,9 +104,9 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                         if (typeName.contains("module-info") || typeName.endsWith("package-info")) {
                             continue;
                         }
-                        String additionalDeps = gavs.size() > 2
-                                ? gavs.subList(2, gavs.size()).stream().collect(joining(", "))
-                                : "";
+                        String additionalDeps = gavs.size() > 2 ?
+                                gavs.subList(2, gavs.size()).stream().collect(joining(", ")) :
+                                "";
                         report.insertRow(ctx, new DuplicateClassesReport.Row(
                                 projectName,
                                 sourceSet.getName(),

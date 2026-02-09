@@ -155,6 +155,38 @@ examples:
     language: xml
 ---
 type: specs.openrewrite.org/v1beta/example
+recipeName: org.openrewrite.java.dependencies.FindRepositoryOrder
+examples:
+- description: '`FindRepositoryOrderTest#findMavenRepositoryOrder`'
+  sources:
+  - before: |
+      <project>
+        <groupId>com.mycompany.app</groupId>
+        <artifactId>my-app</artifactId>
+        <version>1</version>
+        <repositories>
+          <repository>
+            <id>myRepo</id>
+            <url>https://myrepo.maven.com/repo</url>
+          </repository>
+        </repositories>
+      </project>
+    after: |
+      <!--~~(https://myrepo.maven.com/repo)~~>--><project>
+        <groupId>com.mycompany.app</groupId>
+        <artifactId>my-app</artifactId>
+        <version>1</version>
+        <repositories>
+          <repository>
+            <id>myRepo</id>
+            <url>https://myrepo.maven.com/repo</url>
+          </repository>
+        </repositories>
+      </project>
+    path: pom.xml
+    language: xml
+---
+type: specs.openrewrite.org/v1beta/example
 recipeName: org.openrewrite.java.dependencies.RelocatedDependencyCheck
 examples:
 - description: '`Maven#findRelocatedMavenDependencies`'

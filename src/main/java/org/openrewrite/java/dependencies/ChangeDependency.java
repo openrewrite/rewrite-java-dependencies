@@ -32,33 +32,33 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     @Option(displayName = "Old group ID",
             description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "org.openrewrite.recipe")
-    final String oldGroupId;
+    private final String oldGroupId;
 
     @Option(displayName = "Old artifact ID",
             description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "rewrite-testing-frameworks")
-    final String oldArtifactId;
+    private final String oldArtifactId;
 
     @Option(displayName = "New group ID",
             description = "The new group ID to use. Defaults to the existing group ID.",
             example = "corp.internal.openrewrite.recipe",
             required = false)
     @Nullable
-    final String newGroupId;
+    private final String newGroupId;
 
     @Option(displayName = "New artifact ID",
             description = "The new artifact ID to use. Defaults to the existing artifact ID.",
             example = "rewrite-testing-frameworks",
             required = false)
     @Nullable
-    final String newArtifactId;
+    private final String newArtifactId;
 
     @Option(displayName = "New version",
             description = "An exact version number or node-style semver selector used to select the version number.",
             example = "29.X",
             required = false)
     @Nullable
-    final String newVersion;
+    private final String newVersion;
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
@@ -66,22 +66,24 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
             example = "-jre",
             required = false)
     @Nullable
-    final String versionPattern;
+    private final String versionPattern;
 
     @Option(displayName = "Override managed version",
             description = "If the new dependency has a managed version, this flag can be used to explicitly set the version on the dependency. The default for this flag is `false`.",
             required = false)
     @Nullable
-    final Boolean overrideManagedVersion;
+    private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Update dependency management",
             description = "Also update the dependency management section. The default for this flag is `true`.",
             required = false)
     @Nullable
-    final Boolean changeManagedDependency;
+    private final Boolean changeManagedDependency;
 
+    @Getter
     final String displayName = "Change Gradle or Maven dependency";
 
+    @Getter
     final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override

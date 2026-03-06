@@ -17,16 +17,14 @@ package org.openrewrite.java.dependencies;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
 import static java.util.Objects.requireNonNull;
 
+@Value
 @EqualsAndHashCode(callSuper = false)
-@Getter
-@RequiredArgsConstructor
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
@@ -80,11 +78,9 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     @Nullable
     private final Boolean changeManagedDependency;
 
-    @Getter
-    final String displayName = "Change Gradle or Maven dependency";
+    String displayName = "Change Gradle or Maven dependency";
 
-    @Getter
-    final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
+    String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {

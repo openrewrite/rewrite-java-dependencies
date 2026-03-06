@@ -80,9 +80,9 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     @Nullable
     final Boolean changeManagedDependency;
 
-    String displayName = "Change Gradle or Maven dependency";
+    final String displayName = "Change Gradle or Maven dependency";
 
-    String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
+    final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override
     public Validated<Object> validate(ExecutionContext ctx) {

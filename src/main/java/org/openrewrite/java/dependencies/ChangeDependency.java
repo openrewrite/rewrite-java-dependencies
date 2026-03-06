@@ -140,7 +140,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
                 if (gradleVisitor.isAcceptable(s, ctx)) {
                     s = (SourceFile) gradleVisitor.visitNonNull(s, ctx);
                 }
-                if (s == tree && mavenVisitor.isAcceptable(s, ctx)) {
+                if (mavenVisitor.isAcceptable(s, ctx)) {
                     s = (SourceFile) mavenVisitor.visitNonNull(s, ctx);
                 }
                 return s;

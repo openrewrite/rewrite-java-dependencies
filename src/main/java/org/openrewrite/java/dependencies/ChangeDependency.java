@@ -17,46 +17,48 @@ package org.openrewrite.java.dependencies;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
 import static java.util.Objects.requireNonNull;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Getter
+@RequiredArgsConstructor
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
             description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "org.openrewrite.recipe")
-    String oldGroupId;
+    final String oldGroupId;
 
     @Option(displayName = "Old artifact ID",
             description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
             example = "rewrite-testing-frameworks")
-    String oldArtifactId;
+    final String oldArtifactId;
 
     @Option(displayName = "New group ID",
             description = "The new group ID to use. Defaults to the existing group ID.",
             example = "corp.internal.openrewrite.recipe",
             required = false)
     @Nullable
-    String newGroupId;
+    final String newGroupId;
 
     @Option(displayName = "New artifact ID",
             description = "The new artifact ID to use. Defaults to the existing artifact ID.",
             example = "rewrite-testing-frameworks",
             required = false)
     @Nullable
-    String newArtifactId;
+    final String newArtifactId;
 
     @Option(displayName = "New version",
             description = "An exact version number or node-style semver selector used to select the version number.",
             example = "29.X",
             required = false)
     @Nullable
-    String newVersion;
+    final String newVersion;
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
@@ -64,19 +66,19 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
             example = "-jre",
             required = false)
     @Nullable
-    String versionPattern;
+    final String versionPattern;
 
     @Option(displayName = "Override managed version",
             description = "If the new dependency has a managed version, this flag can be used to explicitly set the version on the dependency. The default for this flag is `false`.",
             required = false)
     @Nullable
-    Boolean overrideManagedVersion;
+    final Boolean overrideManagedVersion;
 
     @Option(displayName = "Update dependency management",
             description = "Also update the dependency management section. The default for this flag is `true`.",
             required = false)
     @Nullable
-    Boolean changeManagedDependency;
+    final Boolean changeManagedDependency;
 
     String displayName = "Change Gradle or Maven dependency";
 

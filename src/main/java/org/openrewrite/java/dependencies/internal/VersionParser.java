@@ -16,6 +16,8 @@
 
 package org.openrewrite.java.dependencies.internal;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +72,11 @@ public class VersionParser {
     }
 
     private static class DefaultVersion implements Version {
+        @Getter
         private final String source;
+        @Getter
         private final String[] parts;
+        @Getter
         private final Long[] numericParts;
 
         public DefaultVersion(String source, List<String> parts) {
@@ -106,21 +111,6 @@ public class VersionParser {
         @Override
         public int hashCode() {
             return source.hashCode();
-        }
-
-        @Override
-        public String[] getParts() {
-            return parts;
-        }
-
-        @Override
-        public Long[] getNumericParts() {
-            return numericParts;
-        }
-
-        @Override
-        public String getSource() {
-            return source;
         }
     }
 }

@@ -168,7 +168,7 @@ class DependencyListTest implements RewriteTest {
                 Dependency requested = Dependency.builder()
                   .gav(new GroupArtifactVersion("com.test", "doesnotexist", "1.0.0"))
                   .build();
-                ResolvedGroupArtifactVersion rgav = new ResolvedGroupArtifactVersion(pretendRepo.getId(), "com.test", "doesnotexist", "1.0.0", null);
+                var rgav = new ResolvedGroupArtifactVersion(pretendRepo.getId(), "com.test", "doesnotexist", "1.0.0", null);
                 spec.path(Path.of("pom.xml"))
                   .markers(new MavenResolutionResult(
                     randomId(),

@@ -67,7 +67,7 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override
     public AtomicBoolean getInitialValue(ExecutionContext ctx) {
-        return new AtomicBoolean();
+        return new AtomicBoolean(false);
     }
 
     @Override

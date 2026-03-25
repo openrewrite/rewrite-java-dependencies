@@ -97,7 +97,7 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean acc) {
-        if (acc.get()) {
+        if (acc != null && acc.get()) {
             return new TreeVisitor<Tree, ExecutionContext>() {
                 @Override
                 public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {

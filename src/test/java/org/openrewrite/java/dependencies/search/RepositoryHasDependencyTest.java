@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -30,6 +31,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
         spec.beforeRecipe(withToolingApi());
     }
 
+    @DocumentExample
     @Test
     void usedAsDeclarativePrecondition() {
         rewriteRun(

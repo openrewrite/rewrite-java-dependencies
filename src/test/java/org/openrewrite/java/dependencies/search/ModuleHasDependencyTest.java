@@ -449,6 +449,96 @@ class WithVersionsPattern {
     }
 
     @Test
+    void invertedWithVersionRangeMarksModulesWithoutOldKotlin() {
+        var groupId = "org.jetbrains.kotlin";
+        var artifactId = "kotlin-stdlib";
+        var versionRange = "[0,2.3)";
+        var negativeSub = "(Module does not have dependency: %s:%s:%s)~~".formatted(groupId, artifactId, versionRange);
+        var mavenMarker = "<!--~~%s>-->".formatted(negativeSub);
+        var javaMarker = "/*~~%s>*/".formatted(negativeSub);
+        rewriteRun(
+          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, versionRange, true)),
+          // Module with old Kotlin (2.1.0) — should NOT be marked
+          mavenProject("old-kotlin",
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>old-kotlin</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.jetbrains.kotlin</groupId>
+                      <artifactId>kotlin-stdlib</artifactId>
+                      <version>2.1.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            ),
+            java("public class OldKotlin {}")
+          ),
+          // Module with new Kotlin (2.3.0) — SHOULD be marked
+          mavenProject("new-kotlin",
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>new-kotlin</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.jetbrains.kotlin</groupId>
+                      <artifactId>kotlin-stdlib</artifactId>
+                      <version>2.3.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """,
+              spec -> spec.after(actual ->
+                assertThat(actual)
+                  .startsWith(mavenMarker)
+                  .actual()
+              )
+            ),
+            java(
+              "public class NewKotlin {}",
+              spec -> spec.after(actual ->
+                assertThat(actual)
+                  .startsWith(javaMarker)
+                  .actual()
+              )
+            )
+          ),
+          // Module with no Kotlin — SHOULD be marked
+          mavenProject("no-kotlin",
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>no-kotlin</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """,
+              spec -> spec.after(actual ->
+                assertThat(actual)
+                  .startsWith(mavenMarker)
+                  .actual()
+              )
+            ),
+            java(
+              "public class NoKotlin {}",
+              spec -> spec.after(actual ->
+                assertThat(actual)
+                  .startsWith(javaMarker)
+                  .actual()
+              )
+            )
+          )
+        );
+    }
+
+    @Test
     void noPresentVersion() {
         rewriteRun(
           recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null)),

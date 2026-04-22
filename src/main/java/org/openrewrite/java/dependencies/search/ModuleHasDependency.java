@@ -19,11 +19,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.java.dependencies.DependencyInsight;
+import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
+import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.marker.SearchResult;
+import org.openrewrite.maven.tree.MavenResolutionResult;
+import org.openrewrite.maven.tree.ResolvedDependency;
+import org.openrewrite.maven.tree.Scope;
+import org.openrewrite.semver.Semver;
+import org.openrewrite.semver.VersionComparator;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -87,16 +94,42 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 tree.getMarkers()
                         .findFirst(JavaProject.class)
                         .ifPresent(jp -> {
-                            Tree t = new DependencyInsight(groupIdPattern, artifactIdPattern, version, scope)
-                                    .getVisitor()
-                                    .visit(tree, ctx);
-                            if (t != tree) {
+                            if (hasDependency(tree)) {
                                 acc.add(jp);
                             }
                         });
                 return tree;
             }
         };
+    }
+
+    private boolean hasDependency(Tree tree) {
+        VersionComparator versionComparator = version != null ? Semver.validate(version, null).getValue() : null;
+
+        MavenResolutionResult mavenResult = tree.getMarkers().findFirst(MavenResolutionResult.class).orElse(null);
+        if (mavenResult != null) {
+            Scope requestedScope = scope == null ? null : Scope.fromName(scope);
+            List<ResolvedDependency> dependencies = mavenResult.findDependencies(groupIdPattern, artifactIdPattern, requestedScope);
+            for (ResolvedDependency dependency : dependencies) {
+                if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        GradleProject gp = tree.getMarkers().findFirst(GradleProject.class).orElse(null);
+        if (gp != null) {
+            for (GradleDependencyConfiguration c : gp.getConfigurations()) {
+                for (ResolvedDependency resolvedDependency : c.getDirectResolved()) {
+                    ResolvedDependency found = resolvedDependency.findDependency(groupIdPattern, artifactIdPattern);
+                    if (found != null && (versionComparator == null || versionComparator.isValid(null, found.getVersion()))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

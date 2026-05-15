@@ -22,8 +22,6 @@ import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.test.RewriteTest;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
@@ -69,7 +67,7 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               }
               """,
             spec -> spec.afterRecipe(after -> {
-                Optional<GradleProject> maybeGp = after.getMarkers().findFirst(GradleProject.class);
+                var maybeGp = after.getMarkers().findFirst(GradleProject.class);
                 assertThat(maybeGp).isPresent();
                 GradleProject gp = maybeGp.get();
                 GradleDependencyConfiguration compileClasspath = gp.getConfiguration("compileClasspath");

@@ -18,7 +18,6 @@ package org.openrewrite.java.dependencies;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
-import org.openrewrite.Validated;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -201,7 +200,7 @@ class ChangeDependencyTest implements RewriteTest {
 
     @Test
     void validateCascadesToRecipes() {
-        Validated<Object> validate = new ChangeDependency(
+        var validate = new ChangeDependency(
           "org.springframework.boot", "spring-boot-dependencies",
           "org.springframework.boot", "spring-boot-dependencies",
           "3.2.2", null, null, null

@@ -183,15 +183,31 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     @Test
     void maven() {
         rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi())
-            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
-                assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
-                assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
-                );
-            }),
+          spec -> {
+              // CI may inject ~/.m2/settings.xml with `<mirrorOf>*</mirrorOf>` to route Maven through a cache.
+              // That rewrites the pom-declared `nonexistent` repo to the mirror URL, so neither Maven Central
+              // nor the test's `nonexistent.moderne.io` repo appear in the diagnostic. Force empty settings
+              // here so the recipe sees the pom-declared repositories directly.
+              MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
+              MavenSettings emptySettings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
+                //language=xml
+                """
+                  <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
+                  """.getBytes())), ctx);
+              ctx.setMavenSettings(emptySettings);
+              spec.beforeRecipe(withToolingApi())
+                .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
+                    assertThat(rows).contains(
+                      new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
+                    assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
+                    assertThat(rows).contains(
+                      new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
+                    );
+                })
+                .executionContext(ctx);
+          },
           //language=xml
           pomXml(
             """

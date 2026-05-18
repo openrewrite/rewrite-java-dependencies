@@ -180,12 +180,20 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     void maven() {
         rewriteRun(
           spec -> {
-              // Use empty Maven settings so the developer's local ~/.m2/settings.xml mirrors do not
-              // rewrite Maven Central to some other repository, which would make this test environment-dependent.
+              // CI may inject ~/.m2/settings.xml with `<mirrorOf>*</mirrorOf>` to route Maven through a cache.
+              // That rewrites the pom-declared `nonexistent` repo to the mirror URL, so neither Maven Central
+              // nor the test's `nonexistent.moderne.io` repo appear in the diagnostic. Force empty settings
+              // here so the recipe sees the pom-declared repositories directly.
               MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
-              ctx.setMavenSettings(new MavenSettings(null, null, null, null, null, null, null));
-              spec
-                .executionContext(ctx)
+              MavenSettings emptySettings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
+                //language=xml
+                """
+                  <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
+                  """.getBytes())), ctx);
+              ctx.setMavenSettings(emptySettings);
+              spec.beforeRecipe(withToolingApi())
                 .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                     assertThat(rows).contains(
                       new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
@@ -193,7 +201,8 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                     assertThat(rows).contains(
                       new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
                     );
-                });
+                })
+                .executionContext(ctx);
           },
           //language=xml
           pomXml(

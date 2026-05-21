@@ -22,8 +22,9 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.Tree.randomId;
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -177,17 +178,17 @@ class DependencyListTest implements RewriteTest {
                       .requested(Pom.builder()
                         .gav(rgav)
                         .build())
-                      .repositories(singletonList(pretendRepo))
+                      .repositories(List.of(pretendRepo))
                       .build(),
-                    emptyList(),
+                        List.of(),
                     null,
-                    singletonMap(Scope.Compile, singletonList(new ResolvedDependency(
-                      pretendRepo,
-                      rgav, requested, emptyList(), emptyList(), null, null, null, 0, null)
-                    )),
+                        Map.of(Scope.Compile, List.of(new ResolvedDependency(
+                                pretendRepo,
+                                rgav, requested, List.of(), List.of(), null, null, null, 0, null)
+                        )),
                     null,
-                    emptyList(),
-                    emptyMap()
+                        List.of(),
+                        Map.of()
                   ));
             }
           )

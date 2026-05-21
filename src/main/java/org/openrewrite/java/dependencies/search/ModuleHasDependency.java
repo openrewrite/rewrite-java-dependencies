@@ -94,7 +94,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 tree.getMarkers()
                         .findFirst(JavaProject.class)
                         .ifPresent(jp -> {
-                            if (hasDependency(tree)) {
+                            if (!acc.contains(jp) && hasDependency(tree)) {
                                 acc.add(jp);
                             }
                         });

@@ -454,6 +454,67 @@ class ModuleHasDependencyTest implements RewriteTest {
               )
             );
         }
+
+        @Language("groovy")
+        private final static String GradleNoRepositoriesNoVersion = """
+          plugins {
+            id 'java-library'
+          }
+          dependencies {
+            implementation 'org.springframework:spring-beans'
+          }
+          """;
+
+        @Test
+        void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
+            // Resolution fails (no repositories), so the requested fallback fires. The declared
+            // dependency omits a version (supplied elsewhere by a platform/constraint), so its
+            // requested version is null and must NOT match the supplied version constraint (same
+            // treatment as a ${...} property reference).
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[1.0,)", null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleNoRepositoriesNoVersion),
+                java(GradleJava)
+              )
+            );
+        }
+    }
+
+    @Nested
+    class WhenResolvedVersionIsSourceOfTruth {
+
+        @Language("groovy")
+        private final static String GradleForcedOutOfRange = """
+          plugins {
+            id 'java-library'
+          }
+          repositories {
+            mavenCentral()
+          }
+          configurations.all {
+            resolutionStrategy {
+              force 'org.springframework:spring-beans:6.0.0'
+            }
+          }
+          dependencies {
+            implementation 'org.springframework:spring-beans:5.3.0'
+          }
+          """;
+
+        @Test
+        void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
+            // Declared spring-beans 5.3.0 (in range), but resolutionStrategy forces resolved 6.0.0
+            // (out of range). The resolved version is the source of truth, so the declared-dependency
+            // fallback must be skipped for an already-resolved coordinate and [5.0,6.0) must NOT match.
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleForcedOutOfRange),
+                java(GradleJava)
+              )
+            );
+        }
     }
 
 @Nested

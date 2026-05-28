@@ -21,8 +21,10 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
+import org.openrewrite.internal.StringUtils;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.marker.SearchResult;
+import org.openrewrite.maven.tree.Dependency;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
 import org.openrewrite.maven.tree.Scope;
@@ -115,6 +117,11 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                     return true;
                 }
             }
+            for (Dependency requested : mavenResult.getPom().getRequestedDependencies()) {
+                if (matchesRequested(requested, requestedScope, versionComparator)) {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -128,8 +135,44 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                     }
                 }
             }
+            for (GradleDependencyConfiguration c : gp.getConfigurations()) {
+                for (Dependency requested : c.getRequested()) {
+                    if (matchesRequested(requested, null, versionComparator)) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
+    }
+
+    private boolean matchesRequested(Dependency dep, @Nullable Scope requestedScope, @Nullable VersionComparator versionComparator) {
+        if (dep.getGroupId() == null || dep.getArtifactId() == null) {
+            return false;
+        }
+        if (!StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern)) {
+            return false;
+        }
+        if (!StringUtils.matchesGlob(dep.getArtifactId(), artifactIdPattern)) {
+            return false;
+        }
+        if (requestedScope != null) {
+            Scope depScope = dep.getScope() == null ? Scope.Compile : Scope.fromName(dep.getScope());
+            if (!depScope.isInClasspathOf(requestedScope)) {
+                return false;
+            }
+        }
+        return versionMatches(dep.getVersion(), versionComparator);
+    }
+
+    private static boolean versionMatches(@Nullable String version, @Nullable VersionComparator cmp) {
+        if (cmp == null || version == null) {
+            return true;
+        }
+        if (version.startsWith("${")) {
+            return false;
+        }
+        return cmp.isValid(null, version);
     }
 
     @Override

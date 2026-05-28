@@ -21,8 +21,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.Parser;
+import org.openrewrite.maven.MavenExecutionContextView;
+import org.openrewrite.maven.MavenSettings;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
+
+import java.io.ByteArrayInputStream;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -344,6 +351,109 @@ class ModuleHasDependencyTest implements RewriteTest {
             )
           )
         );
+    }
+
+    @Nested
+    class WhenDependencyIsRequestedButNotResolved {
+
+        @Language("groovy")
+        private final static String GradleNoRepositories = """
+          plugins {
+            id 'java-library'
+          }
+          dependencies {
+            implementation 'org.springframework:spring-beans:6.0.0'
+          }
+          """;
+
+        @Language("xml")
+        private final static String MavenNoRepositories = """
+          <project>
+            <groupId>com.example</groupId>
+            <artifactId>foo</artifactId>
+            <version>1.0.0</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>6.0.0</version>
+              </dependency>
+            </dependencies>
+          </project>
+          """;
+
+        @Test
+        void gradleMatchesOnRequested() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null)),
+              mavenProject("project-gradle",
+                buildGradle(
+                  GradleNoRepositories,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(GradleMarkerPositive)
+                      .actual()
+                  )
+                ),
+                java(
+                  GradleJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerPositive)
+                      .actual()
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void mavenMatchesOnRequested() {
+            rewriteRun(
+              spec -> {
+                  MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
+                  MavenSettings emptySettings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
+                    //language=xml
+                    """
+                      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
+                      """.getBytes())), ctx);
+                  ctx.setMavenSettings(emptySettings);
+                  spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null))
+                    .executionContext(ctx);
+              },
+              mavenProject("project-maven",
+                pomXml(
+                  MavenNoRepositories,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(MavenMarkerPositive)
+                      .actual()
+                  )
+                ),
+                java(
+                  MavenJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerPositive)
+                      .actual()
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void gradleVersionRangeOnRequestedDoesNotMatchWhenOutOfRange() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[7.0,)", null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleNoRepositories),
+                java(GradleJava)
+              )
+            );
+        }
     }
 
 @Nested

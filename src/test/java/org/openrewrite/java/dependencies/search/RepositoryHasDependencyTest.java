@@ -122,6 +122,41 @@ class RepositoryHasDependencyTest implements RewriteTest {
     }
 
     @Test
+    void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
+        // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+          mavenProject("project-maven",
+            //language=xml
+            pomXml("""
+              <project>
+                <groupId>com.example</groupId>
+                <artifactId>foo</artifactId>
+                <version>1.0.0</version>
+                <dependencyManagement>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-dependencies</artifactId>
+                      <version>3.0.0</version>
+                      <type>pom</type>
+                      <scope>import</scope>
+                    </dependency>
+                  </dependencies>
+                </dependencyManagement>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                  </dependency>
+                </dependencies>
+              </project>
+              """)
+          )
+        );
+    }
+
+    @Test
     void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
         // Force resolution failure (no repositories), so the requested fallback fires.
         rewriteRun(

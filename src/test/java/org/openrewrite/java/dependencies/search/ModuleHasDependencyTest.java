@@ -454,6 +454,100 @@ class ModuleHasDependencyTest implements RewriteTest {
               )
             );
         }
+
+        @Language("groovy")
+        private final static String GradleNoRepositoriesNoVersion = """
+          plugins {
+            id 'java-library'
+          }
+          dependencies {
+            implementation 'org.springframework:spring-beans'
+          }
+          """;
+
+        @Test
+        void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
+            // Force resolution failure (no repositories), so the requested fallback fires.
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[1.0,)", null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleNoRepositoriesNoVersion),
+                java(GradleJava)
+              )
+            );
+        }
+    }
+
+    @Nested
+    class WhenResolvedVersionIsSourceOfTruth {
+
+        @Language("groovy")
+        private final static String GradleForcedOutOfRange = """
+          plugins {
+            id 'java-library'
+          }
+          repositories {
+            mavenCentral()
+          }
+          configurations.all {
+            resolutionStrategy {
+              force 'org.springframework:spring-beans:6.0.0'
+            }
+          }
+          dependencies {
+            implementation 'org.springframework:spring-beans:5.3.0'
+          }
+          """;
+
+        @Test
+        void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
+            // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleForcedOutOfRange),
+                java(GradleJava)
+              )
+            );
+        }
+
+        @Language("xml")
+        private final static String MavenBomManagedOutOfRange = """
+          <project>
+            <groupId>com.example</groupId>
+            <artifactId>foo</artifactId>
+            <version>1.0.0</version>
+            <dependencyManagement>
+              <dependencies>
+                <dependency>
+                  <groupId>org.springframework.boot</groupId>
+                  <artifactId>spring-boot-dependencies</artifactId>
+                  <version>3.0.0</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+                </dependency>
+              </dependencies>
+            </dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+              </dependency>
+            </dependencies>
+          </project>
+          """;
+
+        @Test
+        void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
+            // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
+              mavenProject("project-maven",
+                pomXml(MavenBomManagedOutOfRange),
+                java(MavenJava)
+              )
+            );
+        }
     }
 
 @Nested

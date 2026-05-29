@@ -15,12 +15,15 @@
  */
 package org.openrewrite.java.dependencies.search;
 
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
+import static org.openrewrite.java.Assertions.java;
 import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
 
@@ -81,6 +84,94 @@ class RepositoryHasDependencyTest implements RewriteTest {
                 </project>
                 """
             )
+          )
+        );
+    }
+
+    @Language("java")
+    private final static String GradleJava = """
+      public class AGradle {}
+      """;
+
+    @Test
+    void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
+        // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+          mavenProject("project-gradle",
+            //language=groovy
+            buildGradle("""
+              plugins {
+                id 'java-library'
+              }
+              repositories {
+                mavenCentral()
+              }
+              configurations.all {
+                resolutionStrategy {
+                  force 'org.springframework:spring-beans:6.0.0'
+                }
+              }
+              dependencies {
+                implementation 'org.springframework:spring-beans:5.3.0'
+              }
+              """),
+            java(GradleJava)
+          )
+        );
+    }
+
+    @Test
+    void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
+        // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+          mavenProject("project-maven",
+            //language=xml
+            pomXml("""
+              <project>
+                <groupId>com.example</groupId>
+                <artifactId>foo</artifactId>
+                <version>1.0.0</version>
+                <dependencyManagement>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-dependencies</artifactId>
+                      <version>3.0.0</version>
+                      <type>pom</type>
+                      <scope>import</scope>
+                    </dependency>
+                  </dependencies>
+                </dependencyManagement>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                  </dependency>
+                </dependencies>
+              </project>
+              """)
+          )
+        );
+    }
+
+    @Test
+    void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
+        // Force resolution failure (no repositories), so the requested fallback fires.
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[1.0,)")),
+          mavenProject("project-gradle",
+            //language=groovy
+            buildGradle("""
+              plugins {
+                id 'java-library'
+              }
+              dependencies {
+                implementation 'org.springframework:spring-beans'
+              }
+              """),
+            java(GradleJava)
           )
         );
     }

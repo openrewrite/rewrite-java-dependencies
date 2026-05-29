@@ -467,10 +467,7 @@ class ModuleHasDependencyTest implements RewriteTest {
 
         @Test
         void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
-            // Resolution fails (no repositories), so the requested fallback fires. The declared
-            // dependency omits a version (supplied elsewhere by a platform/constraint), so its
-            // requested version is null and must NOT match the supplied version constraint (same
-            // treatment as a ${...} property reference).
+            // Force resolution failure (no repositories), so the requested fallback fires.
             rewriteRun(
               spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[1.0,)", null)),
               mavenProject("project-gradle",
@@ -504,9 +501,7 @@ class ModuleHasDependencyTest implements RewriteTest {
 
         @Test
         void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
-            // Declared spring-beans 5.3.0 (in range), but resolutionStrategy forces resolved 6.0.0
-            // (out of range). The resolved version is the source of truth, so the declared-dependency
-            // fallback must be skipped for an already-resolved coordinate and [5.0,6.0) must NOT match.
+            // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
             rewriteRun(
               spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
               mavenProject("project-gradle",

@@ -9,3 +9,5 @@ bin/
 *.log
 advisory-database/
 oga-maven-plugin/
+
+.context/

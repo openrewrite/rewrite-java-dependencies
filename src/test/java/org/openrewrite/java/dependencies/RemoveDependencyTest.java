@@ -429,6 +429,95 @@ class RemoveDependencyTest implements RewriteTest {
         );
     }
 
+    @Test
+    void removeParentDependencyWhenChildSelfDeclaresAndUses() {
+        rewriteRun(
+          spec -> spec
+            .parser(JavaParser.fromJavaVersion().dependsOn(
+              //language=java
+              """
+                package org.springframework.retry.support;
+                public class RetryTemplate {
+                }
+                """
+            ))
+            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+          mavenProject("parent",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>parent</artifactId>
+                  <version>1</version>
+                  <packaging>pom</packaging>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.retry</groupId>
+                      <artifactId>spring-retry</artifactId>
+                      <version>2.0.0</version>
+                    </dependency>
+                  </dependencies>
+                  <modules>
+                    <module>child</module>
+                  </modules>
+                </project>
+                """,
+              """
+                <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>parent</artifactId>
+                  <version>1</version>
+                  <packaging>pom</packaging>
+                  <modules>
+                    <module>child</module>
+                  </modules>
+                </project>
+                """
+            ),
+            mavenProject("child",
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <parent>
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>parent</artifactId>
+                      <version>1</version>
+                    </parent>
+                    <artifactId>child</artifactId>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework.retry</groupId>
+                        <artifactId>spring-retry</artifactId>
+                        <version>2.0.0</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              ),
+              //language=java
+              srcMainJava(
+                java(
+                  """
+                    import org.springframework.retry.support.RetryTemplate;
+
+                    class RetryConfig {
+                        RetryTemplate retryTemplate() {
+                            return new RetryTemplate();
+                        }
+                    }
+                    """
+                )
+              )
+            )
+          )
+        );
+    }
+
     @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/11")
     @Test
     void doRemoveIfNotInUse() {

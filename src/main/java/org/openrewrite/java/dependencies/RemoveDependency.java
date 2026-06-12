@@ -21,11 +21,14 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.search.UsesType;
+import org.openrewrite.maven.tree.Dependency;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.openrewrite.internal.StringUtils.matchesGlob;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -136,16 +139,29 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
 
     /**
      * Keep this pom's `<dependency>` declaration if any descendant module in the reactor uses the
-     * `unlessUsing` type. A descendant whose Java sources reference the type may rely on this pom
-     * supplying the dependency via inheritance.
+     * `unlessUsing` type AND does not also declare the dependency itself. A descendant that
+     * self-declares the dependency in its own pom is unaffected by removing it from an ancestor,
+     * so it should not block removal.
      */
     private boolean anyDescendantPreservesDependency(MavenResolutionResult mrr, Accumulator acc) {
         for (MavenResolutionResult child : mrr.getModules()) {
             JavaProject childJp = acc.mavenIdToProject.get(child.getId());
-            if (childJp != null && Boolean.TRUE.equals(acc.projectToInUse.get(childJp))) {
+            if (childJp != null && Boolean.TRUE.equals(acc.projectToInUse.get(childJp)) && !declaresDependency(child)) {
                 return true;
             }
             if (anyDescendantPreservesDependency(child, acc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean declaresDependency(MavenResolutionResult mrr) {
+        // Look at the raw `requested` pom — the as-written `<dependencies>` of this module only,
+        // excluding inheritance from a parent pom. A module that inherits the dep from the parent
+        // we may be modifying should still block removal.
+        for (Dependency d : mrr.getPom().getRequested().getDependencies()) {
+            if (matchesGlob(d.getGroupId(), groupId) && matchesGlob(d.getArtifactId(), artifactId)) {
                 return true;
             }
         }

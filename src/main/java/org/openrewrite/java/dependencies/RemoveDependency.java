@@ -21,13 +21,15 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.search.UsesType;
+import org.openrewrite.maven.tree.MavenResolutionResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
-public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> {
+public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulator> {
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
@@ -68,13 +70,18 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
     String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
                "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
 
-    @Override
-    public Map<JavaProject, Boolean> getInitialValue(ExecutionContext ctx) {
-        return new HashMap<>();
+    public static class Accumulator {
+        final Map<JavaProject, Boolean> projectToInUse = new HashMap<>();
+        final Map<UUID, JavaProject> mavenIdToProject = new HashMap<>();
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(Map<JavaProject, Boolean> projectToInUse) {
+    public Accumulator getInitialValue(ExecutionContext ctx) {
+        return new Accumulator();
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
         if (unlessUsing == null) {
             return TreeVisitor.noop();
         }
@@ -83,15 +90,19 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
             @Override
             public Tree preVisit(Tree tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                tree.getMarkers().findFirst(JavaProject.class).ifPresent(javaProject ->
-                    projectToInUse.compute(javaProject, (jp, foundSoFar) -> Boolean.TRUE.equals(foundSoFar) || tree != usesType.visit(tree, ctx)));
+                tree.getMarkers().findFirst(JavaProject.class).ifPresent(javaProject -> {
+                    acc.projectToInUse.compute(javaProject, (jp, foundSoFar) ->
+                            Boolean.TRUE.equals(foundSoFar) || tree != usesType.visit(tree, ctx));
+                    tree.getMarkers().findFirst(MavenResolutionResult.class).ifPresent(mrr ->
+                            acc.mavenIdToProject.put(mrr.getId(), javaProject));
+                });
                 return tree;
             }
         };
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Map<JavaProject, Boolean> projectToInUse) {
+    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             final TreeVisitor<?, ExecutionContext> gradleRemoveDep = new org.openrewrite.gradle.RemoveDependency(groupId, artifactId, configuration).getVisitor();
             final TreeVisitor<?, ExecutionContext> mavenRemoveDep = new org.openrewrite.maven.RemoveDependency(groupId, artifactId, scope).getVisitor();
@@ -103,7 +114,11 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
                 }
                 if (unlessUsing != null) {
                     JavaProject jp = tree.getMarkers().findFirst(JavaProject.class).orElse(null);
-                    if (jp == null || Boolean.TRUE.equals(projectToInUse.get(jp))) {
+                    if (jp == null || Boolean.TRUE.equals(acc.projectToInUse.get(jp))) {
+                        return tree;
+                    }
+                    MavenResolutionResult mrr = tree.getMarkers().findFirst(MavenResolutionResult.class).orElse(null);
+                    if (mrr != null && anyDescendantPreservesDependency(mrr, acc)) {
                         return tree;
                     }
                 }
@@ -117,5 +132,23 @@ public class RemoveDependency extends ScanningRecipe<Map<JavaProject, Boolean>> 
                 return tree;
             }
         };
+    }
+
+    /**
+     * Keep this pom's `<dependency>` declaration if any descendant module in the reactor uses the
+     * `unlessUsing` type. A descendant whose Java sources reference the type may rely on this pom
+     * supplying the dependency via inheritance.
+     */
+    private boolean anyDescendantPreservesDependency(MavenResolutionResult mrr, Accumulator acc) {
+        for (MavenResolutionResult child : mrr.getModules()) {
+            JavaProject childJp = acc.mavenIdToProject.get(child.getId());
+            if (childJp != null && Boolean.TRUE.equals(acc.projectToInUse.get(childJp))) {
+                return true;
+            }
+            if (anyDescendantPreservesDependency(child, acc)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

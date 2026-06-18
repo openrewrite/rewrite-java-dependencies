@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,6 +24,7 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
@@ -139,12 +141,28 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
         };
     }
 
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.maven.UpgradeDependencyVersion> mavenDelegate = new AtomicReference<>();
+
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.gradle.UpgradeDependencyVersion> gradleDelegate = new AtomicReference<>();
+
     org.openrewrite.maven.UpgradeDependencyVersion getUpgradeMavenDependencyVersion() {
-        return new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
+        org.openrewrite.maven.UpgradeDependencyVersion recipe = mavenDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.maven.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern, overrideManagedVersion, retainVersions);
+            mavenDelegate.set(recipe);
+        }
+        return recipe;
     }
 
     public org.openrewrite.gradle.UpgradeDependencyVersion getUpgradeGradleDependencyVersion() {
-        return new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
+        org.openrewrite.gradle.UpgradeDependencyVersion recipe = gradleDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.gradle.UpgradeDependencyVersion(groupId, artifactId, newVersion, versionPattern);
+            gradleDelegate.set(recipe);
+        }
+        return recipe;
     }
 
     @Data

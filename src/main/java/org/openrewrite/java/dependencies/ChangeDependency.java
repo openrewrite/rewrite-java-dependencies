@@ -15,12 +15,15 @@
  */
 package org.openrewrite.java.dependencies;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
@@ -152,16 +155,32 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         };
     }
 
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId> mavenDelegate = new AtomicReference<>();
+
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.gradle.ChangeDependency> gradleDelegate = new AtomicReference<>();
+
     org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId getMavenChangeDependency() {
-        return new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
-                oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
+        org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId recipe = mavenDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
+                    oldGroupId, oldArtifactId, newGroupId, newArtifactId,
+                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
+            mavenDelegate.set(recipe);
+        }
+        return recipe;
     }
 
     org.openrewrite.gradle.ChangeDependency getGradleChangeDependency() {
-        return new org.openrewrite.gradle.ChangeDependency(
-                oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                newVersion, versionPattern, overrideManagedVersion, true);
+        org.openrewrite.gradle.ChangeDependency recipe = gradleDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.gradle.ChangeDependency(
+                    oldGroupId, oldArtifactId, newGroupId, newArtifactId,
+                    newVersion, versionPattern, overrideManagedVersion, true);
+            gradleDelegate.set(recipe);
+        }
+        return recipe;
     }
 
     @Data

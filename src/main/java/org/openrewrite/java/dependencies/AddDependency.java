@@ -15,11 +15,15 @@
  */
 package org.openrewrite.java.dependencies;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.tree.Scope;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -141,10 +145,13 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
+            final TreeVisitor<?, ExecutionContext> gradleAddDep = gradleAddDep().getScanner(acc.gradleAccumulator);
+            final TreeVisitor<?, ExecutionContext> mavenAddDep = mavenAddDep().getScanner(acc.mavenAccumulator);
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                gradleAddDep().getScanner(acc.gradleAccumulator).visit(tree, ctx);
-                mavenAddDep().getScanner(acc.mavenAccumulator).visit(tree, ctx);
+                gradleAddDep.visit(tree, ctx);
+                mavenAddDep.visit(tree, ctx);
                 return tree;
             }
         };
@@ -184,20 +191,36 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
         org.openrewrite.maven.AddDependency.Scanned mavenAccumulator;
     }
 
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.gradle.AddDependency> gradleDelegate = new AtomicReference<>();
+
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.maven.AddDependency> mavenDelegate = new AtomicReference<>();
+
     private org.openrewrite.gradle.AddDependency gradleAddDep() {
-        String configurationName = null;
-        if(configuration != null) {
-            configurationName = configuration;
-        } else if(scope != null) {
-            configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
+        org.openrewrite.gradle.AddDependency recipe = gradleDelegate.get();
+        if (recipe == null) {
+            String configurationName = null;
+            if(configuration != null) {
+                configurationName = configuration;
+            } else if(scope != null) {
+                configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
+            }
+            recipe = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
+                    configurationName, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
+            gradleDelegate.set(recipe);
         }
-        return new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
-                configurationName, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);
+        return recipe;
     }
 
     private org.openrewrite.maven.AddDependency mavenAddDep() {
-        return new org.openrewrite.maven.AddDependency(groupId, artifactId, version != null ? version : "latest.release",
-                versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
-                acceptTransitive);
+        org.openrewrite.maven.AddDependency recipe = mavenDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.maven.AddDependency(groupId, artifactId, version != null ? version : "latest.release",
+                    versionPattern, scope, releasesOnly, onlyIfUsing, type, classifier, optional, familyPattern,
+                    acceptTransitive);
+            mavenDelegate.set(recipe);
+        }
+        return recipe;
     }
 }

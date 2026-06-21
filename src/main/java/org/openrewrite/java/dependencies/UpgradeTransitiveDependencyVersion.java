@@ -15,11 +15,15 @@
  */
 package org.openrewrite.java.dependencies;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.AddManagedDependency;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -154,11 +158,27 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
         };
     }
 
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.gradle.UpgradeTransitiveDependencyVersion> gradleDelegate = new AtomicReference<>();
+
+    @Getter(AccessLevel.NONE)
+    private final transient AtomicReference<org.openrewrite.maven.UpgradeTransitiveDependencyVersion> mavenDelegate = new AtomicReference<>();
+
     private org.openrewrite.gradle.UpgradeTransitiveDependencyVersion getGradleUpgradeTransitive() {
-        return new org.openrewrite.gradle.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, versionPattern, because, null);
+        org.openrewrite.gradle.UpgradeTransitiveDependencyVersion recipe = gradleDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.gradle.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, versionPattern, because, null);
+            gradleDelegate.set(recipe);
+        }
+        return recipe;
     }
 
     private org.openrewrite.maven.UpgradeTransitiveDependencyVersion getMavenUpgradeTransitive() {
-        return new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, scope, type, classifier, versionPattern, releasesOnly, onlyIfUsing, addToRootPom, because);
+        org.openrewrite.maven.UpgradeTransitiveDependencyVersion recipe = mavenDelegate.get();
+        if (recipe == null) {
+            recipe = new org.openrewrite.maven.UpgradeTransitiveDependencyVersion(groupId, artifactId, version, scope, type, classifier, versionPattern, releasesOnly, onlyIfUsing, addToRootPom, because);
+            mavenDelegate.set(recipe);
+        }
+        return recipe;
     }
 }

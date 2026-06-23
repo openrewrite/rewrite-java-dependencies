@@ -151,6 +151,48 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
+        void findRelocatedIonJava() {
+            rewriteRun(
+              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+                new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java", null)
+              )),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>software.amazon.ion</groupId>
+                        <artifactId>ion-java</artifactId>
+                        <version>1.5.1</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """,
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <!--~~(Relocated to com.amazon.ion:ion-java)~~>--><dependency>
+                        <groupId>software.amazon.ion</groupId>
+                        <artifactId>ion-java</artifactId>
+                        <version>1.5.1</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Test
         void findRelocatedMavenPlugins() {
             rewriteRun(
               //language=xml

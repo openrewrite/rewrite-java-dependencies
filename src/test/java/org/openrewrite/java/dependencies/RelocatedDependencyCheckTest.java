@@ -154,7 +154,8 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         void findRelocatedIonJava() {
             rewriteRun(
               recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
-                new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java", null)
+                new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java",
+                  "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name \"com.amazon.ion\". The legacy \"software.amazon.ion\" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")
               )),
               //language=xml
               pomXml(
@@ -180,7 +181,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     <artifactId>rewrite-example</artifactId>
                     <version>1.0-SNAPSHOT</version>
                     <dependencies>
-                      <!--~~(Relocated to com.amazon.ion:ion-java)~~>--><dependency>
+                      <!--~~(Relocated to com.amazon.ion:ion-java as per "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name "com.amazon.ion". The legacy "software.amazon.ion" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")~~>--><dependency>
                         <groupId>software.amazon.ion</groupId>
                         <artifactId>ion-java</artifactId>
                         <version>1.5.1</version>

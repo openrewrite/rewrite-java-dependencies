@@ -312,6 +312,190 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
+    void keepsTomcatEmbedCoreWhenExclusionsDiffer() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>org.apache.tomcat</groupId>
+                          <artifactId>tomcat-embed-programmatic</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsTomcatEmbedCoreWhenDirectHasNoExclusions() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsDirectCompileJunitJupiterWhenTransitiveIsTestScoped() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-test</artifactId>
+                      <scope>test</scope>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsRuntimeTomcatEmbedCoreWhenTransitiveIsCompileScoped() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                      <scope>runtime</scope>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsDirectCompileTomcatEmbedCoreWhenProviderIsProvidedScoped() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                      <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
     void removeRedundantGradleDependency() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())

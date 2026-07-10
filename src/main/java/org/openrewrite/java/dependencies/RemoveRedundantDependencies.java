@@ -221,7 +221,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
 
                 for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                    Set<TransitiveDependency> transitives = getCompatibleTransitives(
+                    Set<TransitiveDependency> transitives = getCompatibleGradleTransitives(
                             scopeToTransitives, conf.getName());
                     if (transitives.isEmpty()) {
                         continue;
@@ -291,10 +291,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return false;
             }
 
-            /**
-             * Get Gradle transitives from this configuration and any broader ones.
-             */
-            private Set<TransitiveDependency> getCompatibleTransitives(
+            private Set<TransitiveDependency> getCompatibleGradleTransitives(
                     Map<String, Set<TransitiveDependency>> scopeToTransitives,
                     String targetScope) {
 

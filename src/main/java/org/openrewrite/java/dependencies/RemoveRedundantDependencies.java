@@ -60,11 +60,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
     }
 
-    /**
-     * A dependency provided transitively by a matched parent dependency, together with the exclusions
-     * that are already in effect for it along that transitive path. Both the coordinate and the
-     * exclusions must match a direct declaration for it to be considered redundant.
-     */
     @Value
     public static class TransitiveDependency {
         ResolvedGroupArtifactVersion gav;
@@ -205,73 +200,76 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     return tree;
                 }
 
-                SourceFile sf = (SourceFile) tree;
-                Tree result = sf;
-
-                // Handle Gradle
-                Optional<GradleProject> gradleOpt = sf.getMarkers().findFirst(GradleProject.class);
+                Optional<GradleProject> gradleOpt = tree.getMarkers().findFirst(GradleProject.class);
                 if (gradleOpt.isPresent()) {
                     GradleProject gradle = gradleOpt.get();
-                    String projectId = gradle.getGroup() + ":" + gradle.getName();
-                    Map<String, Set<TransitiveDependency>> scopeToTransitives =
-                            acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
+                    return handleGradle(ctx, gradle, tree);
+                }
 
-                    for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        Set<TransitiveDependency> transitives = getCompatibleTransitives(
-                                scopeToTransitives, conf.getName());
-                        if (transitives.isEmpty()) {
-                            continue;
+                Optional<MavenResolutionResult> mavenOpt = tree.getMarkers().findFirst(MavenResolutionResult.class);
+                if (mavenOpt.isPresent()) {
+                    MavenResolutionResult maven = mavenOpt.get();
+                    return handleMaven(ctx, maven, tree);
+                }
+
+                return tree;
+            }
+
+            private @Nullable Tree handleGradle(ExecutionContext ctx, GradleProject gradle, Tree result) {
+                String projectId = gradle.getGroup() + ":" + gradle.getName();
+                Map<String, Set<TransitiveDependency>> scopeToTransitives =
+                        acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
+
+                for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
+                    Set<TransitiveDependency> transitives = getCompatibleTransitives(
+                            scopeToTransitives, conf.getName());
+                    if (transitives.isEmpty()) {
+                        continue;
+                    }
+
+                    for (ResolvedDependency dep : conf.getResolved()) {
+                        if (dep.isDirect() &&
+                                doesNotMatchArguments(dep) &&
+                                isRedundant(dep, transitives)) {
+                            // This direct dependency is transitively provided, remove it
+                            // Don't specify configuration - Gradle's resolved config names differ from declaration names
+                            result = new RemoveDependency(
+                                    dep.getGroupId(), dep.getArtifactId(), null, null, null)
+                                    .getVisitor().visit(result, ctx);
                         }
+                    }
+                }
+                return result;
+            }
 
-                        for (ResolvedDependency dep : conf.getResolved()) {
-                            if (dep.isDirect() &&
-                                    doesNotMatchArguments(dep) &&
-                                    isRedundant(dep, transitives)) {
-                                // This direct dependency is transitively provided, remove it
-                                // Don't specify configuration - Gradle's resolved config names differ from declaration names
+            private @Nullable Tree handleMaven(ExecutionContext ctx, MavenResolutionResult maven, Tree result) {
+                String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
+                Map<String, Set<TransitiveDependency>> scopeToTransitives =
+                        acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
+
+                // A direct dependency appears under every scope bucket it is visible in; evaluate each
+                // one once using its own effective scope so a wider transitive scope does not falsely
+                // mark a narrower direct declaration as redundant.
+                Set<String> processed = new HashSet<>();
+                for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
+                    for (ResolvedDependency dep : deps) {
+                        if (dep.isDirect() &&
+                                doesNotMatchArguments(dep) &&
+                                processed.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
+                            Scope depScope = Scope.fromName(dep.getRequested().getScope());
+                            Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
+                                    depScope.name().toLowerCase(), emptySet());
+                            if (isRedundant(dep, transitives)) {
+                                // This direct dependency is transitively provided at the same scope and
+                                // with the same exclusions, remove it.
                                 result = new RemoveDependency(
-                                        dep.getGroupId(), dep.getArtifactId(), null, null, null)
+                                        dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
                             }
                         }
                     }
-                    return result;
                 }
-
-                // Handle Maven
-                Optional<MavenResolutionResult> mavenOpt = sf.getMarkers().findFirst(MavenResolutionResult.class);
-                if (mavenOpt.isPresent()) {
-                    MavenResolutionResult maven = mavenOpt.get();
-                    String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
-                    Map<String, Set<TransitiveDependency>> scopeToTransitives =
-                            acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
-
-                    // A direct dependency appears under every scope bucket it is visible in; evaluate each
-                    // one once using its own effective scope so a wider transitive scope does not falsely
-                    // mark a narrower direct declaration as redundant.
-                    Set<String> processed = new HashSet<>();
-                    for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
-                        for (ResolvedDependency dep : deps) {
-                            if (dep.isDirect() &&
-                                    doesNotMatchArguments(dep) &&
-                                    processed.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
-                                Scope depScope = Scope.fromName(dep.getRequested().getScope());
-                                Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
-                                        depScope.name().toLowerCase(), emptySet());
-                                if (isRedundant(dep, transitives)) {
-                                    // This direct dependency is transitively provided at the same scope and
-                                    // with the same exclusions, remove it.
-                                    result = new RemoveDependency(
-                                            dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
-                                            .getVisitor().visit(result, ctx);
-                                }
-                            }
-                        }
-                    }
-                    return result;
-                }
-
-                return tree;
+                return result;
             }
 
             private boolean doesNotMatchArguments(ResolvedDependency dep) {
@@ -279,11 +277,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                         !StringUtils.matchesGlob(dep.getArtifactId(), artifactId);
             }
 
-            /**
-             * A direct dependency is redundant only when a transitive one matches its coordinate exactly
-             * (group, artifact, version) and carries the same exclusions. Differing exclusions mean removing
-             * the direct declaration would change which transitive dependencies are pulled in.
-             */
             private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives) {
                 Set<GroupArtifact> depExclusions = new HashSet<>(dep.getEffectiveExclusions());
                 for (TransitiveDependency transitive : transitives) {

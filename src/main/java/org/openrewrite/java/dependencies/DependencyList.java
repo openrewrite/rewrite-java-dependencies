@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Collections.emptyMap;
+import static org.openrewrite.PathUtils.separatorsToUnix;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -89,6 +90,7 @@ public class DependencyList extends Recipe {
                 if (tree == null) {
                     return null;
                 }
+                String path = tree instanceof SourceFile ? separatorsToUnix(((SourceFile) tree).getSourcePath().toString()) : "";
                 Markers m = tree.getMarkers();
                 Set<ResolvedGroupArtifactVersion> seen = new HashSet<>();
                 m.findFirst(GradleProject.class)
@@ -100,7 +102,7 @@ public class DependencyList extends Recipe {
                                     if (dep.getDepth() > 0) {
                                         continue;
                                     }
-                                    insertDependency(ctx, gradle, seen, dep, true);
+                                    insertDependency(ctx, gradle, path, seen, dep, true);
                                 }
                             }
                         });
@@ -109,7 +111,7 @@ public class DependencyList extends Recipe {
                         if (dep.getDepth() > 0) {
                             continue;
                         }
-                        insertDependency(ctx, maven, seen, dep, true);
+                        insertDependency(ctx, maven, path, seen, dep, true);
                     }
                 });
                 return tree;
@@ -121,14 +123,13 @@ public class DependencyList extends Recipe {
         return scope == null ? Scope.Compile : scope;
     }
 
-    private void insertDependency(ExecutionContext ctx, GradleProject gradle, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
+    private void insertDependency(ExecutionContext ctx, GradleProject gradle, String path, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
         if (!seen.add(dep.getGav())) {
             return;
         }
         String resolutionFailure = "";
         if (validateResolvable) {
             try {
-                //noinspection DataFlowIssue
                 metadataFailures.insertRows(ctx, () -> new MavenPomDownloader(
                         emptyMap(), ctx,
                         null,
@@ -140,6 +141,7 @@ public class DependencyList extends Recipe {
         }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Gradle",
+                path,
                 gradle.getGroup(),
                 gradle.getName(),
                 gradle.getVersion(),
@@ -151,12 +153,12 @@ public class DependencyList extends Recipe {
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, gradle, seen, transitive, false);
+                insertDependency(ctx, gradle, path, seen, transitive, false);
             }
         }
     }
 
-    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
+    private void insertDependency(ExecutionContext ctx, MavenResolutionResult maven, String path, Set<ResolvedGroupArtifactVersion> seen, ResolvedDependency dep, boolean direct) {
         if (!seen.add(dep.getGav())) {
             return;
         }
@@ -180,6 +182,7 @@ public class DependencyList extends Recipe {
         }
         report.insertRow(ctx, new DependencyListReport.Row(
                 "Maven",
+                path,
                 maven.getPom().getGroupId(),
                 maven.getPom().getArtifactId(),
                 maven.getPom().getVersion(),
@@ -191,7 +194,7 @@ public class DependencyList extends Recipe {
         ));
         if (includeTransitive) {
             for (ResolvedDependency transitive : dep.getDependencies()) {
-                insertDependency(ctx, maven, seen, transitive, false);
+                insertDependency(ctx, maven, path, seen, transitive, false);
             }
         }
     }

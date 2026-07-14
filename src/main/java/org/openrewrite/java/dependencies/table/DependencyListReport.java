@@ -36,6 +36,10 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
                 description = "The build tool used to manage dependencies (Gradle or Maven).")
         String buildTool;
 
+        @Column(displayName = "Path",
+                description = "Path to the build file declaring the dependency")
+        String path;
+
         @Column(displayName = "Group id",
                 description = "The Group ID of the Gradle project or Maven module requesting the dependency.")
         String groupId;

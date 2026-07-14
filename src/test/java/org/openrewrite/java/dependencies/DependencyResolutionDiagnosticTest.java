@@ -91,7 +91,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                       url "https://nonexistent.moderne.io/maven2"
                   }
               }
-                          
+
               dependencies {
                   implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
               }
@@ -107,14 +107,12 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> spec.beforeRecipe(withToolingApi())
             // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
             // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
-            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows)
-                        .hasSize(2)
-                        .contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""))
-                        .contains(
-                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""));
-            }),
+            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> assertThat(rows)
+                    .hasSize(2)
+                    .contains(
+              new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""))
+                    .contains(
+              new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""))),
           //language=groovy
           buildGradle(
             """
@@ -126,7 +124,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                       url "https://nonexistent.moderne.io/maven2"
                   }
               }
-                          
+
               dependencies {
                   implementation("org.openrewrite.nonexistent:nonexistent:0.0.0")
               }
@@ -158,13 +156,11 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                   """.getBytes())), ctx);
               ctx.setMavenSettings(settings);
               spec.beforeRecipe(withToolingApi())
-                .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                    assertThat(rows)
-                            .contains(
-                      new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
-                    )
-                            .noneMatch(repo -> repo.getUri().contains("https://repo.maven.apache.org/maven2"));
-                })
+                .dataTable(RepositoryAccessibilityReport.Row.class, rows -> assertThat(rows)
+                        .contains(
+                  new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
+                )
+                        .noneMatch(repo -> repo.getUri().contains("https://repo.maven.apache.org/maven2")))
                 .executionContext(ctx);
           },
           //language=xml
@@ -189,15 +185,9 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               // nor the test's `nonexistent.moderne.io` repo appear in the diagnostic. Force empty settings
               // here so the recipe sees the pom-declared repositories directly.
               MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
-              MavenSettings emptySettings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
-                //language=xml
-                """
-                  <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
-                  """.getBytes())), ctx);
-              ctx.setMavenSettings(emptySettings);
-              spec.beforeRecipe(withToolingApi())
+              ctx.setMavenSettings(new MavenSettings(null, null, null, null, null, null));
+              spec
+                .executionContext(ctx)
                 .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                     assertThat(rows).contains(
                       new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
@@ -205,8 +195,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                     assertThat(rows).contains(
                       new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
                     );
-                })
-                .executionContext(ctx);
+                });
           },
           //language=xml
           pomXml(
@@ -215,7 +204,7 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
                   <groupId>com.example</groupId>
                   <artifactId>test</artifactId>
                   <version>0.1.0</version>
-                  
+
                   <repositories>
                       <repository>
                           <id>nonexistent</id>

@@ -93,12 +93,10 @@ class DependencyListTest implements RewriteTest {
         rewriteRun(
           spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false, false))
             .beforeRecipe(withToolingApi())
-            .dataTable(DependencyListReport.Row.class, rows -> {
-                assertThat(rows)
-                  .containsExactlyInAnyOrder(
-                    new DependencyListReport.Row("Gradle", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""),
-                    new DependencyListReport.Row("Maven", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""));
-            }),
+            .dataTable(DependencyListReport.Row.class, rows -> assertThat(rows)
+              .containsExactlyInAnyOrder(
+                new DependencyListReport.Row("Gradle", "build.gradle", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""),
+                new DependencyListReport.Row("Maven", "pom.xml", "com.test", "test", "1.0.0", "io.micrometer.prometheus", "prometheus-rsocket-client", "1.5.3", true, ""))),
           settingsGradle("rootProject.name = 'test'"),
           buildGradle(
             //language=groovy

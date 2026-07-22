@@ -74,6 +74,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
+            private final Map<ResolvedGroupArtifactVersion, Set<GroupArtifact>> closureCache = new HashMap<>();
+
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (tree == null) {
@@ -162,7 +164,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     // Collect all dependencies (both direct and transitive of the parent)
                     Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
                     for (ResolvedDependency dep : resolved) {
-                        collectAllDependencies(dep, transitives, visited);
+                        collectAllDependencies(dep, transitives, visited, effectiveRepos, downloader, ctx);
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
                     // If we can't download/resolve the POM, fall back to not detecting redundancies
@@ -180,11 +182,52 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                                Set<ResolvedGroupArtifactVersion> visited) {
+                                                Set<ResolvedGroupArtifactVersion> visited, List<MavenRepository> repositories,
+                                                MavenPomDownloader downloader, ExecutionContext ctx) {
                 if (visited.add(dep.getGav())) {
-                    transitives.add(new TransitiveDependency(dep.getGav(), new HashSet<>(dep.getEffectiveExclusions())));
+                    transitives.add(new TransitiveDependency(dep.getGav(),
+                            relevantExclusions(dep, repositories, downloader, ctx)));
                     for (ResolvedDependency transitive : dep.getDependencies()) {
-                        collectAllDependencies(transitive, transitives, visited);
+                        collectAllDependencies(transitive, transitives, visited, repositories, downloader, ctx);
+                    }
+                }
+            }
+
+            // A dependency's effective exclusions are resolved within the parent's whole tree, so they can
+            // be polluted by exclusions that other branches declare against artifacts this coordinate could
+            // never bring on its own (e.g. an optional dependency pruned elsewhere). Keep only the exclusions
+            // that target something in the coordinate's own dependency closure, so the comparison against a
+            // clean direct declaration is not thrown off by no-op exclusions.
+            private Set<GroupArtifact> relevantExclusions(ResolvedDependency dep, List<MavenRepository> repositories,
+                                                          MavenPomDownloader downloader, ExecutionContext ctx) {
+                Set<GroupArtifact> exclusions = new HashSet<>(dep.getEffectiveExclusions());
+                if (!exclusions.isEmpty()) {
+                    exclusions.retainAll(dependencyClosure(dep.getGav(), repositories, downloader, ctx));
+                }
+                return exclusions;
+            }
+
+            private Set<GroupArtifact> dependencyClosure(ResolvedGroupArtifactVersion gav, List<MavenRepository> repositories,
+                                                         MavenPomDownloader downloader, ExecutionContext ctx) {
+                return closureCache.computeIfAbsent(gav, g -> {
+                    Set<GroupArtifact> closure = new HashSet<>();
+                    try {
+                        Pom pom = downloader.download(g.asGroupArtifactVersion(), null, null, repositories);
+                        ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repositories, ctx);
+                        for (ResolvedDependency d : resolvedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
+                            collectClosure(d, closure);
+                        }
+                    } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
+                        // Best-effort: an unresolvable closure leaves the exclusions unfiltered
+                    }
+                    return closure;
+                });
+            }
+
+            private void collectClosure(ResolvedDependency dep, Set<GroupArtifact> closure) {
+                if (closure.add(dep.getGav().asGroupArtifact())) {
+                    for (ResolvedDependency transitive : dep.getDependencies()) {
+                        collectClosure(transitive, closure);
                     }
                 }
             }

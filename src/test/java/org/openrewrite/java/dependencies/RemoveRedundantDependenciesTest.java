@@ -496,6 +496,168 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
+    void removesJakartaClientWhenTransitiveExclusionsAreEquivalent() {
+        // Resolved within the starter's whole tree, the transitive jakarta.ws.rs-api gains a spurious
+        // effective exclusion of jakarta.activation-api (which it can never bring on its own), while the
+        // direct declaration has none; the two are effectively equivalent so the direct one is redundant.
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-jersey</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>jakarta.ws.rs</groupId>
+                      <artifactId>jakarta.ws.rs-api</artifactId>
+                      <version>3.1.0</version>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-jersey</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsJerseyClientWhenDirectExclusionsDifferFromTransitive() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-jersey</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.glassfish.jersey.core</groupId>
+                      <artifactId>jersey-client</artifactId>
+                      <version>3.1.5</version>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>jakarta.inject</groupId>
+                          <artifactId>jakarta.inject-api</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removesTomcatEmbedCoreWhenExclusionsMatchTransitive() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>org.apache.tomcat</groupId>
+                          <artifactId>tomcat-annotations-api</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
     void removeRedundantGradleDependency() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())

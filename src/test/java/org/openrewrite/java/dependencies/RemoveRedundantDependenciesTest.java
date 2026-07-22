@@ -497,9 +497,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
 
     @Test
     void removesJakartaClientWhenTransitiveExclusionsAreEquivalent() {
-        // Resolved within the starter's whole tree, the transitive jakarta.ws.rs-api gains a spurious
-        // effective exclusion of jakarta.activation-api (which it can never bring on its own), while the
-        // direct declaration has none; the two are effectively equivalent so the direct one is redundant.
+        // In the starter's tree the transitive jakarta.ws.rs-api gains a spurious exclusion of
+        // jakarta.activation-api (which it can never bring on its own); the direct declaration has none,
+        // so the two are effectively equivalent and the direct one is redundant.
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
             "org.springframework.boot", "spring-boot-starter-*")),

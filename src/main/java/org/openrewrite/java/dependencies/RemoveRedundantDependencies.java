@@ -58,6 +58,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     public static class Accumulator {
         // Map from project identifier -> scope/configuration -> Set of transitive dependencies
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
+        // Cache of each coordinate's own clean dependency closure, shared across all source files in the run
+        Map<ResolvedGroupArtifactVersion, Set<GroupArtifact>> closureCache;
     }
 
     @Value
@@ -68,14 +70,12 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
-        return new Accumulator(new HashMap<>());
+        return new Accumulator(new HashMap<>(), new HashMap<>());
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            private final Map<ResolvedGroupArtifactVersion, Set<GroupArtifact>> closureCache = new HashMap<>();
-
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (tree == null) {
@@ -147,17 +147,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     MavenPomDownloader downloader,
                     ExecutionContext ctx,
                     Set<TransitiveDependency> transitives) {
+                List<MavenRepository> effectiveRepos = withMavenCentral(repositories);
                 try {
-                    // Ensure we have Maven Central in the repositories
-                    List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
-                    if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
-                            r.getUri().contains("repo1.maven.org"))) {
-                        effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
-                    }
-
                     // Get the resolved dependencies for compile scope (which includes most transitives)
-                    Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, effectiveRepos);
-                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, effectiveRepos, ctx);
+                    ResolvedPom resolvedPom = resolvePom(gav, effectiveRepos, downloader, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
                     List<ResolvedDependency> resolved = patchedPom.resolveDependencies(Scope.Compile, downloader, ctx);
 
@@ -193,11 +186,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
             }
 
-            // A dependency's effective exclusions are resolved within the parent's whole tree, so they can
-            // be polluted by exclusions that other branches declare against artifacts this coordinate could
-            // never bring on its own (e.g. an optional dependency pruned elsewhere). Keep only the exclusions
-            // that target something in the coordinate's own dependency closure, so the comparison against a
-            // clean direct declaration is not thrown off by no-op exclusions.
+            // Effective exclusions are resolved in the parent's whole tree, so they pick up no-op exclusions
+            // from sibling branches; keep only those targeting this coordinate's own dependency closure.
             private Set<GroupArtifact> relevantExclusions(ResolvedDependency dep, List<MavenRepository> repositories,
                                                           MavenPomDownloader downloader, ExecutionContext ctx) {
                 Set<GroupArtifact> exclusions = new HashSet<>(dep.getEffectiveExclusions());
@@ -209,12 +199,11 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
             private Set<GroupArtifact> dependencyClosure(ResolvedGroupArtifactVersion gav, List<MavenRepository> repositories,
                                                          MavenPomDownloader downloader, ExecutionContext ctx) {
-                return closureCache.computeIfAbsent(gav, g -> {
+                return acc.closureCache.computeIfAbsent(gav, g -> {
                     Set<GroupArtifact> closure = new HashSet<>();
                     try {
-                        Pom pom = downloader.download(g.asGroupArtifactVersion(), null, null, repositories);
-                        ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repositories, ctx);
-                        for (ResolvedDependency d : resolvedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
+                        for (ResolvedDependency d : resolvePom(g, repositories, downloader, ctx)
+                                .resolveDependencies(Scope.Compile, downloader, ctx)) {
                             collectClosure(d, closure);
                         }
                     } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
@@ -222,6 +211,23 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     }
                     return closure;
                 });
+            }
+
+            private ResolvedPom resolvePom(ResolvedGroupArtifactVersion gav, List<MavenRepository> repositories,
+                                           MavenPomDownloader downloader, ExecutionContext ctx)
+                    throws MavenDownloadingException, MavenDownloadingExceptions {
+                List<MavenRepository> repos = withMavenCentral(repositories);
+                Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, repos);
+                return pom.resolve(emptyList(), downloader, repos, ctx);
+            }
+
+            private List<MavenRepository> withMavenCentral(List<MavenRepository> repositories) {
+                List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
+                if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
+                        r.getUri().contains("repo1.maven.org"))) {
+                    effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
+                }
+                return effectiveRepos;
             }
 
             private void collectClosure(ResolvedDependency dep, Set<GroupArtifact> closure) {

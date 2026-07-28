@@ -181,8 +181,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     // corrupted by dependency mediation, as an artifact excluded here may already have been pruned by a shared
     // node elsewhere, in which case the exclusion never fires and drops out of getEffectiveExclusions().
     private static Set<GroupArtifact> declaredExclusions(ResolvedDependency dep) {
-        Dependency requested = dep.getRequested();
-        List<GroupArtifact> exclusions = requested == null ? null : requested.getExclusions();
+        List<GroupArtifact> exclusions = dep.getRequested().getExclusions();
         return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
     }
 

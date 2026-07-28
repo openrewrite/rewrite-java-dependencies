@@ -89,7 +89,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     }
 
     @Language("java")
-    private final static String GradleJava = """
+    private static final String GradleJava = """
       public class AGradle {}
       """;
 

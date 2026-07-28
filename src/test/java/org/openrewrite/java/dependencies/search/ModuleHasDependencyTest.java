@@ -39,24 +39,24 @@ import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class ModuleHasDependencyTest implements RewriteTest {
-    private final static String GroupId = "org.springframework";
-    private final static String ArtifactId = "spring-beans";
+    private static final String GroupId = "org.springframework";
+    private static final String ArtifactId = "spring-beans";
 
-    private final static String PositiveSub = "(Module has dependency: %1$s:%2$s)~~";
-    private final static String NegativeSub = "(Module does not have dependency: %1$s:%2$s)~~";
-    private final static String NegativeVacuousSub = "(No module, so vacuously does not have dependency: %1$s:%2$s)~~";
-    private final static String JavaMarkerBase = "/*~~%s>*/";
-    private final static String JavaMarkerPositive = JavaMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
-    private final static String JavaMarkerNegative = JavaMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
-    private final static String JavaMarkerNegativeVacuous = JavaMarkerBase.formatted(NegativeVacuousSub.formatted(GroupId, ArtifactId));
-    private final static String GradleMarkerPositive = JavaMarkerPositive;
-    private final static String GradleMarkerNegative = JavaMarkerNegative;
-    private final static String MavenMarkerBase = "<!--~~%s>-->";
-    private final static String MavenMarkerPositive = MavenMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
-    private final static String MavenMarkerNegative = MavenMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
+    private static final String PositiveSub = "(Module has dependency: %1$s:%2$s)~~";
+    private static final String NegativeSub = "(Module does not have dependency: %1$s:%2$s)~~";
+    private static final String NegativeVacuousSub = "(No module, so vacuously does not have dependency: %1$s:%2$s)~~";
+    private static final String JavaMarkerBase = "/*~~%s>*/";
+    private static final String JavaMarkerPositive = JavaMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
+    private static final String JavaMarkerNegative = JavaMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
+    private static final String JavaMarkerNegativeVacuous = JavaMarkerBase.formatted(NegativeVacuousSub.formatted(GroupId, ArtifactId));
+    private static final String GradleMarkerPositive = JavaMarkerPositive;
+    private static final String GradleMarkerNegative = JavaMarkerNegative;
+    private static final String MavenMarkerBase = "<!--~~%s>-->";
+    private static final String MavenMarkerPositive = MavenMarkerBase.formatted(PositiveSub.formatted(GroupId, ArtifactId));
+    private static final String MavenMarkerNegative = MavenMarkerBase.formatted(NegativeSub.formatted(GroupId, ArtifactId));
 
     @Language("groovy")
-    private final static String GradleNone = """
+    private static final String GradleNone = """
       plugins {
         id 'java-library'
       }
@@ -66,7 +66,7 @@ class ModuleHasDependencyTest implements RewriteTest {
       """;
 
     @Language("xml")
-    private final static String MavenNone = """
+    private static final String MavenNone = """
       <project>
         <groupId>com.example</groupId>
         <artifactId>foo</artifactId>
@@ -75,7 +75,7 @@ class ModuleHasDependencyTest implements RewriteTest {
       """;
 
     @Language("groovy")
-    private final static String GradleDirect = """
+    private static final String GradleDirect = """
       plugins {
         id 'java-library'
       }
@@ -88,7 +88,7 @@ class ModuleHasDependencyTest implements RewriteTest {
       """;
 
     @Language("xml")
-    private final static String MavenDirect = """
+    private static final String MavenDirect = """
       <project>
         <groupId>com.example</groupId>
         <artifactId>foo</artifactId>
@@ -104,7 +104,7 @@ class ModuleHasDependencyTest implements RewriteTest {
       """;
 
     @Language("groovy")
-    private final static String GradleTransitive = """
+    private static final String GradleTransitive = """
       plugins {
         id 'java-library'
       }
@@ -117,7 +117,7 @@ class ModuleHasDependencyTest implements RewriteTest {
       """;
 
     @Language("xml")
-    private final static String MavenTransitive = """
+    private static final String MavenTransitive = """
       <project>
         <groupId>com.example</groupId>
         <artifactId>foo</artifactId>
@@ -134,12 +134,12 @@ class ModuleHasDependencyTest implements RewriteTest {
 
 
     @Language("java")
-    private final static String GradleJava = """
+    private static final String GradleJava = """
       public class AGradle {}
       """;
 
     @Language("java")
-    private final static String MavenJava = """
+    private static final String MavenJava = """
       public class AMaven {}
       """;
 
@@ -357,7 +357,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     class WhenDependencyIsRequestedButNotResolved {
 
         @Language("groovy")
-        private final static String GradleNoRepositories = """
+        private static final String GradleNoRepositories = """
           plugins {
             id 'java-library'
           }
@@ -367,7 +367,7 @@ class ModuleHasDependencyTest implements RewriteTest {
           """;
 
         @Language("xml")
-        private final static String MavenNoRepositories = """
+        private static final String MavenNoRepositories = """
           <project>
             <groupId>com.example</groupId>
             <artifactId>foo</artifactId>
@@ -456,7 +456,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         }
 
         @Language("groovy")
-        private final static String GradleNoRepositoriesNoVersion = """
+        private static final String GradleNoRepositoriesNoVersion = """
           plugins {
             id 'java-library'
           }
@@ -482,7 +482,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     class WhenResolvedVersionIsSourceOfTruth {
 
         @Language("groovy")
-        private final static String GradleForcedOutOfRange = """
+        private static final String GradleForcedOutOfRange = """
           plugins {
             id 'java-library'
           }
@@ -512,7 +512,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         }
 
         @Language("xml")
-        private final static String MavenBomManagedOutOfRange = """
+        private static final String MavenBomManagedOutOfRange = """
           <project>
             <groupId>com.example</groupId>
             <artifactId>foo</artifactId>

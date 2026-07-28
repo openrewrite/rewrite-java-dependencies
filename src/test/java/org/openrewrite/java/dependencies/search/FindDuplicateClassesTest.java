@@ -68,7 +68,7 @@ class FindDuplicateClassesTest {
                     }
                 }
                 """)
-            .<SourceFile>map(sf -> sf.withMarkers(sf.getMarkers()
+            .map(sf -> sf.withMarkers(sf.getMarkers()
                 .add(sourceSet)
                 .add(new JavaProject(Tree.randomId(), "test-project", null))))
             .toList();

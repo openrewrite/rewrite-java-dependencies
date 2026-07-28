@@ -59,8 +59,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     public static class Accumulator {
         // Map from project identifier -> scope/configuration -> Set of transitive dependencies
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
-        // Run-scoped: every closure miss costs a POM download and resolve
-        Map<GroupArtifactVersion, Set<GroupArtifact>> closureCache;
+        // Map from coordinate -> group:artifacts it pulls in on its own, at compile scope and versionless
+        // because exclusions match on group:artifact. Run-scoped, as every miss costs a POM download.
+        Map<GroupArtifactVersion, Set<GroupArtifact>> compileClosureByGav;
     }
 
     @Value
@@ -271,7 +272,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = gradle.getGroup() + ":" + gradle.getName();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
-                ClosureResolver resolver = new ClosureResolver(gradle.getMavenRepositories(), ctx, acc.closureCache);
+                ClosureResolver resolver = new ClosureResolver(gradle.getMavenRepositories(), ctx, acc.compileClosureByGav);
 
                 for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
                     Set<TransitiveDependency> transitives = getCompatibleGradleTransitives(
@@ -299,7 +300,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
-                ClosureResolver resolver = new ClosureResolver(maven.getPom().getRepositories(), ctx, acc.closureCache);
+                ClosureResolver resolver = new ClosureResolver(maven.getPom().getRepositories(), ctx, acc.compileClosureByGav);
 
                 // A direct dependency appears under every scope bucket it is visible in; evaluate each
                 // one once using its own effective scope so a wider transitive scope does not falsely

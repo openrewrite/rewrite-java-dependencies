@@ -29,7 +29,6 @@ import org.openrewrite.maven.internal.MavenPomDownloader;
 import org.openrewrite.maven.tree.*;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static java.util.Collections.*;
 
@@ -53,15 +52,12 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
                 "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared. " +
                 "A direct dependency is only removed when the transitive one provides it at the exact same scope and " +
-                "with equivalent exclusions, so that removing it does not change the effective classpath.";
+                "with the same declared exclusions, so that removing it does not change the effective classpath.";
 
     @Value
     public static class Accumulator {
         // Map from project identifier -> scope/configuration -> Set of transitive dependencies
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
-        // Map from coordinate -> group:artifacts it pulls in on its own, at compile scope and versionless
-        // because exclusions match on group:artifact. Run-scoped, as every miss costs a POM download.
-        Map<GroupArtifactVersion, Set<GroupArtifact>> compileClosureByGav;
     }
 
     @Value
@@ -72,7 +68,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
-        return new Accumulator(new HashMap<>(), new HashMap<>());
+        return new Accumulator(new HashMap<>());
     }
 
     @Override
@@ -149,17 +145,17 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     MavenPomDownloader downloader,
                     ExecutionContext ctx,
                     Set<TransitiveDependency> transitives) {
+                List<MavenRepository> repos = withMavenCentral(repositories);
                 try {
                     // Get the resolved dependencies for compile scope (which includes most transitives)
-                    ResolvedPom resolvedPom = resolvePom(
-                            gav.asGroupArtifactVersion(), withMavenCentral(repositories), downloader, ctx);
+                    Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, repos);
+                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
 
                     // Collect all dependencies (both direct and transitive of the parent)
                     Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
                     for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
-                        walkDependencies(dep, visited, d ->
-                                transitives.add(new TransitiveDependency(d.getGav(), declaredExclusions(d))));
+                        collectAllDependencies(dep, transitives, visited);
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
                     // If we can't download/resolve the POM, fall back to not detecting redundancies
@@ -175,6 +171,16 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                         .anyMatch(e -> e.getGroupId().equals(d.getGroupId()) && e.getArtifactId().equals(d.getArtifactId())));
                 return patchedPom;
             }
+
+            private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
+                                                Set<ResolvedGroupArtifactVersion> visited) {
+                if (visited.add(dep.getGav())) {
+                    transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep)));
+                    for (ResolvedDependency transitive : dep.getDependencies()) {
+                        collectAllDependencies(transitive, transitives, visited);
+                    }
+                }
+            }
         };
     }
 
@@ -186,22 +192,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
     }
 
-    private static void walkDependencies(ResolvedDependency dep, Set<ResolvedGroupArtifactVersion> visited,
-                                         Consumer<ResolvedDependency> action) {
-        if (visited.add(dep.getGav())) {
-            action.accept(dep);
-            for (ResolvedDependency transitive : dep.getDependencies()) {
-                walkDependencies(transitive, visited, action);
-            }
-        }
-    }
-
-    private static ResolvedPom resolvePom(GroupArtifactVersion gav, List<MavenRepository> repos,
-                                          MavenPomDownloader downloader, ExecutionContext ctx)
-            throws MavenDownloadingException, MavenDownloadingExceptions {
-        return downloader.download(gav, null, null, repos).resolve(emptyList(), downloader, repos, ctx);
-    }
-
     private static List<MavenRepository> withMavenCentral(List<MavenRepository> repositories) {
         List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
         if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
@@ -209,39 +199,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
         }
         return effectiveRepos;
-    }
-
-    // Resolves what a coordinate can bring in on its own, so that exclusions targeting artifacts it could never
-    // have brought can be discarded before comparing two declarations.
-    private static class ClosureResolver {
-        private final List<MavenRepository> repositories;
-        private final MavenPomDownloader downloader;
-        private final ExecutionContext ctx;
-        private final Map<GroupArtifactVersion, Set<GroupArtifact>> cache;
-
-        private ClosureResolver(List<MavenRepository> repositories, ExecutionContext ctx,
-                                Map<GroupArtifactVersion, Set<GroupArtifact>> cache) {
-            this.repositories = withMavenCentral(repositories);
-            this.downloader = new MavenPomDownloader(ctx);
-            this.ctx = ctx;
-            this.cache = cache;
-        }
-
-        private Set<GroupArtifact> closureOf(GroupArtifactVersion gav) {
-            return cache.computeIfAbsent(gav, g -> {
-                Set<GroupArtifact> closure = new HashSet<>();
-                Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
-                try {
-                    for (ResolvedDependency d : resolvePom(g, repositories, downloader, ctx)
-                            .resolveDependencies(Scope.Compile, downloader, ctx)) {
-                        walkDependencies(d, visited, r -> closure.add(r.getGav().asGroupArtifact()));
-                    }
-                } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
-                    // Best-effort: an empty closure makes every exclusion look like a no-op
-                }
-                return closure;
-            });
-        }
     }
 
     @Override
@@ -272,7 +229,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = gradle.getGroup() + ":" + gradle.getName();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
-                ClosureResolver resolver = new ClosureResolver(gradle.getMavenRepositories(), ctx, acc.compileClosureByGav);
 
                 for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
                     Set<TransitiveDependency> transitives = getCompatibleGradleTransitives(
@@ -284,7 +240,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     for (ResolvedDependency dep : conf.getResolved()) {
                         if (dep.isDirect() &&
                                 doesNotMatchArguments(dep) &&
-                                isRedundant(dep, transitives, resolver)) {
+                                isRedundant(dep, transitives)) {
                             // This direct dependency is transitively provided, remove it
                             // Don't specify configuration - Gradle's resolved config names differ from declaration names
                             result = new RemoveDependency(
@@ -300,7 +256,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
-                ClosureResolver resolver = new ClosureResolver(maven.getPom().getRepositories(), ctx, acc.compileClosureByGav);
 
                 // A direct dependency appears under every scope bucket it is visible in; evaluate each
                 // one once using its own effective scope so a wider transitive scope does not falsely
@@ -314,7 +269,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Scope depScope = Scope.fromName(dep.getRequested().getScope());
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
-                            if (isRedundant(dep, transitives, resolver)) {
+                            if (isRedundant(dep, transitives)) {
                                 // This direct dependency is transitively provided at the same scope and
                                 // with the same exclusions, remove it.
                                 result = new RemoveDependency(
@@ -332,37 +287,18 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                         !StringUtils.matchesGlob(dep.getArtifactId(), artifactId);
             }
 
-            private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                        ClosureResolver resolver) {
+            private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives) {
                 Set<GroupArtifact> depExclusions = declaredExclusions(dep);
-                Set<GroupArtifact> closure = null;
                 for (TransitiveDependency transitive : transitives) {
                     ResolvedGroupArtifactVersion gav = transitive.getGav();
                     if (dep.getGroupId().equals(gav.getGroupId()) &&
                             dep.getArtifactId().equals(gav.getArtifactId()) &&
-                            dep.getVersion().equals(gav.getVersion())) {
-                        if (depExclusions.equals(transitive.getExclusions())) {
-                            return true;
-                        }
-                        // Differing declarations can still be equivalent once exclusions that the coordinate
-                        // could never have honoured anyway are discarded. Both sides share one closure, and
-                        // every candidate here has the same coordinate, so this resolves at most once.
-                        if (closure == null) {
-                            closure = resolver.closureOf(gav.asGroupArtifactVersion());
-                        }
-                        if (retainClosure(depExclusions, closure).equals(
-                                retainClosure(transitive.getExclusions(), closure))) {
-                            return true;
-                        }
+                            dep.getVersion().equals(gav.getVersion()) &&
+                            depExclusions.equals(transitive.getExclusions())) {
+                        return true;
                     }
                 }
                 return false;
-            }
-
-            private Set<GroupArtifact> retainClosure(Set<GroupArtifact> exclusions, Set<GroupArtifact> closure) {
-                Set<GroupArtifact> relevant = new HashSet<>(exclusions);
-                relevant.retainAll(closure);
-                return relevant;
             }
 
             private Set<TransitiveDependency> getCompatibleGradleTransitives(

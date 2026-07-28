@@ -497,10 +497,12 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
-    void removesJakartaClientWhenTransitiveExclusionsAreEquivalent() {
-        // In the starter's tree the transitive jakarta.ws.rs-api gains a spurious exclusion of
-        // jakarta.activation-api (which it can never bring on its own); the direct declaration has none,
-        // so the two are effectively equivalent and the direct one is redundant.
+    void keepsJakartaClientWhenTransitiveInheritsUnrelatedExclusions() {
+        // Known conservative limitation: resolution propagates ancestor exclusions into each transitive's
+        // requested dependency, so the transitive jakarta.ws.rs-api carries an inherited jakarta.activation-api
+        // exclusion it could never have honoured, while the direct declaration carries none. Removing this
+        // would in fact be safe, but telling that apart requires resolving the coordinate's own closure, so
+        // the recipe keeps the dependency rather than risk an unsafe removal.
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(
             "org.springframework.boot", "spring-boot-starter-*")),
@@ -527,26 +529,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                       <groupId>jakarta.ws.rs</groupId>
                       <artifactId>jakarta.ws.rs-api</artifactId>
                       <version>3.1.0</version>
-                    </dependency>
-                  </dependencies>
-              </project>
-              """,
-            """
-              <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>com.sample</groupId>
-                  <artifactId>sample</artifactId>
-                  <version>1.0-SNAPSHOT</version>
-                  <parent>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-parent</artifactId>
-                    <version>3.2.3</version>
-                    <relativePath/>
-                  </parent>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.boot</groupId>
-                      <artifactId>spring-boot-starter-jersey</artifactId>
                     </dependency>
                   </dependencies>
               </project>

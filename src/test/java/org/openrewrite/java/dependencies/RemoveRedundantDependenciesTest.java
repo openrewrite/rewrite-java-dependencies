@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.Issue;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -487,6 +488,254 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     <dependency>
                       <groupId>org.apache.tomcat.embed</groupId>
                       <artifactId>tomcat-embed-core</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsJakartaClientWhenTransitiveInheritsUnrelatedExclusions() {
+        // Known conservative limitation: resolution propagates ancestor exclusions into each transitive's
+        // requested dependency, so the transitive jakarta.ws.rs-api carries an inherited jakarta.activation-api
+        // exclusion it could never have honoured, while the direct declaration carries none. Removing this
+        // would in fact be safe, but telling that apart requires resolving the coordinate's own closure, so
+        // the recipe keeps the dependency rather than risk an unsafe removal.
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-jersey</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>jakarta.ws.rs</groupId>
+                      <artifactId>jakarta.ws.rs-api</artifactId>
+                      <version>3.1.0</version>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void keepsJerseyClientWhenDirectExclusionsDifferFromTransitive() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-jersey</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.glassfish.jersey.core</groupId>
+                      <artifactId>jersey-client</artifactId>
+                      <version>3.1.5</version>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>jakarta.inject</groupId>
+                          <artifactId>jakarta.inject-api</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removesTomcatEmbedCoreWhenExclusionsMatchTransitive() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-core</artifactId>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>org.apache.tomcat</groupId>
+                          <artifactId>tomcat-annotations-api</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Issue("https://github.com/openrewrite/rewrite/issues/8336")
+    @Test
+    void keepsWebsocketWhenDirectHasNoExclusionButTransitiveDoes() {
+        // spring-boot-starter-tomcat excludes tomcat-annotations-api from tomcat-embed-websocket, which still
+        // brings its own tomcat-embed-core. A direct websocket with no exclusion is therefore NOT equivalent to
+        // the transitively-provided one and must be kept, even though websocket's effective-exclusion set is
+        // emptied by mediation (annotations-api is pruned at the shared embed-core node first).
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-web")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-websocket</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Issue("https://github.com/openrewrite/rewrite/issues/8336")
+    @Test
+    void removesWebsocketWhenDirectRepeatsTheTransitiveExclusion() {
+        // The mirror image: a direct websocket that repeats the same tomcat-annotations-api exclusion the
+        // starter applies is truly equivalent to the transitively-provided one and should be removed.
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-web")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.apache.tomcat.embed</groupId>
+                      <artifactId>tomcat-embed-websocket</artifactId>
+                      <exclusions>
+                        <exclusion>
+                          <groupId>org.apache.tomcat</groupId>
+                          <artifactId>tomcat-annotations-api</artifactId>
+                        </exclusion>
+                      </exclusions>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
                     </dependency>
                   </dependencies>
               </project>

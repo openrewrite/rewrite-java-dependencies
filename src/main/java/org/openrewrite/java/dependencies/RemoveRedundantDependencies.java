@@ -52,7 +52,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
                 "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared. " +
                 "A direct dependency is only removed when the transitive one provides it at the exact same scope and " +
-                "with the same exclusions, so that removing it does not change the effective classpath.";
+                "with the same declared exclusions, so that removing it does not change the effective classpath.";
 
     @Value
     public static class Accumulator {
@@ -145,23 +145,16 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     MavenPomDownloader downloader,
                     ExecutionContext ctx,
                     Set<TransitiveDependency> transitives) {
+                List<MavenRepository> repos = withMavenCentral(repositories);
                 try {
-                    // Ensure we have Maven Central in the repositories
-                    List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
-                    if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
-                            r.getUri().contains("repo1.maven.org"))) {
-                        effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
-                    }
-
                     // Get the resolved dependencies for compile scope (which includes most transitives)
-                    Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, effectiveRepos);
-                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, effectiveRepos, ctx);
+                    Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, repos);
+                    ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
-                    List<ResolvedDependency> resolved = patchedPom.resolveDependencies(Scope.Compile, downloader, ctx);
 
                     // Collect all dependencies (both direct and transitive of the parent)
                     Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
-                    for (ResolvedDependency dep : resolved) {
+                    for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
                         collectAllDependencies(dep, transitives, visited);
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
@@ -182,13 +175,30 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
                                                 Set<ResolvedGroupArtifactVersion> visited) {
                 if (visited.add(dep.getGav())) {
-                    transitives.add(new TransitiveDependency(dep.getGav(), new HashSet<>(dep.getEffectiveExclusions())));
+                    transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep)));
                     for (ResolvedDependency transitive : dep.getDependencies()) {
                         collectAllDependencies(transitive, transitives, visited);
                     }
                 }
             }
         };
+    }
+
+    // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is
+    // corrupted by dependency mediation, as an artifact excluded here may already have been pruned by a shared
+    // node elsewhere, in which case the exclusion never fires and drops out of getEffectiveExclusions().
+    private static Set<GroupArtifact> declaredExclusions(ResolvedDependency dep) {
+        List<GroupArtifact> exclusions = dep.getRequested().getExclusions();
+        return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
+    }
+
+    private static List<MavenRepository> withMavenCentral(List<MavenRepository> repositories) {
+        List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
+        if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
+                r.getUri().contains("repo1.maven.org"))) {
+            effectiveRepos.add(MavenRepository.MAVEN_CENTRAL);
+        }
+        return effectiveRepos;
     }
 
     @Override
@@ -278,7 +288,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives) {
-                Set<GroupArtifact> depExclusions = new HashSet<>(dep.getEffectiveExclusions());
+                Set<GroupArtifact> depExclusions = declaredExclusions(dep);
                 for (TransitiveDependency transitive : transitives) {
                     ResolvedGroupArtifactVersion gav = transitive.getGav();
                     if (dep.getGroupId().equals(gav.getGroupId()) &&

@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.Issue;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -657,9 +658,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    @Issue("https://github.com/openrewrite/rewrite/issues/8336")
     @Test
     void keepsWebsocketWhenDirectHasNoExclusionButTransitiveDoes() {
-        // https://github.com/openrewrite/rewrite/issues/8336
         // spring-boot-starter-tomcat excludes tomcat-annotations-api from tomcat-embed-websocket, which still
         // brings its own tomcat-embed-core. A direct websocket with no exclusion is therefore NOT equivalent to
         // the transitively-provided one and must be kept, even though websocket's effective-exclusion set is
@@ -697,9 +698,9 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    @Issue("https://github.com/openrewrite/rewrite/issues/8336")
     @Test
     void removesWebsocketWhenDirectRepeatsTheTransitiveExclusion() {
-        // https://github.com/openrewrite/rewrite/issues/8336
         // The mirror image: a direct websocket that repeats the same tomcat-annotations-api exclusion the
         // starter applies is truly equivalent to the transitively-provided one and should be removed.
         rewriteRun(

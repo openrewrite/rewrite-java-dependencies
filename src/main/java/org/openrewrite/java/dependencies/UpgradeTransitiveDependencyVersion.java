@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.maven.AddManagedDependency;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -110,7 +109,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
 
     @Value
     public static class Accumulator {
-        AddManagedDependency.Scanned mavenAccumulator;
+        org.openrewrite.maven.UpgradeTransitiveDependencyVersion.Accumulator mavenAccumulator;
         org.openrewrite.gradle.UpgradeTransitiveDependencyVersion.DependencyVersionState gradleAccumulator;
     }
 

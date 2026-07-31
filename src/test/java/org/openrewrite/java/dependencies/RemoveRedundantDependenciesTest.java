@@ -780,4 +780,245 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
           )
         );
     }
+
+    @Test
+    void globGroupIdMatchesProvider() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.*", "jackson-databind")),
+          //language=xml
+          pomXml(JACKSON_BEFORE, JACKSON_AFTER)
+        );
+    }
+
+    @Test
+    void singleCharacterWildcardMatchesProvider() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.cor?", "jackson-databin?")),
+          //language=xml
+          pomXml(JACKSON_BEFORE, JACKSON_AFTER)
+        );
+    }
+
+    @Test
+    void wildcardArtifactIdRemovesDependenciesProvidedBySibling() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "com.fasterxml.jackson.core", "*")),
+          //language=xml
+          pomXml(JACKSON_BEFORE, JACKSON_AFTER)
+        );
+    }
+
+    @Test
+    void matchAllWildcardsRemoveEveryTransitivelyProvidedDependency() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies("*", "*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>2.17.0</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                    <version>2.17.0</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                    <version>2.17.0</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>2.17.0</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void matchAllWildcardsKeepDependenciesNobodyElseProvides() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies("*", "*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>2.17.0</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                    <version>3.14.0</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removesStarterMatchedByTheSameGlobAsItsProvider() {
+        // spring-boot-starter-web transitively provides spring-boot-starter-json. Both match the
+        // `spring-boot-starter-*` glob, so the redundant one must still be removed.
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-*")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-json</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <modelVersion>4.0.0</modelVersion>
+                  <groupId>com.sample</groupId>
+                  <artifactId>sample</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <parent>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-parent</artifactId>
+                    <version>3.2.3</version>
+                    <relativePath/>
+                  </parent>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework.boot</groupId>
+                      <artifactId>spring-boot-starter-web</artifactId>
+                    </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void removeRedundantGradleDependencyWithWildcardArtifactId() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "com.fasterxml.jackson.core", "*")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                }
+                """
+            )
+          )
+        );
+    }
+
+    private static final String JACKSON_BEFORE = """
+      <project>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.mycompany.app</groupId>
+        <artifactId>my-app</artifactId>
+        <version>1</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.17.0</version>
+          </dependency>
+        </dependencies>
+      </project>
+      """;
+
+    private static final String JACKSON_AFTER = """
+      <project>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.mycompany.app</groupId>
+        <artifactId>my-app</artifactId>
+        <version>1</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
+          </dependency>
+        </dependencies>
+      </project>
+      """;
 }

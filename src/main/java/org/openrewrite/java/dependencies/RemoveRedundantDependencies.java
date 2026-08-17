@@ -199,10 +199,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
     }
 
-    // A declaration whose requested version is a range or a dynamic version exists to constrain resolution rather
-    // than to supply the artifact; a Gradle `version { strictly '[2.0,2.1)' }` block surfaces here as the range.
-    // Removing it silently hands the version back to whatever the rest of the graph, or an imported BOM, asks for,
-    // which is precisely what the constraint was written to prevent.
     private static boolean constrainsResolution(ResolvedDependency dep) {
         String requestedVersion = dep.getRequested().getVersion();
         return requestedVersion != null &&

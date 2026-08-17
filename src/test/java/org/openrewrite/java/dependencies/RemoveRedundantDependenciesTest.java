@@ -782,6 +782,37 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     }
 
     @Test
+    void doNotRemoveGradleDependencyDeclaringVersionConstraint() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                    implementation('com.fasterxml.jackson.core:jackson-core') {
+                        version {
+                            prefer '2.17.0'
+                            strictly '[2.17.0,2.18.0)'
+                        }
+                    }
+                }
+                """
+            )
+          )
+        );
+    }
+
+    @Test
     void globGroupIdMatchesProvider() {
         rewriteRun(
           spec -> spec.recipe(new RemoveRedundantDependencies(

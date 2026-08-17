@@ -52,7 +52,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 "This recipe downloads and resolves the parent dependency's POM to determine its true transitive " +
                 "dependencies, allowing it to detect redundancies even when both dependencies are explicitly declared. " +
                 "A direct dependency is only removed when the transitive one provides it at the exact same scope and " +
-                "with the same declared exclusions, so that removing it does not change the effective classpath.";
+                "with the same declared exclusions, so that removing it does not change the effective classpath. " +
+                "Declarations that constrain resolution through a version range or dynamic version, such as a Gradle " +
+                "`version { strictly ... }` block, are never removed.";
 
     @Value
     public static class Accumulator {
@@ -197,6 +199,17 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
     }
 
+    // A declaration whose requested version is a range or a dynamic version exists to constrain resolution rather
+    // than to supply the artifact; a Gradle `version { strictly '[2.0,2.1)' }` block surfaces here as the range.
+    // Removing it silently hands the version back to whatever the rest of the graph, or an imported BOM, asks for,
+    // which is precisely what the constraint was written to prevent.
+    private static boolean constrainsResolution(ResolvedDependency dep) {
+        String requestedVersion = dep.getRequested().getVersion();
+        return requestedVersion != null &&
+                (requestedVersion.startsWith("[") || requestedVersion.startsWith("(") ||
+                        requestedVersion.endsWith("+") || requestedVersion.startsWith("latest."));
+    }
+
     private static List<MavenRepository> withMavenCentral(List<MavenRepository> repositories) {
         List<MavenRepository> effectiveRepos = new ArrayList<>(repositories);
         if (effectiveRepos.stream().noneMatch(r -> r.getUri().contains("repo.maven.apache.org") ||
@@ -286,6 +299,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives) {
+                if (constrainsResolution(dep)) {
+                    return false;
+                }
                 Set<GroupArtifact> depExclusions = declaredExclusions(dep);
                 for (TransitiveDependency transitive : transitives) {
                     ResolvedGroupArtifactVersion gav = transitive.getGav();

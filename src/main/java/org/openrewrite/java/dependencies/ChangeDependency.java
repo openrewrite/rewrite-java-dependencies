@@ -90,6 +90,11 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override
+    public String getInstanceNameSuffix() {
+        return String.format("`%s:%s`", oldGroupId, oldArtifactId);
+    }
+
+    @Override
     public Validated<Object> validate(ExecutionContext ctx) {
         return super.validate(ctx)
                 .and(((Recipe) getGradleChangeDependency()).validate())

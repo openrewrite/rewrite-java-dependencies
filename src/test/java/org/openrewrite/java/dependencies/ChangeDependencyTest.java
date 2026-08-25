@@ -293,4 +293,14 @@ class ChangeDependencyTest implements RewriteTest {
           )
         );
     }
+
+    @Test
+    void instanceName() {
+        // A composite recipe lists many ChangeDependency instances, and without the coordinates
+        // in the name they are indistinguishable from one another.
+        ChangeDependency cd = new ChangeDependency("org.springframework.boot", "spring-boot-starter-web",
+          null, "spring-boot-starter-webmvc", "4.0.x", null, null, null);
+        assertThat(cd.getInstanceName())
+          .isEqualTo("Change Gradle or Maven dependency `org.springframework.boot:spring-boot-starter-web`");
+    }
 }

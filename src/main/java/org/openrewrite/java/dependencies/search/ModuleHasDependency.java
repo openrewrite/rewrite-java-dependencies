@@ -76,6 +76,13 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     @Nullable
     String version;
 
+    @Option(displayName = "Only direct",
+            description = "If enabled, transitive dependencies will not be considered. All dependencies are searched by default.",
+            required = false,
+            example = "true")
+    @Nullable
+    Boolean onlyDirect;
+
     @Option(displayName = "Invert marking",
             description = "If `true`, will invert the check for whether to mark a file. Defaults to `false`.",
             required = false)
@@ -114,6 +121,9 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
             List<ResolvedDependency> dependencies = mavenResult.findDependencies(groupIdPattern, artifactIdPattern, requestedScope);
             Set<String> resolvedGAs = new HashSet<>();
             for (ResolvedDependency dependency : dependencies) {
+                if (Boolean.TRUE.equals(onlyDirect) && !dependency.isDirect()) {
+                    continue;
+                }
                 resolvedGAs.add(dependency.getGroupId() + ":" + dependency.getArtifactId());
                 if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
                     return true;
@@ -135,7 +145,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
             Set<String> resolvedGAs = new HashSet<>();
             for (GradleDependencyConfiguration c : gp.getConfigurations()) {
                 for (ResolvedDependency resolvedDependency : c.getDirectResolved()) {
-                    ResolvedDependency found = resolvedDependency.findDependency(groupIdPattern, artifactIdPattern);
+                    ResolvedDependency found = findMatching(resolvedDependency);
                     if (found != null) {
                         resolvedGAs.add(found.getGroupId() + ":" + found.getArtifactId());
                         if (versionComparator == null || versionComparator.isValid(null, found.getVersion())) {
@@ -156,6 +166,17 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
             }
         }
         return false;
+    }
+
+    private @Nullable ResolvedDependency findMatching(ResolvedDependency root) {
+        if (Boolean.TRUE.equals(onlyDirect)) {
+            if (StringUtils.matchesGlob(root.getGroupId(), groupIdPattern) &&
+                    StringUtils.matchesGlob(root.getArtifactId(), artifactIdPattern)) {
+                return root;
+            }
+            return null;
+        }
+        return root.findDependency(groupIdPattern, artifactIdPattern);
     }
 
     private boolean matchesRequested(Dependency dep, @Nullable Scope requestedScope, @Nullable VersionComparator versionComparator) {

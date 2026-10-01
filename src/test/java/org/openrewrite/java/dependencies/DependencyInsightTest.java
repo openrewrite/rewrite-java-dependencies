@@ -20,6 +20,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class DependencyInsightTest implements RewriteTest {
@@ -27,6 +28,26 @@ class DependencyInsightTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
         spec.recipe(new DependencyInsight("org.springframework*", "*", null, null));
+    }
+
+    @Test
+    void instanceNameShowsWhatIsBeingSearchedFor() {
+        assertThat(new DependencyInsight("com.fasterxml.jackson*", "jackson-*", null, null).getInstanceName())
+          .isEqualTo("Dependency insight for Gradle and Maven `com.fasterxml.jackson*:jackson-*`");
+    }
+
+    @Test
+    void instanceNameIncludesVersionWhenGiven() {
+        assertThat(new DependencyInsight("com.fasterxml.jackson*", "jackson-*", "2.x", null).getInstanceName())
+          .isEqualTo("Dependency insight for Gradle and Maven `com.fasterxml.jackson*:jackson-*:2.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        // The descriptor of an unconfigured recipe is rendered wherever recipes are listed;
+        // it must not read "null:null".
+        assertThat(new DependencyInsight(null, null, null, null).getInstanceName())
+          .isEqualTo("Dependency insight for Gradle and Maven");
     }
 
     @DocumentExample

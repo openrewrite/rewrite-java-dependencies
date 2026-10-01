@@ -148,9 +148,9 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
                 }
                 SourceFile t = (SourceFile) tree;
                 if (gradle.isAcceptable(t, ctx)) {
-                    t = (SourceFile) gradle.visitNonNull(t, ctx);
+                    t = (SourceFile) gradle.visitNonNull(t, ctx, getCursor());
                 } else if (maven.isAcceptable(t, ctx)) {
-                    t = (SourceFile) maven.visitNonNull(t, ctx);
+                    t = (SourceFile) maven.visitNonNull(t, ctx, getCursor());
                 }
                 return t;
             }

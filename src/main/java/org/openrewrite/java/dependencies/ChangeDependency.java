@@ -15,11 +15,11 @@
  */
 package org.openrewrite.java.dependencies;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
@@ -29,7 +29,6 @@ import static java.util.Objects.requireNonNull;
 
 @EqualsAndHashCode(callSuper = false)
 @Getter
-@RequiredArgsConstructor
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
@@ -82,6 +81,34 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
             required = false)
     @Nullable
     private final Boolean changeManagedDependency;
+
+    @Option(displayName = "Change plugin dependencies",
+            description = "Also change dependencies declared inside Maven plugins. Defaults to true. Has no effect on Gradle dependencies.",
+            required = false)
+    @Nullable
+    private final Boolean changePluginDependencies;
+
+    public ChangeDependency(String oldGroupId, String oldArtifactId, @Nullable String newGroupId, @Nullable String newArtifactId,
+                            @Nullable String newVersion, @Nullable String versionPattern, @Nullable Boolean overrideManagedVersion,
+                            @Nullable Boolean changeManagedDependency) {
+        this(oldGroupId, oldArtifactId, newGroupId, newArtifactId, newVersion, versionPattern,
+                overrideManagedVersion, changeManagedDependency, null);
+    }
+
+    @JsonCreator
+    public ChangeDependency(String oldGroupId, String oldArtifactId, @Nullable String newGroupId, @Nullable String newArtifactId,
+                            @Nullable String newVersion, @Nullable String versionPattern, @Nullable Boolean overrideManagedVersion,
+                            @Nullable Boolean changeManagedDependency, @Nullable Boolean changePluginDependencies) {
+        this.oldGroupId = oldGroupId;
+        this.oldArtifactId = oldArtifactId;
+        this.newGroupId = newGroupId;
+        this.newArtifactId = newArtifactId;
+        this.newVersion = newVersion;
+        this.versionPattern = versionPattern;
+        this.overrideManagedVersion = overrideManagedVersion;
+        this.changeManagedDependency = changeManagedDependency;
+        this.changePluginDependencies = changePluginDependencies;
+    }
 
     @Getter
     final String displayName = "Change Gradle or Maven dependency";
@@ -171,7 +198,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         if (recipe == null) {
             recipe = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
+                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency, changePluginDependencies);
             mavenDelegate.set(recipe);
         }
         return recipe;

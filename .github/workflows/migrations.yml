@@ -31,8 +31,8 @@ jobs:
       - name: Update migrations
         run: ./gradlew parseDefinitionMigrations --args="./oga-maven-plugin src/main/resources/migrations.csv"
         env:
-          CODEGENOME_USERNAME: ${{ secrets.CODEGENOME_USERNAME }}
-          CODEGENOME_TOKEN: ${{ secrets.CODEGENOME_TOKEN }}
+          ORG_GRADLE_PROJECT_codegenomeUsername: ${{ secrets.CODEGENOME_USERNAME }}
+          ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CODEGENOME_TOKEN }}
 
       # Commit and push
       - name: configure-git-user

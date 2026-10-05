@@ -146,6 +146,7 @@ com.squareup.retrofit,,com.squareup.retrofit2,,"The Maven group ID is now com.sq
 com.sun.jersey,,"org.glassfish.jersey.core",,
 com.sun.mail,javax.mail,com.sun.mail,jakarta.mail,
 com.sun.xml,saaj-impl,"com.sun.xml.messaging.saaj",saaj-impl,
+com.tngtech.archunit,archunit-junit,com.tngtech.archunit,archunit-junit4,"archunit-junit is deprecated. use archunit-junit4 instead. See https://github.com/TNG/ArchUnit/issues/1663 for more details"
 com.typesafe,slick_2.10,com.typesafe.slick,slick_2.10,
 com.typesafe,slick-testkit_2.10,com.typesafe.slick,slick-testkit_2.10,
 com.typesafe.play,,org.playframework,,"With Play 3.0, we changed the groupId from com.typesafe.play to org.playframework to emphasize that Play is fully community-driven."

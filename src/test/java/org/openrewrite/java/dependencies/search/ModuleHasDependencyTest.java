@@ -153,7 +153,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ValueSource(booleans = {false})
     void whenNoModuleDoesNotMark(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, invertCondition)),
           java(GradleJava)
         );
     }
@@ -161,7 +161,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenNoModuleButInvertedMarkingMarks() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, true)),
           java(
             GradleJava,
             spec -> spec.after(actual ->
@@ -178,7 +178,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ValueSource(booleans = {false})
     void whenModuleHasDirectDependencyMarks(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, invertCondition)),
           mavenProject("project-gradle",
             buildGradle(
               GradleDirect,
@@ -221,7 +221,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenModuleHasDirectDependencyButInvertedMarkingDoesNotMark() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, true)),
           mavenProject("project",
             buildGradle(GradleDirect),
             java(GradleJava)
@@ -238,7 +238,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ValueSource(booleans = {false})
     void whenModuleHasTransitiveDependencyMarks(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, invertCondition)),
           mavenProject("project-gradle",
             buildGradle(
               GradleTransitive,
@@ -281,7 +281,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenModuleHasTransitiveDependencyButInvertedMarkingDoesNotMark() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, true)),
           mavenProject("project",
             buildGradle(GradleTransitive),
             java(GradleJava)
@@ -298,7 +298,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @ValueSource(booleans = {false})
     void whenModuleDoesNotHaveDependencyDoesNotMark(Boolean invertCondition) {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, invertCondition)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, invertCondition)),
           mavenProject("project-gradle",
             buildGradle(GradleNone),
             java(GradleJava)
@@ -313,7 +313,7 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Test
     void whenModuleDoesNotHaveDependencyButInvertedMarkingMarks() {
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true)),
+          spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, true)),
           mavenProject("project",
             buildGradle(
               GradleNone,
@@ -385,7 +385,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         @Test
         void gradleMatchesOnRequested() {
             rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null)),
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, null)),
               mavenProject("project-gradle",
                 buildGradle(
                   GradleNoRepositories,
@@ -420,7 +420,7 @@ class ModuleHasDependencyTest implements RewriteTest {
                           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
                       """.getBytes())), ctx);
                   ctx.setMavenSettings(emptySettings);
-                  spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null))
+                  spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, null))
                     .executionContext(ctx);
               },
               mavenProject("project-maven",
@@ -447,7 +447,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         @Test
         void gradleVersionRangeOnRequestedDoesNotMatchWhenOutOfRange() {
             rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[7.0,)", null)),
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[7.0,)", null, null)),
               mavenProject("project-gradle",
                 buildGradle(GradleNoRepositories),
                 java(GradleJava)
@@ -469,7 +469,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
             // Force resolution failure (no repositories), so the requested fallback fires.
             rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[1.0,)", null)),
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[1.0,)", null, null)),
               mavenProject("project-gradle",
                 buildGradle(GradleNoRepositoriesNoVersion),
                 java(GradleJava)
@@ -503,7 +503,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
             // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
             rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null, null)),
               mavenProject("project-gradle",
                 buildGradle(GradleForcedOutOfRange),
                 java(GradleJava)
@@ -541,7 +541,7 @@ class ModuleHasDependencyTest implements RewriteTest {
         void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
             // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
             rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null)),
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, "[5.0,6.0)", null, null)),
               mavenProject("project-maven",
                 pomXml(MavenBomManagedOutOfRange),
                 java(MavenJava)
@@ -561,7 +561,7 @@ class WithVersionsPattern {
     })
     void maven(String versionPattern) {
         rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null)),
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null, null)),
           mavenProject("project-maven",
             //language=xml
             pomXml(
@@ -619,7 +619,7 @@ class WithVersionsPattern {
     })
     void gradle(String versionPattern) {
         rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null)),
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("jakarta.data", "*", null, versionPattern, null, null)),
           mavenProject("project-maven",
             //language=groovy
             buildGradle(
@@ -661,7 +661,7 @@ class WithVersionsPattern {
         var mavenMarker = "<!--~~%s>-->".formatted(negativeSub);
         var javaMarker = "/*~~%s>*/".formatted(negativeSub);
         rewriteRun(
-          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, versionRange, true)),
+          spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, versionRange, null, true)),
           // Module with old Kotlin (2.1.0) — should NOT be marked
           mavenProject("old-kotlin",
             pomXml(
@@ -745,7 +745,7 @@ class WithVersionsPattern {
     @Test
     void noPresentVersion() {
         rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null)),
+          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null, null)),
           mavenProject("project-maven",
             //language=groovy
             buildGradle(
@@ -766,4 +766,123 @@ class WithVersionsPattern {
         );
     }
 }
+
+    @Nested
+    class OnlyDirect {
+
+        @Test
+        void skipsMavenTransitiveMatch() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true, null)),
+              mavenProject("project-maven",
+                pomXml(MavenTransitive),
+                java(MavenJava)
+              )
+            );
+        }
+
+        @Test
+        void stillMarksMavenDirectMatch() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true, null)),
+              mavenProject("project-maven",
+                pomXml(
+                  MavenDirect,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(MavenMarkerPositive)
+                      .actual()
+                  )
+                ),
+                java(
+                  MavenJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerPositive)
+                      .actual()
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void skipsGradleTransitiveMatch() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true, null)),
+              mavenProject("project-gradle",
+                buildGradle(GradleTransitive),
+                java(GradleJava)
+              )
+            );
+        }
+
+        @Test
+        void stillMarksGradleDirectMatch() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true, null)),
+              mavenProject("project-gradle",
+                buildGradle(
+                  GradleDirect,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(GradleMarkerPositive)
+                      .actual()
+                  )
+                ),
+                java(
+                  GradleJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerPositive)
+                      .actual()
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void withInvertMarkingMarksTransitiveOnlyModules() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, true, true)),
+              mavenProject("project-gradle",
+                buildGradle(
+                  GradleTransitive,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(GradleMarkerNegative)
+                      .actual()
+                  )
+                ),
+                java(
+                  GradleJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerNegative)
+                      .actual()
+                  )
+                )
+              ),
+              mavenProject("project-maven",
+                pomXml(
+                  MavenTransitive,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(MavenMarkerNegative)
+                      .actual()
+                  )
+                ),
+                java(
+                  MavenJava,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(JavaMarkerNegative)
+                      .actual()
+                  )
+                )
+              )
+            );
+        }
+    }
 }

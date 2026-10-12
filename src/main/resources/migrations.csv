@@ -121,6 +121,7 @@ com.microsoft.azure,"azure-spring-boot-dependencies",com.microsoft.azure,"azure-
 com.microsoft.azure,azure-storage,com.azure,azure-storage,
 com.microsoft.azure,spring-data-documentdb,com.microsoft.azure,spring-data-cosmosdb,
 "com.microsoft.windowsazure.storage","microsoft-windowsazure-storage-sdk",com.microsoft.azure,azure-storage,
+com.mitchellbosecke,pebble,io.pebbletemplates,pebble,
 com.rabbitmq,rabbitmq-client,com.rabbitmq,amqp-client,
 commons-dbcp,commons-dbcp,org.apache.commons,commons-dbcp2,
 commons-collections,commons-collections,org.apache.commons,commons-collections4,

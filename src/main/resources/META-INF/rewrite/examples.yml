@@ -115,6 +115,84 @@ examples:
     language: groovy
 ---
 type: specs.openrewrite.org/v1beta/example
+recipeName: org.openrewrite.java.dependencies.ExcludeDependency
+examples:
+- description: Exclude a transitive Gradle dependency
+  parameters: &id001
+  - commons-logging
+  - commons-logging
+  - 'null'
+  - 'null'
+  sources:
+  - before: |
+      plugins {
+          id 'java-library'
+      }
+
+      repositories {
+          mavenCentral()
+      }
+
+      dependencies {
+          implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+      }
+    after: |
+      plugins {
+          id 'java-library'
+      }
+
+      repositories {
+          mavenCentral()
+      }
+
+      dependencies {
+          implementation('org.apache.httpcomponents:httpclient:4.5.13') {
+              exclude group: 'commons-logging', module: 'commons-logging'
+          }
+      }
+    path: build.gradle
+    language: groovy
+- description: Exclude a transitive Maven dependency
+  parameters: *id001
+  sources:
+  - before: |
+      <project>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.example</groupId>
+        <artifactId>demo</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+          </dependency>
+        </dependencies>
+      </project>
+    after: |
+      <project>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.example</groupId>
+        <artifactId>demo</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+            <exclusions>
+              <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+        </dependencies>
+      </project>
+    path: pom.xml
+    language: xml
+---
+type: specs.openrewrite.org/v1beta/example
 recipeName: org.openrewrite.java.dependencies.FindDependency
 examples:
 - description: '`FindDependencyTest#findMavenDependency`'

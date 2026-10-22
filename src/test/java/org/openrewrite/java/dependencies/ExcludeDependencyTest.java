@@ -149,7 +149,6 @@ class ExcludeDependencyTest implements RewriteTest {
         );
     }
 
-    @DocumentExample("Exclude a transitive Maven dependency")
     @Test
     void excludeMavenDependency() {
         rewriteRun(

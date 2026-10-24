@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.ExecutionContext;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Parser;
 import org.openrewrite.java.dependencies.table.RepositoryAccessibilityReport;
@@ -27,12 +28,18 @@ import org.openrewrite.test.RewriteTest;
 
 import java.io.ByteArrayInputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
+/**
+ * Which URL Maven Central and the Gradle Plugin Portal are reached at depends on the machine the tests run on: where
+ * CI names a mirror in MAVEN_CENTRAL_MIRROR_URL, the mirror stands in for both. So these tests check the repositories
+ * they declare themselves by URL, and Central and the plugin portal only by being reachable.
+ */
 @SuppressWarnings("GroovyAssignabilityCheck")
 class DependencyResolutionDiagnosticTest implements RewriteTest {
 
@@ -68,15 +75,11 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
             // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
             // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                assertThat(rows)
-                        .hasSize(4)
-                        .contains(
-                  new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
                 assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
-                assertThat(rows).contains(
-                  new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""));
                 assertThat(rows)
                   .filteredOn(row -> "https://nonexistent.moderne.io/maven2".equals(row.getUri()) && row.getPingHttpCode() == null).hasSize(1);
+                // Maven Central and the plugin portal, which are one row where a mirror stands in for both
+                assertThat(remote(rows)).hasSizeBetween(1, 2).allSatisfy(DependencyResolutionDiagnosticTest::reachable);
             }),
           //language=groovy
           buildGradle(
@@ -107,12 +110,14 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> spec.beforeRecipe(withToolingApi())
             // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
             // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
-            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> assertThat(rows)
-                    .hasSize(2)
-                    .contains(
-              new RepositoryAccessibilityReport.Row("https://plugins.gradle.org/m2", "", "", 200, "", ""))
-                    .contains(
-              new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""))),
+            .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
+                assertThat(rows)
+                  .hasSize(2)
+                  .contains(
+                    new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", ""));
+                // The plugin portal, which Gradle adds
+                assertThat(remote(rows)).singleElement().satisfies(DependencyResolutionDiagnosticTest::reachable);
+            }),
           //language=groovy
           buildGradle(
             """
@@ -182,19 +187,19 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> {
               // CI may inject ~/.m2/settings.xml with `<mirrorOf>*</mirrorOf>` to route Maven through a cache.
               // That rewrites the pom-declared `nonexistent` repo to the mirror URL, so neither Maven Central
-              // nor the test's `nonexistent.moderne.io` repo appear in the diagnostic. Force empty settings
-              // here so the recipe sees the pom-declared repositories directly.
+              // nor the test's `nonexistent.moderne.io` repo appear in the diagnostic. Use settings of the test's
+              // own here, so the recipe sees the pom-declared repositories directly.
               MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
-              ctx.setMavenSettings(new MavenSettings(null, null, null, null, null, null));
+              ctx.setMavenSettings(settingsMirroringOnlyCentral(ctx));
               spec
                 .executionContext(ctx)
                 .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
-                    assertThat(rows).contains(
-                      new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2", "", "", 200, "", ""));
                     assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
                     assertThat(rows).contains(
                       new RepositoryAccessibilityReport.Row("https://nonexistent.moderne.io/maven2", "java.net.UnknownHostException", "nonexistent.moderne.io", null, "", "")
                     );
+                    // Maven Central, which the recipe adds
+                    assertThat(remote(rows)).singleElement().satisfies(DependencyResolutionDiagnosticTest::reachable);
                 });
           },
           //language=xml
@@ -223,11 +228,14 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
           spec -> spec.recipe(new DependencyResolutionDiagnostic("org.nonexistent", "nonexistent", "0"))
             .beforeRecipe(withToolingApi())
             .dataTable(RepositoryAccessibilityReport.Row.class, rows ->
-              assertThat(rows).contains(
-                new RepositoryAccessibilityReport.Row("https://repo.maven.apache.org/maven2",
-                  "", "", 200, "org.openrewrite.maven.MavenDownloadingException",
-                  "org.nonexistent:nonexistent:0 failed. Unable to download POM: org.nonexistent:nonexistent:0. Tried repositories:\nhttps://repo.maven.apache.org/maven2/: HTTP 404")
-              )
+              // Maven Central, which is reachable but has no such dependency
+              assertThat(rows).anySatisfy(row -> {
+                  reachable(row);
+                  assertThat(row.getDependencyResolveExceptionType()).isEqualTo("org.openrewrite.maven.MavenDownloadingException");
+                  assertThat(row.getDependencyResolveExceptionMessage())
+                    .startsWith("org.nonexistent:nonexistent:0 failed. Unable to download POM: org.nonexistent:nonexistent:0. Tried repositories:\n" + row.getUri())
+                    .endsWith(": HTTP 404");
+              })
             ),
           //language=groovy
           buildGradle(
@@ -241,5 +249,47 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               """
           )
         );
+    }
+
+    /** The rows of the repositories other than the local one and the one that doesn't exist. */
+    private static List<RepositoryAccessibilityReport.Row> remote(List<RepositoryAccessibilityReport.Row> rows) {
+        return rows.stream()
+          .filter(row -> !row.getUri().startsWith("file:/") && !row.getUri().contains("nonexistent.moderne.io"))
+          .toList();
+    }
+
+    private static void reachable(RepositoryAccessibilityReport.Row row) {
+        assertThat(row.getPingHttpCode()).as("what %s answered", row.getUri()).isEqualTo(200);
+        assertThat(row.getPingExceptionType()).as("what reaching %s threw", row.getUri()).isEmpty();
+    }
+
+    /**
+     * Settings with no mirror but one of Maven Central, the mirror CI names in MAVEN_CENTRAL_MIRROR_URL, _USERNAME and
+     * _PASSWORD, so that Central is reached as the rest of the build reaches it. With no mirror named, none at all.
+     */
+    private static MavenSettings settingsMirroringOnlyCentral(ExecutionContext ctx) {
+        if (System.getenv("MAVEN_CENTRAL_MIRROR_URL") == null) {
+            return new MavenSettings(null, null, null, null, null, null);
+        }
+        return MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
+          //language=xml
+          """
+            <settings>
+                <servers>
+                    <server>
+                        <id>central-mirror</id>
+                        <username>${env.MAVEN_CENTRAL_MIRROR_USERNAME}</username>
+                        <password>${env.MAVEN_CENTRAL_MIRROR_PASSWORD}</password>
+                    </server>
+                </servers>
+                <mirrors>
+                    <mirror>
+                        <id>central-mirror</id>
+                        <mirrorOf>central</mirrorOf>
+                        <url>${env.MAVEN_CENTRAL_MIRROR_URL}</url>
+                    </mirror>
+                </mirrors>
+            </settings>
+            """.getBytes())), ctx);
     }
 }

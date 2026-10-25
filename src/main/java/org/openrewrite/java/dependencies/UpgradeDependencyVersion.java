@@ -44,7 +44,11 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     private final String artifactId;
 
     @Option(displayName = "New version",
-            description = "An exact version number or node-style semver selector used to select the version number. ",
+            description = "An exact version number or node-style semver selector used to select the version number. " +
+                          "You can also use `latest.release` for the latest available release version, " +
+                          "`latest.integration` to include pre-release and snapshot versions, and `latest.patch` for patch updates " +
+                          "if the current version is a valid semantic version. For more details, you can look at the documentation " +
+                          "page of [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors).",
             example = "29.X")
     private final String newVersion;
 

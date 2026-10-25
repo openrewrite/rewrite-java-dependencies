@@ -22,20 +22,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openrewrite.InMemoryExecutionContext;
-import org.openrewrite.Parser;
 import org.openrewrite.maven.MavenExecutionContextView;
-import org.openrewrite.maven.MavenSettings;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
-
-import java.io.ByteArrayInputStream;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.java;
 import static org.openrewrite.java.Assertions.mavenProject;
+import static org.openrewrite.java.dependencies.MavenCentralMirror.settingsMirroringOnlyCentral;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class ModuleHasDependencyTest implements RewriteTest {
@@ -412,14 +408,7 @@ class ModuleHasDependencyTest implements RewriteTest {
             rewriteRun(
               spec -> {
                   MavenExecutionContextView ctx = MavenExecutionContextView.view(new InMemoryExecutionContext());
-                  MavenSettings emptySettings = MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
-                    //language=xml
-                    """
-                      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"/>
-                      """.getBytes())), ctx);
-                  ctx.setMavenSettings(emptySettings);
+                  ctx.setMavenSettings(settingsMirroringOnlyCentral(ctx));
                   spec.recipe(new ModuleHasDependency(GroupId, ArtifactId, null, null, null, null))
                     .executionContext(ctx);
               },

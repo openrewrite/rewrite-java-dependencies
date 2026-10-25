@@ -16,7 +16,9 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
+import org.openrewrite.maven.MavenExecutionContextView;
 import org.openrewrite.maven.tree.*;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -138,6 +140,11 @@ class DependencyListTest implements RewriteTest {
     void validateResolvable() {
         rewriteRun(
           spec -> spec.recipe(new DependencyList(DependencyList.Scope.Compile, false, true))
+            // Only the pretend repository below, which can't be reached, is asked: Maven Central and the local
+            // repository, which the recipe would ask too, are left out
+            .executionContext(MavenExecutionContextView.view(new InMemoryExecutionContext())
+              .setAddCentralRepository(false)
+              .setAddLocalRepository(false))
             .dataTable(DependencyListReport.Row.class, rows -> assertThat(rows)
               .singleElement()
               .extracting(DependencyListReport.Row::getResolutionFailure)

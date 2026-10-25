@@ -17,7 +17,6 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
-import org.openrewrite.ExecutionContext;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Parser;
 import org.openrewrite.java.dependencies.table.RepositoryAccessibilityReport;
@@ -33,6 +32,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
+import static org.openrewrite.java.dependencies.MavenCentralMirror.settingsMirroringOnlyCentral;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 /**
@@ -261,35 +261,5 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     private static void reachable(RepositoryAccessibilityReport.Row row) {
         assertThat(row.getPingHttpCode()).as("what %s answered", row.getUri()).isEqualTo(200);
         assertThat(row.getPingExceptionType()).as("what reaching %s threw", row.getUri()).isEmpty();
-    }
-
-    /**
-     * Settings with no mirror but one of Maven Central, the mirror CI names in MAVEN_CENTRAL_MIRROR_URL, _USERNAME and
-     * _PASSWORD, so that Central is reached as the rest of the build reaches it. With no mirror named, none at all.
-     */
-    private static MavenSettings settingsMirroringOnlyCentral(ExecutionContext ctx) {
-        if (System.getenv("MAVEN_CENTRAL_MIRROR_URL") == null) {
-            return new MavenSettings(null, null, null, null, null, null);
-        }
-        return MavenSettings.parse(new Parser.Input(Path.of("settings.xml"), () -> new ByteArrayInputStream(
-          //language=xml
-          """
-            <settings>
-                <servers>
-                    <server>
-                        <id>central-mirror</id>
-                        <username>${env.MAVEN_CENTRAL_MIRROR_USERNAME}</username>
-                        <password>${env.MAVEN_CENTRAL_MIRROR_PASSWORD}</password>
-                    </server>
-                </servers>
-                <mirrors>
-                    <mirror>
-                        <id>central-mirror</id>
-                        <mirrorOf>central</mirrorOf>
-                        <url>${env.MAVEN_CENTRAL_MIRROR_URL}</url>
-                    </mirror>
-                </mirrors>
-            </settings>
-            """.getBytes())), ctx);
     }
 }

@@ -178,7 +178,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
                     t = gradleAddDep.visitNonNull(tree, ctx);
                 }
                 if (mavenAddDep.isAcceptable((SourceFile) t, ctx)) {
-                    t = mavenAddDep.visitNonNull(tree, ctx);
+                    t = mavenAddDep.visitNonNull(t, ctx);
                 }
                 return t;
             }

@@ -209,7 +209,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         if (recipe == null) {
             recipe = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                    newVersion, versionPattern, overrideManagedVersion, true);
+                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
             gradleDelegate.set(recipe);
         }
         return recipe;

@@ -40,10 +40,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
+    private static final Pattern NOT_A_COORDINATE = Pattern.compile("[\\s{,]");
+
     transient RelocatedDependencyReport report = new RelocatedDependencyReport(this);
 
     @Option(displayName = "Change dependencies",
@@ -153,7 +156,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String gav = (String) literal.getValue();
                         assert gav != null;
                         String[] parts = gav.split(":");
-                        if (gav.length() >= 2) {
+                        if (parts.length >= 2) {
                             mi = maybeUpdate(mi, parts[0], parts[1], ctx);
                         }
                         return mi;
@@ -214,12 +217,14 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
                                 String newGroupId = relocation.getTo().getGroupId();
                                 String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                doAfterVisit(new ChangeDependency(
-                                        groupId, artifactId, newGroupId, newArtifactId,
-                                        "latest.release", null, null, null).getVisitor());
-                            } else {
-                                return getSearchResultFound(tree, relocation);
+                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
+                                    doAfterVisit(new ChangeDependency(
+                                            groupId, artifactId, newGroupId, newArtifactId,
+                                            "latest.release", null, null, null).getVisitor());
+                                    return tree;
+                                }
                             }
+                            return getSearchResultFound(tree, relocation);
                         }
                         return tree;
                     }
@@ -258,12 +263,14 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
                                 String newGroupId = relocation.getTo().getGroupId();
                                 String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                doAfterVisit(new ChangeDependency(
-                                        groupId, artifactId, newGroupId, newArtifactId,
-                                        "latest.release", null, null, null).getVisitor());
-                            } else {
-                                return getSearchResultFound(tree, relocation);
+                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
+                                    doAfterVisit(new ChangeDependency(
+                                            groupId, artifactId, newGroupId, newArtifactId,
+                                            "latest.release", null, null, null).getVisitor());
+                                    return tree;
+                                }
                             }
+                            return getSearchResultFound(tree, relocation);
                         }
                         return tree;
                     }
@@ -285,6 +292,10 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         groupId, artifactId,
                         relocatedGA.getGroupId(), Optional.ofNullable(relocatedGA.getArtifactId()).orElse(artifactId),
                         relocation.getContext()));
+            }
+
+            private boolean isCoordinate(String id) {
+                return !"removed".equals(id) && !NOT_A_COORDINATE.matcher(id).find();
             }
 
             private <T extends Tree> T getSearchResultFound(T tree, Relocation relocation) {

@@ -58,8 +58,8 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
     String configuration;
 
     @Option(displayName = "Maven scope",
-            description = "For Maven only, only remove dependencies if they are in this scope. If 'runtime', this will" +
-                          "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
+            description = "For Maven only, only remove dependencies if they are in this scope. If `runtime`, this will " +
+                          "also remove dependencies in the `compile` scope because `compile` dependencies are part of the runtime dependency set.",
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile",
             required = false)

@@ -31,12 +31,12 @@ import static java.util.Objects.requireNonNull;
 @Getter
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
     @Option(displayName = "Old group ID",
-            description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+            description = "The old group ID to replace. The group ID is the first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "org.openrewrite.recipe")
     private final String oldGroupId;
 
     @Option(displayName = "Old artifact ID",
-            description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+            description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "rewrite-testing-frameworks")
     private final String oldArtifactId;
 
@@ -62,8 +62,8 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     private final String newVersion;
 
     @Option(displayName = "Version pattern",
-            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "setting `newVersion` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable

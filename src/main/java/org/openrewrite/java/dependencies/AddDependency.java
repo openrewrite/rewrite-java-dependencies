@@ -34,7 +34,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     String groupId;
 
     @Option(displayName = "Artifact ID",
-            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`",
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`.",
             example = "guava")
     String artifactId;
 
@@ -47,7 +47,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+                          "setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
@@ -69,7 +69,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Family pattern",
             description = "For Maven only, a pattern, applied to group IDs, used to determine which other dependencies should have aligned version numbers. " +
-                          "Accepts '*' as a wildcard character.",
+                          "Accepts `*` as a wildcard character.",
             example = "com.fasterxml.jackson*",
             required = false)
     @Nullable

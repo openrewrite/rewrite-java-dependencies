@@ -35,13 +35,13 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
                "Can be paired with `UpgradeDependencyVersion` to upgrade a dependency everywhere, " +
                "regardless of whether it is direct or transitive.";
 
-    @Option(displayName = "Group",
-            description = "The first part of a dependency coordinate 'org.apache.logging.log4j:ARTIFACT_ID:VERSION'.",
+    @Option(displayName = "Group ID",
+            description = "The first part of a dependency coordinate `org.apache.logging.log4j:ARTIFACT_ID:VERSION`.",
             example = "org.apache.logging.log4j")
     String groupId;
 
-    @Option(displayName = "Artifact",
-            description = "The second part of a dependency coordinate 'org.apache.logging.log4j:log4j-bom:VERSION'.",
+    @Option(displayName = "Artifact ID",
+            description = "The second part of a dependency coordinate `org.apache.logging.log4j:log4j-bom:VERSION`.",
             example = "log4j-bom")
     String artifactId;
 
@@ -74,8 +74,8 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String classifier;
 
     @Option(displayName = "Version pattern",
-            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select 29.0-jre",
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable

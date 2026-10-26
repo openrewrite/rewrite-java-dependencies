@@ -69,7 +69,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Option(displayName = "Version",
             description = "Match only dependencies with the specified version. " +
-                    "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used." +
+                    "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used. " +
                     "All versions are searched by default.",
             example = "1.x",
             required = false)

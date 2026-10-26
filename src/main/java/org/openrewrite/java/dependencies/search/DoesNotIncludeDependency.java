@@ -28,13 +28,13 @@ public class DoesNotIncludeDependency extends Recipe {
     String description = "A precondition which returns false if visiting a Gradle build file or Maven `pom.xml` which includes the specified dependency in the classpath of some Gradle configuration or Maven scope. " +
                 "For compatibility with multi-module projects, this should most often be applied as a precondition.";
 
-    @Option(displayName = "Group",
-            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Group ID",
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "com.google.guava")
     String groupId;
 
-    @Option(displayName = "Artifact",
-            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Artifact ID",
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "guava")
     String artifactId;
 

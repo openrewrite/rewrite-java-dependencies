@@ -24,6 +24,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
@@ -61,6 +62,43 @@ class ChangeDependencyTest implements RewriteTest {
 
               dependencies {
                   implementation "org.apache.commons:commons-lang3:3.11"
+              }
+              """
+          )
+        );
+    }
+
+    @Test
+    void changeGradleKotlinDslDependency() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
+          //language=kotlin
+          buildGradleKts(
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  implementation("commons-lang:commons-lang:2.6")
+              }
+              """,
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  implementation("org.apache.commons:commons-lang3:3.11")
               }
               """
           )

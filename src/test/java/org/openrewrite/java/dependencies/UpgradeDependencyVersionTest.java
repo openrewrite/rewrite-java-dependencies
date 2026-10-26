@@ -26,6 +26,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
@@ -87,6 +88,43 @@ class UpgradeDependencyVersionTest implements RewriteTest {
                   .as("GradleProject requested dependencies should have been updated with the new version of guava")
                   .isPresent();
             })
+          )
+        );
+    }
+
+    @Test
+    void upgradeGuavaInGradleKotlinDslProject() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null)),
+          //language=kotlin
+          buildGradleKts(
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  implementation("com.google.guava:guava:29.0-jre")
+              }
+              """,
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  implementation("com.google.guava:guava:30.1.1-jre")
+              }
+              """
           )
         );
     }

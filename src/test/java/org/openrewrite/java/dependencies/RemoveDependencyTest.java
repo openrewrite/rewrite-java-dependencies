@@ -23,6 +23,7 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.*;
 import static org.openrewrite.maven.Assertions.pomXml;
@@ -64,6 +65,44 @@ class RemoveDependencyTest implements RewriteTest {
 
               dependencies {
                   testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+              }
+              """
+          )
+        );
+    }
+
+    @Test
+    void removeGradleKotlinDslDependency() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveDependency("org.springframework.boot", "spring-boot*", null, null, null)),
+          //language=kotlin
+          buildGradleKts(
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
+                  testImplementation("org.junit.vintage:junit-vintage-engine:5.6.2")
+              }
+              """,
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+              }
+
+              dependencies {
+                  testImplementation("org.junit.vintage:junit-vintage-engine:5.6.2")
               }
               """
           )

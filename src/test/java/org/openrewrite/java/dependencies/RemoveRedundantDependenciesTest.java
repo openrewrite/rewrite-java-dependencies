@@ -21,6 +21,7 @@ import org.openrewrite.Issue;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
@@ -774,6 +775,43 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                 }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+                }
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void removeRedundantGradleKotlinDslDependency() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "com.fasterxml.jackson.core", "jackson-databind")),
+          mavenProject("my-app",
+            //language=kotlin
+            buildGradleKts(
+              """
+                plugins {
+                    `java-library`
+                }
+                repositories {
+                    maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                }
+                dependencies {
+                    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
+                    implementation("com.fasterxml.jackson.core:jackson-core:2.17.0")
+                }
+                """,
+              """
+                plugins {
+                    `java-library`
+                }
+                repositories {
+                    maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                }
+                dependencies {
+                    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
                 }
                 """
             )

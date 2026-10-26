@@ -18,13 +18,15 @@ package org.openrewrite.java.dependencies;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.java.dependencies.RelocatedDependencyCheck.Accumulator;
 import org.openrewrite.java.dependencies.RelocatedDependencyCheck.GroupArtifact;
 import org.openrewrite.java.dependencies.RelocatedDependencyCheck.Relocation;
-import org.openrewrite.java.dependencies.RelocatedDependencyCheck.Relocations;
 import org.openrewrite.java.dependencies.table.RelocatedDependencyReport;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
@@ -40,8 +42,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         spec.recipe(new RelocatedDependencyCheck(null));
     }
     @Test
-    void parsesRelocations() {
-        assertThat(Relocations.BY_OLD_COORDINATES)
+    void initialValueParser() {
+        Accumulator initialValue = new RelocatedDependencyCheck(null).getInitialValue(new InMemoryExecutionContext());
+        Map<GroupArtifact, Relocation> migrations = initialValue.getMigrations();
+        assertThat(migrations)
           .containsEntry(new GroupArtifact("commons-lang", "commons-lang"),
             new Relocation(new GroupArtifact("org.apache.commons", "commons-lang3"), null))
           .containsEntry(new GroupArtifact("org.codehaus.groovy", null),

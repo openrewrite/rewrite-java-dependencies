@@ -394,7 +394,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       id "java-library"
                   }
                   repositories {
-                      mavenCentral()
+                      maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
                   }
                   dependencies {
                       implementation "mysql:mysql-connector-java:8.0.31"

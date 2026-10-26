@@ -57,7 +57,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     String description = "Find Maven and Gradle dependencies and Maven plugins that have relocated to a new `groupId` or `artifactId`. " +
                "Relocation information comes from the [oga-maven-plugin](https://github.com/jonathanlermitage/oga-maven-plugin/) " +
                "maintained by Jonathan Lermitage, Filipe Roque and others.\n\n" +
-               "This recipe makes no changes to any source file by default. Add `changeDependencies=true` to change dependencies, " +
+               "This recipe makes no changes to any source file by default. Add `changeDependencies=true` to change dependencies " +
+               "to their relocated coordinates at `latest.release`, " +
                "but note that you might need to run additional recipes to update imports and adopt other breaking changes.";
 
     @Value

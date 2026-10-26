@@ -30,7 +30,7 @@ public class FindRepositoryOrder extends Recipe {
     String displayName = "Gradle or Maven repository order";
 
     String description = "Determine the order in which dependencies will be resolved for each `pom.xml` or " +
-                         "`build.gradle` based on its defined repositories and effective settings.";
+                         "`build.gradle` based on its defined repositories. For Maven, the effective `settings.xml` is also taken into account.";
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {

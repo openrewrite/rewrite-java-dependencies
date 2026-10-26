@@ -58,10 +58,9 @@ public class FindDependency extends Recipe {
 
     String displayName = "Find Gradle or Maven dependencies";
 
-    String description = "Finds direct dependencies declared in Maven and Gradle build files. " +
+    String description = "Finds direct dependencies declared in Gradle and Maven build files. " +
                "This does *not* search transitive dependencies. " +
-               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight` " +
-               "This recipe works for both Maven and Gradle projects.";
+               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight`.";
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {

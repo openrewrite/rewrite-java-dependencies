@@ -25,8 +25,8 @@ import org.openrewrite.*;
 public class DoesNotIncludeDependency extends Recipe {
     String displayName = "Does not include Gradle or Maven dependency";
 
-    String description = "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
-                "For compatibility with multimodule projects, this should most often be applied as a precondition.";
+    String description = "A precondition which returns false if visiting a Gradle build file or Maven `pom.xml` which includes the specified dependency in the classpath of some Gradle configuration or Maven scope. " +
+                "For compatibility with multi-module projects, this should most often be applied as a precondition.";
 
     @Option(displayName = "Group",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",

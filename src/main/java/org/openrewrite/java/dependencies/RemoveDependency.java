@@ -70,8 +70,8 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
 
     String displayName = "Remove a Gradle or Maven dependency";
 
-    String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
-               "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
+    String description = "For a Gradle project, removes a single dependency from the `dependencies` section of the `build.gradle` or `build.gradle.kts`.\n" +
+               "For a Maven project, removes a single dependency from the `<dependencies>` section of the `pom.xml`.";
 
     public static class Accumulator {
         final Map<JavaProject, Boolean> projectToInUse = new HashMap<>();

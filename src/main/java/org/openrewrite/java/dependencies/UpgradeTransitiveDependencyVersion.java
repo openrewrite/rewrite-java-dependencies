@@ -30,9 +30,9 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
 
     String displayName = "Upgrade transitive Gradle or Maven dependencies";
 
-    String description = "Upgrades the version of a transitive dependency in a Maven pom.xml or Gradle build.gradle. " +
+    String description = "Upgrades the version of a transitive dependency in a Maven `pom.xml` or Gradle `build.gradle` or `build.gradle.kts`. " +
                "Leaves direct dependencies unmodified. " +
-               "Can be paired with the regular Upgrade Dependency Version recipe to upgrade a dependency everywhere, " +
+               "Can be paired with `UpgradeDependencyVersion` to upgrade a dependency everywhere, " +
                "regardless of whether it is direct or transitive.";
 
     @Option(displayName = "Group",

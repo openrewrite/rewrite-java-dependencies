@@ -32,7 +32,7 @@ import static org.openrewrite.maven.Assertions.pomXml;
 
 class UpgradeDependencyVersionTest implements RewriteTest {
 
-    @DocumentExample("Upgrade gradle dependency")
+    @DocumentExample("Upgrade Gradle dependency")
     @Test
     void upgradeGuavaInGradleProject() {
         rewriteRun(
@@ -85,7 +85,7 @@ class UpgradeDependencyVersionTest implements RewriteTest {
                   compileClasspath.getResolved().stream()
                     .filter(dep -> "com.google.guava".equals(dep.getGroupId()) && "guava".equals(dep.getArtifactId()) && "30.1.1-jre".equals(dep.getVersion()))
                     .findAny())
-                  .as("GradleProject requested dependencies should have been updated with the new version of guava")
+                  .as("GradleProject resolved dependencies should have been updated with the new version of guava")
                   .isPresent();
             })
           )

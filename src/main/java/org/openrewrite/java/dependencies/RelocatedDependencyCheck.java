@@ -42,9 +42,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static java.util.Collections.unmodifiableMap;
+
 @EqualsAndHashCode(callSuper = false)
 @Value
-public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
+public class RelocatedDependencyCheck extends Recipe {
     private static final Pattern NOT_A_COORDINATE = Pattern.compile("[\\s{,]");
     private static final MethodMatcher GRADLE_DEPENDENCY_MATCHER = new MethodMatcher("DependencyHandlerSpec *(..)");
     private static final XPathMatcher MAVEN_DEPENDENCY_MATCHER = new XPathMatcher("//dependencies/dependency");
@@ -67,11 +69,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                "but note that you might need to run additional recipes to update imports and adopt other breaking changes.";
 
     @Value
-    public static class Accumulator {
-        Map<GroupArtifact, Relocation> migrations;
-    }
-
-    @Value
     static class GroupArtifact {
         String groupId;
 
@@ -87,8 +84,11 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         String context;
     }
 
-    @Override
-    public Accumulator getInitialValue(ExecutionContext ctx) {
+    static class Relocations {
+        static final Map<GroupArtifact, Relocation> BY_OLD_COORDINATES = loadRelocations();
+    }
+
+    private static Map<GroupArtifact, Relocation> loadRelocations() {
         try {
             MappingIterator<Migration> objectMappingIterator = new CsvMapper()
                     .readerWithSchemaFor(Migration.class)
@@ -100,19 +100,14 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                 GroupArtifact newGav = new GroupArtifact(def.getNewGroupId(), StringUtils.isBlank(def.getNewArtifactId()) ? null : def.getNewArtifactId());
                 migrations.put(oldGav, new Relocation(newGav, StringUtils.isBlank(def.getContext()) ? null : def.getContext()));
             }
-            return new Accumulator(migrations);
+            return unmodifiableMap(migrations);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(Accumulator acc) {
-        return TreeVisitor.noop();
-    }
-
-    @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
             private final TreeVisitor<?, ExecutionContext> gradleVisitor = gradleVisitor();
             private final TreeVisitor<?, ExecutionContext> mavenVisitor = mavenVisitor();
@@ -281,9 +276,9 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             }
 
             private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {
-                Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
+                Relocation relocation = Relocations.BY_OLD_COORDINATES.get(new GroupArtifact(groupId, artifactId));
                 if (relocation == null && artifactId != null) {
-                    relocation = acc.getMigrations().get(new GroupArtifact(groupId, null));
+                    relocation = Relocations.BY_OLD_COORDINATES.get(new GroupArtifact(groupId, null));
                 }
                 return relocation;
             }

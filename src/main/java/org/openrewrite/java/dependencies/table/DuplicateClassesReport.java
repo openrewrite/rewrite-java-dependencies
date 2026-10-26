@@ -26,7 +26,7 @@ public class DuplicateClassesReport extends DataTable<DuplicateClassesReport.Row
     public DuplicateClassesReport(Recipe recipe) {
         super(recipe,
                 "Duplicate classes report",
-                "Lists classes that appear in multiple dependencies on the classpath");
+                "Lists classes that appear in multiple dependencies on the classpath.");
     }
 
     @Value

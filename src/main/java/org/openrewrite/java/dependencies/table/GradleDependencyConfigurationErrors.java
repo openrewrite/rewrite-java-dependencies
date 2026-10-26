@@ -26,7 +26,7 @@ public class GradleDependencyConfigurationErrors extends DataTable<GradleDepende
     public GradleDependencyConfigurationErrors(Recipe recipe) {
         super(recipe, "Gradle dependency configuration errors",
                 "Records Gradle dependency configurations which failed to resolve during parsing. " +
-                "Partial success/failure is common, a failure in this list does not mean that every dependency failed to resolve.");
+                "Partial success/failure is common; a failure in this list does not mean that every dependency failed to resolve.");
     }
 
     @Value

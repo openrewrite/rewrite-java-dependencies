@@ -21,8 +21,6 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
-import org.openrewrite.java.dependencies.internal.StaticVersionComparator;
-import org.openrewrite.java.dependencies.internal.VersionParser;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.maven.tree.GroupArtifact;
@@ -34,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.singletonMap;
+import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.OLDEST_FIRST;
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.applyMarkersForLocatedGavs;
 
 @EqualsAndHashCode(callSuper = false)
@@ -88,8 +87,7 @@ public class FindMinimumJUnitVersion extends Recipe {
         if (minimumVersion == null) {
             return true;
         }
-        Long[] numericParts = new VersionParser().transform(gav.getVersion()).getNumericParts();
-        return numericParts.length > 0 && minimumVersion.equals(String.valueOf(numericParts[0]));
+        return minimumVersion.equals(gav.getVersion().split("\\D", 2)[0]);
     }
 
     private static @Nullable ResolvedGroupArtifactVersion findMinimumJUnit(Markers markers) {
@@ -101,16 +99,12 @@ public class FindMinimumJUnitVersion extends Recipe {
         });
         markers.findFirst(MavenResolutionResult.class).ifPresent(maven -> resolved.addAll(maven.getDependencies().values()));
 
-        VersionParser versionParser = new VersionParser();
-        StaticVersionComparator versionComparator = new StaticVersionComparator();
         ResolvedGroupArtifactVersion minimum = null;
         for (List<ResolvedDependency> dependencies : resolved) {
             for (ResolvedDependency dep : dependencies) {
                 GroupArtifact ga = new GroupArtifact(dep.getGroupId(), dep.getArtifactId());
                 if ((JUNIT_4.equals(ga) || JUNIT_JUPITER_API.equals(ga)) &&
-                    (minimum == null || versionComparator.compare(
-                            versionParser.transform(dep.getVersion()),
-                            versionParser.transform(minimum.getVersion())) < 0)) {
+                    (minimum == null || OLDEST_FIRST.compare(dep.getGav(), minimum) < 0)) {
                     minimum = dep.getGav();
                 }
             }

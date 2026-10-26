@@ -75,7 +75,7 @@ public class ParseDefinitionMigrations {
         objectWriter.writeValue(csv, migrations);
     }
 
-    private static Migration getMigration(String oldGav1, String newGav1, String context) {
+    private static Migration getMigration(String oldGav1, String newGav1, @Nullable String context) {
         String[] oldGav = oldGav1.split(":");
         String[] newGav = newGav1.split(":");
         return new Migration(

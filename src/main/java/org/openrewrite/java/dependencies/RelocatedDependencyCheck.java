@@ -76,6 +76,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     @Value
     static class Relocation {
         GroupArtifact to;
+
+        @Nullable
         String context;
     }
 

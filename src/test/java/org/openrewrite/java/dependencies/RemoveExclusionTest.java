@@ -374,12 +374,15 @@ class RemoveExclusionTest implements RewriteTest {
           //language=groovy
           buildGradle(
             """
-              configurations.all {
-                  exclude group: 'commons-logging'
+              dependencies {
+                  implementation('org.apache.httpcomponents:httpclient:4.5.13') {
+                      exclude group: 'commons-logging'
+                  }
               }
               """,
             """
-              configurations.all {
+              dependencies {
+                  implementation('org.apache.httpcomponents:httpclient:4.5.13')
               }
               """
           ),

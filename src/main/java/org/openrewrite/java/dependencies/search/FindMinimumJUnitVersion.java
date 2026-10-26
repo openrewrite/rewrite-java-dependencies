@@ -31,11 +31,13 @@ import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
 import org.openrewrite.maven.tree.ResolvedGroupArtifactVersion;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Collections.emptyList;
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.applyMarkersForLocatedGavs;
 
 @EqualsAndHashCode(callSuper = false)
@@ -103,26 +105,34 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+    public Collection<? extends SourceFile> generate(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, ExecutionContext ctx) {
         boolean hasJUnit4 = acc.values().stream().anyMatch(resolvedGroupArtifactVersion -> isResolvedGroupArtifactVersion(resolvedGroupArtifactVersion, "junit", "junit"));
         boolean hasJUnit5 = acc.values().stream().anyMatch(resolvedGroupArtifactVersion -> isResolvedGroupArtifactVersion(resolvedGroupArtifactVersion, "org.junit.jupiter", "junit-jupiter-api"));
         if (Objects.equals(minimumVersion, "4")) {
             if (hasJUnit4) {
                 acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "junit", "junit"));
             } else {
-                return TreeVisitor.noop();
+                acc.clear();
             }
         } else if (Objects.equals(minimumVersion, "5")) {
             if (hasJUnit4) {
-                return TreeVisitor.noop();
+                acc.clear();
+            } else {
+                acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "org.junit.jupiter", "junit-jupiter-api"));
             }
-            acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "org.junit.jupiter", "junit-jupiter-api"));
         } else {
             if (hasJUnit4 && hasJUnit5) {
                 acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "junit", "junit"));
             }
         }
+        return emptyList();
+    }
 
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        if (acc.isEmpty()) {
+            return TreeVisitor.noop();
+        }
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 

@@ -29,9 +29,10 @@ class ParseDefinitionMigrationsTest {
         Path csv = tempDir.resolve("migrations.csv");
         ParseDefinitionMigrations.parseDefinitionMigrations(new File("src/test/resources"), csv.toFile());
         assertThat(csv).hasContent("""
-          acegisecurity,,org.acegisecurity,,
-          activation,activation,javax.activation,activation,
-          com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
+          acegisecurity,,org.acegisecurity,,,official
+          activation,activation,javax.activation,activation,,official
+          javax.mail,javax.mail-api,jakarta.mail,jakarta.mail-api,"Java EE new home is Jakarta EE",official
+          com.jcraft,jsch,com.github.mwiede,jsch,"See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/",unofficial
           """);
     }
 }

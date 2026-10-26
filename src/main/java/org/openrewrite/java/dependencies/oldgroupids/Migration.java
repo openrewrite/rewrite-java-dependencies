@@ -22,8 +22,11 @@ import org.jspecify.annotations.Nullable;
 
 @AllArgsConstructor
 @Data
-@JsonPropertyOrder({"oldGroupId", "oldArtifactId", "newGroupId", "newArtifactId", "context"})
+@JsonPropertyOrder({"oldGroupId", "oldArtifactId", "newGroupId", "newArtifactId", "context", "source"})
 public class Migration {
+    public static final String OFFICIAL = "official";
+    public static final String UNOFFICIAL = "unofficial";
+
     String oldGroupId;
 
     @Nullable
@@ -36,4 +39,6 @@ public class Migration {
 
     @Nullable
     String context;
+
+    String source;
 }

@@ -8,6 +8,31 @@
     {
       "old": "activation:activation",
       "new": "javax.activation:activation"
+    },
+    {
+      "old": "jca:jca",
+      "new": "javax.resource:connector"
+    },
+    {
+      "old": "jca:jca",
+      "new": "javax.resource:connector-api"
+    },
+    {
+      "old": "javax.mail:javax.mail-api",
+      "new": "jakarta.mail:jakarta.mail-api"
+    },
+    {
+      "old": "javax.mail:javax.mail-api",
+      "new": "jakarta.mail:jakarta.mail-api",
+      "context": "Java EE new home is Jakarta EE"
+    },
+    {
+      "old": "log4j:log4j",
+      "new": "org.apache.logging.log4j:log4j-core or ch.qos.reload4j:reload4j"
+    },
+    {
+      "old": "org.eclipse.jetty:jetty-ant",
+      "new": "removed:removed"
     }
   ]
 }

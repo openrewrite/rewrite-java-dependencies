@@ -19,10 +19,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.DependenciesDeclared;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class FindDependency extends Recipe {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient DependenciesDeclared dependenciesDeclared = new DependenciesDeclared(this);
 
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate identifying its publisher.",

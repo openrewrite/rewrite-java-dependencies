@@ -18,8 +18,10 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.config.DataTableDescriptor;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -132,5 +134,12 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void declaresMavenMetadataFailuresDataTable() {
+        assertThat(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null).getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(MavenMetadataFailures.class.getName());
     }
 }

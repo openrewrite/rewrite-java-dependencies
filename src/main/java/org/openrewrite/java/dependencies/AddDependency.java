@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.maven.tree.Scope;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,6 +29,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
+
     // Gradle and Maven shared parameters
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",

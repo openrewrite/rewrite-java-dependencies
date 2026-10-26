@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,6 +31,9 @@ import static java.util.Objects.requireNonNull;
 @EqualsAndHashCode(callSuper = false)
 @Getter
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    private final transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
+
     // Gradle and Maven shared parameters
     @Option(displayName = "Old group ID",
             description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",

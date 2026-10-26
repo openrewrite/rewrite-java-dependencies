@@ -383,4 +383,16 @@ class ExcludeDependencyTest implements RewriteTest {
     void invalidScopeIsInvalid() {
         assertThat(new ExcludeDependency("commons-logging", "commons-logging", null, "bogus").validate().isValid()).isFalse();
     }
+
+    @Test
+    void instanceNameShowsTheDependencyBeingExcluded() {
+        var recipe = new ExcludeDependency("commons-logging", "commons-logging", null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `commons-logging:commons-logging`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new ExcludeDependency(null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
 }

@@ -73,6 +73,15 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
                "For a Maven project, removes a single dependency from the `<dependencies>` section of the `pom.xml`.";
 
     @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        return String.format("`%s:%s`", groupId, artifactId);
+    }
+
+    @Override
     public Validated<Object> validate() {
         return super.validate().and(Validated.test("scope", "scope is a valid Maven scope", scope,
                 s -> Scope.fromName(s) != Scope.Invalid));

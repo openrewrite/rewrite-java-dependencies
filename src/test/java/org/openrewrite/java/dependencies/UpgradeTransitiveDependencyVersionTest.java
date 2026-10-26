@@ -16,11 +16,37 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.config.DataTableDescriptor;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpgradeTransitiveDependencyVersionTest implements RewriteTest {
+
+    private static UpgradeTransitiveDependencyVersion upgradeLog4jBom() {
+        return new UpgradeTransitiveDependencyVersion("org.apache.logging.log4j", "log4j-bom", "2.24.x",
+          null, null, null, null, null, null, null, null);
+    }
+
+    @Test
+    void declaresMavenMetadataFailuresDataTable() {
+        assertThat(upgradeLog4jBom().getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(MavenMetadataFailures.class.getName());
+    }
+
+    @Test
+    void instanceNameShowsTheDependencyAndTargetVersion() {
+        var recipe = upgradeLog4jBom();
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.apache.logging.log4j:log4j-bom:2.24.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new UpgradeTransitiveDependencyVersion(null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
 
     @Test
     void invalidVersionIsInvalid() {

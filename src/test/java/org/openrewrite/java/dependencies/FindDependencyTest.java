@@ -7,6 +7,8 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.config.DataTableDescriptor;
+import org.openrewrite.maven.table.DependenciesDeclared;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -141,6 +143,31 @@ class FindDependencyTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void declaresDependenciesDeclaredDataTable() {
+        assertThat(new FindDependency("org.openrewrite", "rewrite-core", null, null, null).getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(DependenciesDeclared.class.getName());
+    }
+
+    @Test
+    void instanceNameShowsTheDependencyBeingSearchedFor() {
+        var recipe = new FindDependency("org.openrewrite", "rewrite-core", "8.0.0", null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.openrewrite:rewrite-core:8.0.0`");
+    }
+
+    @Test
+    void instanceNameOmitsTheVersionWhenNotGiven() {
+        var recipe = new FindDependency("org.openrewrite", "rewrite-core", null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.openrewrite:rewrite-core`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new FindDependency(null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
     }
 
     @Test

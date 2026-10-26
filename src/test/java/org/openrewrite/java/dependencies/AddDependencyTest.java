@@ -21,7 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.config.DataTableDescriptor;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -123,6 +125,31 @@ class AddDependencyTest implements RewriteTest {
             )
           )
         );
+    }
+
+    @Test
+    void declaresMavenMetadataFailuresDataTable() {
+        assertThat(addDependency("com.google.guava:guava:29.0-jre", "com.google.common.math.IntMath", null).getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(MavenMetadataFailures.class.getName());
+    }
+
+    @Test
+    void instanceNameShowsTheDependencyBeingAdded() {
+        var recipe = addDependency("com.google.guava:guava:29.0-jre", "com.google.common.math.IntMath", null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava:29.0-jre`");
+    }
+
+    @Test
+    void instanceNameOmitsTheVersionWhenNotGiven() {
+        var recipe = addDependency("com.google.guava:guava", "com.google.common.math.IntMath", null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new AddDependency(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
     }
 
 

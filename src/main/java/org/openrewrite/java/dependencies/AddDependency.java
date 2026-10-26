@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.maven.tree.Scope;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,6 +29,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
+
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
             example = "com.google.guava")
@@ -132,6 +136,18 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     String description = "For a Gradle project, add a dependency to a `build.gradle` or `build.gradle.kts` file in the correct " +
                "configuration based on where it is used. For a Maven project, add a dependency to a `pom.xml` file in the " +
                "correct scope based on where it is used.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
 
     @Override
     public Validated<Object> validate() {

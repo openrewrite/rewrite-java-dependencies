@@ -158,10 +158,10 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     }
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.gradle.UpgradeTransitiveDependencyVersion> gradleDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.gradle.UpgradeTransitiveDependencyVersion> gradleDelegate = new AtomicReference<>();
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.maven.UpgradeTransitiveDependencyVersion> mavenDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.maven.UpgradeTransitiveDependencyVersion> mavenDelegate = new AtomicReference<>();
 
     private org.openrewrite.gradle.UpgradeTransitiveDependencyVersion getGradleUpgradeTransitive() {
         org.openrewrite.gradle.UpgradeTransitiveDependencyVersion recipe = gradleDelegate.get();

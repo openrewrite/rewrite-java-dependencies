@@ -76,10 +76,8 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     @Nullable
     private final List<String> retainVersions;
 
-    @Getter
     final String displayName = "Upgrade Gradle or Maven dependency versions";
 
-    @Getter
     final String description = "For Gradle projects, upgrade the version of a dependency in a `build.gradle` file. " +
             "Supports updating dependency declarations of various forms:\n" +
             " * `String` notation: `\"group:artifact:version\"` \n" +

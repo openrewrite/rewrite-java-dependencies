@@ -21,8 +21,8 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.table.MavenRepositoryOrder;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindRepositoryOrder extends Recipe {
     // Populated by the sub-recipes. Listed here so the data table is included in the recipe metadata.
     transient MavenRepositoryOrder repositoryOrder = new MavenRepositoryOrder(this);

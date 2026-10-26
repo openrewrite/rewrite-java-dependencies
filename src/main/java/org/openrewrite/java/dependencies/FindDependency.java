@@ -20,8 +20,8 @@ import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindDependency extends Recipe {
 
     @Option(displayName = "Group ID",

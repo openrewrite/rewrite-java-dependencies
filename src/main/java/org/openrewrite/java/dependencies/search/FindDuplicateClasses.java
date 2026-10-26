@@ -82,8 +82,8 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     return cu;
                 }
 
-                Map<String, List<String>> typeToGavs = new HashMap<>();
-                for (Map.Entry<String, List<JavaType.FullyQualified>> entry : gavToTypes.entrySet()) {
+                Map<String, List<String>> typeToGavs = new TreeMap<>();
+                for (Map.Entry<String, List<JavaType.FullyQualified>> entry : new TreeMap<>(gavToTypes).entrySet()) {
                     String gav = entry.getKey();
                     for (JavaType.FullyQualified type : entry.getValue()) {
                         typeToGavs.computeIfAbsent(type.getFullyQualifiedName(), k -> new ArrayList<>()).add(gav);

@@ -36,6 +36,7 @@ import org.openrewrite.semver.VersionComparator;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 @EqualsAndHashCode(callSuper = false)
@@ -111,7 +112,7 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
     }
 
     @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+    public Collection<? extends SourceFile> generate(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, ExecutionContext ctx) {
         VersionComparator versionComparator = version == null ? null :
                 requireNonNull(Semver.validate(version, null).getValue());
         StaticVersionComparator staticVersionComparator = new StaticVersionComparator();
@@ -123,11 +124,18 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                 .filter(min -> versionComparator == null || versionComparator.isValid(null, min))
                 .orElse(null);
         if (minimumVersion == null) {
+            acc.clear();
+        } else {
+            acc.entrySet().removeIf(e -> !e.getValue().getVersion().equals(minimumVersion));
+        }
+        return emptyList();
+    }
+
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        if (acc.isEmpty()) {
             return TreeVisitor.noop();
         }
-
-        acc.entrySet().removeIf(e -> !e.getValue().getVersion().equals(minimumVersion));
-
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 

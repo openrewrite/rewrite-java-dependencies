@@ -40,11 +40,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
+    private static final MethodMatcher GRADLE_DEPENDENCY_MATCHER = new MethodMatcher("DependencyHandlerSpec *(..)");
+    private static final XPathMatcher MAVEN_DEPENDENCY_MATCHER = new XPathMatcher("//dependencies/dependency");
     private static final Pattern NOT_A_COORDINATE = Pattern.compile("[\\s{,]");
 
     transient RelocatedDependencyReport report = new RelocatedDependencyReport(this);
@@ -131,12 +134,10 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
             private TreeVisitor<?, ExecutionContext> gradleVisitor() {
                 return new GroovyIsoVisitor<ExecutionContext>() {
-                    private final MethodMatcher dependencyMatcher = new MethodMatcher("DependencyHandlerSpec *(..)");
-
                     @Override
                     public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
                         J.MethodInvocation mi = super.visitMethodInvocation(method, ctx);
-                        if (dependencyMatcher.matches(mi)) {
+                        if (GRADLE_DEPENDENCY_MATCHER.matches(mi)) {
                             List<Expression> methodArguments = mi.getArguments();
                             Expression firstMethodArgument = methodArguments.get(0);
                             if (firstMethodArgument instanceof J.Literal) {
@@ -162,7 +163,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String gav = (String) literal.getValue();
                         String[] parts = gav.split(":");
                         if (parts.length >= 2) {
-                            mi = maybeUpdate(mi, parts[0], parts[1], ctx);
+                            mi = maybeUpdate(mi, parts[0], parts[1], ctx, this::doAfterVisit);
                         }
                         return mi;
                     }
@@ -210,76 +211,56 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                             }
                         }
                         if (groupId != null) {
-                            mi = maybeUpdate(mi, groupId, artifactId, ctx);
+                            mi = maybeUpdate(mi, groupId, artifactId, ctx, this::doAfterVisit);
                         }
                         return mi;
-                    }
-
-                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                        Relocation relocation = getRelocation(groupId, artifactId);
-                        if (relocation != null) {
-                            insertRow(groupId, artifactId, relocation, ctx);
-                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                                String newGroupId = relocation.getTo().getGroupId();
-                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
-                                    doAfterVisit(new ChangeDependency(
-                                            groupId, artifactId, newGroupId, newArtifactId,
-                                            "latest.release", null, null, null).getVisitor());
-                                    return tree;
-                                }
-                            }
-                            return getSearchResultFound(tree, relocation);
-                        }
-                        return tree;
                     }
                 };
             }
 
             private TreeVisitor<?, ExecutionContext> mavenVisitor() {
                 return new MavenIsoVisitor<ExecutionContext>() {
-                    private final XPathMatcher dependencyMatcher = new XPathMatcher("//dependencies/dependency");
-
                     @Override
                     public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
                         tag = super.visitTag(tag, ctx);
                         Optional<String> optionalGroupId = tag.getChildValue("groupId");
                         Optional<String> optionalArtifactId = tag.getChildValue("artifactId");
-                        if (dependencyMatcher.matches(getCursor())) {
+                        if (MAVEN_DEPENDENCY_MATCHER.matches(getCursor())) {
                             if (optionalGroupId.isPresent()) {
                                 String groupId = optionalGroupId.get();
                                 String artifactId = optionalArtifactId.orElse(null);
-                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx, this::doAfterVisit);
                             }
                         } else if (isPluginTag()) {
                             if (optionalArtifactId.isPresent()) {
                                 String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
                                 String artifactId = optionalArtifactId.get();
-                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx, this::doAfterVisit);
                             }
                         }
                         return tag;
                     }
-
-                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                        Relocation relocation = getRelocation(groupId, artifactId);
-                        if (relocation != null) {
-                            insertRow(groupId, artifactId, relocation, ctx);
-                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                                String newGroupId = relocation.getTo().getGroupId();
-                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
-                                    doAfterVisit(new ChangeDependency(
-                                            groupId, artifactId, newGroupId, newArtifactId,
-                                            "latest.release", null, null, null).getVisitor());
-                                    return tree;
-                                }
-                            }
-                            return getSearchResultFound(tree, relocation);
-                        }
-                        return tree;
-                    }
                 };
+            }
+
+            private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx,
+                                                   Consumer<TreeVisitor<?, ExecutionContext>> doAfterVisit) {
+                Relocation relocation = getRelocation(groupId, artifactId);
+                if (relocation != null) {
+                    insertRow(groupId, artifactId, relocation, ctx);
+                    if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
+                        String newGroupId = relocation.getTo().getGroupId();
+                        String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
+                        if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
+                            doAfterVisit.accept(new ChangeDependency(
+                                    groupId, artifactId, newGroupId, newArtifactId,
+                                    "latest.release", null, null, null).getVisitor());
+                            return tree;
+                        }
+                    }
+                    return getSearchResultFound(tree, relocation);
+                }
+                return tree;
             }
 
             private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {

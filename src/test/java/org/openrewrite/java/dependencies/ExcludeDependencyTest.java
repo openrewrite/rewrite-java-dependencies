@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
@@ -186,32 +187,6 @@ class ExcludeDependencyTest implements RewriteTest {
                         <artifactId>commons-logging</artifactId>
                       </exclusion>
                     </exclusions>
-                  </dependency>
-                </dependencies>
-              </project>
-              """
-          )
-        );
-    }
-
-    @Test
-    void mavenScopeFilter() {
-        rewriteRun(
-          spec -> spec.recipe(new ExcludeDependency("commons-logging", "commons-logging", null, "compile")),
-          //language=xml
-          pomXml(
-            """
-              <project>
-                <modelVersion>4.0.0</modelVersion>
-                <groupId>com.example</groupId>
-                <artifactId>demo</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.apache.httpcomponents</groupId>
-                    <artifactId>httpclient</artifactId>
-                    <version>4.5.13</version>
-                    <scope>test</scope>
                   </dependency>
                 </dependencies>
               </project>
@@ -394,5 +369,34 @@ class ExcludeDependencyTest implements RewriteTest {
     void instanceNameOmitsTheSuffixWhenUnconfigured() {
         var recipe = new ExcludeDependency(null, null, null, null);
         assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
+
+    @Nested
+    class NoChange {
+        @Test
+        void mavenScopeFilter() {
+            rewriteRun(
+              spec -> spec.recipe(new ExcludeDependency("commons-logging", "commons-logging", null, "compile")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.example</groupId>
+                    <artifactId>demo</artifactId>
+                    <version>0.0.1-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                        <version>4.5.13</version>
+                        <scope>test</scope>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

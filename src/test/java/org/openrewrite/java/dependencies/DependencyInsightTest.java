@@ -24,6 +24,8 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class DependencyInsightTest implements RewriteTest {
@@ -68,6 +70,38 @@ class DependencyInsightTest implements RewriteTest {
                   </dependency>
                 </dependencies>
               </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void gradle() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi()),
+          //language=groovy
+          buildGradle(
+            """
+              plugins {
+                  id 'java-library'
+              }
+              repositories {
+                  mavenCentral()
+              }
+              dependencies {
+                  implementation 'org.springframework:spring-core:5.2.6.RELEASE'
+              }
+              """,
+            """
+              plugins {
+                  id 'java-library'
+              }
+              repositories {
+                  mavenCentral()
+              }
+              dependencies {
+                  /*~~(org.springframework:spring-core:5.2.6.RELEASE,org.springframework:spring-jcl:5.2.6.RELEASE)~~>*/implementation 'org.springframework:spring-core:5.2.6.RELEASE'
+              }
               """
           )
         );

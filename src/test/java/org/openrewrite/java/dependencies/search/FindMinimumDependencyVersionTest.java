@@ -15,12 +15,15 @@
  */
 package org.openrewrite.java.dependencies.search;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.mavenProject;
@@ -37,6 +40,10 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
     @Test
     void minimumMaven() {
         rewriteRun(
+          spec -> spec.dataTable(DependenciesInUse.Row.class, rows -> assertThat(rows)
+            .extracting(DependenciesInUse.Row::getProjectName, DependenciesInUse.Row::getGroupId,
+              DependenciesInUse.Row::getArtifactId, DependenciesInUse.Row::getVersion)
+            .containsOnly(tuple("core", "com.fasterxml.jackson.core", "jackson-core", "2.14.0"))),
           mavenProject(
             "core",
             //language=xml
@@ -145,29 +152,6 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
     }
 
     @Test
-    void noMatchBecauseVersionIsOutsideRange() {
-        rewriteRun(
-          //language=xml
-          pomXml(
-            """
-              <project>
-                <groupId>org.openrewrite</groupId>
-                <artifactId>core</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                        <version>2.11.0</version>
-                    </dependency>
-                </dependencies>
-              </project>
-              """
-          )
-        );
-    }
-
-    @Test
     void findMultiple() {
         rewriteRun(
           //language=yaml
@@ -232,5 +216,31 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
     @Test
     void invalidVersionIsInvalid() {
         assertThat(new FindMinimumDependencyVersion("junit", "junit", "latest.bogus").validate().isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+        @Test
+        void noMatchBecauseVersionIsOutsideRange() {
+            rewriteRun(
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <groupId>org.openrewrite</groupId>
+                    <artifactId>core</artifactId>
+                    <version>0.1.0-SNAPSHOT</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-core</artifactId>
+                            <version>2.11.0</version>
+                        </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

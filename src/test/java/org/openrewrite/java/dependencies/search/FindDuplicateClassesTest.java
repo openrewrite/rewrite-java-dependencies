@@ -17,122 +17,125 @@ package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
-import org.openrewrite.SourceFile;
 import org.openrewrite.Tree;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.dependencies.table.DuplicateClassesReport;
 import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.marker.JavaSourceSet;
-import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.test.RecipeSpec;
+import org.openrewrite.test.RewriteTest;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.java.Assertions.java;
 
-/**
- * Tests for FindDuplicateClasses recipe.
- * <p>
- * This recipe uses JavaSourceSet.gavToTypes to find duplicate classes.
- * The tests use actual JARs from the runtime classpath that have known duplicates
- * (e.g., SLF4J binding classes in logback-classic and slf4j-nop).
- */
-class FindDuplicateClassesTest {
+class FindDuplicateClassesTest implements RewriteTest {
 
-    // Get JAR paths for SLF4J dependencies that have overlapping binding classes
-    private static final List<Path> SLF4J_CLASSPATH = JavaParser.runtimeClasspath().stream()
-        .filter(p -> p.toString().contains("logback-classic") || p.toString().contains("slf4j-nop"))
-        .toList();
+    private static final JavaProject PROJECT = new JavaProject(Tree.randomId(), "test-project", null);
 
-    private static final List<Path> GUAVA_CLASSPATH = JavaParser.runtimeClasspath().stream()
-        .filter(p -> p.toString().contains("guava") && !p.toString().contains("listenablefuture"))
-        .toList();
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new FindDuplicateClasses());
+    }
 
     @DocumentExample
     @Test
     void findsDuplicateSlf4jBindingClasses() {
-        // Build JavaSourceSet with both SLF4J binding JARs
-        JavaSourceSet sourceSet = JavaSourceSet.build("main", SLF4J_CLASSPATH);
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic", "slf4j-nop"));
+        rewriteRun(
+          spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows -> {
+              assertThat(rows)
+                .allSatisfy(row -> {
+                    assertThat(row.getProjectName()).isEqualTo("test-project");
+                    assertThat(row.getSourceSet()).isEqualTo("main");
+                    assertThat(List.of(row.getDependency1(), row.getDependency2()))
+                      .satisfiesExactlyInAnyOrder(
+                        gav -> assertThat(gav).contains("logback-classic"),
+                        gav -> assertThat(gav).contains("slf4j-nop"));
+                    assertThat(row.getAdditionalDependencies()).isEmpty();
+                })
+                .extracting(DuplicateClassesReport.Row::getTypeName)
+                .contains("org.slf4j.impl.StaticLoggerBinder")
+                .doesNotHaveDuplicates();
+          }),
+          java(
+            """
+              class A {
+              }
+              """,
+            spec -> spec.markers(sourceSet, PROJECT)
+          )
+        );
+    }
 
-        // Verify that both JARs contributed types
-        assertThat(sourceSet.getGavToTypes())
-            .as("Both JARs should contribute types")
-            .hasSizeGreaterThanOrEqualTo(2);
-
-        // Parse a simple Java source and attach the marker
-        List<SourceFile> sources = JavaParser.fromJavaVersion()
-            .build()
-            .parse("""
-                class A {
-                    void log() {
-                        System.out.println("test");
-                    }
-                }
-                """)
-            .<SourceFile>map(sf -> sf.withMarkers(sf.getMarkers()
-                .add(sourceSet)
-                .add(new JavaProject(Tree.randomId(), "test-project", null))))
-            .toList();
-
-        // Run the recipe scanner manually (since DataTable requires full execution context)
-        // Instead, we test the core duplicate detection logic directly
-        Map<String, List<JavaType.FullyQualified>> gavToTypes = sourceSet.getGavToTypes();
-
-        // Invert the mapping: type name -> list of GAVs containing that type
-        Map<String, List<String>> typeToGavs = new HashMap<>();
-        for (Map.Entry<String, List<JavaType.FullyQualified>> entry : gavToTypes.entrySet()) {
-            String gav = entry.getKey();
-            for (JavaType.FullyQualified type : entry.getValue()) {
-                typeToGavs.computeIfAbsent(type.getFullyQualifiedName(), k -> new ArrayList<>()).add(gav);
-            }
-        }
-
-        // Find duplicates (types appearing in more than one GAV)
-        List<String> duplicates = typeToGavs.entrySet().stream()
-            .filter(e -> e.getValue().size() > 1)
-            .map(Map.Entry::getKey)
-            .toList();
-
-        // Verify duplicates were detected
-        assertThat(duplicates)
-            .as("Should detect duplicate SLF4J binding classes from logback-classic and slf4j-nop")
-            .isNotEmpty()
-            .anyMatch(typeName -> typeName.contains("org.slf4j.impl."));
+    @Test
+    void reportsEachSourceSetOnce() {
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic", "slf4j-nop"));
+        rewriteRun(
+          spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows ->
+            assertThat(rows)
+              .extracting(DuplicateClassesReport.Row::getTypeName)
+              .doesNotHaveDuplicates()),
+          java(
+            """
+              class A {
+              }
+              """,
+            spec -> spec.markers(sourceSet, PROJECT)
+          ),
+          java(
+            """
+              class B {
+              }
+              """,
+            spec -> spec.markers(sourceSet, PROJECT)
+          )
+        );
     }
 
     @Test
     void noDuplicatesWithSingleDependency() {
-        // Build JavaSourceSet with only guava (no conflicts)
-        JavaSourceSet sourceSet = JavaSourceSet.build("main", GUAVA_CLASSPATH);
-
-        Map<String, List<JavaType.FullyQualified>> gavToTypes = sourceSet.getGavToTypes();
-
-        // Invert the mapping to find any duplicates
-        Map<String, List<String>> typeToGavs = new HashMap<>();
-        for (Map.Entry<String, List<JavaType.FullyQualified>> entry : gavToTypes.entrySet()) {
-            String gav = entry.getKey();
-            for (JavaType.FullyQualified type : entry.getValue()) {
-                typeToGavs.computeIfAbsent(type.getFullyQualifiedName(), k -> new ArrayList<>()).add(gav);
-            }
-        }
-
-        // Find duplicates, excluding module-info artifacts (multi-release JAR false positives)
-        List<String> duplicates = typeToGavs.entrySet().stream()
-            .filter(e -> e.getValue().size() > 1)
-            .map(Map.Entry::getKey)
-            .filter(name -> !name.contains("module-info"))
-            .toList();
-
-        // Verify no real duplicates (guava has no internal conflicts)
-        assertThat(duplicates)
-            .as("No duplicates when classpath has no overlapping JARs")
-            .isEmpty();
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("guava"));
+        rewriteRun(
+          spec -> spec.afterRecipe(run ->
+            assertThat(run.getDataTableRows(DuplicateClassesReport.class)).isEmpty()),
+          java(
+            """
+              class A {
+              }
+              """,
+            spec -> spec.markers(sourceSet, PROJECT)
+          )
+        );
     }
 
     @Test
-    void recipeHasCorrectMetadata() {
-        FindDuplicateClasses recipe = new FindDuplicateClasses();
-        assertThat(recipe.getDisplayName()).isEqualTo("Find duplicate classes on the classpath");
-        assertThat(recipe.getDescription()).contains("duplicate");
-        assertThat(recipe.getDescription()).contains("classpath");
+    void noDuplicatesWithoutSourceSet() {
+        rewriteRun(
+          spec -> spec.afterRecipe(run ->
+            assertThat(run.getDataTableRows(DuplicateClassesReport.class)).isEmpty()),
+          java(
+            """
+              class A {
+              }
+              """
+          )
+        );
+    }
+
+    private static List<Path> classpath(String... artifactIds) {
+        return JavaParser.runtimeClasspath().stream()
+          .filter(path -> {
+              String fileName = path.getFileName().toString();
+              for (String artifactId : artifactIds) {
+                  if (fileName.startsWith(artifactId + "-")) {
+                      return true;
+                  }
+              }
+              return false;
+          })
+          .toList();
     }
 }

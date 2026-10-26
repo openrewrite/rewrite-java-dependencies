@@ -17,9 +17,13 @@ package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
+import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.mavenProject;
@@ -114,9 +118,14 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
             );
         }
 
+        @DocumentExample
         @Test
         void minimumJUnit4AndJUnit5Present() {
             rewriteRun(
+              spec -> spec.dataTable(DependenciesInUse.Row.class, rows -> assertThat(rows)
+                .extracting(DependenciesInUse.Row::getProjectName, DependenciesInUse.Row::getGroupId,
+                  DependenciesInUse.Row::getArtifactId, DependenciesInUse.Row::getVersion)
+                .containsOnly(tuple("core", "junit", "junit", "4.12"))),
               mavenProject(
                 "core",
                 //language=xml

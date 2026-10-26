@@ -42,6 +42,9 @@ import static org.openrewrite.internal.StringUtils.isBlank;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyResolutionDiagnostic.Accumulator> {
+    private static final String DEFAULT_GROUP_ID = "com.fasterxml.jackson.core";
+    private static final String DEFAULT_ARTIFACT_ID = "jackson-core";
+    private static final String DEFAULT_VERSION = "2.16.0";
 
     transient RepositoryAccessibilityReport report = new RepositoryAccessibilityReport(this);
     transient GradleDependencyConfigurationErrors gradleErrors = new GradleDependencyConfigurationErrors(this);
@@ -60,30 +63,30 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
 
     @Option(displayName = "Group ID",
             description = "The group ID of a dependency to attempt to download from the repository. " +
-                          "Default value is \"com.fasterxml.jackson.core\". " +
+                          "Default value is \"" + DEFAULT_GROUP_ID + "\". " +
                           "If this dependency is not found in the repository the error will be noted in the report. " +
                           "There is no need to specify an alternate value for this parameter unless the repository is known not to contain jackson-core.",
-            example = "com.fasterxml.jackson.core",
+            example = DEFAULT_GROUP_ID,
             required = false)
     @Nullable
     String groupId;
 
     @Option(displayName = "Artifact ID",
             description = "The artifact ID of a dependency to attempt to download from the repository. " +
-                          "Default value is \"jackson-core\". " +
+                          "Default value is \"" + DEFAULT_ARTIFACT_ID + "\". " +
                           "If this dependency is not found in the repository the error will be noted in the report. " +
                           "There is no need to specify an alternate value for this parameter unless the repository is known not to contain jackson-core.",
-            example = "jackson-core",
+            example = DEFAULT_ARTIFACT_ID,
             required = false)
     @Nullable
     String artifactId;
 
     @Option(displayName = "Version",
             description = "The version of a dependency to attempt to download from the repository. " +
-                          "Default value is \"2.16.0\". " +
+                          "Default value is \"" + DEFAULT_VERSION + "\". " +
                           "If this dependency is not found in the repository the error will be noted in the report. " +
                           "There is no need to specify an alternate value for this parameter unless the repository is known not to contain jackson-core.",
-            example = "2.16.0",
+            example = DEFAULT_VERSION,
             required = false)
     @Nullable
     String version;
@@ -182,9 +185,9 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                 } else {
                     if (seen.add(noTrailingSlash(normalized.getUri()))) {
                         GroupArtifactVersion gav = new GroupArtifactVersion(
-                                isBlank(groupId) ? "com.fasterxml.jackson.core" : groupId,
-                                isBlank(artifactId) ? "jackson-core" : artifactId,
-                                isBlank(version) ? "2.16.0" : version);
+                                isBlank(groupId) ? DEFAULT_GROUP_ID : groupId,
+                                isBlank(artifactId) ? DEFAULT_ARTIFACT_ID : artifactId,
+                                isBlank(version) ? DEFAULT_VERSION : version);
                         Throwable resolutionThrowable = null;
                         try {
                             mpd.download(gav, null, null, singletonList(normalized));

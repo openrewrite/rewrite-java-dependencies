@@ -1082,5 +1082,109 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
               )
             );
         }
+
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyThatIsOptionalInProvider() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.apache.commons", "commons-compress")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-compress</artifactId>
+                        <version>1.26.0</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.tukaani</groupId>
+                        <artifactId>xz</artifactId>
+                        <version>1.9</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyWithClassifier() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "com.fasterxml.jackson.core", "jackson-databind")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.17.0</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.17.0</version>
+                        <classifier>sources</classifier>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsPlainDependencyDeclaredAlongsideTestJar() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "com.fasterxml.jackson.core", "jackson-databind")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.17.0</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.17.0</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.17.0</version>
+                        <type>test-jar</type>
+                        <scope>test</scope>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

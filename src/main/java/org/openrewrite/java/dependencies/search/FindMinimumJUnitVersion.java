@@ -22,8 +22,6 @@ import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.internal.StringUtils;
-import org.openrewrite.java.dependencies.internal.StaticVersionComparator;
-import org.openrewrite.java.dependencies.internal.VersionParser;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.maven.tree.GroupArtifact;
@@ -36,8 +34,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
 
 import static java.util.Collections.emptyList;
+import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.OLDEST_FIRST;
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.applyMarkersForLocatedGavs;
 
 @EqualsAndHashCode(callSuper = false)
@@ -80,18 +80,17 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
                 if (tree == null) {
                     return null;
                 }
-                VersionParser versionParser = new VersionParser();
                 Markers m = tree.getMarkers();
                 m.findFirst(GradleProject.class).ifPresent(gradle -> {
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        collectJUnit4(versionParser, conf.getResolved(), acc);
-                        collectJUnit5(versionParser, conf.getResolved(), acc);
+                        collectJUnit4(conf.getResolved(), acc);
+                        collectJUnit5(conf.getResolved(), acc);
                     }
                 });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     for (List<ResolvedDependency> resolved : maven.getDependencies().values()) {
-                        collectJUnit4(versionParser, resolved, acc);
-                        collectJUnit5(versionParser, resolved, acc);
+                        collectJUnit4(resolved, acc);
+                        collectJUnit5(resolved, acc);
                     }
                 });
                 return tree;
@@ -136,26 +135,20 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 
-    private void collectJUnit4(VersionParser versionParser, List<ResolvedDependency> resolved,
-                               Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        collectVersion(versionParser, resolved, "junit", "junit", acc);
+    private void collectJUnit4(List<ResolvedDependency> resolved, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        collectVersion(resolved, "junit", "junit", acc);
     }
 
-    private void collectJUnit5(VersionParser versionParser, List<ResolvedDependency> resolved,
-                               Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        collectVersion(versionParser, resolved, "org.junit.jupiter", "junit-jupiter-api", acc);
+    private void collectJUnit5(List<ResolvedDependency> resolved, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+        collectVersion(resolved, "org.junit.jupiter", "junit-jupiter-api", acc);
     }
 
-    private static void collectVersion(VersionParser versionParser, List<ResolvedDependency> resolved, String groupIdPattern, String artifactIdPattern, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        StaticVersionComparator versionComparator = new StaticVersionComparator();
+    private static void collectVersion(List<ResolvedDependency> resolved, String groupIdPattern, String artifactIdPattern, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
         for (ResolvedDependency dep : resolved) {
             if (StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern) &&
                     StringUtils.matchesGlob(dep.getArtifactId(), artifactIdPattern)) {
                 acc.merge(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()),
-                        dep.getGav(), (d1, d2) -> versionComparator.compare(
-                                versionParser.transform(d1.getVersion()),
-                                versionParser.transform(d2.getVersion())) < 0 ?
-                                d1 : d2);
+                        dep.getGav(), BinaryOperator.minBy(OLDEST_FIRST));
             }
         }
     }

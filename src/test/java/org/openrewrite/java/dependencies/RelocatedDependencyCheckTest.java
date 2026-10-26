@@ -138,7 +138,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void markInsteadOfChangeWhenTargetIsNotACoordinate() {
             rewriteRun(
-              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              spec -> spec.recipe(new RelocatedDependencyCheck(true)),
               //language=xml
               pomXml(
                 """

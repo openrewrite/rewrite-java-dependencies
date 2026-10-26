@@ -59,8 +59,8 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
             example = "jackson-module-*")
     String artifactIdPattern;
 
-    @Option(displayName = "Scope",
-            description = "Match dependencies with the specified scope. All scopes are searched by default.",
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, match dependencies with the specified scope. All scopes are searched by default.",
             valid = {"compile", "test", "runtime", "provided", "system"},
             example = "compile",
             required = false)

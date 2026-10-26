@@ -48,14 +48,14 @@ public class DoesNotIncludeDependency extends Recipe {
     String version;
 
     @Option(displayName = "Only direct dependencies",
-            description = "Default false. If enabled, transitive dependencies will not be considered.",
+            description = "For Maven only, if enabled, transitive dependencies will not be considered. Defaults to `false`.",
             required = false,
             example = "true")
     @Nullable
     Boolean onlyDirect;
 
     @Option(displayName = "Maven scope",
-            description = "Default any. If specified, only the requested scope's classpaths will be checked.",
+            description = "For Maven only, if specified, only the requested scope's classpaths will be checked. All scopes are checked by default.",
             required = false,
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile")
@@ -63,7 +63,7 @@ public class DoesNotIncludeDependency extends Recipe {
     String scope;
 
     @Option(displayName = "Gradle configuration",
-            description = "Match dependencies with the specified configuration. If not specified, all configurations will be searched.",
+            description = "For Gradle only, match dependencies with the specified configuration. If not specified, all configurations will be searched.",
             example = "compileClasspath",
             required = false)
     @Nullable

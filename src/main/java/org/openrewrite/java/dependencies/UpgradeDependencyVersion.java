@@ -61,14 +61,14 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     private final String versionPattern;
 
     @Option(displayName = "Override managed version",
-            description = "For Maven project only, This flag can be set to explicitly override a managed " +
+            description = "For Maven only, this flag can be set to explicitly override a managed " +
                           "dependency's version. The default for this flag is `false`.",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Retain versions",
-            description = "For Maven project only, accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed " +
+            description = "For Maven only, accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed " +
                           "from dependency management after the changes from this recipe, then it will be retained with an explicit version. " +
                           "The version can be omitted from the GAV to use the old value from dependency management.",
             example = "com.jcraft:jsch",

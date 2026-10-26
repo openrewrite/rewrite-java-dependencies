@@ -50,17 +50,15 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
     @Nullable
     String unlessUsing;
 
-    // Gradle only parameter
-    @Option(displayName = "The dependency configuration",
-            description = "The dependency configuration to remove from.",
+    @Option(displayName = "Gradle configuration",
+            description = "For Gradle only, the dependency configuration to remove from.",
             example = "api",
             required = false)
     @Nullable
     String configuration;
 
-    // Maven only parameter
-    @Option(displayName = "Scope",
-            description = "Only remove dependencies if they are in this scope. If 'runtime', this will" +
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, only remove dependencies if they are in this scope. If 'runtime', this will" +
                           "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile",

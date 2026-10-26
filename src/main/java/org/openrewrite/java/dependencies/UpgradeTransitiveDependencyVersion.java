@@ -51,7 +51,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String version;
 
     @Option(displayName = "Scope",
-            description = "An optional scope to use for the dependency management tag. Relevant only to Maven.",
+            description = "For Maven only, an optional scope to use for the dependency management tag.",
             example = "import",
             valid = {"import", "runtime", "provided", "test"},
             required = false)
@@ -59,7 +59,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String scope;
 
     @Option(displayName = "Type",
-            description = "An optional type to use for the dependency management tag. Relevant only to Maven builds.",
+            description = "For Maven only, an optional type to use for the dependency management tag.",
             valid = {"jar", "pom", "war"},
             example = "pom",
             required = false)
@@ -67,7 +67,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String type;
 
     @Option(displayName = "Classifier",
-            description = "An optional classifier to use for the dependency management tag. Relevant only to Maven.",
+            description = "For Maven only, an optional classifier to use for the dependency management tag.",
             example = "test",
             required = false)
     @Nullable
@@ -89,20 +89,20 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String because;
 
     @Option(displayName = "Releases only",
-            description = "Whether to exclude snapshots from consideration when using a semver selector",
+            description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
             required = false)
     @Nullable
     Boolean releasesOnly;
 
     @Option(displayName = "Only if using glob expression for group:artifact",
-            description = "Only add managed dependencies to projects having a dependency matching the expression.",
+            description = "For Maven only, only add managed dependencies to projects having a dependency matching the expression.",
             example = "org.apache.logging.log4j:log4j*",
             required = false)
     @Nullable
     String onlyIfUsing;
 
     @Option(displayName = "Add to the root pom",
-            description = "Add to the root pom where root is the eldest parent of the pom within the source set.",
+            description = "For Maven only, add to the root pom where root is the eldest parent of the pom within the source set.",
             required = false)
     @Nullable
     Boolean addToRootPom;

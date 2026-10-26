@@ -49,7 +49,7 @@ public class FindDependency extends Recipe {
     @Nullable
     String versionPattern;
 
-    @Option(displayName = "Configuration",
+    @Option(displayName = "Gradle configuration",
             description = "For Gradle only, the dependency configuration to search for dependencies in. If omitted then all configurations will be searched.",
             example = "api",
             required = false)

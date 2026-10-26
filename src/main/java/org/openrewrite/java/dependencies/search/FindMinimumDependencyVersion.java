@@ -69,7 +69,7 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                "a repository. It is possible that, for example, the main " +
                "source set of a project uses Jackson 2.11, but a test source set " +
                "uses Jackson 2.16. In this case, the oldest Jackson version in use is " +
-               "Java 2.11.";
+               "Jackson 2.11.";
 
     @Override
     public Validated<Object> validate() {

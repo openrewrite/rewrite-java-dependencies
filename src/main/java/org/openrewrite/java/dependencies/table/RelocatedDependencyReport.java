@@ -32,20 +32,20 @@ public class RelocatedDependencyReport extends DataTable<RelocatedDependencyRepo
 
     @Value
     public static class Row {
-        @Column(displayName = "Dependency group id",
+        @Column(displayName = "Dependency group ID",
                 description = "The Group ID of the dependency in use.")
         String dependencyGroupId;
 
-        @Column(displayName = "Dependency artifact id",
+        @Column(displayName = "Dependency artifact ID",
                 description = "The Artifact ID of the dependency in use.")
         @Nullable
         String dependencyArtifactId;
 
-        @Column(displayName = "Relocated dependency group id",
+        @Column(displayName = "Relocated dependency group ID",
                 description = "The Group ID of the relocated dependency.")
         String relocatedGroupId;
 
-        @Column(displayName = "Relocated ependency artifact id",
+        @Column(displayName = "Relocated dependency artifact ID",
                 description = "The Artifact ID of the relocated dependency.")
         @Nullable
         String relocatedArtifactId;

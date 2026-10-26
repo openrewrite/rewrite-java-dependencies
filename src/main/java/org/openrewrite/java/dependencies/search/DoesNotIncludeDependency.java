@@ -23,18 +23,18 @@ import org.openrewrite.*;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DoesNotIncludeDependency extends Recipe {
-    String displayName = "Does not include dependency for Gradle and Maven";
+    String displayName = "Does not include Gradle or Maven dependency";
 
-    String description = "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
-                "For compatibility with multimodule projects, this should most often be applied as a precondition.";
+    String description = "A precondition which returns false if visiting a Gradle build file or Maven `pom.xml` which includes the specified dependency in the classpath of some Gradle configuration or Maven scope. " +
+                "For compatibility with multi-module projects, this should most often be applied as a precondition.";
 
-    @Option(displayName = "Group",
-            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Group ID",
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "com.google.guava")
     String groupId;
 
-    @Option(displayName = "Artifact",
-            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Artifact ID",
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "guava")
     String artifactId;
 
@@ -48,14 +48,13 @@ public class DoesNotIncludeDependency extends Recipe {
     String version;
 
     @Option(displayName = "Only direct dependencies",
-            description = "Default false. If enabled, transitive dependencies will not be considered.",
-            required = false,
-            example = "true")
+            description = "For Maven only, if enabled, transitive dependencies will not be considered. Defaults to `false`.",
+            required = false)
     @Nullable
     Boolean onlyDirect;
 
     @Option(displayName = "Maven scope",
-            description = "Default any. If specified, only the requested scope's classpaths will be checked.",
+            description = "For Maven only, if specified, only the requested scope's classpaths will be checked. All scopes are checked by default.",
             required = false,
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile")
@@ -63,7 +62,7 @@ public class DoesNotIncludeDependency extends Recipe {
     String scope;
 
     @Option(displayName = "Gradle configuration",
-            description = "Match dependencies with the specified configuration. If not specified, all configurations will be searched.",
+            description = "For Gradle only, match dependencies with the specified configuration. If not specified, all configurations will be searched.",
             example = "compileClasspath",
             required = false)
     @Nullable

@@ -52,26 +52,26 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
                           "`latest.integration` to include pre-release and snapshot versions, and `latest.patch` for patch updates " +
                           "if the current version is a valid semantic version. For more details, you can look at the documentation " +
                           "page of [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors).",
-            example = "29.X")
+            example = "29.x")
     private final String newVersion;
 
     @Option(displayName = "Version pattern",
-            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "setting `newVersion` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
     private final String versionPattern;
 
     @Option(displayName = "Override managed version",
-            description = "For Maven project only, This flag can be set to explicitly override a managed " +
+            description = "For Maven only, this flag can be set to explicitly override a managed " +
                           "dependency's version. The default for this flag is `false`.",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
 
     @Option(displayName = "Retain versions",
-            description = "For Maven project only, accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed " +
+            description = "For Maven only, accepts a list of GAVs. For each GAV, if it is a project direct dependency, and it is removed " +
                           "from dependency management after the changes from this recipe, then it will be retained with an explicit version. " +
                           "The version can be omitted from the GAV to use the old value from dependency management.",
             example = "com.jcraft:jsch",
@@ -81,12 +81,13 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
 
     final String displayName = "Upgrade Gradle or Maven dependency versions";
 
-    final String description = "For Gradle projects, upgrade the version of a dependency in a `build.gradle` file. " +
+    final String description = "For Gradle projects, upgrade the version of a dependency in a `build.gradle` or `build.gradle.kts` file. " +
             "Supports updating dependency declarations of various forms:\n" +
-            " * `String` notation: `\"group:artifact:version\"` \n" +
+            " * `String` notation: `\"group:artifact:version\"`\n" +
             " * `Map` notation: `group: 'group', name: 'artifact', version: 'version'`\n" +
-            "It is possible to update version numbers which are defined earlier in the same file in variable declarations.\n\n" +
-            "For Maven projects, upgrade the version of a dependency by specifying a group ID and (optionally) an " +
+            "It is possible to update version numbers which are defined earlier in the same file in variable declarations, " +
+            "in `gradle.properties`, or in a version catalog.\n\n" +
+            "For Maven projects, upgrade the version of a dependency by specifying a group ID and an " +
             "artifact ID using Node Semver advanced range selectors, allowing more precise control over version " +
             "updates to patch or minor releases.";
 

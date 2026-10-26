@@ -38,7 +38,7 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
     String displayName = "Find duplicate classes on the classpath";
 
     String description = "Detects classes that appear in multiple dependencies on the classpath. " +
-            "This is similar to what the Maven duplicate-finder-maven-plugin does. " +
+            "This is similar to what the Maven `duplicate-finder-maven-plugin` does. " +
             "Duplicate classes can cause runtime issues when different versions " +
             "of the same class are loaded.";
 

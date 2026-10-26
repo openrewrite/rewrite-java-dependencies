@@ -47,25 +47,24 @@ public class FindDependency extends Recipe {
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. " +
-                          "So for example, setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+                          "So for example, setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
     String versionPattern;
 
-    @Option(displayName = "Configuration",
+    @Option(displayName = "Gradle configuration",
             description = "For Gradle only, the dependency configuration to search for dependencies in. If omitted then all configurations will be searched.",
             example = "api",
             required = false)
     @Nullable
     String configuration;
 
-    String displayName = "Find Maven and Gradle dependencies";
+    String displayName = "Find Gradle or Maven dependencies";
 
-    String description = "Finds direct dependencies declared in Maven and Gradle build files. " +
+    String description = "Finds direct dependencies declared in Gradle and Maven build files. " +
                "This does *not* search transitive dependencies. " +
-               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight` " +
-               "This recipe works for both Maven and Gradle projects.";
+               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight`.";
 
     @Override
     public String getInstanceNameSuffix() {

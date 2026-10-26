@@ -27,15 +27,14 @@ public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibi
 
     public RepositoryAccessibilityReport(Recipe recipe) {
         super(recipe,
-            "Repository accessibility report",
-            "Listing of all dependency repositories and whether they are accessible.");
-
+                "Repository accessibility report",
+                "Listing of all dependency repositories and whether they are accessible.");
     }
 
     @Value
     public static class Row {
         @Column(displayName = "Repository URI",
-                description = "The URI of the repository")
+                description = "The URI of the repository.")
         String uri;
 
         @Column(displayName = "Ping exception type",
@@ -56,12 +55,12 @@ public class RepositoryAccessibilityReport extends DataTable<RepositoryAccessibi
 
         @Column(displayName = "Dependency resolution exception type",
                 description = "Empty if ping failed, or if the repository successfully downloaded the specified dependency. Otherwise, the type of exception encountered " +
-                              "when attempting to access the repository.")
+                              "when downloading the dependency.")
         String dependencyResolveExceptionType;
 
         @Column(displayName = "Dependency resolution error message",
-                description = "Empty if ping failed, or if the repository successfully downloaded the specified dependency. Otherwise, the error message encountered when " +
-                              "attempting to access the repository.")
+                description = "Empty if ping failed, or if the repository successfully downloaded the specified dependency. Otherwise, the error message encountered " +
+                              "when downloading the dependency.")
         @Nullable
         String dependencyResolveExceptionMessage;
     }

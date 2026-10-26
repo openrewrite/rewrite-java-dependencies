@@ -35,7 +35,6 @@ public class ExcludeDependency extends Recipe {
             example = "commons-logging")
     String artifactId;
 
-    // Gradle only parameter
     @Option(displayName = "Gradle configuration",
             description = "For Gradle only, only direct dependency declarations in this configuration are considered. " +
                           "If omitted, declarations in every configuration are considered.",
@@ -44,7 +43,6 @@ public class ExcludeDependency extends Recipe {
     @Nullable
     String configuration;
 
-    // Maven only parameter
     @Option(displayName = "Maven scope",
             description = "For Maven only, only dependencies in this scope are considered. If you specify `compile`, this will NOT match dependencies in `runtime`.",
             valid = {"compile", "test", "runtime", "provided"},

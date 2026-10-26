@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.semver.Semver;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -64,13 +65,22 @@ public class FindDependency extends Recipe {
                "This recipe works for both Maven and Gradle projects.";
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate()
+                .and(gradleFindDependency().validate())
+                .and(mavenFindDependency().validate());
+        if (version != null) {
+            validated = validated.and(Semver.validate(version, versionPattern));
+        }
+        return validated;
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
 
-            final TreeVisitor<?, ExecutionContext> mavenFindDependency = new org.openrewrite.maven.search.FindDependency(groupId, artifactId, version, versionPattern)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> gradleFindDependency = new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration, version, versionPattern)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenFindDependency = mavenFindDependency().getVisitor();
+            final TreeVisitor<?, ExecutionContext> gradleFindDependency = gradleFindDependency().getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -87,5 +97,13 @@ public class FindDependency extends Recipe {
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.FindDependency gradleFindDependency() {
+        return new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration, version, versionPattern);
+    }
+
+    private org.openrewrite.maven.search.FindDependency mavenFindDependency() {
+        return new org.openrewrite.maven.search.FindDependency(groupId, artifactId, version, versionPattern);
     }
 }

@@ -151,6 +151,46 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
+        void markInsteadOfChangeWhenTargetIsNotACoordinate() {
+            rewriteRun(
+              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.17</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """,
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <!--~~(Relocated to org.apache.logging.log4j:log4j-core or ch.qos.reload4j as per "log4j-core (Log4j 2) introduces many breaking changes to its predecessor, while reload4j is a unofficial drop-in replacement for Log4j version 1.2.17. See https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html or https://reload4j.qos.ch")~~>--><dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.17</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Test
         void findRelocatedIonJava() {
             rewriteRun(
               recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
@@ -332,6 +372,24 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation "commons-lang:commons-lang:2.6"
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation group: "commons-lang", name: "commons-lang", version: "2.6"
                       /*~~(Relocated to org.apache.groovy)~~>*/implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+                  }
+                  """
+              )
+            );
+        }
+
+        @Test
+        void interpolatedArtifactId() {
+            rewriteRun(
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  def name = "commons-lang"
+                  dependencies {
+                      implementation "commons-lang:${name}:2.6"
                   }
                   """
               )

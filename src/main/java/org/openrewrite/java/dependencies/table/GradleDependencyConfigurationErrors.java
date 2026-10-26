@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies.table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.Value;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.Column;
 import org.openrewrite.DataTable;
 import org.openrewrite.Recipe;
@@ -45,6 +46,7 @@ public class GradleDependencyConfigurationErrors extends DataTable<GradleDepende
 
         @Column(displayName = "Error message",
                 description = "The error message encountered when attempting to resolve the dependency configuration.")
+        @Nullable
         String exceptionMessage;
     }
 }

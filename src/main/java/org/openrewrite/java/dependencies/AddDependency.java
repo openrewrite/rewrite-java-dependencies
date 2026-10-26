@@ -138,6 +138,13 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
                "correct scope based on where it is used.";
 
     @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(gradleAddDep().validate())
+                .and(mavenAddDep().validate());
+    }
+
+    @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
         return new Accumulator(gradleAddDep().getInitialValue(ctx), mavenAddDep().getInitialValue(ctx));
     }
@@ -178,7 +185,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
                     t = gradleAddDep.visitNonNull(tree, ctx);
                 }
                 if (mavenAddDep.isAcceptable((SourceFile) t, ctx)) {
-                    t = mavenAddDep.visitNonNull(tree, ctx);
+                    t = mavenAddDep.visitNonNull(t, ctx);
                 }
                 return t;
             }

@@ -20,6 +20,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.mavenProject;
@@ -226,5 +227,10 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new FindMinimumDependencyVersion("junit", "junit", "latest.bogus").validate().isValid()).isFalse();
     }
 }

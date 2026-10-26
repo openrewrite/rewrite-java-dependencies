@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
-
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @RequiredArgsConstructor

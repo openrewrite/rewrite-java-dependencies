@@ -201,9 +201,9 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
         org.openrewrite.gradle.AddDependency recipe = gradleDelegate.get();
         if (recipe == null) {
             String configurationName = null;
-            if(configuration != null) {
+            if (configuration != null) {
                 configurationName = configuration;
-            } else if(scope != null) {
+            } else if (scope != null) {
                 configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
             }
             recipe = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,

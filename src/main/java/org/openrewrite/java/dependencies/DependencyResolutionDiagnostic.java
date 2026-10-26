@@ -58,7 +58,6 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                "resolve one or more dependencies when the project was parsed. This is representative of conditions at " +
                "the time the LST was parsed.";
 
-
     @Option(displayName = "Group ID",
             description = "The group ID of a dependency to attempt to download from the repository. " +
                           "Default value is \"com.fasterxml.jackson.core\". " +

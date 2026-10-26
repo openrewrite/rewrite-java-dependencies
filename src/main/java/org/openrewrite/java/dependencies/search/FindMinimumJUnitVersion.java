@@ -53,7 +53,6 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
     @Nullable
     String minimumVersion;
 
-
     String displayName = "Find minimum JUnit version";
 
     String description = "A recipe to find the minimum version of JUnit dependencies. " +

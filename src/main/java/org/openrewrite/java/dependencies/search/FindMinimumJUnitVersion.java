@@ -84,14 +84,14 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
                 Markers m = tree.getMarkers();
                 m.findFirst(GradleProject.class).ifPresent(gradle -> {
                     for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        collectionJUnit4(versionParser, conf.getResolved(), acc);
-                        collectionJUnit5(versionParser, conf.getResolved(), acc);
+                        collectJUnit4(versionParser, conf.getResolved(), acc);
+                        collectJUnit5(versionParser, conf.getResolved(), acc);
                     }
                 });
                 m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
                     for (List<ResolvedDependency> resolved : maven.getDependencies().values()) {
-                        collectionJUnit4(versionParser, resolved, acc);
-                        collectionJUnit5(versionParser, resolved, acc);
+                        collectJUnit4(versionParser, resolved, acc);
+                        collectJUnit5(versionParser, resolved, acc);
                     }
                 });
                 return tree;
@@ -99,7 +99,7 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
         };
     }
 
-    private boolean isResolvedGroupArtifactVersion(ResolvedGroupArtifactVersion resolvedGroupArtifactVersion, String groupName, String artifactName) {
+    private static boolean isResolvedGroupArtifactVersion(ResolvedGroupArtifactVersion resolvedGroupArtifactVersion, String groupName, String artifactName) {
         return resolvedGroupArtifactVersion.getArtifactId().equals(artifactName) &&
                resolvedGroupArtifactVersion.getGroupId().equals(groupName);
     }
@@ -128,13 +128,13 @@ public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, R
         return applyMarkersForLocatedGavs(acc, dependenciesInUse);
     }
 
-    private void collectionJUnit4(VersionParser versionParser, List<ResolvedDependency> resolved,
-                                  Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+    private void collectJUnit4(VersionParser versionParser, List<ResolvedDependency> resolved,
+                               Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
         collectVersion(versionParser, resolved, "junit", "junit", acc);
     }
 
-    private void collectionJUnit5(VersionParser versionParser, List<ResolvedDependency> resolved,
-                                  Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+    private void collectJUnit5(VersionParser versionParser, List<ResolvedDependency> resolved,
+                               Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
         collectVersion(versionParser, resolved, "org.junit.jupiter", "junit-jupiter-api", acc);
     }
 

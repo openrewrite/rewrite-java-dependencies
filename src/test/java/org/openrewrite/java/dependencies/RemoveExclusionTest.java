@@ -261,9 +261,128 @@ class RemoveExclusionTest implements RewriteTest {
     }
 
     @Test
+    void onlyArtifactIdMatchesWildcardGroupExclusion() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveExclusion(null, "commons-logging")),
+          //language=groovy
+          buildGradle(
+            """
+              dependencies {
+                  implementation('org.apache.httpcomponents:httpclient:4.5.13') {
+                      exclude module: 'commons-logging'
+                  }
+              }
+              """,
+            """
+              dependencies {
+                  implementation('org.apache.httpcomponents:httpclient:4.5.13')
+              }
+              """
+          ),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                    <exclusions>
+                      <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>commons-logging</artifactId>
+                      </exclusion>
+                    </exclusions>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void onlyArtifactIdMatchesSpecificGroupExclusion() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveExclusion(null, "commons-logging")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                    <exclusions>
+                      <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                      </exclusion>
+                    </exclusions>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
     void onlyGroupId() {
         rewriteRun(
           spec -> spec.recipe(new RemoveExclusion("commons-logging", null)),
+          //language=groovy
+          buildGradle(
+            """
+              configurations.all {
+                  exclude group: 'commons-logging'
+              }
+              """,
+            """
+              configurations.all {
+              }
+              """
+          ),
           //language=xml
           pomXml(
             """

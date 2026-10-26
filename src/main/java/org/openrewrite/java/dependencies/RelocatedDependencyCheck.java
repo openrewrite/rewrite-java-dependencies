@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static java.util.Collections.unmodifiableMap;
@@ -157,7 +158,7 @@ public class RelocatedDependencyCheck extends Recipe {
                         String gav = (String) literal.getValue();
                         String[] parts = gav.split(":");
                         if (parts.length >= 2) {
-                            mi = maybeUpdate(mi, parts[0], parts[1], ctx);
+                            mi = maybeUpdate(mi, parts[0], parts[1], ctx, this::doAfterVisit);
                         }
                         return mi;
                     }
@@ -205,28 +206,9 @@ public class RelocatedDependencyCheck extends Recipe {
                             }
                         }
                         if (groupId != null) {
-                            mi = maybeUpdate(mi, groupId, artifactId, ctx);
+                            mi = maybeUpdate(mi, groupId, artifactId, ctx, this::doAfterVisit);
                         }
                         return mi;
-                    }
-
-                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                        Relocation relocation = getRelocation(groupId, artifactId);
-                        if (relocation != null) {
-                            insertRow(groupId, artifactId, relocation, ctx);
-                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                                String newGroupId = relocation.getTo().getGroupId();
-                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
-                                    doAfterVisit(new ChangeDependency(
-                                            groupId, artifactId, newGroupId, newArtifactId,
-                                            "latest.release", null, null, null).getVisitor());
-                                    return tree;
-                                }
-                            }
-                            return getSearchResultFound(tree, relocation);
-                        }
-                        return tree;
                     }
                 };
             }
@@ -242,37 +224,38 @@ public class RelocatedDependencyCheck extends Recipe {
                             if (optionalGroupId.isPresent()) {
                                 String groupId = optionalGroupId.get();
                                 String artifactId = optionalArtifactId.orElse(null);
-                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx, this::doAfterVisit);
                             }
                         } else if (isPluginTag()) {
                             if (optionalArtifactId.isPresent()) {
                                 String groupId = tag.getChildValue("groupId").orElse("org.apache.maven.plugins");
                                 String artifactId = optionalArtifactId.get();
-                                tag = maybeUpdate(tag, groupId, artifactId, ctx);
+                                tag = maybeUpdate(tag, groupId, artifactId, ctx, this::doAfterVisit);
                             }
                         }
                         return tag;
                     }
-
-                    private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx) {
-                        Relocation relocation = getRelocation(groupId, artifactId);
-                        if (relocation != null) {
-                            insertRow(groupId, artifactId, relocation, ctx);
-                            if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
-                                String newGroupId = relocation.getTo().getGroupId();
-                                String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
-                                if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
-                                    doAfterVisit(new ChangeDependency(
-                                            groupId, artifactId, newGroupId, newArtifactId,
-                                            "latest.release", null, null, null).getVisitor());
-                                    return tree;
-                                }
-                            }
-                            return getSearchResultFound(tree, relocation);
-                        }
-                        return tree;
-                    }
                 };
+            }
+
+            private <T extends Tree> T maybeUpdate(T tree, String groupId, @Nullable String artifactId, ExecutionContext ctx,
+                                                   Consumer<TreeVisitor<?, ExecutionContext>> doAfterVisit) {
+                Relocation relocation = getRelocation(groupId, artifactId);
+                if (relocation != null) {
+                    insertRow(groupId, artifactId, relocation, ctx);
+                    if (Boolean.TRUE.equals(changeDependencies) && artifactId != null) {
+                        String newGroupId = relocation.getTo().getGroupId();
+                        String newArtifactId = Optional.ofNullable(relocation.getTo().getArtifactId()).orElse(artifactId);
+                        if (isCoordinate(newGroupId) && isCoordinate(newArtifactId)) {
+                            doAfterVisit.accept(new ChangeDependency(
+                                    groupId, artifactId, newGroupId, newArtifactId,
+                                    "latest.release", null, null, null).getVisitor());
+                            return tree;
+                        }
+                    }
+                    return getSearchResultFound(tree, relocation);
+                }
+                return tree;
             }
 
             private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {

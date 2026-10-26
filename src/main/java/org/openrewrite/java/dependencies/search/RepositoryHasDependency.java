@@ -85,9 +85,8 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
     public TreeVisitor<?, ExecutionContext> getScanner(AtomicBoolean acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                assert tree != null;
-                if (acc.get()) {
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null || acc.get()) {
                     return tree;
                 }
                 tree.getMarkers()
@@ -189,8 +188,10 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
         if (acc.get()) {
             return new TreeVisitor<Tree, ExecutionContext>() {
                 @Override
-                public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                    assert tree != null;
+                public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                    if (tree == null) {
+                        return null;
+                    }
                     return SearchResult.found(tree, "Repository has dependency: " + groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version));
                 }
             };

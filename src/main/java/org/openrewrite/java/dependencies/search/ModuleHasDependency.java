@@ -98,8 +98,10 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     public TreeVisitor<?, ExecutionContext> getScanner(Set<JavaProject> acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                assert tree != null;
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
                 tree.getMarkers()
                         .findFirst(JavaProject.class)
                         .ifPresent(jp -> {
@@ -212,8 +214,10 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     public TreeVisitor<?, ExecutionContext> getVisitor(Set<JavaProject> acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                assert tree != null;
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
                 boolean shouldInvert = invertMarking != null && invertMarking;
                 String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 Optional<JavaProject> maybeJp = tree.getMarkers().findFirst(JavaProject.class);

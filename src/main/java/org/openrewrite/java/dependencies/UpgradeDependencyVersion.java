@@ -133,8 +133,10 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (!(tree instanceof SourceFile)) {
+                    return tree;
+                }
                 Tree t = tree;
-                assert tree != null;
                 if (mavenVisitor.isAcceptable((SourceFile) tree, ctx)) {
                     t = mavenVisitor.visit(tree, ctx);
                 } else if (gradleVisitor.isAcceptable((SourceFile) tree, ctx)) {

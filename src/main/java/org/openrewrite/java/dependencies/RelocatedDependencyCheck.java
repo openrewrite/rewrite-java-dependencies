@@ -150,8 +150,10 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     }
 
                     private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi, ExecutionContext ctx) {
+                        if (!(literal.getValue() instanceof String)) {
+                            return mi;
+                        }
                         String gav = (String) literal.getValue();
-                        assert gav != null;
                         String[] parts = gav.split(":");
                         if (gav.length() >= 2) {
                             mi = maybeUpdate(mi, parts[0], parts[1], ctx);

@@ -18,6 +18,8 @@ package org.openrewrite.java.dependencies;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.config.DataTableDescriptor;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -390,6 +392,21 @@ class ChangeDependencyTest implements RewriteTest {
           null, "spring-boot-starter-webmvc", "4.0.x", null, null, null);
         assertThat(cd.getInstanceName())
           .isEqualTo("Change Gradle or Maven dependency `org.springframework.boot:spring-boot-starter-web`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var cd = new ChangeDependency(null, null, null, null, null, null, null, null);
+        assertThat(cd.getInstanceName()).isEqualTo(cd.getDisplayName());
+    }
+
+    @Test
+    void declaresMavenMetadataFailuresDataTable() {
+        var cd = new ChangeDependency("org.springframework.boot", "spring-boot-starter-web",
+          null, "spring-boot-starter-webmvc", "4.0.x", null, null, null);
+        assertThat(cd.getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(MavenMetadataFailures.class.getName());
     }
 
     @Test

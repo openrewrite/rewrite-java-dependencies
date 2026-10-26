@@ -17,6 +17,9 @@ package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.config.DataTableDescriptor;
+import org.openrewrite.maven.table.DependenciesInUse;
+import org.openrewrite.maven.table.ExplainDependenciesInUse;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -88,6 +91,13 @@ class DependencyInsightTest implements RewriteTest {
         // it must not read "null:null".
         assertThat(new DependencyInsight(null, null, null, null).getInstanceName())
           .isEqualTo("Dependency insight for Gradle and Maven");
+    }
+
+    @Test
+    void declaresDataTablesFilledByDelegates() {
+        assertThat(new DependencyInsight("com.fasterxml.jackson*", "jackson-*", null, null).getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(DependenciesInUse.class.getName(), ExplainDependenciesInUse.class.getName());
     }
 
     @Test

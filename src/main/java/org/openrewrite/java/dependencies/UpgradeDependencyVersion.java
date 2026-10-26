@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +34,9 @@ import static java.util.Objects.requireNonNull;
 @Getter
 @RequiredArgsConstructor
 public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVersion.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    private final transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
+
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. This can be a glob expression.",
             example = "com.fasterxml.jackson*")
@@ -88,6 +92,18 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
             "For Maven projects, upgrade the version of a dependency by specifying a group ID and (optionally) an " +
             "artifact ID using Node Semver advanced range selectors, allowing more precise control over version " +
             "updates to patch or minor releases.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (newVersion == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, newVersion);
+    }
 
     @Override
     public Validated<Object> validate() {

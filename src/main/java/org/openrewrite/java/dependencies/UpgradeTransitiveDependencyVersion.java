@@ -21,12 +21,15 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
     String displayName = "Upgrade transitive Gradle or Maven dependencies";
 
@@ -106,6 +109,18 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
             required = false)
     @Nullable
     Boolean addToRootPom;
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
 
     @Value
     public static class Accumulator {

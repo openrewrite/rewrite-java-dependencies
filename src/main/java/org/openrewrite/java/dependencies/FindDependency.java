@@ -19,11 +19,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.DependenciesDeclared;
 import org.openrewrite.semver.Semver;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class FindDependency extends Recipe {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient DependenciesDeclared dependenciesDeclared = new DependenciesDeclared(this);
 
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate identifying its publisher.",
@@ -63,6 +66,18 @@ public class FindDependency extends Recipe {
                "This does *not* search transitive dependencies. " +
                "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight` " +
                "This recipe works for both Maven and Gradle projects.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
 
     @Override
     public Validated<Object> validate() {

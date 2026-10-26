@@ -150,6 +150,24 @@ class DoesNotIncludeDependencyTest implements RewriteTest {
     }
 
     @Test
+    void instanceNameShowsTheDependencyBeingChecked() {
+        var recipe = new DoesNotIncludeDependency("com.google.guava", "guava", "29.x", null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava:29.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheVersionWhenNotGiven() {
+        var recipe = new DoesNotIncludeDependency("com.google.guava", "guava", null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new DoesNotIncludeDependency(null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
+
+    @Test
     void invalidOptionsAreInvalid() {
         assertThat(new DoesNotIncludeDependency("junit", "junit", "latest.bogus", null, null, null).validate().isValid()).isFalse();
         assertThat(new DoesNotIncludeDependency("junit", "junit", null, null, "bogus", null).validate().isValid()).isFalse();

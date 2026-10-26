@@ -110,6 +110,18 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     @Nullable
     Boolean addToRootPom;
 
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
+
     @Value
     public static class Accumulator {
         org.openrewrite.maven.UpgradeTransitiveDependencyVersion.Accumulator mavenAccumulator;

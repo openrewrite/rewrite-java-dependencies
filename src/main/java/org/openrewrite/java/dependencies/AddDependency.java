@@ -142,6 +142,18 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
                "correct scope based on where it is used.";
 
     @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
+
+    @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
         return new Accumulator(gradleAddDep().getInitialValue(ctx), mavenAddDep().getInitialValue(ctx));
     }

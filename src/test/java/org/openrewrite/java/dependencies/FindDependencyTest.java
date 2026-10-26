@@ -151,4 +151,22 @@ class FindDependencyTest implements RewriteTest {
           .extracting(DataTableDescriptor::getName)
           .contains(DependenciesDeclared.class.getName());
     }
+
+    @Test
+    void instanceNameShowsTheDependencyBeingSearchedFor() {
+        var recipe = new FindDependency("org.openrewrite", "rewrite-core", "8.0.0", null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.openrewrite:rewrite-core:8.0.0`");
+    }
+
+    @Test
+    void instanceNameOmitsTheVersionWhenNotGiven() {
+        var recipe = new FindDependency("org.openrewrite", "rewrite-core", null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.openrewrite:rewrite-core`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new FindDependency(null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
 }

@@ -134,6 +134,24 @@ class AddDependencyTest implements RewriteTest {
           .contains(MavenMetadataFailures.class.getName());
     }
 
+    @Test
+    void instanceNameShowsTheDependencyBeingAdded() {
+        var recipe = addDependency("com.google.guava:guava:29.0-jre", "com.google.common.math.IntMath", null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava:29.0-jre`");
+    }
+
+    @Test
+    void instanceNameOmitsTheVersionWhenNotGiven() {
+        var recipe = addDependency("com.google.guava:guava", "com.google.common.math.IntMath", null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new AddDependency(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
+
 
     private AddDependency addDependency(String gav, String onlyIfUsing, @Nullable String scope) {
         String[] gavParts = gav.split(":");

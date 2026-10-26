@@ -73,6 +73,15 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
     String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
                "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
 
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        return String.format("`%s:%s`", groupId, artifactId);
+    }
+
     public static class Accumulator {
         final Map<JavaProject, Boolean> projectToInUse = new HashMap<>();
         final Map<UUID, JavaProject> mavenIdToProject = new HashMap<>();

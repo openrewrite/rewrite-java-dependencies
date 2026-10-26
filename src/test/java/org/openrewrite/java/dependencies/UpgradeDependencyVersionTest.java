@@ -142,4 +142,16 @@ class UpgradeDependencyVersionTest implements RewriteTest {
           .extracting(DataTableDescriptor::getName)
           .contains(MavenMetadataFailures.class.getName());
     }
+
+    @Test
+    void instanceNameShowsTheDependencyAndTargetVersion() {
+        var recipe = new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `com.google.guava:guava:30.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new UpgradeDependencyVersion(null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
 }

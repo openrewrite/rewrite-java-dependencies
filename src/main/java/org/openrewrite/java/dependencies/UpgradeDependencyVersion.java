@@ -94,6 +94,18 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
             "updates to patch or minor releases.";
 
     @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (newVersion == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, newVersion);
+    }
+
+    @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
         return new Accumulator(
                 getUpgradeMavenDependencyVersion().getInitialValue(ctx),

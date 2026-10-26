@@ -34,4 +34,16 @@ class UpgradeTransitiveDependencyVersionTest {
           .extracting(DataTableDescriptor::getName)
           .contains(MavenMetadataFailures.class.getName());
     }
+
+    @Test
+    void instanceNameShowsTheDependencyAndTargetVersion() {
+        var recipe = upgradeLog4jBom();
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.apache.logging.log4j:log4j-bom:2.24.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new UpgradeTransitiveDependencyVersion(null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
 }

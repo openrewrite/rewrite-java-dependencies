@@ -349,6 +349,215 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
               )
             );
         }
+
+        @Test
+        void findIfJUnit6IsMinimum() {
+            rewriteRun(
+              spec -> spec.recipe(new FindMinimumJUnitVersion("6")),
+              mavenProject(
+                "core",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>core</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>6.0.0</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """,
+                  """
+                    <!--~~(org.junit.jupiter:junit-jupiter-api:6.0.0)~~>--><project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>core</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>6.0.0</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void findIfJUnit5IsMinimumButJUnit6IsUsed() {
+            rewriteRun(
+              spec -> spec.recipe(new FindMinimumJUnitVersion("5")),
+              mavenProject(
+                "core",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>core</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>6.0.0</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void eachModuleReportsItsOwnMinimum() {
+            rewriteRun(
+              spec -> spec.dataTable(DependenciesInUse.Row.class, rows -> assertThat(rows)
+                .extracting(DependenciesInUse.Row::getProjectName, DependenciesInUse.Row::getGroupId,
+                  DependenciesInUse.Row::getArtifactId, DependenciesInUse.Row::getVersion)
+                .containsOnly(
+                  tuple("legacy", "junit", "junit", "4.12"),
+                  tuple("modern", "org.junit.jupiter", "junit-jupiter-api", "5.8.1"))),
+              mavenProject(
+                "legacy",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>legacy</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>junit</groupId>
+                              <artifactId>junit</artifactId>
+                              <version>4.12</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """,
+                  """
+                    <!--~~(junit:junit:4.12)~~>--><project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>legacy</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>junit</groupId>
+                              <artifactId>junit</artifactId>
+                              <version>4.12</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              ),
+              mavenProject(
+                "modern",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>modern</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """,
+                  """
+                    <!--~~(org.junit.jupiter:junit-jupiter-api:5.8.1)~~>--><project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>modern</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void findIfJUnit5IsMinimumInOneOfTwoModules() {
+            rewriteRun(
+              spec -> spec.recipe(new FindMinimumJUnitVersion("5")),
+              mavenProject(
+                "legacy",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>legacy</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>junit</groupId>
+                              <artifactId>junit</artifactId>
+                              <version>4.12</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              ),
+              mavenProject(
+                "modern",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>modern</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """,
+                  """
+                    <!--~~(org.junit.jupiter:junit-jupiter-api:5.8.1)~~>--><project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>modern</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
     }
 
     @Nested
@@ -517,6 +726,33 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
                     repositories { mavenCentral() }
                     dependencies {
                         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+                    }
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void findIfJUnit6IsMinimum() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi()).recipe(new FindMinimumJUnitVersion("6")),
+              mavenProject(
+                "core",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins { id 'java' }
+                    repositories { mavenCentral() }
+                    dependencies {
+                        testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.0'
+                    }
+                    """,
+                  """
+                    /*~~(org.junit.jupiter:junit-jupiter-api:6.0.0)~~>*/plugins { id 'java' }
+                    repositories { mavenCentral() }
+                    dependencies {
+                        testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.0'
                     }
                     """
                 )

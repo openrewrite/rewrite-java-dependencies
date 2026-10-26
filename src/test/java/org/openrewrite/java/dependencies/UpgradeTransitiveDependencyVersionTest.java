@@ -16,13 +16,130 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.config.DataTableDescriptor;
 import org.openrewrite.maven.table.MavenMetadataFailures;
+import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
+import static org.openrewrite.maven.Assertions.pomXml;
 
 class UpgradeTransitiveDependencyVersionTest implements RewriteTest {
+
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new UpgradeTransitiveDependencyVersion(
+          "com.fasterxml.jackson.core", "jackson-core", "2.12.5", null, null, null, null, null, null, null, null));
+    }
+
+    @DocumentExample
+    @Test
+    void maven() {
+        rewriteRun(
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>com.fasterxml.jackson.core</groupId>
+                          <artifactId>jackson-databind</artifactId>
+                          <version>2.12.0</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencyManagement>
+                      <dependencies>
+                          <dependency>
+                              <groupId>com.fasterxml.jackson.core</groupId>
+                              <artifactId>jackson-core</artifactId>
+                              <version>2.12.5</version>
+                          </dependency>
+                      </dependencies>
+                  </dependencyManagement>
+                  <dependencies>
+                      <dependency>
+                          <groupId>com.fasterxml.jackson.core</groupId>
+                          <artifactId>jackson-databind</artifactId>
+                          <version>2.12.0</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
+    void gradle() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi()),
+          //language=groovy
+          buildGradle(
+            """
+              plugins {
+                  id 'java'
+              }
+              repositories {
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+              }
+              dependencies {
+                  implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+              }
+              """,
+            """
+              plugins {
+                  id 'java'
+              }
+              repositories {
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+              }
+              dependencies {
+                  constraints {
+                      implementation('com.fasterxml.jackson.core:jackson-core:2.12.5')
+                  }
+
+                  implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+              }
+              """
+          )
+        );
+    }
+
+    @Test
+    void leavesDirectDependencyUnchanged() {
+        rewriteRun(
+          //language=xml
+          pomXml(
+            """
+              <project>
+                  <groupId>com.mycompany.app</groupId>
+                  <artifactId>my-app</artifactId>
+                  <version>1</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>com.fasterxml.jackson.core</groupId>
+                          <artifactId>jackson-core</artifactId>
+                          <version>2.12.0</version>
+                      </dependency>
+                  </dependencies>
+              </project>
+              """
+          )
+        );
+    }
 
     private static UpgradeTransitiveDependencyVersion upgradeLog4jBom() {
         return new UpgradeTransitiveDependencyVersion("org.apache.logging.log4j", "log4j-bom", "2.24.x",

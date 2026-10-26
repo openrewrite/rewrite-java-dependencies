@@ -21,6 +21,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.java;
@@ -174,5 +175,11 @@ class RepositoryHasDependencyTest implements RewriteTest {
             java(GradleJava)
           )
         );
+    }
+
+    @Test
+    void invalidOptionsAreInvalid() {
+        assertThat(new RepositoryHasDependency("junit", "junit", null, "latest.bogus").validate().isValid()).isFalse();
+        assertThat(new RepositoryHasDependency("junit", "junit", "bogus", null).validate().isValid()).isFalse();
     }
 }

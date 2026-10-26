@@ -7,6 +7,13 @@
         "com.github.mwiede:jsch"
       ],
       "context": "See https://www.matez.de/index.php/2020/06/22/the-future-of-jsch-without-ssh-rsa/"
+    },
+    {
+      "old": "commons-logging:commons-logging",
+      "proposal": [
+        "org.slf4j:jcl-over-slf4j",
+        "org.apache.logging.log4j:log4j-jcl"
+      ]
     }
   ]
 }

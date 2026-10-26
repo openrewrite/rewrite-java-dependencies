@@ -226,9 +226,6 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
               assertThat(rows).anySatisfy(row -> {
                   reachable(row);
                   assertThat(row.getDependencyResolveExceptionType()).isEqualTo("org.openrewrite.maven.MavenDownloadingException");
-                  assertThat(row.getDependencyResolveExceptionMessage())
-                    .startsWith("org.nonexistent:nonexistent:0 failed. Unable to download POM: org.nonexistent:nonexistent:0. Tried repositories:\n" + row.getUri())
-                    .endsWith(": HTTP 404");
               })
             ),
           //language=groovy

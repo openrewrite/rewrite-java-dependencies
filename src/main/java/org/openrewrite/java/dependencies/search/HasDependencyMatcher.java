@@ -41,55 +41,62 @@ class HasDependencyMatcher {
     private final boolean onlyDirect;
 
     boolean hasDependency(Tree tree) {
-        VersionComparator versionComparator = version != null ? Semver.validate(version, null).getValue() : null;
-
         MavenResolutionResult mavenResult = tree.getMarkers().findFirst(MavenResolutionResult.class).orElse(null);
         if (mavenResult != null) {
-            Scope requestedScope = scope == null ? null : Scope.fromName(scope);
-            List<ResolvedDependency> dependencies = mavenResult.findDependencies(groupIdPattern, artifactIdPattern, requestedScope);
-            Set<String> resolvedGAs = new HashSet<>();
-            for (ResolvedDependency dependency : dependencies) {
-                if (onlyDirect && !dependency.isDirect()) {
-                    continue;
-                }
-                resolvedGAs.add(dependency.getGroupId() + ":" + dependency.getArtifactId());
-                if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
-                    return true;
+            return hasMavenDependency(mavenResult, versionComparator());
+        }
+        GradleProject gp = tree.getMarkers().findFirst(GradleProject.class).orElse(null);
+        return gp != null && hasGradleDependency(gp, versionComparator());
+    }
+
+    private @Nullable VersionComparator versionComparator() {
+        return version != null ? Semver.validate(version, null).getValue() : null;
+    }
+
+    private boolean hasMavenDependency(MavenResolutionResult mavenResult, @Nullable VersionComparator versionComparator) {
+        Scope requestedScope = scope == null ? null : Scope.fromName(scope);
+        List<ResolvedDependency> dependencies = mavenResult.findDependencies(groupIdPattern, artifactIdPattern, requestedScope);
+        Set<String> resolvedGAs = new HashSet<>();
+        for (ResolvedDependency dependency : dependencies) {
+            if (onlyDirect && !dependency.isDirect()) {
+                continue;
+            }
+            resolvedGAs.add(dependency.getGroupId() + ":" + dependency.getArtifactId());
+            if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
+                return true;
+            }
+        }
+        for (Dependency requested : mavenResult.getPom().getRequestedDependencies()) {
+            if (resolvedGAs.contains(requested.getGroupId() + ":" + requested.getArtifactId())) {
+                continue;
+            }
+            if (matchesRequested(requested, requestedScope, versionComparator)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasGradleDependency(GradleProject gp, @Nullable VersionComparator versionComparator) {
+        Set<String> resolvedGAs = new HashSet<>();
+        for (GradleDependencyConfiguration c : gp.getConfigurations()) {
+            for (ResolvedDependency resolvedDependency : c.getDirectResolved()) {
+                ResolvedDependency found = findMatching(resolvedDependency);
+                if (found != null) {
+                    resolvedGAs.add(found.getGroupId() + ":" + found.getArtifactId());
+                    if (versionComparator == null || versionComparator.isValid(null, found.getVersion())) {
+                        return true;
+                    }
                 }
             }
-            for (Dependency requested : mavenResult.getPom().getRequestedDependencies()) {
+        }
+        for (GradleDependencyConfiguration c : gp.getConfigurations()) {
+            for (Dependency requested : c.getRequested()) {
                 if (resolvedGAs.contains(requested.getGroupId() + ":" + requested.getArtifactId())) {
                     continue;
                 }
-                if (matchesRequested(requested, requestedScope, versionComparator)) {
+                if (matchesRequested(requested, null, versionComparator)) {
                     return true;
-                }
-            }
-            return false;
-        }
-
-        GradleProject gp = tree.getMarkers().findFirst(GradleProject.class).orElse(null);
-        if (gp != null) {
-            Set<String> resolvedGAs = new HashSet<>();
-            for (GradleDependencyConfiguration c : gp.getConfigurations()) {
-                for (ResolvedDependency resolvedDependency : c.getDirectResolved()) {
-                    ResolvedDependency found = findMatching(resolvedDependency);
-                    if (found != null) {
-                        resolvedGAs.add(found.getGroupId() + ":" + found.getArtifactId());
-                        if (versionComparator == null || versionComparator.isValid(null, found.getVersion())) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            for (GradleDependencyConfiguration c : gp.getConfigurations()) {
-                for (Dependency requested : c.getRequested()) {
-                    if (resolvedGAs.contains(requested.getGroupId() + ":" + requested.getArtifactId())) {
-                        continue;
-                    }
-                    if (matchesRequested(requested, null, versionComparator)) {
-                        return true;
-                    }
                 }
             }
         }

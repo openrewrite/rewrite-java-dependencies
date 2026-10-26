@@ -86,7 +86,6 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     return cu;
                 }
 
-                // Invert the mapping: type name -> list of GAVs containing that type
                 Map<String, List<String>> typeToGavs = new HashMap<>();
                 for (Map.Entry<String, List<JavaType.FullyQualified>> entry : gavToTypes.entrySet()) {
                     String gav = entry.getKey();
@@ -95,7 +94,6 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     }
                 }
 
-                // Report duplicates (types appearing in more than one GAV)
                 for (Map.Entry<String, List<String>> entry : typeToGavs.entrySet()) {
                     List<String> gavs = entry.getValue();
                     if (gavs.size() > 1) {

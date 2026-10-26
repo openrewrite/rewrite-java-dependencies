@@ -273,7 +273,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {
                 Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
                 if (relocation == null && artifactId != null) {
-                    // Try again without artifactId, as some migrations only specify groupId
                     relocation = acc.getMigrations().get(new GroupArtifact(groupId, null));
                 }
                 return relocation;

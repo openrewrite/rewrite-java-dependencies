@@ -82,7 +82,6 @@ public class FindDependency extends Recipe {
                     return mavenFindDependency.visitNonNull(tree, ctx);
                 }
                 if (gradleFindDependency.isAcceptable(s, ctx)) {
-                    // Handle Gradle projects
                     return gradleFindDependency.visitNonNull(tree, ctx);
                 }
                 return s;

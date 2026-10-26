@@ -173,7 +173,7 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
 
                     MavenSettings settings = mctx.getSettings();
                     if (settings != null) {
-                        // normalizeRepository() internally applies mirrors,but normalizeRepository() just returned null.
+                        // normalizeRepository() internally applies mirrors, but normalizeRepository() just returned null.
                         // Replicate mirror application so that the correct URL is recorded
                         repo = MavenRepositoryMirror.apply(mctx.getMirrors(settings), repo);
                     }
@@ -256,7 +256,6 @@ public class DependencyResolutionDiagnostic extends ScanningRecipe<DependencyRes
                 G.CompilationUnit g = super.visitCompilationUnit(cu, ctx);
 
                 for (GradleDependencyConfiguration conf : gp.getConfigurations()) {
-                    //noinspection ConstantValue
                     if (conf.getExceptionType() == null) {
                         continue;
                     }

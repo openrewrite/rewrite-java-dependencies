@@ -153,7 +153,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                         String gav = (String) literal.getValue();
                         assert gav != null;
                         String[] parts = gav.split(":");
-                        if (gav.length() >= 2) {
+                        if (parts.length >= 2) {
                             mi = maybeUpdate(mi, parts[0], parts[1], ctx);
                         }
                         return mi;

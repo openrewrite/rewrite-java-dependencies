@@ -339,6 +339,24 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
+        void interpolatedArtifactId() {
+            rewriteRun(
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  def name = "commons-lang"
+                  dependencies {
+                      implementation "commons-lang:${name}:2.6"
+                  }
+                  """
+              )
+            );
+        }
+
+        @Test
         void changeRelocatedGradleDependencies() {
             rewriteRun(
               recipe -> recipe

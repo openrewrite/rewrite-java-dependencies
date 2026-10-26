@@ -261,6 +261,52 @@ class RemoveExclusionTest implements RewriteTest {
     }
 
     @Test
+    void onlyGroupId() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveExclusion("commons-logging", null)),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                    <exclusions>
+                      <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>*</artifactId>
+                      </exclusion>
+                    </exclusions>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.example</groupId>
+                <artifactId>demo</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5.13</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
+    @Test
     void groupOrArtifactIsRequired() {
         assertThat(new RemoveExclusion(null, null).validate().isValid()).isFalse();
         assertThat(new RemoveExclusion("*", "*").validate().isValid()).isFalse();

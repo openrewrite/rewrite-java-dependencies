@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.gradle.IsBuildGradle;
 import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.gradle.trait.GradleDependency;
 import org.openrewrite.gradle.trait.VersionCatalog;
@@ -37,8 +38,9 @@ import org.openrewrite.maven.ChangePluginGroupIdAndArtifactId;
 import org.openrewrite.maven.MavenDownloadingException;
 import org.openrewrite.maven.MavenIsoVisitor;
 import org.openrewrite.maven.internal.MavenPomDownloader;
+import org.openrewrite.maven.tree.MavenMetadata;
 import org.openrewrite.maven.tree.MavenRepository;
-import org.openrewrite.maven.tree.MavenResolutionResult;
+import org.openrewrite.maven.tree.Plugin;
 import org.openrewrite.maven.tree.ResolvedPom;
 import org.openrewrite.toml.tree.Toml;
 import org.openrewrite.xml.XPathMatcher;
@@ -51,6 +53,7 @@ import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -59,7 +62,6 @@ import static java.util.stream.Collectors.joining;
 public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependencyCheck.Accumulator> {
     private static final XPathMatcher DEPENDENCY_MATCHER = new XPathMatcher("//dependencies/dependency");
     private static final XPathMatcher ANNOTATION_PROCESSOR_PATH_MATCHER = new XPathMatcher("//annotationProcessorPaths/path");
-    private static final XPathMatcher PARENT_MATCHER = new XPathMatcher("/project/parent");
     private static final XPathMatcher EXTENSION_MATCHER = new XPathMatcher("/project/build/extensions/extension");
 
     transient RelocatedDependencyReport report = new RelocatedDependencyReport(this);
@@ -103,9 +105,9 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
         @Nullable
         GroupArtifact changeTo(Usage usage) {
-            Set<@Nullable GroupArtifact> candidates = new HashSet<>(targets.getOrDefault(usage, Collections.emptySet()));
+            Set<@Nullable GroupArtifact> candidates = new HashSet<>(targets.getOrDefault(usage, emptySet()));
             if (!managedInRepository.contains(usage.getFrom())) {
-                candidates.addAll(versionlessTargets.getOrDefault(usage, Collections.emptySet()));
+                candidates.addAll(versionlessTargets.getOrDefault(usage, emptySet()));
             }
             return candidates.size() == 1 ? candidates.iterator().next() : null;
         }
@@ -193,14 +195,14 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         return new DeclarationVisitor(acc) {
             @Override
             <T extends Tree> T visitDeclaration(Declaration declaration, List<Hop> chain, T tree, ExecutionContext ctx) {
-                if (declaration.getKind() != Kind.DEPENDENCY && declaration.getKind() != Kind.PLUGIN) {
+                Usage usage = declaration.getUsage();
+                if (usage.getKind() != Kind.DEPENDENCY && usage.getKind() != Kind.PLUGIN) {
                     return tree;
                 }
-                Usage usage = new Usage(declaration.getKind(), declaration.getFrom());
-                Hop hop = furthestAvailable(declaration, chain);
                 if (declaration.isManaged()) {
-                    acc.getManagedInRepository().add(declaration.getFrom());
+                    acc.getManagedInRepository().add(usage.getFrom());
                 }
+                Hop hop = furthestAvailable(declaration, chain);
                 (declaration.isVersionless() ? acc.getVersionlessTargets() : acc.getTargets())
                         .computeIfAbsent(usage, k -> new HashSet<>())
                         .add(hop == null ? null : hop.getTo());
@@ -230,16 +232,17 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
             @Override
             <T extends Tree> T visitDeclaration(Declaration declaration, List<Hop> chain, T tree, ExecutionContext ctx) {
+                Usage usage = declaration.getUsage();
                 Hop last = chain.get(chain.size() - 1);
+                String context = context(chain);
                 report.insertRow(ctx, new RelocatedDependencyReport.Row(
-                        declaration.getFrom().getGroupId(), declaration.getFrom().getArtifactId(),
+                        usage.getFrom().getGroupId(), usage.getFrom().getArtifactId(),
                         last.getTo().getGroupId(), last.getTo().getArtifactId(),
-                        context(chain)));
+                        context));
 
-                Usage usage = new Usage(declaration.getKind(), declaration.getFrom());
                 GroupArtifact target = Boolean.TRUE.equals(changeDependencies) ? acc.changeTo(usage) : null;
                 if (target == null) {
-                    return SearchResult.found(tree, relocatedMessage(chain));
+                    return SearchResult.found(tree, relocatedMessage(chain, context));
                 }
                 changes.put(usage, target);
                 return tree;
@@ -279,18 +282,16 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         return null;
     }
 
-    private static String relocatedMessage(List<Hop> chain) {
-        String relocatedMessage = chain.stream()
+    private static String relocatedMessage(List<Hop> chain, @Nullable String context) {
+        String message = chain.stream()
                 .map(hop -> hop.getTo().getGroupId() + ":" + hop.getTo().getArtifactId())
                 .collect(joining(", then to ", "Relocated to ", ""));
-        String context = context(chain);
-        return context == null ? relocatedMessage : relocatedMessage + " as per \"" + context + "\"";
+        return context == null ? message : message + " as per \"" + context + "\"";
     }
 
     @Value
     static class Declaration {
-        Kind kind;
-        GroupArtifact from;
+        Usage usage;
 
         @Nullable
         String version;
@@ -300,6 +301,11 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         boolean managed;
 
         Repositories repositories;
+
+        static Declaration dependency(String groupId, String artifactId, @Nullable String version, Repositories repositories) {
+            return new Declaration(new Usage(Kind.DEPENDENCY, new GroupArtifact(groupId, artifactId)), version,
+                    false, false, repositories);
+        }
 
         boolean isAvailableAt(GroupArtifact target) {
             if (versionless) {
@@ -328,8 +334,7 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         }
 
         private static boolean isGradleBuildFile(SourceFile sourceFile) {
-            String path = sourceFile.getSourcePath().toString();
-            return sourceFile instanceof JavaSourceFile && (path.endsWith(".gradle") || path.endsWith(".gradle.kts"));
+            return sourceFile instanceof JavaSourceFile && IsBuildGradle.matches(sourceFile.getSourcePath());
         }
 
         private static boolean isVersionCatalog(SourceFile sourceFile) {
@@ -351,22 +356,15 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             return afterDeclarations((SourceFile) visitor.visitNonNull(s, ctx), ctx);
         }
 
-        private @Nullable Tree visitCoordinates(Kind kind, String groupId, String artifactId, @Nullable String version,
-                                                boolean versionless, boolean managed, Repositories repositories,
-                                                Tree tree, ExecutionContext ctx) {
-            List<Hop> chain = relocations(groupId, artifactId, repositories);
-            if (chain.isEmpty()) {
-                return tree;
-            }
-            Declaration declaration = new Declaration(kind, new GroupArtifact(groupId, artifactId), version,
-                    versionless, managed, repositories);
-            return visitDeclaration(declaration, chain, tree, ctx);
+        private <T extends Tree> T visitIfRelocated(Declaration declaration, T tree, ExecutionContext ctx) {
+            List<Hop> chain = relocations(declaration.getUsage().getFrom(), declaration.getRepositories());
+            return chain.isEmpty() ? tree : visitDeclaration(declaration, chain, tree, ctx);
         }
 
-        private List<Hop> relocations(String groupId, String artifactId, Repositories repositories) {
+        private List<Hop> relocations(GroupArtifact from, Repositories repositories) {
             List<Hop> chain = new ArrayList<>();
             Set<GroupArtifact> visited = new HashSet<>();
-            GroupArtifact current = new GroupArtifact(groupId, artifactId);
+            GroupArtifact current = from;
             visited.add(current);
             while (true) {
                 String currentArtifactId = requireNonNull(current.getArtifactId());
@@ -395,6 +393,12 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             return new JavaIsoVisitor<ExecutionContext>() {
                 private final GradleDependency.Matcher dependencyMatcher = new GradleDependency.Matcher();
 
+                @Nullable
+                private Repositories repositories;
+
+                @Nullable
+                private Repositories buildscriptRepositories;
+
                 @Override
                 public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx) {
                     J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
@@ -402,104 +406,138 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     if (dependency == null) {
                         return m;
                     }
+                    return visitIfRelocated(Declaration.dependency(dependency.getGroupId(), dependency.getArtifactId(),
+                            version(dependency), repositories("classpath".equals(dependency.getConfigurationName()), ctx)), m, ctx);
+                }
+
+                private @Nullable String version(GradleDependency dependency) {
                     String declaredVersion = dependency.getResolvedDependency().getRequested().getVersion();
-                    String version = !StringUtils.isBlank(declaredVersion) ? declaredVersion :
-                            dependency.getVersionVariable() != null && dependency.getResolvedDependency().getDepth() >= 0 ?
-                                    dependency.getVersion() : null;
-                    Repositories repositories = Repositories.of(getCursor().firstEnclosingOrThrow(SourceFile.class),
-                            "classpath".equals(dependency.getConfigurationName()), ctx);
-                    return (J.MethodInvocation) visitCoordinates(Kind.DEPENDENCY, dependency.getGroupId(),
-                            dependency.getArtifactId(), version, false, false, repositories, m, ctx);
+                    if (!StringUtils.isBlank(declaredVersion)) {
+                        return declaredVersion;
+                    }
+                    if (dependency.getVersionVariable() != null && dependency.getResolvedDependency().getDepth() >= 0) {
+                        return dependency.getVersion();
+                    }
+                    return null;
+                }
+
+                private Repositories repositories(boolean buildscript, ExecutionContext ctx) {
+                    if (buildscript) {
+                        if (buildscriptRepositories == null) {
+                            buildscriptRepositories = Repositories.of(getCursor().firstEnclosingOrThrow(SourceFile.class), true, ctx);
+                        }
+                        return buildscriptRepositories;
+                    }
+                    if (repositories == null) {
+                        repositories = Repositories.of(getCursor().firstEnclosingOrThrow(SourceFile.class), false, ctx);
+                    }
+                    return repositories;
                 }
             };
         }
 
         private TreeVisitor<?, ExecutionContext> versionCatalogVisitor() {
-            return new TreeVisitor<Tree, ExecutionContext>() {
-                @Override
-                public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                    if (!(tree instanceof Toml.Document)) {
-                        return tree;
-                    }
-                    Cursor root = new Cursor(new Cursor(null, Cursor.ROOT_VALUE), tree);
-                    VersionCatalog catalog = new VersionCatalog.Matcher().get(root).orElse(null);
-                    if (catalog == null) {
-                        return tree;
-                    }
-                    Map<String, String> versionDeclarations = catalog.getVersionDeclarations();
-                    Repositories repositories = Repositories.of((SourceFile) tree, false, ctx);
-                    return new VersionCatalogLibrary.Matcher().<ExecutionContext>asVisitor((library, c) -> visitCoordinates(
-                            Kind.DEPENDENCY, library.getGroupId(), library.getArtifactId(),
-                            library.getResolvedVersion(versionDeclarations), false, false, repositories,
-                            library.getTree(), c)).visit(tree, ctx);
-                }
-            };
+            return new VersionCatalog.Matcher().asVisitor((catalog, ctx) -> {
+                Map<String, String> versionDeclarations = catalog.getVersionDeclarations();
+                Repositories repositories = Repositories.of(catalog.getCursor().firstEnclosingOrThrow(SourceFile.class), false, ctx);
+                return new VersionCatalogLibrary.Matcher().<ExecutionContext>asVisitor((library, c) -> visitIfRelocated(
+                        Declaration.dependency(library.getGroupId(), library.getArtifactId(),
+                                library.getResolvedVersion(versionDeclarations), repositories),
+                        library.getTree(), c)).visit(catalog.getTree(), ctx, catalog.getCursor().getParentOrThrow());
+            });
         }
 
         private TreeVisitor<?, ExecutionContext> mavenVisitor() {
             return new MavenIsoVisitor<ExecutionContext>() {
+                @Nullable
+                private Repositories repositories;
+
+                @Nullable
+                private Repositories pluginRepositories;
+
                 @Override
                 public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext ctx) {
                     Xml.Tag t = super.visitTag(tag, ctx);
-                    Kind kind = kind();
+                    Kind kind = kind(t);
                     if (kind == null) {
                         return t;
                     }
                     ResolvedPom pom = getResolutionResult().getPom();
                     String groupId = pom.getValue(t.getChildValue("groupId")
-                            .orElse(kind == Kind.PLUGIN ? "org.apache.maven.plugins" : null));
+                            .orElse(kind == Kind.PLUGIN ? Plugin.PLUGIN_DEFAULT_GROUPID : null));
                     String artifactId = pom.getValue(t.getChildValue("artifactId").orElse(null));
                     if (groupId == null || artifactId == null) {
                         return t;
                     }
                     String declaredVersion = t.getChildValue("version").orElse(null);
                     String version = pom.getValue(declaredVersion);
-                    return (Xml.Tag) visitCoordinates(kind, groupId, artifactId,
+                    return visitIfRelocated(new Declaration(
+                            new Usage(kind, new GroupArtifact(groupId, artifactId)),
                             version == null || version.contains("${") ? null : version,
-                            kind == Kind.DEPENDENCY && declaredVersion == null, isManagedDependencyTag(),
-                            Repositories.of(getResolutionResult(), ctx), t, ctx);
+                            kind == Kind.DEPENDENCY && declaredVersion == null,
+                            isManagedDependencyTag(),
+                            kind == Kind.PLUGIN ? pluginRepositories(ctx) : repositories(ctx)), t, ctx);
                 }
 
-                private @Nullable Kind kind() {
-                    if (DEPENDENCY_MATCHER.matches(getCursor()) || ANNOTATION_PROCESSOR_PATH_MATCHER.matches(getCursor())) {
-                        return Kind.DEPENDENCY;
-                    } else if (isPluginTag()) {
-                        return Kind.PLUGIN;
-                    } else if (PARENT_MATCHER.matches(getCursor())) {
-                        return Kind.PARENT;
-                    } else if (EXTENSION_MATCHER.matches(getCursor())) {
-                        return Kind.EXTENSION;
+                private @Nullable Kind kind(Xml.Tag tag) {
+                    switch (tag.getName()) {
+                        case "dependency":
+                            return DEPENDENCY_MATCHER.matches(getCursor()) ? Kind.DEPENDENCY : null;
+                        case "path":
+                            return ANNOTATION_PROCESSOR_PATH_MATCHER.matches(getCursor()) ? Kind.DEPENDENCY : null;
+                        case "plugin":
+                            return isPluginTag() ? Kind.PLUGIN : null;
+                        case "parent":
+                            return isParentTag() ? Kind.PARENT : null;
+                        case "extension":
+                            return EXTENSION_MATCHER.matches(getCursor()) ? Kind.EXTENSION : null;
+                        default:
+                            return null;
                     }
-                    return null;
+                }
+
+                private Repositories repositories(ExecutionContext ctx) {
+                    if (repositories == null) {
+                        repositories = new Repositories((g, a) -> downloadMetadata(g, a, ctx), getResolutionResult().getPom());
+                    }
+                    return repositories;
+                }
+
+                private Repositories pluginRepositories(ExecutionContext ctx) {
+                    if (pluginRepositories == null) {
+                        pluginRepositories = new Repositories((g, a) -> downloadPluginMetadata(g, a, ctx), getResolutionResult().getPom());
+                    }
+                    return pluginRepositories;
                 }
             };
         }
     }
 
+    @FunctionalInterface
+    private interface MetadataDownloader {
+        MavenMetadata download(String groupId, String artifactId) throws MavenDownloadingException;
+    }
+
     private static class Repositories {
-        private final MavenPomDownloader downloader;
+        private final MetadataDownloader downloader;
 
         @Nullable
         private final ResolvedPom pom;
 
-        private final List<MavenRepository> repositories;
+        private final Map<GroupArtifact, @Nullable List<String>> versions = new HashMap<>();
 
-        private Repositories(MavenPomDownloader downloader, @Nullable ResolvedPom pom, List<MavenRepository> repositories) {
+        Repositories(MetadataDownloader downloader, @Nullable ResolvedPom pom) {
             this.downloader = downloader;
             this.pom = pom;
-            this.repositories = repositories;
-        }
-
-        static Repositories of(MavenResolutionResult resolutionResult, ExecutionContext ctx) {
-            ResolvedPom pom = resolutionResult.getPom();
-            return new Repositories(new MavenPomDownloader(resolutionResult.getProjectPoms(), ctx), pom, pom.getRepositories());
         }
 
         static Repositories of(SourceFile sourceFile, boolean buildscript, ExecutionContext ctx) {
             List<MavenRepository> repositories = sourceFile.getMarkers().findFirst(GradleProject.class)
                     .map(gp -> buildscript ? gp.getBuildscript().getMavenRepositories() : gp.getMavenRepositories())
                     .orElse(emptyList());
-            return new Repositories(new MavenPomDownloader(emptyMap(), ctx), null, repositories);
+            MavenPomDownloader downloader = new MavenPomDownloader(emptyMap(), ctx);
+            return new Repositories((g, a) -> downloader.downloadMetadata(
+                    new org.openrewrite.maven.tree.GroupArtifact(g, a), null, repositories), null);
         }
 
         boolean exists(GroupArtifact ga) {
@@ -516,15 +554,16 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
         }
 
         private @Nullable List<String> versions(GroupArtifact ga) {
-            try {
-                return downloader.downloadMetadata(
-                                new org.openrewrite.maven.tree.GroupArtifact(ga.getGroupId(), requireNonNull(ga.getArtifactId())),
-                                pom, repositories)
-                        .getVersioning()
-                        .getVersions();
-            } catch (MavenDownloadingException e) {
-                return null;
+            if (!versions.containsKey(ga)) {
+                List<String> found;
+                try {
+                    found = downloader.download(ga.getGroupId(), requireNonNull(ga.getArtifactId())).getVersioning().getVersions();
+                } catch (MavenDownloadingException e) {
+                    found = null;
+                }
+                versions.put(ga, found);
             }
+            return versions.get(ga);
         }
     }
 }

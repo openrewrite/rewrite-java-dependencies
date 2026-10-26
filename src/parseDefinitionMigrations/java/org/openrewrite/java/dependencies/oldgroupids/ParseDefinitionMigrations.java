@@ -31,15 +31,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
-import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toCollection;
 
 public class ParseDefinitionMigrations {
     private static final Pattern COORDINATE = Pattern.compile("[\\w.\\-]+(:[\\w.\\-]+)?");
-    private static final String REMOVED = "removed";
 
     public static void main(String[] args) throws IOException {
         if (args.length != 2) {
@@ -85,14 +86,15 @@ public class ParseDefinitionMigrations {
         List<Migration> migrations = new ArrayList<>(migrationsByOldGav.size());
         for (Map.Entry<String, List<Migration>> entry : migrationsByOldGav.entrySet()) {
             List<Migration> candidates = entry.getValue();
-            if (candidates.stream().map(ParseDefinitionMigrations::target).distinct().count() == 1) {
+            Set<String> targets = candidates.stream().map(ParseDefinitionMigrations::target).collect(toCollection(LinkedHashSet::new));
+            if (targets.size() == 1) {
                 migrations.add(candidates.stream()
                         .filter(m -> m.getContext() != null)
                         .findFirst()
                         .orElse(candidates.get(0)));
             } else {
                 System.err.println("Skipping " + entry.getKey() + ", which has conflicting relocations " +
-                                   candidates.stream().map(ParseDefinitionMigrations::target).collect(joining(", ")));
+                                   String.join(", ", targets));
             }
         }
 
@@ -111,7 +113,7 @@ public class ParseDefinitionMigrations {
     }
 
     private static boolean isCoordinate(String gav) {
-        return COORDINATE.matcher(gav).matches() && !REMOVED.equals(gav.split(":")[0]);
+        return COORDINATE.matcher(gav).matches() && !"removed".equals(gav.split(":")[0]);
     }
 
     private static String target(Migration m) {

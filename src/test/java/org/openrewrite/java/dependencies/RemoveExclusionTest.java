@@ -39,14 +39,6 @@ class RemoveExclusionTest implements RewriteTest {
           //language=groovy
           buildGradle(
             """
-              plugins {
-                  id 'java-library'
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation('org.apache.httpcomponents:httpclient:4.5.13') {
                       exclude group: 'commons-logging', module: 'commons-logging'
@@ -54,14 +46,6 @@ class RemoveExclusionTest implements RewriteTest {
               }
               """,
             """
-              plugins {
-                  id 'java-library'
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation('org.apache.httpcomponents:httpclient:4.5.13')
               }
@@ -76,14 +60,6 @@ class RemoveExclusionTest implements RewriteTest {
           //language=kotlin
           buildGradleKts(
             """
-              plugins {
-                  `java-library`
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation("org.apache.httpcomponents:httpclient:4.5.13") {
                       exclude(group = "commons-logging", module = "commons-logging")
@@ -91,14 +67,6 @@ class RemoveExclusionTest implements RewriteTest {
               }
               """,
             """
-              plugins {
-                  `java-library`
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation("org.apache.httpcomponents:httpclient:4.5.13")
               }
@@ -113,20 +81,12 @@ class RemoveExclusionTest implements RewriteTest {
           //language=groovy
           buildGradle(
             """
-              plugins {
-                  id 'java-library'
-              }
-
               configurations.all {
                   exclude group: 'commons-logging', module: 'commons-logging'
                   exclude group: 'org.slf4j', module: 'slf4j-simple'
               }
               """,
             """
-              plugins {
-                  id 'java-library'
-              }
-
               configurations.all {
                   exclude group: 'org.slf4j', module: 'slf4j-simple'
               }
@@ -246,14 +206,6 @@ class RemoveExclusionTest implements RewriteTest {
           //language=groovy
           buildGradle(
             """
-              plugins {
-                  id 'java-library'
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation('org.apache.httpcomponents:httpclient:4.5.13') {
                       exclude group: 'commons-logging', module: 'commons-logging'
@@ -261,14 +213,6 @@ class RemoveExclusionTest implements RewriteTest {
               }
               """,
             """
-              plugins {
-                  id 'java-library'
-              }
-
-              repositories {
-                  mavenCentral()
-              }
-
               dependencies {
                   implementation('org.apache.httpcomponents:httpclient:4.5.13')
               }

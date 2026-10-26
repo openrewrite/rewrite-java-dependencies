@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -117,6 +118,7 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
             );
         }
 
+        @DocumentExample
         @Test
         void minimumJUnit4AndJUnit5Present() {
             rewriteRun(

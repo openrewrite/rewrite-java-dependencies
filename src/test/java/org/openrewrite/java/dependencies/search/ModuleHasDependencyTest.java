@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.maven.MavenExecutionContextView;
 import org.openrewrite.test.RecipeSpec;
@@ -770,6 +771,7 @@ class WithVersionsPattern {
             );
         }
 
+        @DocumentExample
         @Test
         void stillMarksMavenDirectMatch() {
             rewriteRun(

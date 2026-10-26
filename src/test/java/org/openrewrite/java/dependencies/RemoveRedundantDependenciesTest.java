@@ -325,7 +325,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     id 'java-library'
                 }
                 repositories {
-                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
@@ -337,7 +337,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     id 'java-library'
                 }
                 repositories {
-                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
@@ -362,7 +362,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     `java-library`
                 }
                 repositories {
-                    maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
@@ -374,7 +374,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     `java-library`
                 }
                 repositories {
-                    maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
@@ -534,7 +534,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     id 'java-library'
                 }
                 repositories {
-                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
@@ -546,7 +546,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                     id 'java-library'
                 }
                 repositories {
-                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                    mavenCentral()
                 }
                 dependencies {
                     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
@@ -1036,7 +1036,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                         id 'java-library'
                     }
                     repositories {
-                        maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                        mavenCentral()
                     }
                     dependencies {
                         implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'

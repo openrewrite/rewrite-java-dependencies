@@ -86,7 +86,7 @@ class DependencyInsightTest implements RewriteTest {
                   id 'java-library'
               }
               repositories {
-                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                  mavenCentral()
               }
               dependencies {
                   implementation 'org.springframework:spring-core:5.2.6.RELEASE'
@@ -97,7 +97,7 @@ class DependencyInsightTest implements RewriteTest {
                   id 'java-library'
               }
               repositories {
-                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                  mavenCentral()
               }
               dependencies {
                   /*~~(org.springframework:spring-core:5.2.6.RELEASE,org.springframework:spring-jcl:5.2.6.RELEASE)~~>*/implementation 'org.springframework:spring-core:5.2.6.RELEASE'

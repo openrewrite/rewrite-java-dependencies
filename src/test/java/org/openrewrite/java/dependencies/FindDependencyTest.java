@@ -123,7 +123,7 @@ class FindDependencyTest implements RewriteTest {
               }
 
               repositories {
-                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                  mavenCentral()
               }
 
               dependencies {
@@ -136,7 +136,7 @@ class FindDependencyTest implements RewriteTest {
               }
 
               repositories {
-                  maven { url = uri("https://maven-central.storage-download.googleapis.com/maven2") }
+                  mavenCentral()
               }
 
               dependencies {

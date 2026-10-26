@@ -93,7 +93,7 @@ class UpgradeTransitiveDependencyVersionTest implements RewriteTest {
                   id 'java'
               }
               repositories {
-                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                  mavenCentral()
               }
               dependencies {
                   implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
@@ -104,7 +104,7 @@ class UpgradeTransitiveDependencyVersionTest implements RewriteTest {
                   id 'java'
               }
               repositories {
-                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                  mavenCentral()
               }
               dependencies {
                   constraints {

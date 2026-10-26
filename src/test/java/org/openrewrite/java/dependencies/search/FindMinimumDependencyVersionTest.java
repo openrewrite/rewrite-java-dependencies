@@ -214,6 +214,67 @@ class FindMinimumDependencyVersionTest implements RewriteTest {
     }
 
     @Test
+    void ordersVersionsLikeMaven() {
+        rewriteRun(
+          spec -> spec.recipe(new FindMinimumDependencyVersion("org.springframework", "spring-core", null)),
+          mavenProject(
+            "core",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>org.openrewrite</groupId>
+                  <artifactId>core</artifactId>
+                  <version>0.1.0-SNAPSHOT</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.springframework</groupId>
+                          <artifactId>spring-core</artifactId>
+                          <version>2.5.6.SEC03</version>
+                      </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          ),
+          mavenProject(
+            "server",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>org.openrewrite</groupId>
+                  <artifactId>server</artifactId>
+                  <version>0.1.0-SNAPSHOT</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.springframework</groupId>
+                          <artifactId>spring-core</artifactId>
+                          <version>2.5.6</version>
+                      </dependency>
+                  </dependencies>
+                </project>
+                """,
+              """
+                <!--~~(org.springframework:spring-core:2.5.6)~~>--><project>
+                  <groupId>org.openrewrite</groupId>
+                  <artifactId>server</artifactId>
+                  <version>0.1.0-SNAPSHOT</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>org.springframework</groupId>
+                          <artifactId>spring-core</artifactId>
+                          <version>2.5.6</version>
+                      </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
     void invalidVersionIsInvalid() {
         assertThat(new FindMinimumDependencyVersion("junit", "junit", "latest.bogus").validate().isValid()).isFalse();
     }

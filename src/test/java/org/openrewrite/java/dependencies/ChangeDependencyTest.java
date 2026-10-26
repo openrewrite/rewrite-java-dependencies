@@ -339,4 +339,11 @@ class ChangeDependencyTest implements RewriteTest {
         assertThat(cd.getInstanceName())
           .isEqualTo("Change Gradle or Maven dependency `org.springframework.boot:spring-boot-starter-web`");
     }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        ChangeDependency cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
+        assertThat(cd.validate().isValid()).isFalse();
+        assertThat(cd.validate(new InMemoryExecutionContext()).isValid()).isFalse();
+    }
 }

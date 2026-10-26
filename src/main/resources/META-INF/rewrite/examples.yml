@@ -302,7 +302,7 @@ examples:
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
           </dependency>
-          <!--~~(Relocated to org.apache.groovy)~~>--><dependency>
+          <!--~~(Relocated to org.apache.groovy:groovy)~~>--><dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>2.5.6</version>

@@ -29,7 +29,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
-
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @RequiredArgsConstructor
@@ -80,10 +79,8 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     @Nullable
     private final List<String> retainVersions;
 
-    @Getter
     final String displayName = "Upgrade Gradle or Maven dependency versions";
 
-    @Getter
     final String description = "For Gradle projects, upgrade the version of a dependency in a `build.gradle` or `build.gradle.kts` file. " +
             "Supports updating dependency declarations of various forms:\n" +
             " * `String` notation: `\"group:artifact:version\"`\n" +
@@ -157,8 +154,10 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (!(tree instanceof SourceFile)) {
+                    return tree;
+                }
                 Tree t = tree;
-                assert tree != null;
                 if (mavenVisitor.isAcceptable((SourceFile) tree, ctx)) {
                     t = mavenVisitor.visit(tree, ctx);
                 } else if (gradleVisitor.isAcceptable((SourceFile) tree, ctx)) {

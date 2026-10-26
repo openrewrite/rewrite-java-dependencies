@@ -58,7 +58,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
     @Value
     public static class Accumulator {
-        // Map from project identifier -> scope/configuration -> Set of transitive dependencies
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
     }
 
@@ -95,7 +94,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             if (dep.isDirect() &&
                                     StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
                                     StringUtils.matchesGlob(dep.getArtifactId(), artifactId)) {
-                                // This is a matching parent dependency, resolve its transitives independently
                                 Set<TransitiveDependency> transitives = acc.transitivesByProjectAndScope
                                         .computeIfAbsent(projectId, k -> new HashMap<>())
                                         .computeIfAbsent(conf.getName(), k -> new HashSet<>());
@@ -124,7 +122,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                     StringUtils.matchesGlob(dep.getGroupId(), groupId) &&
                                     StringUtils.matchesGlob(dep.getArtifactId(), artifactId) &&
                                     processed.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
-                                // This is a matching parent dependency, resolve its transitives independently
                                 Scope depScope = Scope.fromName(dep.getRequested().getScope());
                                 Set<TransitiveDependency> transitives = acc.transitivesByProjectAndScope
                                         .computeIfAbsent(projectId, k -> new HashMap<>())
@@ -159,7 +156,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
 
-                    // Collect all dependencies (both direct and transitive of the parent)
                     Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
                     for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
                         collectAllDependencies(dep, transitives, visited, providedBy);
@@ -254,7 +250,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     for (ResolvedDependency dep : conf.getResolved()) {
                         if (dep.isDirect() &&
                                 isRedundant(dep, transitives)) {
-                            // This direct dependency is transitively provided, remove it
                             // Don't specify configuration - Gradle's resolved config names differ from declaration names
                             result = new RemoveDependency(
                                     dep.getGroupId(), dep.getArtifactId(), null, null, null)
@@ -282,8 +277,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
                             if (isRedundant(dep, transitives)) {
-                                // This direct dependency is transitively provided at the same scope and
-                                // with the same exclusions, remove it.
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -324,13 +317,11 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                 Set<TransitiveDependency> result = new HashSet<>();
 
-                // Always include transitives from the same scope
                 Set<TransitiveDependency> sameScope = scopeToTransitives.get(targetScope);
                 if (sameScope != null) {
                     result.addAll(sameScope);
                 }
 
-                // Include transitives from broader scopes
                 for (String broader : getBroaderGradleScopes(targetScope)) {
                     Set<TransitiveDependency> broaderTransitives = scopeToTransitives.get(broader);
                     if (broaderTransitives != null) {

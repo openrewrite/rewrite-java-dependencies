@@ -22,8 +22,8 @@ import org.openrewrite.*;
 import org.openrewrite.maven.table.DependenciesDeclared;
 import org.openrewrite.semver.Semver;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindDependency extends Recipe {
     // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
     transient DependenciesDeclared dependenciesDeclared = new DependenciesDeclared(this);
@@ -106,7 +106,6 @@ public class FindDependency extends Recipe {
                     return mavenFindDependency.visitNonNull(tree, ctx);
                 }
                 if (gradleFindDependency.isAcceptable(s, ctx)) {
-                    // Handle Gradle projects
                     return gradleFindDependency.visitNonNull(tree, ctx);
                 }
                 return s;

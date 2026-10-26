@@ -80,6 +80,8 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
     @Value
     static class Relocation {
         GroupArtifact to;
+
+        @Nullable
         String context;
     }
 
@@ -154,8 +156,10 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
                     }
 
                     private J.MethodInvocation searchInLiteral(J.Literal literal, J.MethodInvocation mi, ExecutionContext ctx) {
+                        if (!(literal.getValue() instanceof String)) {
+                            return mi;
+                        }
                         String gav = (String) literal.getValue();
-                        assert gav != null;
                         String[] parts = gav.split(":");
                         if (parts.length >= 2) {
                             mi = maybeUpdate(mi, parts[0], parts[1], ctx);
@@ -281,7 +285,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
             private @Nullable Relocation getRelocation(String groupId, @Nullable String artifactId) {
                 Relocation relocation = acc.getMigrations().get(new GroupArtifact(groupId, artifactId));
                 if (relocation == null && artifactId != null) {
-                    // Try again without artifactId, as some migrations only specify groupId
                     relocation = acc.getMigrations().get(new GroupArtifact(groupId, null));
                 }
                 return relocation;

@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.ScanningRecipe;
-import org.openrewrite.SourceFile;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.dependencies.table.DuplicateClassesReport;
@@ -29,9 +28,6 @@ import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
 
 import java.util.*;
-
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.joining;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -86,7 +82,6 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     return cu;
                 }
 
-                // Invert the mapping: type name -> list of GAVs containing that type
                 Map<String, List<String>> typeToGavs = new HashMap<>();
                 for (Map.Entry<String, List<JavaType.FullyQualified>> entry : gavToTypes.entrySet()) {
                     String gav = entry.getKey();
@@ -95,7 +90,6 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                     }
                 }
 
-                // Report duplicates (types appearing in more than one GAV)
                 for (Map.Entry<String, List<String>> entry : typeToGavs.entrySet()) {
                     List<String> gavs = entry.getValue();
                     if (gavs.size() > 1) {
@@ -105,7 +99,7 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                             continue;
                         }
                         String additionalDeps = gavs.size() > 2 ?
-                                gavs.subList(2, gavs.size()).stream().collect(joining(", ")) :
+                                String.join(", ", gavs.subList(2, gavs.size())) :
                                 "";
                         report.insertRow(ctx, new DuplicateClassesReport.Row(
                                 projectName,
@@ -121,10 +115,5 @@ public class FindDuplicateClasses extends ScanningRecipe<FindDuplicateClasses.Ac
                 return cu;
             }
         };
-    }
-
-    @Override
-    public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
-        return emptyList();
     }
 }

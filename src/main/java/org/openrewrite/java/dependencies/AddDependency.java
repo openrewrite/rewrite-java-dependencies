@@ -211,18 +211,18 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     }
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.gradle.AddDependency> gradleDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.gradle.AddDependency> gradleDelegate = new AtomicReference<>();
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.maven.AddDependency> mavenDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.maven.AddDependency> mavenDelegate = new AtomicReference<>();
 
     private org.openrewrite.gradle.AddDependency gradleAddDep() {
         org.openrewrite.gradle.AddDependency recipe = gradleDelegate.get();
         if (recipe == null) {
             String configurationName = null;
-            if(configuration != null) {
+            if (configuration != null) {
                 configurationName = configuration;
-            } else if(scope != null) {
+            } else if (scope != null) {
                 configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
             }
             recipe = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,

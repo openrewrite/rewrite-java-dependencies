@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.Issue;
+import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.gradle.Assertions.buildGradle;
@@ -28,6 +29,12 @@ import static org.openrewrite.java.Assertions.mavenProject;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RemoveRedundantDependenciesTest implements RewriteTest {
+
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new RemoveRedundantDependencies("org.springframework.boot", "spring-boot-starter-*"));
+    }
+
     @DocumentExample
     @Test
     void removeRedundantMavenDependency() {
@@ -184,8 +191,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
     @Test
     void removesTomcatEmbedCoreWhenExclusionsMatchTransitive() {
         rewriteRun(
-          spec -> spec.recipe(new RemoveRedundantDependencies(
-            "org.springframework.boot", "spring-boot-starter-*")),
           //language=xml
           pomXml(
             """
@@ -465,8 +470,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         // spring-boot-starter-web transitively provides spring-boot-starter-json. Both match the
         // `spring-boot-starter-*` glob, so the redundant one must still be removed.
         rewriteRun(
-          spec -> spec.recipe(new RemoveRedundantDependencies(
-            "org.springframework.boot", "spring-boot-starter-*")),
           //language=xml
           pomXml(
             """
@@ -729,8 +732,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsTomcatEmbedCoreWhenExclusionsDiffer() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -770,8 +771,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsTomcatEmbedCoreWhenDirectHasNoExclusions() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -805,8 +804,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsDirectCompileJunitJupiterWhenTransitiveIsTestScoped() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -841,8 +838,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsRuntimeTomcatEmbedCoreWhenTransitiveIsCompileScoped() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -877,8 +872,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsDirectCompileTomcatEmbedCoreWhenProviderIsProvidedScoped() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -918,8 +911,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             // would in fact be safe, but telling that apart requires resolving the coordinate's own closure, so
             // the recipe keeps the dependency rather than risk an unsafe removal.
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """
@@ -954,8 +945,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         @Test
         void keepsJerseyClientWhenDirectExclusionsDifferFromTransitive() {
             rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-*")),
               //language=xml
               pomXml(
                 """

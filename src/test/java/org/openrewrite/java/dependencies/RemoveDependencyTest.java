@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.Issue;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +31,11 @@ import static org.openrewrite.java.Assertions.*;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class RemoveDependencyTest implements RewriteTest {
+
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null));
+    }
 
     @DocumentExample("Remove a Gradle dependency")
     @Test
@@ -171,8 +177,7 @@ class RemoveDependencyTest implements RewriteTest {
                 public class RetryTemplate {
                 }
                 """
-            ))
-            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+            )),
           mavenProject("parent",
             //language=xml
             pomXml(
@@ -426,8 +431,7 @@ class RemoveDependencyTest implements RewriteTest {
                     public class ExponentialBackOffPolicy {
                     }
                     """
-                ))
-                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+                )),
               mavenProject("example",
                 //language=java
                 srcMainJava(
@@ -480,8 +484,7 @@ class RemoveDependencyTest implements RewriteTest {
                     public class RetryTemplate {
                     }
                     """
-                ))
-                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+                )),
               mavenProject("example",
                 //language=java
                 srcMainJava(
@@ -528,8 +531,7 @@ class RemoveDependencyTest implements RewriteTest {
                     public class RetryTemplate {
                     }
                     """
-                ))
-                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+                )),
               mavenProject("parent",
                 //language=xml
                 pomXml(
@@ -598,8 +600,7 @@ class RemoveDependencyTest implements RewriteTest {
                     public class RetryTemplate {
                     }
                     """
-                ))
-                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+                )),
               mavenProject("parent",
                 //language=xml
                 pomXml(

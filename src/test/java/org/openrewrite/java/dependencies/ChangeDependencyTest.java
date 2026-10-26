@@ -21,6 +21,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.config.DataTableDescriptor;
 import org.openrewrite.maven.table.MavenMetadataFailures;
+import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,12 +32,16 @@ import static org.openrewrite.maven.Assertions.pomXml;
 
 class ChangeDependencyTest implements RewriteTest {
 
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null));
+    }
+
     @DocumentExample("Change Gradle dependency")
     @Test
     void changeGradleDependency() {
         rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
+          spec -> spec.beforeRecipe(withToolingApi()),
           //language=groovy
           buildGradle(
             """
@@ -72,8 +77,7 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeGradleKotlinDslDependency() {
         rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
+          spec -> spec.beforeRecipe(withToolingApi()),
           //language=kotlin
           buildGradleKts(
             """
@@ -109,7 +113,6 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeMavenDependency() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=xml
           pomXml(
             """
@@ -147,7 +150,6 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeMavenDependencyToAlreadyPresent() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=xml
           pomXml(
             """

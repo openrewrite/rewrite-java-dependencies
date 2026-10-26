@@ -65,7 +65,6 @@ public class DependencyList extends Recipe {
             description = "When enabled the recipe will attempt to download every dependency it encounters, reporting on any failures. " +
                           "This can be useful for identifying dependencies that have become unavailable since an LST was produced. " +
                           "Defaults to `false`.",
-            valid = {"true", "false"},
             required = false,
             example = "true")
     boolean validateResolvable;

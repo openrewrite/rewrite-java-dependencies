@@ -40,7 +40,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Version",
             description = "An exact version number or node-style semver selector used to select the version number.",
-            example = "29.X",
+            example = "29.x",
             required = false)
     @Nullable
     String version;
@@ -103,6 +103,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Releases only",
             description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
+            example = "true",
             required = false)
     @Nullable
     Boolean releasesOnly;
@@ -117,6 +118,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Optional",
             description = "For Maven only, set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
+            example = "true",
             required = false)
     @Nullable
     Boolean optional;

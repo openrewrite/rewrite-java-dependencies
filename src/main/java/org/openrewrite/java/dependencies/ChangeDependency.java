@@ -56,7 +56,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Option(displayName = "New version",
             description = "An exact version number or node-style semver selector used to select the version number.",
-            example = "29.X",
+            example = "29.x",
             required = false)
     @Nullable
     private final String newVersion;
@@ -74,6 +74,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
                           "For Maven, this applies when the new dependency has a managed version. " +
                           "For Gradle, this applies when the old dependency has no declared version, regardless of whether the new dependency is managed. " +
                           "The default for this flag is `false`.",
+            example = "true",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
@@ -86,6 +87,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Option(displayName = "Change plugin dependencies",
             description = "For Maven only, also change dependencies declared inside Maven plugins. Defaults to `true`.",
+            example = "true",
             required = false)
     @Nullable
     private final Boolean changePluginDependencies;

@@ -49,7 +49,7 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
                           "`latest.integration` to include pre-release and snapshot versions, and `latest.patch` for patch updates " +
                           "if the current version is a valid semantic version. For more details, you can look at the documentation " +
                           "page of [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors).",
-            example = "29.X")
+            example = "29.x")
     private final String newVersion;
 
     @Option(displayName = "Version pattern",
@@ -63,6 +63,7 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     @Option(displayName = "Override managed version",
             description = "For Maven only, this flag can be set to explicitly override a managed " +
                           "dependency's version. The default for this flag is `false`.",
+            example = "true",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;

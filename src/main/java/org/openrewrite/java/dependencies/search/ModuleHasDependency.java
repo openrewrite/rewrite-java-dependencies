@@ -85,6 +85,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Option(displayName = "Invert marking",
             description = "If `true`, will invert the check for whether to mark a file. Defaults to `false`.",
+            example = "true",
             required = false)
     @Nullable
     Boolean invertMarking;

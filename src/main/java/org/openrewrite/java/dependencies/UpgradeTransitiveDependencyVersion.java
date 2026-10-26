@@ -90,6 +90,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
 
     @Option(displayName = "Releases only",
             description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
+            example = "true",
             required = false)
     @Nullable
     Boolean releasesOnly;
@@ -103,6 +104,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
 
     @Option(displayName = "Add to the root pom",
             description = "For Maven only, add to the root pom where root is the eldest parent of the pom within the source set.",
+            example = "true",
             required = false)
     @Nullable
     Boolean addToRootPom;

@@ -25,6 +25,7 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.*;
@@ -143,5 +144,11 @@ class AddDependencyTest implements RewriteTest {
           null,
           null
         );
+    }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new AddDependency("junit", "junit", "latest.bogus", null, null, null, null, null, null, null, null, null, null, null)
+          .validate().isValid()).isFalse();
     }
 }

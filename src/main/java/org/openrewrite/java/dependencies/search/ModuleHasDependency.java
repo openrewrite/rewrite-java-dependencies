@@ -218,7 +218,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 if (tree == null) {
                     return null;
                 }
-                boolean shouldInvert = invertMarking != null && invertMarking;
+                boolean shouldInvert = Boolean.TRUE.equals(invertMarking);
                 String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 Optional<JavaProject> maybeJp = tree.getMarkers().findFirst(JavaProject.class);
                 if (!maybeJp.isPresent()) {

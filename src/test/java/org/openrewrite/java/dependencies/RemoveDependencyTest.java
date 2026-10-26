@@ -608,6 +608,99 @@ class RemoveDependencyTest implements RewriteTest {
     }
 
     @Test
+    void removeGradleDependencyIfNotInUse() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
+          mavenProject("example",
+            srcMainJava(
+              //language=java
+              java(
+                """
+                  class MyLoggingInterceptor {
+                  }
+                  """
+              )
+            ),
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+
+                repositories {
+                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                }
+
+                dependencies {
+                    implementation "org.aspectj:aspectjrt:1.9.22.1"
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+
+                repositories {
+                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                }
+
+                dependencies {
+                }
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void doNotRemoveGradleDependencyIfInUse() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .parser(JavaParser.fromJavaVersion().dependsOn(
+              //language=java
+              """
+                package org.aspectj.lang.annotation;
+
+                public @interface Aspect {
+                }
+                """
+            ))
+            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
+          mavenProject("example",
+            srcMainJava(
+              //language=java
+              java(
+                """
+                  import org.aspectj.lang.annotation.Aspect;
+                  @Aspect
+                  class MyLoggingInterceptor {
+                  }
+                  """
+              )
+            ),
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+
+                repositories {
+                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                }
+
+                dependencies {
+                    implementation "org.aspectj:aspectjrt:1.9.22.1"
+                }
+                """
+            )
+          )
+        );
+    }
+
+    @Test
     void instanceNameShowsTheDependencyBeingRemoved() {
         var recipe = new RemoveDependency("org.springframework.boot", "spring-boot*", null, null, null);
         assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.springframework.boot:spring-boot*`");

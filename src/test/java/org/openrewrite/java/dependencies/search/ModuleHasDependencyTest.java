@@ -652,7 +652,6 @@ class ModuleHasDependencyTest implements RewriteTest {
             var javaMarker = "/*~~%s>*/".formatted(negativeSub);
             rewriteRun(
               spec -> spec.recipe(new ModuleHasDependency(groupId, artifactId, null, versionRange, null, true)),
-              // Module with old Kotlin (2.1.0) — should NOT be marked
               mavenProject("old-kotlin",
                 pomXml(
                   """
@@ -672,7 +671,6 @@ class ModuleHasDependencyTest implements RewriteTest {
                 ),
                 java("public class OldKotlin {}")
               ),
-              // Module with new Kotlin (2.3.0) — SHOULD be marked
               mavenProject("new-kotlin",
                 pomXml(
                   """
@@ -704,7 +702,6 @@ class ModuleHasDependencyTest implements RewriteTest {
                   )
                 )
               ),
-              // Module with no Kotlin — SHOULD be marked
               mavenProject("no-kotlin",
                 pomXml(
                   """

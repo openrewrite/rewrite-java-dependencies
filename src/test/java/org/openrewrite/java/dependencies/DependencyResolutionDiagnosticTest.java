@@ -35,11 +35,9 @@ import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.dependencies.MavenCentralMirror.settingsMirroringOnlyCentral;
 import static org.openrewrite.maven.Assertions.pomXml;
 
-/**
- * Which URL Maven Central and the Gradle Plugin Portal are reached at depends on the machine the tests run on: where
- * CI names a mirror in MAVEN_CENTRAL_MIRROR_URL, the mirror stands in for both. So these tests check the repositories
- * they declare themselves by URL, and Central and the plugin portal only by being reachable.
- */
+// Which URL Maven Central and the Gradle Plugin Portal are reached at depends on the machine the tests run on: where
+// CI names a mirror in MAVEN_CENTRAL_MIRROR_URL, the mirror stands in for both. So these tests check the repositories
+// they declare themselves by URL, and Central and the plugin portal only by being reachable.
 @SuppressWarnings("GroovyAssignabilityCheck")
 class DependencyResolutionDiagnosticTest implements RewriteTest {
 
@@ -72,8 +70,6 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     void gradle() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
-            // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
-            // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows).filteredOn(row -> row.getUri().startsWith("file:/") && "".equals(row.getPingExceptionMessage())).hasSize(1);
                 assertThat(rows)
@@ -108,8 +104,6 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
     void gradleNoDefaultRepos() {
         rewriteRun(
           spec -> spec.beforeRecipe(withToolingApi())
-            // It is a limitation of the tooling API which prevents configuration-granularity error information from being collected.
-            // So the GradleDependencyConfigurationErrors table will never be populated in unit tests.
             .dataTable(RepositoryAccessibilityReport.Row.class, rows -> {
                 assertThat(rows)
                   .hasSize(2)
@@ -251,7 +245,6 @@ class DependencyResolutionDiagnosticTest implements RewriteTest {
         );
     }
 
-    /** The rows of the repositories other than the local one and the one that doesn't exist. */
     private static List<RepositoryAccessibilityReport.Row> remote(List<RepositoryAccessibilityReport.Row> rows) {
         return rows.stream()
           .filter(row -> !row.getUri().startsWith("file:/") && !row.getUri().contains("nonexistent.moderne.io"))

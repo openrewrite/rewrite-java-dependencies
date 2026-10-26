@@ -265,7 +265,6 @@ class RemoveDependencyTest implements RewriteTest {
               java(
                 """
                   class MyLoggingInterceptor {
-                      // Not using String anywhere here; the dependency should be removed
                   }
                   """
               )
@@ -493,7 +492,6 @@ class RemoveDependencyTest implements RewriteTest {
                       import org.springframework.retry.support.RetryTemplate;
 
                       class RetryConfig {
-                          // imports but no body usage — should still keep the dep
                       }
                       """
                   )

@@ -168,7 +168,6 @@ class DependencyListTest implements RewriteTest {
               </project>
               """,
             spec -> {
-                // Manually construct a resolution result since, obviously, the above cannot be resolved
                 MavenRepository pretendRepo = MavenRepository.builder()
                   .id("nonexistent")
                   .uri("https://nonexistent")

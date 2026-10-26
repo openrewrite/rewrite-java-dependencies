@@ -45,6 +45,15 @@ tasks {
         mainClass = "org.openrewrite.java.dependencies.oldgroupids.ParseDefinitionMigrations"
         classpath = sourceSets.getByName("parseDefinitionMigrations").runtimeClasspath
     }
+
+    // ./gradlew updateMigrations
+    val updateMigrations by registering(JavaExec::class) {
+        group = "generate"
+        description = "Refresh src/main/resources/migrations.csv from the latest oga-maven-plugin definitions."
+        mainClass = "org.openrewrite.java.dependencies.oldgroupids.UpdateMigrations"
+        classpath = sourceSets.getByName("parseDefinitionMigrations").runtimeClasspath
+        args(layout.buildDirectory.dir("oga-maven-plugin").get().asFile, "src/main/resources/migrations.csv")
+    }
 }
 
 license {

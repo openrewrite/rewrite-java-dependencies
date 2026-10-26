@@ -27,9 +27,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
@@ -129,23 +127,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     </dependencies>
                   </project>
                   """,
-                spec -> spec.after(actual -> """
-                  <project>
-                    <modelVersion>4.0.0</modelVersion>
-                    <groupId>org.openrewrite.example</groupId>
-                    <artifactId>rewrite-example</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                    <dependencies>
-                      <dependency>
-                        <groupId>com.mysql</groupId>
-                        <artifactId>mysql-connector-j</artifactId>
-                        <version>%s</version>
-                      </dependency>
-                    </dependencies>
-                  </project>
-                  """.formatted(Pattern.compile("<version>(.*)</version>")
-                  .matcher(requireNonNull(actual)).results().skip(1).findFirst().orElseThrow().group(1))
-                )
+                spec -> spec.after(actual -> assertThat(actual)
+                  .containsPattern("<groupId>com.mysql</groupId>\\s*<artifactId>mysql-connector-j</artifactId>\\s*<version>\\d+\\.\\d+\\.\\d+</version>")
+                  .doesNotContain("mysql-connector-java")
+                  .actual())
               )
             );
         }
@@ -415,18 +400,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       implementation "mysql:mysql-connector-java:8.0.31"
                   }
                   """,
-                spec -> spec.after(actual -> """
-                  plugins {
-                      id "java-library"
-                  }
-                  repositories {
-                      mavenCentral()
-                  }
-                  dependencies {
-                      implementation "%s"
-                  }
-                  """.formatted(Pattern.compile("com.mysql:mysql-connector-j:[^\"]+")
-                  .matcher(requireNonNull(actual)).results().findFirst().orElseThrow().group()))
+                spec -> spec.after(actual -> assertThat(actual)
+                  .containsPattern("implementation \"com.mysql:mysql-connector-j:\\d+\\.\\d+\\.\\d+\"")
+                  .doesNotContain("mysql-connector-java")
+                  .actual())
               )
             );
         }

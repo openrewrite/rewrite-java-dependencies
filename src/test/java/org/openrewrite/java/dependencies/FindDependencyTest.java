@@ -169,4 +169,9 @@ class FindDependencyTest implements RewriteTest {
         var recipe = new FindDependency(null, null, null, null, null);
         assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
     }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new FindDependency("junit", "junit", "latest.bogus", null, null).validate().isValid()).isFalse();
+    }
 }

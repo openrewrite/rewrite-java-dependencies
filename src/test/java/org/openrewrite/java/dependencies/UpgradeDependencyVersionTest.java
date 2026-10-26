@@ -154,4 +154,9 @@ class UpgradeDependencyVersionTest implements RewriteTest {
         var recipe = new UpgradeDependencyVersion(null, null, null, null, null, null);
         assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
     }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new UpgradeDependencyVersion("junit", "junit", "latest.bogus", null, null, null).validate().isValid()).isFalse();
+    }
 }

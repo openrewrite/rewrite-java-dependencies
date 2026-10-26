@@ -90,6 +90,17 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     Boolean invertMarking;
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate()
+                .and(Validated.test("scope", "scope is a valid Maven scope", scope,
+                        s -> Scope.fromName(s) != Scope.Invalid));
+        if (version != null) {
+            validated = validated.and(Semver.validate(version, null));
+        }
+        return validated;
+    }
+
+    @Override
     public Set<JavaProject> getInitialValue(ExecutionContext ctx) {
         return new HashSet<>();
     }

@@ -82,14 +82,17 @@ public class DoesNotIncludeDependency extends Recipe {
     }
 
     @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(gradleDoesNotIncludeDependency().validate())
+                .and(mavenDoesNotIncludeDependency().validate());
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdnid = new org.openrewrite.gradle.search.DoesNotIncludeDependency(
-                    groupId, artifactId, version, configuration)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdnid = new org.openrewrite.maven.search.DoesNotIncludeDependency(
-                    groupId, artifactId, version, onlyDirect, scope)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> gdnid = gradleDoesNotIncludeDependency().getVisitor();
+            final TreeVisitor<?, ExecutionContext> mdnid = mavenDoesNotIncludeDependency().getVisitor();
 
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
@@ -110,5 +113,13 @@ public class DoesNotIncludeDependency extends Recipe {
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.DoesNotIncludeDependency gradleDoesNotIncludeDependency() {
+        return new org.openrewrite.gradle.search.DoesNotIncludeDependency(groupId, artifactId, version, configuration);
+    }
+
+    private org.openrewrite.maven.search.DoesNotIncludeDependency mavenDoesNotIncludeDependency() {
+        return new org.openrewrite.maven.search.DoesNotIncludeDependency(groupId, artifactId, version, onlyDirect, scope);
     }
 }

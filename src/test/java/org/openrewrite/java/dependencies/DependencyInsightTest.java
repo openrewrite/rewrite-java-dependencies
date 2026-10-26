@@ -99,4 +99,11 @@ class DependencyInsightTest implements RewriteTest {
           .extracting(DataTableDescriptor::getName)
           .contains(DependenciesInUse.class.getName(), ExplainDependenciesInUse.class.getName());
     }
+
+    @Test
+    void invalidOptionsAreInvalid() {
+        assertThat(new DependencyInsight("*", "*", null, null).validate().isValid()).isFalse();
+        assertThat(new DependencyInsight("junit", "junit", "latest.bogus", null).validate().isValid()).isFalse();
+        assertThat(new DependencyInsight("junit", "junit", null, "bogus").validate().isValid()).isFalse();
+    }
 }

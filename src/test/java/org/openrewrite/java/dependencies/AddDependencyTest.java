@@ -172,4 +172,10 @@ class AddDependencyTest implements RewriteTest {
           null
         );
     }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new AddDependency("junit", "junit", "latest.bogus", null, null, null, null, null, null, null, null, null, null, null)
+          .validate().isValid()).isFalse();
+    }
 }

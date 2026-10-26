@@ -333,6 +333,58 @@ class ChangeDependencyTest implements RewriteTest {
     }
 
     @Test
+    void leaveGradleManagedDependencyWhenDisabled() {
+        rewriteRun(
+          spec -> spec
+            .beforeRecipe(withToolingApi())
+            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, false)),
+          //language=groovy
+          buildGradle(
+            """
+              plugins {
+                id 'java'
+                id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+              }
+
+              repositories {
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+              }
+
+              dependencyManagement {
+                  dependencies {
+                      dependency 'commons-lang:commons-lang:2.6'
+                  }
+              }
+
+              dependencies {
+                  implementation 'commons-lang:commons-lang:2.6'
+              }
+              """,
+            """
+              plugins {
+                id 'java'
+                id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+              }
+
+              repositories {
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+              }
+
+              dependencyManagement {
+                  dependencies {
+                      dependency 'commons-lang:commons-lang:2.6'
+                  }
+              }
+
+              dependencies {
+                  implementation 'org.apache.commons:commons-lang3:3.11'
+              }
+              """
+          )
+        );
+    }
+
+    @Test
     void instanceName() {
         // A composite recipe lists many ChangeDependency instances, and without the coordinates
         // in the name they are indistinguishable from one another.
@@ -355,5 +407,12 @@ class ChangeDependencyTest implements RewriteTest {
         assertThat(cd.getDataTableDescriptors())
           .extracting(DataTableDescriptor::getName)
           .contains(MavenMetadataFailures.class.getName());
+    }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        ChangeDependency cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
+        assertThat(cd.validate().isValid()).isFalse();
+        assertThat(cd.validate(new InMemoryExecutionContext()).isValid()).isFalse();
     }
 }

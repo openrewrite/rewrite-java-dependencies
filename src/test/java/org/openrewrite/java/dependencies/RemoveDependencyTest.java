@@ -579,4 +579,9 @@ class RemoveDependencyTest implements RewriteTest {
         var recipe = new RemoveDependency(null, null, null, null, null);
         assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
     }
+
+    @Test
+    void invalidScopeIsInvalid() {
+        assertThat(new RemoveDependency("junit", "junit", null, null, "bogus").validate().isValid()).isFalse();
+    }
 }

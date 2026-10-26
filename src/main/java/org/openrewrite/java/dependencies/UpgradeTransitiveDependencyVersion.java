@@ -21,12 +21,15 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
     String displayName = "Upgrade transitive Gradle or Maven dependencies";
 
@@ -107,10 +110,29 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     @Nullable
     Boolean addToRootPom;
 
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
+
     @Value
     public static class Accumulator {
         org.openrewrite.maven.UpgradeTransitiveDependencyVersion.Accumulator mavenAccumulator;
         org.openrewrite.gradle.UpgradeTransitiveDependencyVersion.DependencyVersionState gradleAccumulator;
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate().and(getGradleUpgradeTransitive().validate());
+        // The Maven delegate throws on a null version, which super.validate() already reports as missing
+        return version == null ? validated : validated.and(getMavenUpgradeTransitive().validate());
     }
 
     @Override

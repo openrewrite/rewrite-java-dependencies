@@ -23,6 +23,7 @@ import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.search.UsesType;
 import org.openrewrite.maven.tree.Dependency;
 import org.openrewrite.maven.tree.MavenResolutionResult;
+import org.openrewrite.maven.tree.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +73,21 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
 
     String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
                "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        return String.format("`%s:%s`", groupId, artifactId);
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        return super.validate().and(Validated.test("scope", "scope is a valid Maven scope", scope,
+                s -> Scope.fromName(s) != Scope.Invalid));
+    }
 
     public static class Accumulator {
         final Map<JavaProject, Boolean> projectToInUse = new HashMap<>();

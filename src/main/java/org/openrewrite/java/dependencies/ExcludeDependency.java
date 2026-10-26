@@ -61,6 +61,10 @@ public class ExcludeDependency extends Recipe {
 
     @Override
     public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
         return String.format("`%s:%s`", groupId, artifactId);
     }
 

@@ -23,7 +23,7 @@ import org.openrewrite.*;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DoesNotIncludeDependency extends Recipe {
-    String displayName = "Does not include dependency for Gradle and Maven";
+    String displayName = "Does not include Gradle or Maven dependency";
 
     String description = "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
                 "For compatibility with multimodule projects, this should most often be applied as a precondition.";

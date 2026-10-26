@@ -27,7 +27,7 @@ public class DependencyInsight extends Recipe {
     // Populated by the other DependencyInsight visitors. Listed here so the saas knows to display this when the recipe runs
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 
-    String displayName = "Dependency insight for Gradle and Maven";
+    String displayName = "Gradle or Maven dependency insight";
 
     String description = "Finds dependencies, including transitive dependencies, in both Gradle and Maven projects. " +
                "Matches within all Gradle dependency configurations and Maven scopes.";

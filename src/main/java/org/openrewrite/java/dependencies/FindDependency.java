@@ -56,7 +56,7 @@ public class FindDependency extends Recipe {
     @Nullable
     String configuration;
 
-    String displayName = "Find Maven and Gradle dependencies";
+    String displayName = "Find Gradle or Maven dependencies";
 
     String description = "Finds direct dependencies declared in Maven and Gradle build files. " +
                "This does *not* search transitive dependencies. " +

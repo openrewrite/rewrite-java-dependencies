@@ -27,7 +27,7 @@ public class FindRepositoryOrder extends Recipe {
     // Populated by the sub-recipes. Listed here so the data table is included in the recipe metadata.
     transient MavenRepositoryOrder repositoryOrder = new MavenRepositoryOrder(this);
 
-    String displayName = "Maven repository order";
+    String displayName = "Gradle or Maven repository order";
 
     String description = "Determine the order in which dependencies will be resolved for each `pom.xml` or " +
                          "`build.gradle` based on its defined repositories and effective settings.";

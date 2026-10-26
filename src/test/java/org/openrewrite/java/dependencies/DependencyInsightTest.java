@@ -73,13 +73,13 @@ class DependencyInsightTest implements RewriteTest {
     @Test
     void instanceNameShowsWhatIsBeingSearchedFor() {
         assertThat(new DependencyInsight("com.fasterxml.jackson*", "jackson-*", null, null).getInstanceName())
-          .isEqualTo("Dependency insight for Gradle and Maven `com.fasterxml.jackson*:jackson-*`");
+          .isEqualTo("Gradle or Maven dependency insight `com.fasterxml.jackson*:jackson-*`");
     }
 
     @Test
     void instanceNameIncludesVersionWhenGiven() {
         assertThat(new DependencyInsight("com.fasterxml.jackson*", "jackson-*", "2.x", null).getInstanceName())
-          .isEqualTo("Dependency insight for Gradle and Maven `com.fasterxml.jackson*:jackson-*:2.x`");
+          .isEqualTo("Gradle or Maven dependency insight `com.fasterxml.jackson*:jackson-*:2.x`");
     }
 
     @Test
@@ -87,6 +87,6 @@ class DependencyInsightTest implements RewriteTest {
         // The descriptor of an unconfigured recipe is rendered wherever recipes are listed;
         // it must not read "null:null".
         assertThat(new DependencyInsight(null, null, null, null).getInstanceName())
-          .isEqualTo("Dependency insight for Gradle and Maven");
+          .isEqualTo("Gradle or Maven dependency insight");
     }
 }

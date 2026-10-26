@@ -21,7 +21,6 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.gradle.marker.GradleDependencyConfiguration;
 import org.openrewrite.gradle.marker.GradleProject;
-import org.openrewrite.internal.StringUtils;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.maven.table.DependenciesInUse;
 import org.openrewrite.maven.tree.GroupArtifact;
@@ -29,127 +28,87 @@ import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
 import org.openrewrite.maven.tree.ResolvedGroupArtifactVersion;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BinaryOperator;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.OLDEST_FIRST;
 import static org.openrewrite.java.dependencies.search.FindMinimumDependencyVersion.applyMarkersForLocatedGavs;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
-public class FindMinimumJUnitVersion extends ScanningRecipe<Map<GroupArtifact, ResolvedGroupArtifactVersion>> {
+public class FindMinimumJUnitVersion extends Recipe {
+    private static final GroupArtifact JUNIT_4 = new GroupArtifact("junit", "junit");
+    private static final GroupArtifact JUNIT_JUPITER_API = new GroupArtifact("org.junit.jupiter", "junit-jupiter-api");
+
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
 
     @Option(displayName = "Version",
-            description = "Determine if the provided version is the minimum JUnit version. " +
-                          "If both JUnit 4 and JUnit 5 are present, the minimum version is JUnit 4. " +
-                          "If only one version is present, that version is the minimum version.",
+            description = "Only report modules whose minimum JUnit major version is the provided version. " +
+                          "If a module uses several JUnit major versions, the lowest one is its minimum version.",
             example = "4",
-            valid = {"4", "5"},
+            valid = {"4", "5", "6"},
             required = false)
     @Nullable
     String minimumVersion;
 
     String displayName = "Find minimum JUnit version";
 
-    String description = "Finds the minimum version of JUnit dependencies in a project. " +
-               "It will search for JUnit 4 and JUnit 5 dependencies in the project. " +
-               "If both versions are found, it will return the JUnit 4 version.\n" +
-               "If a `minimumVersion` is provided, the recipe only returns results when " +
-               "that is the minimum version of JUnit used by the project.\n" +
-               "For example: if the `minimumVersion` is 4, and the project has JUnit 4.12 and JUnit 5.7, " +
-               "the recipe will return JUnit 4.12. If the project has only JUnit 5.7, the recipe will not return any results.\n" +
-               "Another example: if the `minimumVersion` is 5, and the project has JUnit 4.12 and JUnit 5.7, " +
-               "the recipe will not return any results.";
+    String description = "Finds the minimum version of JUnit used by each module, " +
+               "looking at `junit:junit` for JUnit 4 and `org.junit.jupiter:junit-jupiter-api` for JUnit 5 and 6. " +
+               "If a module uses several JUnit major versions, the lowest one is reported.\n" +
+               "If a `minimumVersion` is provided, the recipe only reports modules for which " +
+               "that is the minimum JUnit major version.\n" +
+               "For example: if the `minimumVersion` is 4, and a module has JUnit 4.12 and JUnit 5.7, " +
+               "the recipe will report JUnit 4.12. If a module has only JUnit 5.7, the recipe will not report it.\n" +
+               "Another example: if the `minimumVersion` is 5, and a module has JUnit 4.12 and JUnit 5.7, " +
+               "the recipe will not report it.";
 
     @Override
-    public Map<GroupArtifact, ResolvedGroupArtifactVersion> getInitialValue(ExecutionContext ctx) {
-        return new HashMap<>();
-    }
-
-    @Override
-    public TreeVisitor<?, ExecutionContext> getScanner(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (tree == null) {
                     return null;
                 }
-                Markers m = tree.getMarkers();
-                m.findFirst(GradleProject.class).ifPresent(gradle -> {
-                    for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                        collectJUnit4(conf.getResolved(), acc);
-                        collectJUnit5(conf.getResolved(), acc);
-                    }
-                });
-                m.findFirst(MavenResolutionResult.class).ifPresent(maven -> {
-                    for (List<ResolvedDependency> resolved : maven.getDependencies().values()) {
-                        collectJUnit4(resolved, acc);
-                        collectJUnit5(resolved, acc);
-                    }
-                });
-                return tree;
+                ResolvedGroupArtifactVersion minimum = findMinimumJUnit(tree.getMarkers());
+                if (minimum == null || !isRequestedMajorVersion(minimum)) {
+                    return tree;
+                }
+                return applyMarkersForLocatedGavs(
+                        singletonMap(new GroupArtifact(minimum.getGroupId(), minimum.getArtifactId()), minimum),
+                        dependenciesInUse).visit(tree, ctx);
             }
         };
     }
 
-    private static boolean isResolvedGroupArtifactVersion(ResolvedGroupArtifactVersion resolvedGroupArtifactVersion, String groupName, String artifactName) {
-        return resolvedGroupArtifactVersion.getArtifactId().equals(artifactName) &&
-               resolvedGroupArtifactVersion.getGroupId().equals(groupName);
+    private boolean isRequestedMajorVersion(ResolvedGroupArtifactVersion gav) {
+        if (minimumVersion == null) {
+            return true;
+        }
+        return minimumVersion.equals(gav.getVersion().split("\\D", 2)[0]);
     }
 
-    @Override
-    public Collection<? extends SourceFile> generate(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc, ExecutionContext ctx) {
-        boolean hasJUnit4 = acc.values().stream().anyMatch(resolvedGroupArtifactVersion -> isResolvedGroupArtifactVersion(resolvedGroupArtifactVersion, "junit", "junit"));
-        boolean hasJUnit5 = acc.values().stream().anyMatch(resolvedGroupArtifactVersion -> isResolvedGroupArtifactVersion(resolvedGroupArtifactVersion, "org.junit.jupiter", "junit-jupiter-api"));
-        if (Objects.equals(minimumVersion, "4")) {
-            if (hasJUnit4) {
-                acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "junit", "junit"));
-            } else {
-                acc.clear();
+    private static @Nullable ResolvedGroupArtifactVersion findMinimumJUnit(Markers markers) {
+        List<List<ResolvedDependency>> resolved = new ArrayList<>();
+        markers.findFirst(GradleProject.class).ifPresent(gradle -> {
+            for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
+                resolved.add(conf.getResolved());
             }
-        } else if (Objects.equals(minimumVersion, "5")) {
-            if (hasJUnit4) {
-                acc.clear();
-            } else {
-                acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "org.junit.jupiter", "junit-jupiter-api"));
-            }
-        } else {
-            if (hasJUnit4 && hasJUnit5) {
-                acc.entrySet().removeIf(e -> !isResolvedGroupArtifactVersion(e.getValue(), "junit", "junit"));
+        });
+        markers.findFirst(MavenResolutionResult.class).ifPresent(maven -> resolved.addAll(maven.getDependencies().values()));
+
+        ResolvedGroupArtifactVersion minimum = null;
+        for (List<ResolvedDependency> dependencies : resolved) {
+            for (ResolvedDependency dep : dependencies) {
+                GroupArtifact ga = new GroupArtifact(dep.getGroupId(), dep.getArtifactId());
+                if ((JUNIT_4.equals(ga) || JUNIT_JUPITER_API.equals(ga)) &&
+                    (minimum == null || OLDEST_FIRST.compare(dep.getGav(), minimum) < 0)) {
+                    minimum = dep.getGav();
+                }
             }
         }
-        return emptyList();
-    }
-
-    @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        if (acc.isEmpty()) {
-            return TreeVisitor.noop();
-        }
-        return applyMarkersForLocatedGavs(acc, dependenciesInUse);
-    }
-
-    private void collectJUnit4(List<ResolvedDependency> resolved, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        collectVersion(resolved, "junit", "junit", acc);
-    }
-
-    private void collectJUnit5(List<ResolvedDependency> resolved, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        collectVersion(resolved, "org.junit.jupiter", "junit-jupiter-api", acc);
-    }
-
-    private static void collectVersion(List<ResolvedDependency> resolved, String groupIdPattern, String artifactIdPattern, Map<GroupArtifact, ResolvedGroupArtifactVersion> acc) {
-        for (ResolvedDependency dep : resolved) {
-            if (StringUtils.matchesGlob(dep.getGroupId(), groupIdPattern) &&
-                    StringUtils.matchesGlob(dep.getArtifactId(), artifactIdPattern)) {
-                acc.merge(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()),
-                        dep.getGav(), BinaryOperator.minBy(OLDEST_FIRST));
-            }
-        }
+        return minimum;
     }
 }

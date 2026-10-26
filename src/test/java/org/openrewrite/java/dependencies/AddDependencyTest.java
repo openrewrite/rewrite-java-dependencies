@@ -107,7 +107,7 @@ class AddDependencyTest implements RewriteTest {
                 }
                 
                 repositories {
-                    mavenCentral()
+                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
                 }
                 """,
               """
@@ -116,7 +116,7 @@ class AddDependencyTest implements RewriteTest {
                 }
                 
                 repositories {
-                    mavenCentral()
+                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
                 }
                 
                 dependencies {

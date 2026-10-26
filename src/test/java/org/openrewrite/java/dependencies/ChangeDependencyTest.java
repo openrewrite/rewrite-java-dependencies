@@ -50,7 +50,7 @@ class ChangeDependencyTest implements RewriteTest {
               }
 
               repositories {
-                  mavenCentral()
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
               }
 
               dependencies {
@@ -63,7 +63,7 @@ class ChangeDependencyTest implements RewriteTest {
               }
 
               repositories {
-                  mavenCentral()
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
               }
 
               dependencies {

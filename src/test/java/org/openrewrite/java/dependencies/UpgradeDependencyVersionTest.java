@@ -46,7 +46,7 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               }
                             
               repositories {
-                mavenCentral()
+                maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
               }
                             
               dependencies {
@@ -61,7 +61,7 @@ class UpgradeDependencyVersionTest implements RewriteTest {
               }
                             
               repositories {
-                mavenCentral()
+                maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
               }
                             
               dependencies {

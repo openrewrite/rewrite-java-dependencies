@@ -29,7 +29,7 @@ public class DependencyInsight extends Recipe {
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
     transient ExplainDependenciesInUse explainDependenciesInUse = new ExplainDependenciesInUse(this);
 
-    String displayName = "Dependency insight for Gradle and Maven";
+    String displayName = "Gradle or Maven dependency insight";
 
     String description = "Finds dependencies, including transitive dependencies, in both Gradle and Maven projects. " +
                "Matches within all Gradle dependency configurations and Maven scopes.";
@@ -53,8 +53,8 @@ public class DependencyInsight extends Recipe {
     @Nullable
     String version;
 
-    @Option(displayName = "Scope",
-            description = "Match dependencies with the specified Maven scope. All scopes are searched by default.",
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, match dependencies with the specified scope. All scopes are searched by default.",
             valid = {"compile", "test", "runtime", "provided", "system"},
             example = "compile",
             required = false)

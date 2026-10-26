@@ -32,27 +32,26 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
     transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
-    // Gradle and Maven shared parameters
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`.",
             example = "com.google.guava")
     String groupId;
 
     @Option(displayName = "Artifact ID",
-            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`",
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`.",
             example = "guava")
     String artifactId;
 
     @Option(displayName = "Version",
             description = "An exact version number or node-style semver selector used to select the version number.",
-            example = "29.X",
+            example = "29.x",
             required = false)
     @Nullable
     String version;
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+                          "setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
@@ -73,16 +72,15 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     String classifier;
 
     @Option(displayName = "Family pattern",
-            description = "A pattern, applied to groupIds, used to determine which other dependencies should have aligned version numbers. " +
-                          "Accepts '*' as a wildcard character.",
+            description = "For Maven only, a pattern, applied to group IDs, used to determine which other dependencies should have aligned version numbers. " +
+                          "Accepts `*` as a wildcard character.",
             example = "com.fasterxml.jackson*",
             required = false)
     @Nullable
     String familyPattern;
 
-    // Gradle only parameters
     @Option(displayName = "Extension",
-            description = "For Gradle only, The extension of the dependency to add. If omitted Gradle defaults to assuming the type is \"jar\".",
+            description = "For Gradle only, the extension of the dependency to add. If omitted Gradle defaults to assuming the type is \"jar\".",
             example = "jar",
             required = false)
     @Nullable
@@ -98,7 +96,6 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     @Nullable
     String configuration;
 
-    // Maven only parameters
     @Option(displayName = "Maven scope",
             description = "The Maven scope within which to place the dependency. " +
                           "When omitted scope will be determined based on where types matching `onlyIfUsing` appear in source code.",
@@ -109,13 +106,13 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     String scope;
 
     @Option(displayName = "Releases only",
-            description = "For Maven only, Whether to exclude snapshots from consideration when using a semver selector",
+            description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
             required = false)
     @Nullable
     Boolean releasesOnly;
 
     @Option(displayName = "Type",
-            description = "For Maven only, The type of dependency to add. If omitted Maven defaults to assuming the type is \"jar\".",
+            description = "For Maven only, the type of dependency to add. If omitted Maven defaults to assuming the type is \"jar\".",
             valid = {"jar", "pom", "war"},
             example = "jar",
             required = false)
@@ -123,22 +120,21 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
     String type;
 
     @Option(displayName = "Optional",
-            description = "Set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
+            description = "For Maven only, set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
             required = false)
     @Nullable
     Boolean optional;
 
     @Option(displayName = "Accept transitive",
-            description = "Default false. If enabled, the dependency will not be added if it is already on the classpath as a transitive dependency.",
-            example = "true",
+            description = "For Maven only, if enabled, the dependency will not be added if it is already on the classpath as a transitive dependency. Defaults to `false`.",
             required = false)
     @Nullable
     Boolean acceptTransitive;
 
     String displayName = "Add Gradle or Maven dependency";
 
-    String description = "For a Gradle project, add a gradle dependency to a `build.gradle` file in the correct configuration " +
-               "based on where it is used. Or For a maven project, Add a Maven dependency to a `pom.xml` file in the " +
+    String description = "For a Gradle project, add a dependency to a `build.gradle` or `build.gradle.kts` file in the correct " +
+               "configuration based on where it is used. For a Maven project, add a dependency to a `pom.xml` file in the " +
                "correct scope based on where it is used.";
 
     @Override

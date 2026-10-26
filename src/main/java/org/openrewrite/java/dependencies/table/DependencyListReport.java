@@ -26,7 +26,7 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
     public DependencyListReport(Recipe recipe) {
         super(recipe,
                 "Dependency report",
-                "Lists all Gradle and Maven dependencies");
+                "Lists all Gradle and Maven dependencies.");
     }
 
     @Value
@@ -37,14 +37,14 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
         String buildTool;
 
         @Column(displayName = "Path",
-                description = "Path to the build file declaring the dependency")
+                description = "Path to the build file declaring the dependency.")
         String path;
 
-        @Column(displayName = "Group id",
+        @Column(displayName = "Group ID",
                 description = "The Group ID of the Gradle project or Maven module requesting the dependency.")
         String groupId;
 
-        @Column(displayName = "Artifact id",
+        @Column(displayName = "Artifact ID",
                 description = "The Artifact ID of the Gradle project or Maven module requesting the dependency.")
         String artifactId;
 
@@ -52,11 +52,11 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
                 description = "The version of Gradle project or Maven module requesting the dependency.")
         String version;
 
-        @Column(displayName = "Dependency group id",
+        @Column(displayName = "Dependency group ID",
                 description = "The Group ID of the dependency.")
         String dependencyGroupId;
 
-        @Column(displayName = "Dependency artifact id",
+        @Column(displayName = "Dependency artifact ID",
                 description = "The Artifact ID of the dependency.")
         String dependencyArtifactId;
 
@@ -64,7 +64,7 @@ public class DependencyListReport extends DataTable<DependencyListReport.Row> {
                 description = "The version of the dependency.")
         String dependencyVersion;
 
-        @Column(displayName = "Direct Dependency",
+        @Column(displayName = "Direct dependency",
                 description = "When `true` the project directly depends on the dependency. When `false` the project " +
                               "depends on the dependency transitively through at least one direct dependency.")
         boolean direct;

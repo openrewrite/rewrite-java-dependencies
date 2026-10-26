@@ -54,7 +54,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 "A direct dependency is only removed when the transitive one provides it at the exact same scope and " +
                 "with the same declared exclusions, so that removing it does not change the effective classpath. " +
                 "Declarations that constrain resolution through a version range or dynamic version, such as a Gradle " +
-                "`version { strictly ... }` block, are never removed.";
+                "`version { strictly ... }` block, are never removed, and neither are declarations with a classifier " +
+                "or a type other than `jar`.";
 
     @Value
     public static class Accumulator {
@@ -151,14 +152,17 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 List<MavenRepository> repos = withMavenCentral(repositories);
                 GroupArtifact providedBy = new GroupArtifact(gav.getGroupId(), gav.getArtifactId());
                 try {
-                    // Get the resolved dependencies for compile scope (which includes most transitives)
                     Pom pom = downloader.download(gav.asGroupArtifactVersion(), null, null, repos);
                     ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
 
                     Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
                     for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
-                        collectAllDependencies(dep, transitives, visited, providedBy);
+                        // The provider is resolved as the root, so its own optional dependencies are listed here,
+                        // even though a project depending on the provider never receives them
+                        if (!Boolean.TRUE.equals(dep.getOptional())) {
+                            collectAllDependencies(dep, transitives, visited, providedBy);
+                        }
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
                     // If we can't download/resolve the POM, fall back to not detecting redundancies
@@ -178,7 +182,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
                                                 Set<ResolvedGroupArtifactVersion> visited, GroupArtifact providedBy) {
                 if (visited.add(dep.getGav())) {
-                    transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy));
+                    if (isPlainJar(dep.getRequested())) {
+                        transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy));
+                    }
                     for (ResolvedDependency transitive : dep.getDependencies()) {
                         collectAllDependencies(transitive, transitives, visited, providedBy);
                     }
@@ -193,6 +199,23 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     private static Set<GroupArtifact> declaredExclusions(ResolvedDependency dep) {
         List<GroupArtifact> exclusions = dep.getRequested().getExclusions();
         return exclusions == null || exclusions.isEmpty() ? emptySet() : new HashSet<>(exclusions);
+    }
+
+    private static boolean isPlainJar(Dependency dependency) {
+        return StringUtils.isBlank(dependency.getClassifier()) &&
+                (dependency.getType() == null || "jar".equals(dependency.getType()));
+    }
+
+    // A classifier or type variant, such as `sources` or a `test-jar`, is never what a provider supplies. Because
+    // RemoveDependency matches on group and artifact only, a plain jar declared next to such a variant is kept too
+    private static Set<GroupArtifact> declaredAsVariant(Collection<Dependency> requested) {
+        Set<GroupArtifact> variants = new HashSet<>();
+        for (Dependency dependency : requested) {
+            if (!isPlainJar(dependency)) {
+                variants.add(new GroupArtifact(dependency.getGroupId(), dependency.getArtifactId()));
+            }
+        }
+        return variants;
     }
 
     private static boolean constrainsResolution(ResolvedDependency dep) {
@@ -239,6 +262,11 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = gradle.getGroup() + ":" + gradle.getName();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
+                List<Dependency> requested = new ArrayList<>();
+                for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
+                    requested.addAll(conf.getRequested());
+                }
+                Set<GroupArtifact> variants = declaredAsVariant(requested);
 
                 for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
                     Set<TransitiveDependency> transitives = getCompatibleGradleTransitives(
@@ -249,7 +277,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                     for (ResolvedDependency dep : conf.getResolved()) {
                         if (dep.isDirect() &&
-                                isRedundant(dep, transitives)) {
+                                isRedundant(dep, transitives, variants)) {
                             // Don't specify configuration - Gradle's resolved config names differ from declaration names
                             result = new RemoveDependency(
                                     dep.getGroupId(), dep.getArtifactId(), null, null, null)
@@ -264,6 +292,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 String projectId = maven.getPom().getGroupId() + ":" + maven.getPom().getArtifactId();
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
+                Set<GroupArtifact> variants = declaredAsVariant(maven.getPom().getRequestedDependencies());
 
                 // A direct dependency appears under every scope bucket it is visible in; evaluate each
                 // one once using its own effective scope so a wider transitive scope does not falsely
@@ -276,7 +305,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Scope depScope = Scope.fromName(dep.getRequested().getScope());
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
-                            if (isRedundant(dep, transitives)) {
+                            if (isRedundant(dep, transitives, variants)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -287,8 +316,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return result;
             }
 
-            private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives) {
-                if (constrainsResolution(dep)) {
+            private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives,
+                                        Set<GroupArtifact> variants) {
+                if (constrainsResolution(dep) ||
+                        variants.contains(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()))) {
                     return false;
                 }
                 Set<GroupArtifact> depExclusions = declaredExclusions(dep);

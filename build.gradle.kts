@@ -5,6 +5,16 @@ plugins {
 group = "org.openrewrite.recipe"
 description = "A rewrite module automating Java dependency management."
 
+val parseDefinitionMigrations: SourceSet by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().output
+}
+configurations {
+    named(parseDefinitionMigrations.implementationConfigurationName) { extendsFrom(implementation.get()) }
+    named(parseDefinitionMigrations.compileOnlyConfigurationName) { extendsFrom(compileOnly.get()) }
+    named(parseDefinitionMigrations.annotationProcessorConfigurationName) { extendsFrom(annotationProcessor.get()) }
+}
+
 val rewriteVersion = rewriteRecipe.rewriteVersion.get()
 dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
@@ -18,6 +28,7 @@ dependencies {
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
     testImplementation(gradleApi())
+    testImplementation(parseDefinitionMigrations.output)
 
     testRuntimeOnly("org.openrewrite:rewrite-java-21")
     testRuntimeOnly("com.google.guava:guava:33.7.2-jre")
@@ -32,7 +43,7 @@ tasks {
         group = "generate"
         description = "Parse oga-maven-plugin and generate a CSV file."
         mainClass = "org.openrewrite.java.dependencies.oldgroupids.ParseDefinitionMigrations"
-        classpath = sourceSets.getByName("main").runtimeClasspath
+        classpath = sourceSets.getByName("parseDefinitionMigrations").runtimeClasspath
     }
 }
 

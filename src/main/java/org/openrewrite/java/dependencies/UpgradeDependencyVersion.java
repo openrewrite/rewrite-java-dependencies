@@ -63,7 +63,6 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
     @Option(displayName = "Override managed version",
             description = "For Maven only, this flag can be set to explicitly override a managed " +
                           "dependency's version. The default for this flag is `false`.",
-            example = "true",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;

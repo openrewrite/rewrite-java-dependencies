@@ -49,8 +49,7 @@ public class DoesNotIncludeDependency extends Recipe {
 
     @Option(displayName = "Only direct dependencies",
             description = "For Maven only, if enabled, transitive dependencies will not be considered. Defaults to `false`.",
-            required = false,
-            example = "true")
+            required = false)
     @Nullable
     Boolean onlyDirect;
 

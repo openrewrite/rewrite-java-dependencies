@@ -48,7 +48,6 @@ public class RelocatedDependencyCheck extends ScanningRecipe<RelocatedDependency
 
     @Option(displayName = "Change dependencies",
             description = "Whether to change dependencies to their relocated groupId and artifactId.",
-            example = "true",
             required = false)
     @Nullable
     Boolean changeDependencies;

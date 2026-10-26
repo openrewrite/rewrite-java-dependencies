@@ -57,16 +57,14 @@ public class DependencyList extends Recipe {
     @Option(displayName = "Include transitive dependencies",
             description = "Whether or not to include transitive dependencies in the report. " +
                           "Defaults to `false`, which includes only direct dependencies.",
-            required = false,
-            example = "true")
+            required = false)
     boolean includeTransitive;
 
     @Option(displayName = "Validate dependencies are resolvable",
             description = "When enabled the recipe will attempt to download every dependency it encounters, reporting on any failures. " +
                           "This can be useful for identifying dependencies that have become unavailable since an LST was produced. " +
                           "Defaults to `false`.",
-            required = false,
-            example = "true")
+            required = false)
     boolean validateResolvable;
 
     /**

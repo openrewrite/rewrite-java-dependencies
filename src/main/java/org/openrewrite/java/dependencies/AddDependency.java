@@ -103,7 +103,6 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Releases only",
             description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
-            example = "true",
             required = false)
     @Nullable
     Boolean releasesOnly;
@@ -118,14 +117,12 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
 
     @Option(displayName = "Optional",
             description = "For Maven only, set the value of the `<optional>` tag. No `<optional>` tag will be added when this is `null`.",
-            example = "true",
             required = false)
     @Nullable
     Boolean optional;
 
     @Option(displayName = "Accept transitive",
             description = "For Maven only, if enabled, the dependency will not be added if it is already on the classpath as a transitive dependency. Defaults to `false`.",
-            example = "true",
             required = false)
     @Nullable
     Boolean acceptTransitive;

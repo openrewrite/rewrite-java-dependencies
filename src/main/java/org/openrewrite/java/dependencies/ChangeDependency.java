@@ -122,6 +122,10 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Override
     public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (oldGroupId == null || oldArtifactId == null) {
+            return "";
+        }
         return String.format("`%s:%s`", oldGroupId, oldArtifactId);
     }
 

@@ -343,6 +343,12 @@ class ChangeDependencyTest implements RewriteTest {
     }
 
     @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var cd = new ChangeDependency(null, null, null, null, null, null, null, null);
+        assertThat(cd.getInstanceName()).isEqualTo(cd.getDisplayName());
+    }
+
+    @Test
     void declaresMavenMetadataFailuresDataTable() {
         var cd = new ChangeDependency("org.springframework.boot", "spring-boot-starter-web",
           null, "spring-boot-starter-webmvc", "4.0.x", null, null, null);

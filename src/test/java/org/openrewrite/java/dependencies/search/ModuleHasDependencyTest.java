@@ -874,4 +874,10 @@ class WithVersionsPattern {
             );
         }
     }
+
+    @Test
+    void invalidOptionsAreInvalid() {
+        assertThat(new ModuleHasDependency("junit", "junit", null, "latest.bogus", null, null).validate().isValid()).isFalse();
+        assertThat(new ModuleHasDependency("junit", "junit", "bogus", null, null, null).validate().isValid()).isFalse();
+    }
 }

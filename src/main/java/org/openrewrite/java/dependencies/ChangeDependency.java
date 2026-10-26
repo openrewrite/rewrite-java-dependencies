@@ -122,10 +122,10 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     }
 
     @Override
-    public Validated<Object> validate(ExecutionContext ctx) {
-        return super.validate(ctx)
-                .and(((Recipe) getGradleChangeDependency()).validate())
-                .and(((Recipe) getMavenChangeDependency()).validate());
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(getGradleChangeDependency().validate())
+                .and(getMavenChangeDependency().validate());
     }
 
     @Override

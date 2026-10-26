@@ -114,6 +114,13 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     }
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate().and(getGradleUpgradeTransitive().validate());
+        // The Maven delegate throws on a null version, which super.validate() already reports as missing
+        return version == null ? validated : validated.and(getMavenUpgradeTransitive().validate());
+    }
+
+    @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
         return new Accumulator(getMavenUpgradeTransitive().getInitialValue(ctx), getGradleUpgradeTransitive().getInitialValue(ctx));
     }

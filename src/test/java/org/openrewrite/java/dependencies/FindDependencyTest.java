@@ -10,6 +10,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
@@ -140,5 +141,10 @@ class FindDependencyTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new FindDependency("junit", "junit", "latest.bogus", null, null).validate().isValid()).isFalse();
     }
 }

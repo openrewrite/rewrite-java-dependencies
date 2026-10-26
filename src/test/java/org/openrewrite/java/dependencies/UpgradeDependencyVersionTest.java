@@ -26,12 +26,13 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class UpgradeDependencyVersionTest implements RewriteTest {
 
-    @DocumentExample("Upgrade gradle dependency")
+    @DocumentExample("Upgrade Gradle dependency")
     @Test
     void upgradeGuavaInGradleProject() {
         rewriteRun(
@@ -84,9 +85,46 @@ class UpgradeDependencyVersionTest implements RewriteTest {
                   compileClasspath.getResolved().stream()
                     .filter(dep -> "com.google.guava".equals(dep.getGroupId()) && "guava".equals(dep.getArtifactId()) && "30.1.1-jre".equals(dep.getVersion()))
                     .findAny())
-                  .as("GradleProject requested dependencies should have been updated with the new version of guava")
+                  .as("GradleProject resolved dependencies should have been updated with the new version of guava")
                   .isPresent();
             })
+          )
+        );
+    }
+
+    @Test
+    void upgradeGuavaInGradleKotlinDslProject() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new UpgradeDependencyVersion("com.google.guava", "guava", "30.x", "-jre", null, null)),
+          //language=kotlin
+          buildGradleKts(
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  mavenCentral()
+              }
+
+              dependencies {
+                  implementation("com.google.guava:guava:29.0-jre")
+              }
+              """,
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  mavenCentral()
+              }
+
+              dependencies {
+                  implementation("com.google.guava:guava:30.1.1-jre")
+              }
+              """
           )
         );
     }

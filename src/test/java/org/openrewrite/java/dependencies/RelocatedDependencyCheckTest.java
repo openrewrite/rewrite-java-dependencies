@@ -27,9 +27,7 @@ import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
@@ -58,7 +56,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedMavenDependencies() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy", "org.apache.groovy", "groovy", null)
               )),
@@ -111,7 +109,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void changeRelocatedMavenDependencies() {
             rewriteRun(
-              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              spec -> spec.recipe(new RelocatedDependencyCheck(true)),
               //language=xml
               pomXml(
                 """
@@ -129,23 +127,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                     </dependencies>
                   </project>
                   """,
-                spec -> spec.after(actual -> """
-                  <project>
-                    <modelVersion>4.0.0</modelVersion>
-                    <groupId>org.openrewrite.example</groupId>
-                    <artifactId>rewrite-example</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                    <dependencies>
-                      <dependency>
-                        <groupId>com.mysql</groupId>
-                        <artifactId>mysql-connector-j</artifactId>
-                        <version>%s</version>
-                      </dependency>
-                    </dependencies>
-                  </project>
-                  """.formatted(Pattern.compile("<version>(.*)</version>")
-                  .matcher(requireNonNull(actual)).results().skip(1).findFirst().orElseThrow().group(1))
-                )
+                spec -> spec.after(actual -> assertThat(actual)
+                  .containsPattern("<groupId>com.mysql</groupId>\\s*<artifactId>mysql-connector-j</artifactId>\\s*<version>\\d+\\.\\d+\\.\\d+</version>")
+                  .doesNotContain("mysql-connector-java")
+                  .actual())
               )
             );
         }
@@ -153,7 +138,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void markInsteadOfChangeWhenTargetIsNotACoordinate() {
             rewriteRun(
-              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              spec -> spec.recipe(new RelocatedDependencyCheck(true)),
               //language=xml
               pomXml(
                 """
@@ -193,7 +178,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedIonJava() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java",
                   "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name \"com.amazon.ion\". The legacy \"software.amazon.ion\" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")
               )),
@@ -339,7 +324,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedGradleDependencies() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy-all", "org.apache.groovy", "groovy-all", null)
@@ -399,7 +384,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void changeRelocatedGradleDependencies() {
             rewriteRun(
-              recipe -> recipe
+              spec -> spec
                 .beforeRecipe(withToolingApi())
                 .recipe(new RelocatedDependencyCheck(true)),
               //language=groovy
@@ -415,18 +400,10 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                       implementation "mysql:mysql-connector-java:8.0.31"
                   }
                   """,
-                spec -> spec.after(actual -> """
-                  plugins {
-                      id "java-library"
-                  }
-                  repositories {
-                      mavenCentral()
-                  }
-                  dependencies {
-                      implementation "%s"
-                  }
-                  """.formatted(Pattern.compile("com.mysql:mysql-connector-j:[^\"]+")
-                  .matcher(requireNonNull(actual)).results().findFirst().orElseThrow().group()))
+                spec -> spec.after(actual -> assertThat(actual)
+                  .containsPattern("implementation \"com.mysql:mysql-connector-j:\\d+\\.\\d+\\.\\d+\"")
+                  .doesNotContain("mysql-connector-java")
+                  .actual())
               )
             );
         }

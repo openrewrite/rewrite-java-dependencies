@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.java.dependencies.table.DependencyListReport;
 import org.openrewrite.maven.MavenExecutionContextView;
@@ -43,6 +44,7 @@ class DependencyListTest implements RewriteTest {
         spec.recipe(new DependencyList(DependencyList.Scope.Compile, true, false));
     }
 
+    @DocumentExample
     @Test
     void basic() {
         rewriteRun(
@@ -166,7 +168,6 @@ class DependencyListTest implements RewriteTest {
               </project>
               """,
             spec -> {
-                // Manually construct a resolution result since, obviously, the above cannot be resolved
                 MavenRepository pretendRepo = MavenRepository.builder()
                   .id("nonexistent")
                   .uri("https://nonexistent")

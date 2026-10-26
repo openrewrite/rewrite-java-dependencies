@@ -15,26 +15,33 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.config.DataTableDescriptor;
 import org.openrewrite.maven.table.MavenMetadataFailures;
+import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
+import static org.openrewrite.gradle.Assertions.buildGradleKts;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.maven.Assertions.pomXml;
 
 class ChangeDependencyTest implements RewriteTest {
 
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null));
+    }
+
     @DocumentExample("Change Gradle dependency")
     @Test
     void changeGradleDependency() {
         rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi())
-            .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
+          spec -> spec.beforeRecipe(withToolingApi()),
           //language=groovy
           buildGradle(
             """
@@ -68,36 +75,36 @@ class ChangeDependencyTest implements RewriteTest {
     }
 
     @Test
-    void leavePluginDependenciesWhenDisabled() {
+    void changeGradleKotlinDslDependency() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency(
-            "org.liquibase", "liquibase-core", "org.springframework.boot", "spring-boot-starter-liquibase",
-            "4.0.0", null, null, null, false
-          )),
-          pomXml(
+          spec -> spec.beforeRecipe(withToolingApi()),
+          //language=kotlin
+          buildGradleKts(
             """
-              <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>org.example</groupId>
-                  <artifactId>example</artifactId>
-                  <version>1.0</version>
-                  <build>
-                      <plugins>
-                          <plugin>
-                              <groupId>org.liquibase</groupId>
-                              <artifactId>liquibase-maven-plugin</artifactId>
-                              <version>4.24.0</version>
-                              <dependencies>
-                                  <dependency>
-                                      <groupId>org.liquibase</groupId>
-                                      <artifactId>liquibase-core</artifactId>
-                                      <version>4.24.0</version>
-                                  </dependency>
-                              </dependencies>
-                          </plugin>
-                      </plugins>
-                  </build>
-              </project>
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  mavenCentral()
+              }
+
+              dependencies {
+                  implementation("commons-lang:commons-lang:2.6")
+              }
+              """,
+            """
+              plugins {
+                  `java-library`
+              }
+
+              repositories {
+                  mavenCentral()
+              }
+
+              dependencies {
+                  implementation("org.apache.commons:commons-lang3:3.11")
+              }
               """
           )
         );
@@ -106,7 +113,6 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeMavenDependency() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=xml
           pomXml(
             """
@@ -144,7 +150,6 @@ class ChangeDependencyTest implements RewriteTest {
     @Test
     void changeMavenDependencyToAlreadyPresent() {
         rewriteRun(
-          spec -> spec.recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, null)),
           //language=xml
           pomXml(
             """
@@ -414,5 +419,44 @@ class ChangeDependencyTest implements RewriteTest {
         ChangeDependency cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
         assertThat(cd.validate().isValid()).isFalse();
         assertThat(cd.validate(new InMemoryExecutionContext()).isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+        @Test
+        void leavePluginDependenciesWhenDisabled() {
+            rewriteRun(
+              spec -> spec.recipe(new ChangeDependency(
+                "org.liquibase", "liquibase-core", "org.springframework.boot", "spring-boot-starter-liquibase",
+                "4.0.0", null, null, null, false
+              )),
+              pomXml(
+                """
+                  <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>org.example</groupId>
+                      <artifactId>example</artifactId>
+                      <version>1.0</version>
+                      <build>
+                          <plugins>
+                              <plugin>
+                                  <groupId>org.liquibase</groupId>
+                                  <artifactId>liquibase-maven-plugin</artifactId>
+                                  <version>4.24.0</version>
+                                  <dependencies>
+                                      <dependency>
+                                          <groupId>org.liquibase</groupId>
+                                          <artifactId>liquibase-core</artifactId>
+                                          <version>4.24.0</version>
+                                      </dependency>
+                                  </dependencies>
+                              </plugin>
+                          </plugins>
+                      </build>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

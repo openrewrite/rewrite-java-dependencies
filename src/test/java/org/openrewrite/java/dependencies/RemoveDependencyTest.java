@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.Issue;
@@ -155,316 +156,6 @@ class RemoveDependencyTest implements RewriteTest {
                 </dependencies>
               </project>
               """
-          )
-        );
-    }
-
-    @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/11")
-    @Test
-    void doNotRemoveIfInUse() {
-        rewriteRun(
-          spec -> spec
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.aspectj.lang.annotation;
-
-                import java.lang.annotation.Target;
-                import java.lang.annotation.ElementType;
-                import java.lang.annotation.Retention;
-                import java.lang.annotation.RetentionPolicy;
-
-                @Retention(RetentionPolicy.RUNTIME)
-                @Target(ElementType.TYPE)
-                public @interface Aspect {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
-          mavenProject("example",
-            //language=java
-            srcMainJava(
-              java(
-                """
-                  import org.aspectj.lang.annotation.Aspect;
-                  @Aspect
-                  class MyLoggingInterceptor {
-                  }
-                  """
-              )
-            ),
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <modelVersion>4.0.0</modelVersion>
-
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>my-app</artifactId>
-                  <version>1</version>
-
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.aspectj</groupId>
-                      <artifactId>aspectjrt</artifactId>
-                      <version>1.9.22.1</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """
-            )
-          )
-        );
-    }
-
-    @Test
-    void doNotRemoveSpringRetryWhenRetryTemplateInUse() {
-        rewriteRun(
-          spec -> spec
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.springframework.retry.support;
-                public class RetryTemplate {
-                }
-                """,
-              """
-                package org.springframework.retry.policy;
-                public class SimpleRetryPolicy {
-                }
-                """,
-              """
-                package org.springframework.retry.backoff;
-                public class ExponentialBackOffPolicy {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
-          mavenProject("example",
-            //language=java
-            srcMainJava(
-              java(
-                """
-                  import org.springframework.retry.support.RetryTemplate;
-                  import org.springframework.retry.policy.SimpleRetryPolicy;
-                  import org.springframework.retry.backoff.ExponentialBackOffPolicy;
-
-                  class RetryConfig {
-                      RetryTemplate retryTemplate() {
-                          new SimpleRetryPolicy();
-                          new ExponentialBackOffPolicy();
-                          return new RetryTemplate();
-                      }
-                  }
-                  """
-              )
-            ),
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>my-app</artifactId>
-                  <version>1</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.retry</groupId>
-                      <artifactId>spring-retry</artifactId>
-                      <version>2.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """
-            )
-          )
-        );
-    }
-
-    @Test
-    void doNotRemoveSpringRetryWhenOnlyImportsPresent() {
-        rewriteRun(
-          spec -> spec
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.springframework.retry.support;
-                public class RetryTemplate {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
-          mavenProject("example",
-            //language=java
-            srcMainJava(
-              java(
-                """
-                  import org.springframework.retry.support.RetryTemplate;
-
-                  class RetryConfig {
-                      // imports but no body usage — should still keep the dep
-                  }
-                  """
-              )
-            ),
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>my-app</artifactId>
-                  <version>1</version>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.retry</groupId>
-                      <artifactId>spring-retry</artifactId>
-                      <version>2.0.0</version>
-                    </dependency>
-                  </dependencies>
-                </project>
-                """
-            )
-          )
-        );
-    }
-
-    @Test
-    void doNotRemoveSpringRetryInMultiModuleWhenChildUsesIt() {
-        rewriteRun(
-          spec -> spec
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.springframework.retry.support;
-                public class RetryTemplate {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
-          mavenProject("parent",
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>parent</artifactId>
-                  <version>1</version>
-                  <packaging>pom</packaging>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.retry</groupId>
-                      <artifactId>spring-retry</artifactId>
-                      <version>2.0.0</version>
-                    </dependency>
-                  </dependencies>
-                  <modules>
-                    <module>child</module>
-                  </modules>
-                </project>
-                """
-            ),
-            mavenProject("child",
-              //language=xml
-              pomXml(
-                """
-                  <project>
-                    <modelVersion>4.0.0</modelVersion>
-                    <parent>
-                      <groupId>com.mycompany.app</groupId>
-                      <artifactId>parent</artifactId>
-                      <version>1</version>
-                    </parent>
-                    <artifactId>child</artifactId>
-                  </project>
-                  """
-              ),
-              //language=java
-              srcMainJava(
-                java(
-                  """
-                    import org.springframework.retry.support.RetryTemplate;
-
-                    class RetryConfig {
-                        RetryTemplate retryTemplate() {
-                            return new RetryTemplate();
-                        }
-                    }
-                    """
-                )
-              )
-            )
-          )
-        );
-    }
-
-    @Test
-    void doNotRemoveSpringRetryWhenDepAndUsageInSameChildModule() {
-        rewriteRun(
-          spec -> spec
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.springframework.retry.support;
-                public class RetryTemplate {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
-          mavenProject("parent",
-            //language=xml
-            pomXml(
-              """
-                <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>com.mycompany.app</groupId>
-                  <artifactId>parent</artifactId>
-                  <version>1</version>
-                  <packaging>pom</packaging>
-                  <modules>
-                    <module>child</module>
-                  </modules>
-                </project>
-                """
-            ),
-            mavenProject("child",
-              //language=xml
-              pomXml(
-                """
-                  <project>
-                    <modelVersion>4.0.0</modelVersion>
-                    <parent>
-                      <groupId>com.mycompany.app</groupId>
-                      <artifactId>parent</artifactId>
-                      <version>1</version>
-                    </parent>
-                    <artifactId>child</artifactId>
-                    <dependencies>
-                      <dependency>
-                        <groupId>org.springframework.retry</groupId>
-                        <artifactId>spring-retry</artifactId>
-                        <version>2.0.0</version>
-                      </dependency>
-                    </dependencies>
-                  </project>
-                  """
-              ),
-              //language=java
-              srcMainJava(
-                java(
-                  """
-                    import org.springframework.retry.support.RetryTemplate;
-
-                    class RetryConfig {
-                        RetryTemplate retryTemplate() {
-                            return new RetryTemplate();
-                        }
-                    }
-                    """
-                )
-              )
-            )
           )
         );
     }
@@ -654,50 +345,363 @@ class RemoveDependencyTest implements RewriteTest {
         );
     }
 
-    @Test
-    void doNotRemoveGradleDependencyIfInUse() {
-        rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi())
-            .parser(JavaParser.fromJavaVersion().dependsOn(
-              //language=java
-              """
-                package org.aspectj.lang.annotation;
-
-                public @interface Aspect {
-                }
-                """
-            ))
-            .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
-          mavenProject("example",
-            srcMainJava(
-              //language=java
-              java(
-                """
-                  import org.aspectj.lang.annotation.Aspect;
-                  @Aspect
-                  class MyLoggingInterceptor {
-                  }
+    @Nested
+    class NoChange {
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/11")
+        @Test
+        void doNotRemoveIfInUse() {
+            rewriteRun(
+              spec -> spec
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
                   """
+                    package org.aspectj.lang.annotation;
+
+                    import java.lang.annotation.Target;
+                    import java.lang.annotation.ElementType;
+                    import java.lang.annotation.Retention;
+                    import java.lang.annotation.RetentionPolicy;
+
+                    @Retention(RetentionPolicy.RUNTIME)
+                    @Target(ElementType.TYPE)
+                    public @interface Aspect {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
+              mavenProject("example",
+                //language=java
+                srcMainJava(
+                  java(
+                    """
+                      import org.aspectj.lang.annotation.Aspect;
+                      @Aspect
+                      class MyLoggingInterceptor {
+                      }
+                      """
+                  )
+                ),
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <modelVersion>4.0.0</modelVersion>
+
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>my-app</artifactId>
+                      <version>1</version>
+
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.aspectj</groupId>
+                          <artifactId>aspectjrt</artifactId>
+                          <version>1.9.22.1</version>
+                        </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
               )
-            ),
-            //language=groovy
-            buildGradle(
-              """
-                plugins {
-                    id 'java-library'
-                }
+            );
+        }
 
-                repositories {
-                    maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
-                }
+        @Test
+        void doNotRemoveSpringRetryWhenRetryTemplateInUse() {
+            rewriteRun(
+              spec -> spec
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
+                  """
+                    package org.springframework.retry.support;
+                    public class RetryTemplate {
+                    }
+                    """,
+                  """
+                    package org.springframework.retry.policy;
+                    public class SimpleRetryPolicy {
+                    }
+                    """,
+                  """
+                    package org.springframework.retry.backoff;
+                    public class ExponentialBackOffPolicy {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+              mavenProject("example",
+                //language=java
+                srcMainJava(
+                  java(
+                    """
+                      import org.springframework.retry.support.RetryTemplate;
+                      import org.springframework.retry.policy.SimpleRetryPolicy;
+                      import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 
-                dependencies {
-                    implementation "org.aspectj:aspectjrt:1.9.22.1"
-                }
-                """
-            )
-          )
-        );
+                      class RetryConfig {
+                          RetryTemplate retryTemplate() {
+                              new SimpleRetryPolicy();
+                              new ExponentialBackOffPolicy();
+                              return new RetryTemplate();
+                          }
+                      }
+                      """
+                  )
+                ),
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>my-app</artifactId>
+                      <version>1</version>
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.springframework.retry</groupId>
+                          <artifactId>spring-retry</artifactId>
+                          <version>2.0.0</version>
+                        </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void doNotRemoveSpringRetryWhenOnlyImportsPresent() {
+            rewriteRun(
+              spec -> spec
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
+                  """
+                    package org.springframework.retry.support;
+                    public class RetryTemplate {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+              mavenProject("example",
+                //language=java
+                srcMainJava(
+                  java(
+                    """
+                      import org.springframework.retry.support.RetryTemplate;
+
+                      class RetryConfig {
+                          // imports but no body usage — should still keep the dep
+                      }
+                      """
+                  )
+                ),
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>my-app</artifactId>
+                      <version>1</version>
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.springframework.retry</groupId>
+                          <artifactId>spring-retry</artifactId>
+                          <version>2.0.0</version>
+                        </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
+
+        @Test
+        void doNotRemoveSpringRetryInMultiModuleWhenChildUsesIt() {
+            rewriteRun(
+              spec -> spec
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
+                  """
+                    package org.springframework.retry.support;
+                    public class RetryTemplate {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+              mavenProject("parent",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>parent</artifactId>
+                      <version>1</version>
+                      <packaging>pom</packaging>
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.springframework.retry</groupId>
+                          <artifactId>spring-retry</artifactId>
+                          <version>2.0.0</version>
+                        </dependency>
+                      </dependencies>
+                      <modules>
+                        <module>child</module>
+                      </modules>
+                    </project>
+                    """
+                ),
+                mavenProject("child",
+                  //language=xml
+                  pomXml(
+                    """
+                      <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <parent>
+                          <groupId>com.mycompany.app</groupId>
+                          <artifactId>parent</artifactId>
+                          <version>1</version>
+                        </parent>
+                        <artifactId>child</artifactId>
+                      </project>
+                      """
+                  ),
+                  //language=java
+                  srcMainJava(
+                    java(
+                      """
+                        import org.springframework.retry.support.RetryTemplate;
+
+                        class RetryConfig {
+                            RetryTemplate retryTemplate() {
+                                return new RetryTemplate();
+                            }
+                        }
+                        """
+                    )
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void doNotRemoveSpringRetryWhenDepAndUsageInSameChildModule() {
+            rewriteRun(
+              spec -> spec
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
+                  """
+                    package org.springframework.retry.support;
+                    public class RetryTemplate {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.springframework.retry", "spring-retry", "org.springframework.retry..*", null, null)),
+              mavenProject("parent",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>com.mycompany.app</groupId>
+                      <artifactId>parent</artifactId>
+                      <version>1</version>
+                      <packaging>pom</packaging>
+                      <modules>
+                        <module>child</module>
+                      </modules>
+                    </project>
+                    """
+                ),
+                mavenProject("child",
+                  //language=xml
+                  pomXml(
+                    """
+                      <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <parent>
+                          <groupId>com.mycompany.app</groupId>
+                          <artifactId>parent</artifactId>
+                          <version>1</version>
+                        </parent>
+                        <artifactId>child</artifactId>
+                        <dependencies>
+                          <dependency>
+                            <groupId>org.springframework.retry</groupId>
+                            <artifactId>spring-retry</artifactId>
+                            <version>2.0.0</version>
+                          </dependency>
+                        </dependencies>
+                      </project>
+                      """
+                  ),
+                  //language=java
+                  srcMainJava(
+                    java(
+                      """
+                        import org.springframework.retry.support.RetryTemplate;
+
+                        class RetryConfig {
+                            RetryTemplate retryTemplate() {
+                                return new RetryTemplate();
+                            }
+                        }
+                        """
+                    )
+                  )
+                )
+              )
+            );
+        }
+
+        @Test
+        void doNotRemoveGradleDependencyIfInUse() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi())
+                .parser(JavaParser.fromJavaVersion().dependsOn(
+                  //language=java
+                  """
+                    package org.aspectj.lang.annotation;
+
+                    public @interface Aspect {
+                    }
+                    """
+                ))
+                .recipe(new RemoveDependency("org.aspectj", "aspectjrt", "org.aspectj.lang.annotation.*", null, null)),
+              mavenProject("example",
+                srcMainJava(
+                  //language=java
+                  java(
+                    """
+                      import org.aspectj.lang.annotation.Aspect;
+                      @Aspect
+                      class MyLoggingInterceptor {
+                      }
+                      """
+                  )
+                ),
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+
+                    repositories {
+                        maven { url 'https://maven-central.storage-download.googleapis.com/maven2' }
+                    }
+
+                    dependencies {
+                        implementation "org.aspectj:aspectjrt:1.9.22.1"
+                    }
+                    """
+                )
+              )
+            );
+        }
     }
 
     @Test

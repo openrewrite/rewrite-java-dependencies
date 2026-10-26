@@ -731,30 +731,6 @@ class WithVersionsPattern {
           )
         );
     }
-
-    @Test
-    void noPresentVersion() {
-        rewriteRun(
-          recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null, null)),
-          mavenProject("project-maven",
-            //language=groovy
-            buildGradle(
-              """
-                plugins {
-                    id 'java-library'
-                }
-                repositories {
-                    mavenCentral()
-                }
-                dependencies {
-                    implementation 'org.springframework:spring-core:6.1.5'
-                    implementation 'org.springframework:spring-aop:6.1.5'
-                }
-                """
-            )
-          )
-        );
-    }
 }
 
     @Nested
@@ -881,5 +857,32 @@ class WithVersionsPattern {
     void invalidOptionsAreInvalid() {
         assertThat(new ModuleHasDependency("junit", "junit", null, "latest.bogus", null, null).validate().isValid()).isFalse();
         assertThat(new ModuleHasDependency("junit", "junit", "bogus", null, null, null).validate().isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+        @Test
+        void noPresentVersion() {
+            rewriteRun(
+              recipeSpec -> recipeSpec.recipe(new ModuleHasDependency("org.springframework", "*", null, "5.1.2", null, null)),
+              mavenProject("project-maven",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+                    repositories {
+                        mavenCentral()
+                    }
+                    dependencies {
+                        implementation 'org.springframework:spring-core:6.1.5'
+                        implementation 'org.springframework:spring-aop:6.1.5'
+                    }
+                    """
+                )
+              )
+            );
+        }
     }
 }

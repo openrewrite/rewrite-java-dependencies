@@ -5,6 +5,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.config.DataTableDescriptor;
@@ -56,29 +57,6 @@ class FindDependencyTest implements RewriteTest {
                     <groupId>org.openrewrite</groupId>
                     <artifactId>rewrite-core</artifactId>
                     <version>8.0.0</version>
-                  </dependency>
-                </dependencies>
-              </project>
-              """
-          )
-        );
-    }
-
-    @Test
-    void findMavenDependencyDoesNotFindWrongVersion() {
-        rewriteRun(
-          //language=xml
-          pomXml(
-            """
-              <project>
-                <groupId>com.mycompany.app</groupId>
-                <artifactId>my-app</artifactId>
-                <version>1</version>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.openrewrite</groupId>
-                    <artifactId>rewrite-core</artifactId>
-                    <version>8.1.0</version>
                   </dependency>
                 </dependencies>
               </project>
@@ -159,27 +137,53 @@ class FindDependencyTest implements RewriteTest {
         );
     }
 
-    @Test
-    void findGradleDependencyDoesntFindWrongVersion() {
-        rewriteRun(
-          spec -> spec.beforeRecipe(withToolingApi()),
-          //language=groovy
-          buildGradle(
-            """
-              plugins {
-                  id 'java-library'
-              }
+    @Nested
+    class NoChange {
+        @Test
+        void findMavenDependencyDoesNotFindWrongVersion() {
+            rewriteRun(
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.openrewrite</groupId>
+                        <artifactId>rewrite-core</artifactId>
+                        <version>8.1.0</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
 
-              repositories {
-                  mavenCentral()
-              }
+        @Test
+        void findGradleDependencyDoesntFindWrongVersion() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi()),
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id 'java-library'
+                  }
 
-              dependencies {
-                  api "org.openrewrite:rewrite-core:8.1.0"
-              }
-              """
-          )
-        );
+                  repositories {
+                      mavenCentral()
+                  }
+
+                  dependencies {
+                      api "org.openrewrite:rewrite-core:8.1.0"
+                  }
+                  """
+              )
+            );
+        }
     }
 
     @Test

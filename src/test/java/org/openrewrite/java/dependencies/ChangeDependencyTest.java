@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
@@ -100,42 +101,6 @@ class ChangeDependencyTest implements RewriteTest {
               dependencies {
                   implementation("org.apache.commons:commons-lang3:3.11")
               }
-              """
-          )
-        );
-    }
-
-    @Test
-    void leavePluginDependenciesWhenDisabled() {
-        rewriteRun(
-          spec -> spec.recipe(new ChangeDependency(
-            "org.liquibase", "liquibase-core", "org.springframework.boot", "spring-boot-starter-liquibase",
-            "4.0.0", null, null, null, false
-          )),
-          pomXml(
-            """
-              <project>
-                  <modelVersion>4.0.0</modelVersion>
-                  <groupId>org.example</groupId>
-                  <artifactId>example</artifactId>
-                  <version>1.0</version>
-                  <build>
-                      <plugins>
-                          <plugin>
-                              <groupId>org.liquibase</groupId>
-                              <artifactId>liquibase-maven-plugin</artifactId>
-                              <version>4.24.0</version>
-                              <dependencies>
-                                  <dependency>
-                                      <groupId>org.liquibase</groupId>
-                                      <artifactId>liquibase-core</artifactId>
-                                      <version>4.24.0</version>
-                                  </dependency>
-                              </dependencies>
-                          </plugin>
-                      </plugins>
-                  </build>
-              </project>
               """
           )
         );
@@ -452,5 +417,44 @@ class ChangeDependencyTest implements RewriteTest {
         ChangeDependency cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
         assertThat(cd.validate().isValid()).isFalse();
         assertThat(cd.validate(new InMemoryExecutionContext()).isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+        @Test
+        void leavePluginDependenciesWhenDisabled() {
+            rewriteRun(
+              spec -> spec.recipe(new ChangeDependency(
+                "org.liquibase", "liquibase-core", "org.springframework.boot", "spring-boot-starter-liquibase",
+                "4.0.0", null, null, null, false
+              )),
+              pomXml(
+                """
+                  <project>
+                      <modelVersion>4.0.0</modelVersion>
+                      <groupId>org.example</groupId>
+                      <artifactId>example</artifactId>
+                      <version>1.0</version>
+                      <build>
+                          <plugins>
+                              <plugin>
+                                  <groupId>org.liquibase</groupId>
+                                  <artifactId>liquibase-maven-plugin</artifactId>
+                                  <version>4.24.0</version>
+                                  <dependencies>
+                                      <dependency>
+                                          <groupId>org.liquibase</groupId>
+                                          <artifactId>liquibase-core</artifactId>
+                                          <version>4.24.0</version>
+                                      </dependency>
+                                  </dependencies>
+                              </plugin>
+                          </plugins>
+                      </build>
+                  </project>
+                  """
+              )
+            );
+        }
     }
 }

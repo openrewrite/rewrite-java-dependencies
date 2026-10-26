@@ -124,10 +124,10 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     }
 
     @Override
-    public Validated<Object> validate(ExecutionContext ctx) {
-        return super.validate(ctx)
-                .and(((Recipe) getGradleChangeDependency()).validate())
-                .and(((Recipe) getMavenChangeDependency()).validate());
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(getGradleChangeDependency().validate())
+                .and(getMavenChangeDependency().validate());
     }
 
     @Override
@@ -211,7 +211,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         if (recipe == null) {
             recipe = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                    newVersion, versionPattern, overrideManagedVersion, true);
+                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
             gradleDelegate.set(recipe);
         }
         return recipe;

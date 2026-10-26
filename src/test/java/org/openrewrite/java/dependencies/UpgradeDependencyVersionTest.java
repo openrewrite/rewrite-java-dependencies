@@ -133,4 +133,9 @@ class UpgradeDependencyVersionTest implements RewriteTest {
           )
         );
     }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new UpgradeDependencyVersion("junit", "junit", "latest.bogus", null, null, null).validate().isValid()).isFalse();
+    }
 }

@@ -73,12 +73,17 @@ public class DependencyInsight extends Recipe {
     }
 
     @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(gradleDependencyInsight().validate())
+                .and(mavenDependencyInsight().validate());
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, scope, version, false)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> gdi = gradleDependencyInsight().getVisitor();
+            final TreeVisitor<?, ExecutionContext> mdi = mavenDependencyInsight().getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -94,5 +99,13 @@ public class DependencyInsight extends Recipe {
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.DependencyInsight gradleDependencyInsight() {
+        return new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null);
+    }
+
+    private org.openrewrite.maven.search.DependencyInsight mavenDependencyInsight() {
+        return new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, scope, version, false);
     }
 }

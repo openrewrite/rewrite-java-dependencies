@@ -89,4 +89,11 @@ class DependencyInsightTest implements RewriteTest {
         assertThat(new DependencyInsight(null, null, null, null).getInstanceName())
           .isEqualTo("Gradle or Maven dependency insight");
     }
+
+    @Test
+    void invalidOptionsAreInvalid() {
+        assertThat(new DependencyInsight("*", "*", null, null).validate().isValid()).isFalse();
+        assertThat(new DependencyInsight("junit", "junit", "latest.bogus", null).validate().isValid()).isFalse();
+        assertThat(new DependencyInsight("junit", "junit", null, "bogus").validate().isValid()).isFalse();
+    }
 }

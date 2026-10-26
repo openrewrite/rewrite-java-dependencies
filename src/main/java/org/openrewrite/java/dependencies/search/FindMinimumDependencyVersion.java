@@ -72,6 +72,15 @@ public class FindMinimumDependencyVersion extends ScanningRecipe<Map<GroupArtifa
                "Jackson 2.11.";
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate();
+        if (version != null) {
+            validated = validated.and(Semver.validate(version, null));
+        }
+        return validated;
+    }
+
+    @Override
     public Map<GroupArtifact, ResolvedGroupArtifactVersion> getInitialValue(ExecutionContext ctx) {
         return new HashMap<>();
     }

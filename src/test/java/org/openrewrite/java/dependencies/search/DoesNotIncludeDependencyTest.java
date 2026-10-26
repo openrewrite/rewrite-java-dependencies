@@ -20,6 +20,7 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.java;
@@ -146,5 +147,11 @@ class DoesNotIncludeDependencyTest implements RewriteTest {
               """
           )
         );
+    }
+
+    @Test
+    void invalidOptionsAreInvalid() {
+        assertThat(new DoesNotIncludeDependency("junit", "junit", "latest.bogus", null, null, null).validate().isValid()).isFalse();
+        assertThat(new DoesNotIncludeDependency("junit", "junit", null, null, "bogus", null).validate().isValid()).isFalse();
     }
 }

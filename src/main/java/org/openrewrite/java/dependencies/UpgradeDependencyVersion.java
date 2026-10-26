@@ -91,6 +91,13 @@ public class UpgradeDependencyVersion extends ScanningRecipe<UpgradeDependencyVe
             "updates to patch or minor releases.";
 
     @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(getUpgradeGradleDependencyVersion().validate())
+                .and(getUpgradeMavenDependencyVersion().validate());
+    }
+
+    @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
         return new Accumulator(
                 getUpgradeMavenDependencyVersion().getInitialValue(ctx),

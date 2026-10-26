@@ -630,7 +630,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         }
 
         @Test
-        void doNoRemoveWhenExcluded() {
+        void doNotRemoveWhenExcluded() {
             rewriteRun(
               spec -> spec.recipe(new RemoveRedundantDependencies(
                 "com.fasterxml.jackson.core", "jackson-databind")),

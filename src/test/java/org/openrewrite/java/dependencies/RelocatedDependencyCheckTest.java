@@ -56,7 +56,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedMavenDependencies() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy", "org.apache.groovy", "groovy", null)
               )),
@@ -109,7 +109,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void changeRelocatedMavenDependencies() {
             rewriteRun(
-              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              spec -> spec.recipe(new RelocatedDependencyCheck(true)),
               //language=xml
               pomXml(
                 """
@@ -178,7 +178,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedIonJava() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java",
                   "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name \"com.amazon.ion\". The legacy \"software.amazon.ion\" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")
               )),
@@ -324,7 +324,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void findRelocatedGradleDependencies() {
             rewriteRun(
-              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+              spec -> spec.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", null),
                 new RelocatedDependencyReport.Row("org.codehaus.groovy", "groovy-all", "org.apache.groovy", "groovy-all", null)
@@ -384,7 +384,7 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         @Test
         void changeRelocatedGradleDependencies() {
             rewriteRun(
-              recipe -> recipe
+              spec -> spec
                 .beforeRecipe(withToolingApi())
                 .recipe(new RelocatedDependencyCheck(true)),
               //language=groovy

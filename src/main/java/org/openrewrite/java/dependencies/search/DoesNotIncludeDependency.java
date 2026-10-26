@@ -23,18 +23,18 @@ import org.openrewrite.*;
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DoesNotIncludeDependency extends Recipe {
-    String displayName = "Does not include dependency for Gradle and Maven";
+    String displayName = "Does not include Gradle or Maven dependency";
 
-    String description = "A precondition which returns false if visiting a Gradle file / Maven pom which includes the specified dependency in the classpath of some Gradle configuration / Maven scope. " +
-                "For compatibility with multimodule projects, this should most often be applied as a precondition.";
+    String description = "A precondition which returns false if visiting a Gradle build file or Maven `pom.xml` which includes the specified dependency in the classpath of some Gradle configuration or Maven scope. " +
+                "For compatibility with multi-module projects, this should most often be applied as a precondition.";
 
-    @Option(displayName = "Group",
-            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Group ID",
+            description = "The first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "com.google.guava")
     String groupId;
 
-    @Option(displayName = "Artifact",
-            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob.",
+    @Option(displayName = "Artifact ID",
+            description = "The second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "guava")
     String artifactId;
 
@@ -48,14 +48,13 @@ public class DoesNotIncludeDependency extends Recipe {
     String version;
 
     @Option(displayName = "Only direct dependencies",
-            description = "Default false. If enabled, transitive dependencies will not be considered.",
-            required = false,
-            example = "true")
+            description = "For Maven only, if enabled, transitive dependencies will not be considered. Defaults to `false`.",
+            required = false)
     @Nullable
     Boolean onlyDirect;
 
     @Option(displayName = "Maven scope",
-            description = "Default any. If specified, only the requested scope's classpaths will be checked.",
+            description = "For Maven only, if specified, only the requested scope's classpaths will be checked. All scopes are checked by default.",
             required = false,
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile")
@@ -63,21 +62,36 @@ public class DoesNotIncludeDependency extends Recipe {
     String scope;
 
     @Option(displayName = "Gradle configuration",
-            description = "Match dependencies with the specified configuration. If not specified, all configurations will be searched.",
+            description = "For Gradle only, match dependencies with the specified configuration. If not specified, all configurations will be searched.",
             example = "compileClasspath",
             required = false)
     @Nullable
     String configuration;
 
     @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(gradleDoesNotIncludeDependency().validate())
+                .and(mavenDoesNotIncludeDependency().validate());
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdnid = new org.openrewrite.gradle.search.DoesNotIncludeDependency(
-                    groupId, artifactId, version, configuration)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdnid = new org.openrewrite.maven.search.DoesNotIncludeDependency(
-                    groupId, artifactId, version, onlyDirect, scope)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> gdnid = gradleDoesNotIncludeDependency().getVisitor();
+            final TreeVisitor<?, ExecutionContext> mdnid = mavenDoesNotIncludeDependency().getVisitor();
 
             @Override
             public boolean isAcceptable(SourceFile sourceFile, ExecutionContext ctx) {
@@ -98,5 +112,13 @@ public class DoesNotIncludeDependency extends Recipe {
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.DoesNotIncludeDependency gradleDoesNotIncludeDependency() {
+        return new org.openrewrite.gradle.search.DoesNotIncludeDependency(groupId, artifactId, version, configuration);
+    }
+
+    private org.openrewrite.maven.search.DoesNotIncludeDependency mavenDoesNotIncludeDependency() {
+        return new org.openrewrite.maven.search.DoesNotIncludeDependency(groupId, artifactId, version, onlyDirect, scope);
     }
 }

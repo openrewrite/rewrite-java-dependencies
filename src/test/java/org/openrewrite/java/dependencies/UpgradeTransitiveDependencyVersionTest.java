@@ -1,0 +1,62 @@
+/*
+ * Copyright 2026 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openrewrite.java.dependencies;
+
+import org.junit.jupiter.api.Test;
+import org.openrewrite.config.DataTableDescriptor;
+import org.openrewrite.maven.table.MavenMetadataFailures;
+import org.openrewrite.test.RewriteTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class UpgradeTransitiveDependencyVersionTest implements RewriteTest {
+
+    private static UpgradeTransitiveDependencyVersion upgradeLog4jBom() {
+        return new UpgradeTransitiveDependencyVersion("org.apache.logging.log4j", "log4j-bom", "2.24.x",
+          null, null, null, null, null, null, null, null);
+    }
+
+    @Test
+    void declaresMavenMetadataFailuresDataTable() {
+        assertThat(upgradeLog4jBom().getDataTableDescriptors())
+          .extracting(DataTableDescriptor::getName)
+          .contains(MavenMetadataFailures.class.getName());
+    }
+
+    @Test
+    void instanceNameShowsTheDependencyAndTargetVersion() {
+        var recipe = upgradeLog4jBom();
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.apache.logging.log4j:log4j-bom:2.24.x`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new UpgradeTransitiveDependencyVersion(null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
+
+    @Test
+    void invalidVersionIsInvalid() {
+        assertThat(new UpgradeTransitiveDependencyVersion("junit", "junit", "latest.bogus", null, null, null, null, null, null, null, null)
+          .validate().isValid()).isFalse();
+    }
+
+    @Test
+    void missingVersionIsInvalid() {
+        assertThat(new UpgradeTransitiveDependencyVersion("junit", "junit", null, null, null, null, null, null, null, null, null)
+          .validate().isValid()).isFalse();
+    }
+}

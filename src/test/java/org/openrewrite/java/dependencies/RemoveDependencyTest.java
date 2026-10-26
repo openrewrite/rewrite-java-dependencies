@@ -21,6 +21,7 @@ import org.openrewrite.Issue;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RewriteTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.*;
@@ -565,5 +566,22 @@ class RemoveDependencyTest implements RewriteTest {
             )
           )
         );
+    }
+
+    @Test
+    void instanceNameShowsTheDependencyBeingRemoved() {
+        var recipe = new RemoveDependency("org.springframework.boot", "spring-boot*", null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName() + " `org.springframework.boot:spring-boot*`");
+    }
+
+    @Test
+    void instanceNameOmitsTheSuffixWhenUnconfigured() {
+        var recipe = new RemoveDependency(null, null, null, null, null);
+        assertThat(recipe.getInstanceName()).isEqualTo(recipe.getDisplayName());
+    }
+
+    @Test
+    void invalidScopeIsInvalid() {
+        assertThat(new RemoveDependency("junit", "junit", null, null, "bogus").validate().isValid()).isFalse();
     }
 }

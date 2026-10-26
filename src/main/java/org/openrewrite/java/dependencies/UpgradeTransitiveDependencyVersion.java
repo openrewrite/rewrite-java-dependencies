@@ -21,27 +21,30 @@ import lombok.Getter;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTransitiveDependencyVersion.Accumulator> {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
 
     String displayName = "Upgrade transitive Gradle or Maven dependencies";
 
-    String description = "Upgrades the version of a transitive dependency in a Maven pom.xml or Gradle build.gradle. " +
+    String description = "Upgrades the version of a transitive dependency in a Maven `pom.xml` or Gradle `build.gradle` or `build.gradle.kts`. " +
                "Leaves direct dependencies unmodified. " +
-               "Can be paired with the regular Upgrade Dependency Version recipe to upgrade a dependency everywhere, " +
+               "Can be paired with `UpgradeDependencyVersion` to upgrade a dependency everywhere, " +
                "regardless of whether it is direct or transitive.";
 
-    @Option(displayName = "Group",
-            description = "The first part of a dependency coordinate 'org.apache.logging.log4j:ARTIFACT_ID:VERSION'.",
+    @Option(displayName = "Group ID",
+            description = "The first part of a dependency coordinate `org.apache.logging.log4j:ARTIFACT_ID:VERSION`.",
             example = "org.apache.logging.log4j")
     String groupId;
 
-    @Option(displayName = "Artifact",
-            description = "The second part of a dependency coordinate 'org.apache.logging.log4j:log4j-bom:VERSION'.",
+    @Option(displayName = "Artifact ID",
+            description = "The second part of a dependency coordinate `org.apache.logging.log4j:log4j-bom:VERSION`.",
             example = "log4j-bom")
     String artifactId;
 
@@ -51,7 +54,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String version;
 
     @Option(displayName = "Scope",
-            description = "An optional scope to use for the dependency management tag. Relevant only to Maven.",
+            description = "For Maven only, an optional scope to use for the dependency management tag.",
             example = "import",
             valid = {"import", "runtime", "provided", "test"},
             required = false)
@@ -59,7 +62,7 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String scope;
 
     @Option(displayName = "Type",
-            description = "An optional type to use for the dependency management tag. Relevant only to Maven builds.",
+            description = "For Maven only, an optional type to use for the dependency management tag.",
             valid = {"jar", "pom", "war"},
             example = "pom",
             required = false)
@@ -67,15 +70,15 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String type;
 
     @Option(displayName = "Classifier",
-            description = "An optional classifier to use for the dependency management tag. Relevant only to Maven.",
+            description = "For Maven only, an optional classifier to use for the dependency management tag.",
             example = "test",
             required = false)
     @Nullable
     String classifier;
 
     @Option(displayName = "Version pattern",
-            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select 29.0-jre",
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
@@ -89,28 +92,47 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     String because;
 
     @Option(displayName = "Releases only",
-            description = "Whether to exclude snapshots from consideration when using a semver selector",
+            description = "For Maven only, whether to exclude snapshots from consideration when using a semver selector.",
             required = false)
     @Nullable
     Boolean releasesOnly;
 
     @Option(displayName = "Only if using glob expression for group:artifact",
-            description = "Only add managed dependencies to projects having a dependency matching the expression.",
+            description = "For Maven only, only add managed dependencies to projects having a dependency matching the expression.",
             example = "org.apache.logging.log4j:log4j*",
             required = false)
     @Nullable
     String onlyIfUsing;
 
     @Option(displayName = "Add to the root pom",
-            description = "Add to the root pom where root is the eldest parent of the pom within the source set.",
+            description = "For Maven only, add to the root pom where root is the eldest parent of the pom within the source set.",
             required = false)
     @Nullable
     Boolean addToRootPom;
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
 
     @Value
     public static class Accumulator {
         org.openrewrite.maven.UpgradeTransitiveDependencyVersion.Accumulator mavenAccumulator;
         org.openrewrite.gradle.UpgradeTransitiveDependencyVersion.DependencyVersionState gradleAccumulator;
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate().and(getGradleUpgradeTransitive().validate());
+        // The Maven delegate throws on a null version, which super.validate() already reports as missing
+        return version == null ? validated : validated.and(getMavenUpgradeTransitive().validate());
     }
 
     @Override
@@ -158,10 +180,10 @@ public class UpgradeTransitiveDependencyVersion extends ScanningRecipe<UpgradeTr
     }
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.gradle.UpgradeTransitiveDependencyVersion> gradleDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.gradle.UpgradeTransitiveDependencyVersion> gradleDelegate = new AtomicReference<>();
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.maven.UpgradeTransitiveDependencyVersion> mavenDelegate = new AtomicReference<>();
+    transient AtomicReference<org.openrewrite.maven.UpgradeTransitiveDependencyVersion> mavenDelegate = new AtomicReference<>();
 
     private org.openrewrite.gradle.UpgradeTransitiveDependencyVersion getGradleUpgradeTransitive() {
         org.openrewrite.gradle.UpgradeTransitiveDependencyVersion recipe = gradleDelegate.get();

@@ -23,6 +23,7 @@ import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.java.search.UsesType;
 import org.openrewrite.maven.tree.Dependency;
 import org.openrewrite.maven.tree.MavenResolutionResult;
+import org.openrewrite.maven.tree.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,18 +51,16 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
     @Nullable
     String unlessUsing;
 
-    // Gradle only parameter
-    @Option(displayName = "The dependency configuration",
-            description = "The dependency configuration to remove from.",
+    @Option(displayName = "Gradle configuration",
+            description = "For Gradle only, the dependency configuration to remove from.",
             example = "api",
             required = false)
     @Nullable
     String configuration;
 
-    // Maven only parameter
-    @Option(displayName = "Scope",
-            description = "Only remove dependencies if they are in this scope. If 'runtime', this will" +
-                          "also remove dependencies in the 'compile' scope because 'compile' dependencies are part of the runtime dependency set",
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, only remove dependencies if they are in this scope. If `runtime`, this will " +
+                          "also remove dependencies in the `compile` scope because `compile` dependencies are part of the runtime dependency set.",
             valid = {"compile", "test", "runtime", "provided"},
             example = "compile",
             required = false)
@@ -70,8 +69,23 @@ public class RemoveDependency extends ScanningRecipe<RemoveDependency.Accumulato
 
     String displayName = "Remove a Gradle or Maven dependency";
 
-    String description = "For Gradle project, removes a single dependency from the dependencies section of the `build.gradle`.\n" +
-               "For Maven project, removes a single dependency from the `<dependencies>` section of the pom.xml.";
+    String description = "For a Gradle project, removes a single dependency from the `dependencies` section of the `build.gradle` or `build.gradle.kts`.\n" +
+               "For a Maven project, removes a single dependency from the `<dependencies>` section of the `pom.xml`.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        return String.format("`%s:%s`", groupId, artifactId);
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        return super.validate().and(Validated.test("scope", "scope is a valid Maven scope", scope,
+                s -> Scope.fromName(s) != Scope.Invalid));
+    }
 
     public static class Accumulator {
         final Map<JavaProject, Boolean> projectToInUse = new HashMap<>();

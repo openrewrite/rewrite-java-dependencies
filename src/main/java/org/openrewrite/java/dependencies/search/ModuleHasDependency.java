@@ -42,12 +42,12 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     String displayName = "Module has dependency";
 
-    String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified groupId and artifactId. " +
+    String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified `groupId` and `artifactId`. " +
                 "Places a `SearchResult` marker on all sources within a module with a matching dependency. " +
                 "This recipe is intended to be used as a precondition for other recipes. " +
-                "For example this could be used to limit the application of a spring boot migration to only projects " +
-                "that use spring-boot-starter, limiting unnecessary upgrading. " +
-                "If the search result you want is instead just the build.gradle(.kts) or pom.xml file applying the plugin, use the `FindDependency` recipe instead.";
+                "For example this could be used to limit the application of a Spring Boot migration to only projects " +
+                "that use `spring-boot-starter`, limiting unnecessary upgrading. " +
+                "If the search result you want is instead just the `build.gradle(.kts)` or `pom.xml` file declaring the dependency, use the `FindDependency` recipe instead.";
 
     @Option(displayName = "Group pattern",
             description = "Group glob pattern used to match dependencies.",
@@ -59,8 +59,8 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
             example = "jackson-module-*")
     String artifactIdPattern;
 
-    @Option(displayName = "Scope",
-            description = "Match dependencies with the specified scope. All scopes are searched by default.",
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, match dependencies with the specified scope. All scopes are searched by default.",
             valid = {"compile", "test", "runtime", "provided", "system"},
             example = "compile",
             required = false)
@@ -69,7 +69,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Option(displayName = "Version",
             description = "Match only dependencies with the specified version. " +
-                    "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used." +
+                    "Node-style [version selectors](https://docs.openrewrite.org/reference/dependency-version-selectors) may be used. " +
                     "All versions are searched by default.",
             example = "1.x",
             required = false)
@@ -78,8 +78,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Option(displayName = "Only direct",
             description = "If enabled, transitive dependencies will not be considered. All dependencies are searched by default.",
-            required = false,
-            example = "true")
+            required = false)
     @Nullable
     Boolean onlyDirect;
 
@@ -90,6 +89,17 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     Boolean invertMarking;
 
     @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate()
+                .and(Validated.test("scope", "scope is a valid Maven scope", scope,
+                        s -> Scope.fromName(s) != Scope.Invalid));
+        if (version != null) {
+            validated = validated.and(Semver.validate(version, null));
+        }
+        return validated;
+    }
+
+    @Override
     public Set<JavaProject> getInitialValue(ExecutionContext ctx) {
         return new HashSet<>();
     }
@@ -98,8 +108,10 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     public TreeVisitor<?, ExecutionContext> getScanner(Set<JavaProject> acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                assert tree != null;
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
                 tree.getMarkers()
                         .findFirst(JavaProject.class)
                         .ifPresent(jp -> {
@@ -212,9 +224,11 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
     public TreeVisitor<?, ExecutionContext> getVisitor(Set<JavaProject> acc) {
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
-            public Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                assert tree != null;
-                boolean shouldInvert = invertMarking != null && invertMarking;
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
+                boolean shouldInvert = Boolean.TRUE.equals(invertMarking);
                 String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
                 Optional<JavaProject> maybeJp = tree.getMarkers().findFirst(JavaProject.class);
                 if (!maybeJp.isPresent()) {

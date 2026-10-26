@@ -265,6 +265,74 @@ class RelocatedDependencyCheckTest implements RewriteTest {
         }
 
         @Test
+        void noMarkerForRelocationToProse() {
+            rewriteRun(
+              recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.17</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Test
+        void findRelocatedIonJava() {
+            rewriteRun(
+              recipe -> recipe.dataTable(RelocatedDependencyReport.Row.class, rows -> assertThat(rows).containsExactly(
+                new RelocatedDependencyReport.Row("software.amazon.ion", "ion-java", "com.amazon.ion", "ion-java",
+                  "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name \"com.amazon.ion\". The legacy \"software.amazon.ion\" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")
+              )),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>software.amazon.ion</groupId>
+                        <artifactId>ion-java</artifactId>
+                        <version>1.5.1</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """,
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>org.openrewrite.example</groupId>
+                    <artifactId>rewrite-example</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                    <dependencies>
+                      <!--~~(Relocated to com.amazon.ion:ion-java as per "From version 1.4.0 onward, Amazon Ion for Java moved to the new group id and Java package name "com.amazon.ion". The legacy "software.amazon.ion" group id is deprecated. See https://amazon-ion.github.io/ion-docs/news/2020/01/15/software.amazon.ion-deprecated.html")~~>--><dependency>
+                        <groupId>software.amazon.ion</groupId>
+                        <artifactId>ion-java</artifactId>
+                        <version>1.5.1</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        @Test
         void markWhenRelocatedArtifactDoesNotPublishTheVersion() {
             rewriteRun(
               recipe -> recipe.recipe(new RelocatedDependencyCheck(true)),
@@ -839,6 +907,24 @@ class RelocatedDependencyCheckTest implements RewriteTest {
                   }
                   dependencies {
                       /*~~(Relocated to org.apache.commons:commons-lang3)~~>*/implementation("commons-lang:commons-lang:2.6")
+                  }
+                  """
+              )
+            );
+        }
+
+        @Test
+        void interpolatedArtifactId() {
+            rewriteRun(
+              //language=groovy
+              buildGradle(
+                """
+                  plugins {
+                      id "java-library"
+                  }
+                  def name = "commons-lang"
+                  dependencies {
+                      implementation "commons-lang:${name}:2.6"
                   }
                   """
               )

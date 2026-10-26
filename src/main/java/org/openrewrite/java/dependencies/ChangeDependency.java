@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,14 +31,16 @@ import static java.util.Objects.requireNonNull;
 @EqualsAndHashCode(callSuper = false)
 @Getter
 public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulator> {
-    // Gradle and Maven shared parameters
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    private final transient MavenMetadataFailures metadataFailures = new MavenMetadataFailures(this);
+
     @Option(displayName = "Old group ID",
-            description = "The old group ID to replace. The group ID is the first part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+            description = "The old group ID to replace. The group ID is the first part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "org.openrewrite.recipe")
     private final String oldGroupId;
 
     @Option(displayName = "Old artifact ID",
-            description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate 'com.google.guava:guava:VERSION'. Supports glob expressions.",
+            description = "The old artifact ID to replace. The artifact ID is the second part of a dependency coordinate `com.google.guava:guava:VERSION`. Supports glob expressions.",
             example = "rewrite-testing-frameworks")
     private final String oldArtifactId;
 
@@ -57,21 +60,24 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Option(displayName = "New version",
             description = "An exact version number or node-style semver selector used to select the version number.",
-            example = "29.X",
+            example = "29.x",
             required = false)
     @Nullable
     private final String newVersion;
 
     @Option(displayName = "Version pattern",
-            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example," +
-                          "Setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+            description = "Allows version selection to be extended beyond the original Node Semver semantics. So for example, " +
+                          "setting `newVersion` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
     private final String versionPattern;
 
     @Option(displayName = "Override managed version",
-            description = "If the new dependency has a managed version, this flag can be used to explicitly set the version on the dependency. The default for this flag is `false`.",
+            description = "Explicitly set the version on the new dependency, even when its version is managed. " +
+                          "For Maven, this applies when the new dependency has a managed version. " +
+                          "For Gradle, this applies when the old dependency has no declared version, regardless of whether the new dependency is managed. " +
+                          "The default for this flag is `false`.",
             required = false)
     @Nullable
     private final Boolean overrideManagedVersion;
@@ -83,7 +89,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     private final Boolean changeManagedDependency;
 
     @Option(displayName = "Change plugin dependencies",
-            description = "Also change dependencies declared inside Maven plugins. Defaults to true. Has no effect on Gradle dependencies.",
+            description = "For Maven only, also change dependencies declared inside Maven plugins. Defaults to `true`.",
             required = false)
     @Nullable
     private final Boolean changePluginDependencies;
@@ -110,22 +116,24 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         this.changePluginDependencies = changePluginDependencies;
     }
 
-    @Getter
     final String displayName = "Change Gradle or Maven dependency";
 
-    @Getter
     final String description = "Change the group ID, artifact ID, and/or the version of a specified Gradle or Maven dependency.";
 
     @Override
     public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (oldGroupId == null || oldArtifactId == null) {
+            return "";
+        }
         return String.format("`%s:%s`", oldGroupId, oldArtifactId);
     }
 
     @Override
-    public Validated<Object> validate(ExecutionContext ctx) {
-        return super.validate(ctx)
-                .and(((Recipe) getGradleChangeDependency()).validate())
-                .and(((Recipe) getMavenChangeDependency()).validate());
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(getGradleChangeDependency().validate())
+                .and(getMavenChangeDependency().validate());
     }
 
     @Override
@@ -209,7 +217,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
         if (recipe == null) {
             recipe = new org.openrewrite.gradle.ChangeDependency(
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId,
-                    newVersion, versionPattern, overrideManagedVersion, true);
+                    newVersion, versionPattern, overrideManagedVersion, changeManagedDependency);
             gradleDelegate.set(recipe);
         }
         return recipe;

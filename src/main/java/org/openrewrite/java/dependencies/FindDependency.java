@@ -19,10 +19,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.table.DependenciesDeclared;
+import org.openrewrite.semver.Semver;
 
-@Value
 @EqualsAndHashCode(callSuper = false)
+@Value
 public class FindDependency extends Recipe {
+    // Populated by the Gradle and Maven delegates. Listed here so that getDataTableDescriptors() advertises it
+    transient DependenciesDeclared dependenciesDeclared = new DependenciesDeclared(this);
 
     @Option(displayName = "Group ID",
             description = "The first part of a dependency coordinate identifying its publisher.",
@@ -43,34 +47,54 @@ public class FindDependency extends Recipe {
 
     @Option(displayName = "Version pattern",
             description = "Allows version selection to be extended beyond the original Node Semver semantics. " +
-                          "So for example, setting 'version' to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre",
+                          "So for example, setting `version` to \"25-29\" can be paired with a metadata pattern of \"-jre\" to select Guava 29.0-jre.",
             example = "-jre",
             required = false)
     @Nullable
     String versionPattern;
 
-    @Option(displayName = "Configuration",
+    @Option(displayName = "Gradle configuration",
             description = "For Gradle only, the dependency configuration to search for dependencies in. If omitted then all configurations will be searched.",
             example = "api",
             required = false)
     @Nullable
     String configuration;
 
-    String displayName = "Find Maven and Gradle dependencies";
+    String displayName = "Find Gradle or Maven dependencies";
 
-    String description = "Finds direct dependencies declared in Maven and Gradle build files. " +
+    String description = "Finds direct dependencies declared in Gradle and Maven build files. " +
                "This does *not* search transitive dependencies. " +
-               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight` " +
-               "This recipe works for both Maven and Gradle projects.";
+               "To detect both direct and transitive dependencies use `org.openrewrite.java.dependencies.DependencyInsight`.";
+
+    @Override
+    public String getInstanceNameSuffix() {
+        // Null when rendering the descriptor of an unconfigured recipe
+        if (groupId == null || artifactId == null) {
+            return "";
+        }
+        if (version == null) {
+            return String.format("`%s:%s`", groupId, artifactId);
+        }
+        return String.format("`%s:%s:%s`", groupId, artifactId, version);
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        Validated<Object> validated = super.validate()
+                .and(gradleFindDependency().validate())
+                .and(mavenFindDependency().validate());
+        if (version != null) {
+            validated = validated.and(Semver.validate(version, versionPattern));
+        }
+        return validated;
+    }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
 
-            final TreeVisitor<?, ExecutionContext> mavenFindDependency = new org.openrewrite.maven.search.FindDependency(groupId,artifactId,version,versionPattern)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> gradleFindDependency = new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration, version, versionPattern)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> mavenFindDependency = mavenFindDependency().getVisitor();
+            final TreeVisitor<?, ExecutionContext> gradleFindDependency = gradleFindDependency().getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -82,11 +106,18 @@ public class FindDependency extends Recipe {
                     return mavenFindDependency.visitNonNull(tree, ctx);
                 }
                 if (gradleFindDependency.isAcceptable(s, ctx)) {
-                    // Handle Gradle projects
                     return gradleFindDependency.visitNonNull(tree, ctx);
                 }
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.FindDependency gradleFindDependency() {
+        return new org.openrewrite.gradle.search.FindDependency(groupId, artifactId, configuration, version, versionPattern);
+    }
+
+    private org.openrewrite.maven.search.FindDependency mavenFindDependency() {
+        return new org.openrewrite.maven.search.FindDependency(groupId, artifactId, version, versionPattern);
     }
 }

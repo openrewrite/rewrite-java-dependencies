@@ -20,14 +20,16 @@ import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.maven.table.DependenciesInUse;
+import org.openrewrite.maven.table.ExplainDependenciesInUse;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
 public class DependencyInsight extends Recipe {
     // Populated by the other DependencyInsight visitors. Listed here so the saas knows to display this when the recipe runs
     transient DependenciesInUse dependenciesInUse = new DependenciesInUse(this);
+    transient ExplainDependenciesInUse explainDependenciesInUse = new ExplainDependenciesInUse(this);
 
-    String displayName = "Dependency insight for Gradle and Maven";
+    String displayName = "Gradle or Maven dependency insight";
 
     String description = "Finds dependencies, including transitive dependencies, in both Gradle and Maven projects. " +
                "Matches within all Gradle dependency configurations and Maven scopes.";
@@ -51,8 +53,8 @@ public class DependencyInsight extends Recipe {
     @Nullable
     String version;
 
-    @Option(displayName = "Scope",
-            description = "Match dependencies with the specified Maven scope. All scopes are searched by default.",
+    @Option(displayName = "Maven scope",
+            description = "For Maven only, match dependencies with the specified scope. All scopes are searched by default.",
             valid = {"compile", "test", "runtime", "provided", "system"},
             example = "compile",
             required = false)
@@ -73,12 +75,17 @@ public class DependencyInsight extends Recipe {
     }
 
     @Override
+    public Validated<Object> validate() {
+        return super.validate()
+                .and(gradleDependencyInsight().validate())
+                .and(mavenDependencyInsight().validate());
+    }
+
+    @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new TreeVisitor<Tree, ExecutionContext>() {
-            final TreeVisitor<?, ExecutionContext> gdi = new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null)
-                    .getVisitor();
-            final TreeVisitor<?, ExecutionContext> mdi = new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, scope, version, false)
-                    .getVisitor();
+            final TreeVisitor<?, ExecutionContext> gdi = gradleDependencyInsight().getVisitor();
+            final TreeVisitor<?, ExecutionContext> mdi = mavenDependencyInsight().getVisitor();
 
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -94,5 +101,13 @@ public class DependencyInsight extends Recipe {
                 return s;
             }
         };
+    }
+
+    private org.openrewrite.gradle.search.DependencyInsight gradleDependencyInsight() {
+        return new org.openrewrite.gradle.search.DependencyInsight(groupIdPattern, artifactIdPattern, version, null);
+    }
+
+    private org.openrewrite.maven.search.DependencyInsight mavenDependencyInsight() {
+        return new org.openrewrite.maven.search.DependencyInsight(groupIdPattern, artifactIdPattern, scope, version, false);
     }
 }

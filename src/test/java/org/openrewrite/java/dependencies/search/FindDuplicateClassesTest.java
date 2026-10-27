@@ -17,6 +17,7 @@ package org.openrewrite.java.dependencies.search;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Tree;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.dependencies.table.DuplicateClassesReport;
@@ -43,7 +44,7 @@ class FindDuplicateClassesTest implements RewriteTest {
     @DocumentExample
     @Test
     void findsDuplicateSlf4jBindingClasses() {
-        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic", "slf4j-nop"));
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic-1.2", "slf4j-nop-1.7"));
         rewriteRun(
           spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows -> {
               assertThat(rows)
@@ -72,7 +73,7 @@ class FindDuplicateClassesTest implements RewriteTest {
 
     @Test
     void reportsEachSourceSetOnce() {
-        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic", "slf4j-nop"));
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic-1.2", "slf4j-nop-1.7"));
         rewriteRun(
           spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows ->
             assertThat(rows)
@@ -97,7 +98,7 @@ class FindDuplicateClassesTest implements RewriteTest {
 
     @Test
     void noDuplicatesWithSingleDependency() {
-        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("guava"));
+        JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("guava-33"));
         rewriteRun(
           spec -> spec.afterRecipe(run ->
             assertThat(run.getDataTableRows(DuplicateClassesReport.class)).isEmpty()),
@@ -125,17 +126,7 @@ class FindDuplicateClassesTest implements RewriteTest {
         );
     }
 
-    private static List<Path> classpath(String... artifactIds) {
-        return JavaParser.runtimeClasspath().stream()
-          .filter(path -> {
-              String fileName = path.getFileName().toString();
-              for (String artifactId : artifactIds) {
-                  if (fileName.startsWith(artifactId + "-")) {
-                      return true;
-                  }
-              }
-              return false;
-          })
-          .toList();
+    private static List<Path> classpath(String... artifactNamesWithVersions) {
+        return JavaParser.dependenciesFromResources(new InMemoryExecutionContext(), artifactNamesWithVersions);
     }
 }

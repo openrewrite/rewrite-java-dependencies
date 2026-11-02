@@ -5,7 +5,7 @@ plugins {
 group = "org.openrewrite.recipe"
 description = "A rewrite module automating Java dependency management."
 
-val parseDefinitionMigrations: SourceSet by sourceSets.creating {
+val parseDefinitionMigrations: SourceSet = sourceSets.create("parseDefinitionMigrations") {
     compileClasspath += sourceSets.main.get().output
     runtimeClasspath += sourceSets.main.get().output
 }
@@ -42,7 +42,7 @@ dependencies {
 
 tasks {
     // ./gradlew parseDefinitionMigrations --args="./oga-maven-plugin src/main/resources/migrations.csv"
-    val parseDefinitionMigrations by registering(JavaExec::class) {
+    val parseDefinitionMigrations = register<JavaExec>("parseDefinitionMigrations") {
         group = "generate"
         description = "Parse oga-maven-plugin and generate a CSV file."
         mainClass = "org.openrewrite.java.dependencies.oldgroupids.ParseDefinitionMigrations"
@@ -50,7 +50,7 @@ tasks {
     }
 
     // ./gradlew updateMigrations
-    val updateMigrations by registering(JavaExec::class) {
+    val updateMigrations = register<JavaExec>("updateMigrations") {
         group = "generate"
         description = "Refresh src/main/resources/migrations.csv from the latest oga-maven-plugin definitions."
         mainClass = "org.openrewrite.java.dependencies.oldgroupids.UpdateMigrations"

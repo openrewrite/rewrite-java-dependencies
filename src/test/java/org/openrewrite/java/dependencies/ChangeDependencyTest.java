@@ -253,11 +253,12 @@ class ChangeDependencyTest implements RewriteTest {
           .allMatch(failure -> failure.getMessage().contains("must be different"));
     }
 
+    // io.spring.dependency-management 1.0 uses Gradle APIs that Gradle 9 removed
     @Test
     void doNotPinWhenNotVersionedGradle() {
         rewriteRun(
           spec -> spec
-            .beforeRecipe(withToolingApi())
+            .beforeRecipe(withToolingApi("8.14.5"))
             .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, null, null)),
           //language=groovy
           buildGradle(
@@ -295,11 +296,12 @@ class ChangeDependencyTest implements RewriteTest {
         );
     }
 
+    // io.spring.dependency-management 1.0 uses Gradle APIs that Gradle 9 removed
     @Test
     void pinWhenOverrideManagedVersionGradle() {
         rewriteRun(
           spec -> spec
-            .beforeRecipe(withToolingApi())
+            .beforeRecipe(withToolingApi("8.14.5"))
             .recipe(new ChangeDependency("mysql", "mysql-connector-java", "com.mysql", "mysql-connector-j", "8.0.x", null, true, null)),
           //language=groovy
           buildGradle(
@@ -337,11 +339,12 @@ class ChangeDependencyTest implements RewriteTest {
         );
     }
 
+    // io.spring.dependency-management 1.0 uses Gradle APIs that Gradle 9 removed
     @Test
     void leaveGradleManagedDependencyWhenDisabled() {
         rewriteRun(
           spec -> spec
-            .beforeRecipe(withToolingApi())
+            .beforeRecipe(withToolingApi("8.14.5"))
             .recipe(new ChangeDependency("commons-lang", "commons-lang", "org.apache.commons", "commons-lang3", "3.11.x", null, null, false)),
           //language=groovy
           buildGradle(

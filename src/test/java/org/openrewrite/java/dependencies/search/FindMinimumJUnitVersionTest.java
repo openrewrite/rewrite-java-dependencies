@@ -38,6 +38,61 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
 
     @Nested
     class Maven {
+
+        @DocumentExample
+        @Test
+        void minimumJUnit4AndJUnit5Present() {
+            rewriteRun(
+              spec -> spec.dataTable(DependenciesInUse.Row.class, rows -> assertThat(rows)
+                .extracting(DependenciesInUse.Row::getProjectName, DependenciesInUse.Row::getGroupId,
+                  DependenciesInUse.Row::getArtifactId, DependenciesInUse.Row::getVersion)
+                .containsOnly(tuple("core", "junit", "junit", "4.12"))),
+              mavenProject(
+                "core",
+                //language=xml
+                pomXml(
+                  """
+                    <project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>core</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                          <dependency>
+                              <groupId>junit</groupId>
+                              <artifactId>junit</artifactId>
+                              <version>4.12</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """,
+                  """
+                    <!--~~(junit:junit:4.12)~~>--><project>
+                      <groupId>org.openrewrite</groupId>
+                      <artifactId>core</artifactId>
+                      <version>0.1.0-SNAPSHOT</version>
+                      <dependencies>
+                          <dependency>
+                              <groupId>org.junit.jupiter</groupId>
+                              <artifactId>junit-jupiter-api</artifactId>
+                              <version>5.8.1</version>
+                          </dependency>
+                          <dependency>
+                              <groupId>junit</groupId>
+                              <artifactId>junit</artifactId>
+                              <version>4.12</version>
+                          </dependency>
+                      </dependencies>
+                    </project>
+                    """
+                )
+              )
+            );
+        }
         @Test
         void minimumJUnit4() {
             rewriteRun(
@@ -109,61 +164,6 @@ class FindMinimumJUnitVersionTest implements RewriteTest {
                               <groupId>org.junit.jupiter</groupId>
                               <artifactId>junit-jupiter-api</artifactId>
                               <version>5.8.1</version>
-                          </dependency>
-                      </dependencies>
-                    </project>
-                    """
-                )
-              )
-            );
-        }
-
-        @DocumentExample
-        @Test
-        void minimumJUnit4AndJUnit5Present() {
-            rewriteRun(
-              spec -> spec.dataTable(DependenciesInUse.Row.class, rows -> assertThat(rows)
-                .extracting(DependenciesInUse.Row::getProjectName, DependenciesInUse.Row::getGroupId,
-                  DependenciesInUse.Row::getArtifactId, DependenciesInUse.Row::getVersion)
-                .containsOnly(tuple("core", "junit", "junit", "4.12"))),
-              mavenProject(
-                "core",
-                //language=xml
-                pomXml(
-                  """
-                    <project>
-                      <groupId>org.openrewrite</groupId>
-                      <artifactId>core</artifactId>
-                      <version>0.1.0-SNAPSHOT</version>
-                      <dependencies>
-                          <dependency>
-                              <groupId>org.junit.jupiter</groupId>
-                              <artifactId>junit-jupiter-api</artifactId>
-                              <version>5.8.1</version>
-                          </dependency>
-                          <dependency>
-                              <groupId>junit</groupId>
-                              <artifactId>junit</artifactId>
-                              <version>4.12</version>
-                          </dependency>
-                      </dependencies>
-                    </project>
-                    """,
-                  """
-                    <!--~~(junit:junit:4.12)~~>--><project>
-                      <groupId>org.openrewrite</groupId>
-                      <artifactId>core</artifactId>
-                      <version>0.1.0-SNAPSHOT</version>
-                      <dependencies>
-                          <dependency>
-                              <groupId>org.junit.jupiter</groupId>
-                              <artifactId>junit-jupiter-api</artifactId>
-                              <version>5.8.1</version>
-                          </dependency>
-                          <dependency>
-                              <groupId>junit</groupId>
-                              <artifactId>junit</artifactId>
-                              <version>4.12</version>
                           </dependency>
                       </dependencies>
                     </project>

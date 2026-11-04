@@ -419,7 +419,7 @@ class ChangeDependencyTest implements RewriteTest {
 
     @Test
     void invalidVersionIsInvalid() {
-        ChangeDependency cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
+        var cd = new ChangeDependency("junit", "junit", "org.junit", null, "latest.bogus", null, null, null);
         assertThat(cd.validate().isValid()).isFalse();
         assertThat(cd.validate(new InMemoryExecutionContext()).isValid()).isFalse();
     }

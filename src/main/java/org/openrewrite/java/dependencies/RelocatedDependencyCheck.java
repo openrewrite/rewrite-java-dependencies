@@ -51,9 +51,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.*;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
+import static java.util.Collections.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

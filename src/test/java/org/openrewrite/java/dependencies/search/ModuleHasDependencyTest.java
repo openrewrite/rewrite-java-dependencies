@@ -733,17 +733,6 @@ class ModuleHasDependencyTest implements RewriteTest {
     @Nested
     class OnlyDirect {
 
-        @Test
-        void skipsMavenTransitiveMatch() {
-            rewriteRun(
-              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, true, null)),
-              mavenProject("project-maven",
-                pomXml(MAVEN_TRANSITIVE),
-                java(MAVEN_JAVA)
-              )
-            );
-        }
-
         @DocumentExample
         @Test
         void stillMarksMavenDirectMatch() {
@@ -766,6 +755,17 @@ class ModuleHasDependencyTest implements RewriteTest {
                       .actual()
                   )
                 )
+              )
+            );
+        }
+
+        @Test
+        void skipsMavenTransitiveMatch() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, true, null)),
+              mavenProject("project-maven",
+                pomXml(MAVEN_TRANSITIVE),
+                java(MAVEN_JAVA)
               )
             );
         }

@@ -223,7 +223,7 @@ public class AddDependency extends ScanningRecipe<AddDependency.Accumulator> {
             if (configuration != null) {
                 configurationName = configuration;
             } else if (scope != null) {
-                configurationName = Scope.asGradleConfigurationName(Scope.fromName(scope));
+                configurationName = Scope.asConsumableGradleConfigurationName(Scope.fromName(scope));
             }
             recipe = new org.openrewrite.gradle.AddDependency(groupId, artifactId, version, versionPattern,
                     configurationName, onlyIfUsing, classifier, extension, familyPattern, acceptTransitive);

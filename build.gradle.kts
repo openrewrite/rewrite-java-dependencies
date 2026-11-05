@@ -36,8 +36,6 @@ dependencies {
     testImplementation("org.openrewrite.gradle.tooling:model:${rewriteVersion}")
     testImplementation(gradleApi())
     testImplementation(parseDefinitionMigrations.output)
-
-    testRuntimeOnly("org.openrewrite:rewrite-java-21")
 }
 
 tasks {

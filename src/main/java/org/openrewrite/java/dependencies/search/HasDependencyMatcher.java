@@ -31,9 +31,13 @@ import org.openrewrite.semver.VersionComparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 class HasDependencyMatcher {
+    private static final Pattern NUMERIC_PREFIX = Pattern.compile("\\d+(?:\\.\\d+)*");
+
     private final String groupIdPattern;
     private final String artifactIdPattern;
     private final @Nullable String scope;
@@ -62,7 +66,7 @@ class HasDependencyMatcher {
                 continue;
             }
             resolvedGAs.add(dependency.getGroupId() + ":" + dependency.getArtifactId());
-            if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
+            if (versionComparator == null || inRange(versionComparator, dependency.getVersion())) {
                 return true;
             }
         }
@@ -84,7 +88,7 @@ class HasDependencyMatcher {
                 ResolvedDependency found = findMatching(resolvedDependency);
                 if (found != null) {
                     resolvedGAs.add(found.getGroupId() + ":" + found.getArtifactId());
-                    if (versionComparator == null || versionComparator.isValid(null, found.getVersion())) {
+                    if (versionComparator == null || inRange(versionComparator, found.getVersion())) {
                         return true;
                     }
                 }
@@ -140,6 +144,19 @@ class HasDependencyMatcher {
         if (version == null || version.startsWith("${")) {
             return false;
         }
-        return cmp.isValid(null, version);
+        return inRange(cmp, version);
+    }
+
+    /**
+     * A version selector only admits releases, which leaves out a version with a qualifier such as {@code 14.0.14-LTS},
+     * {@code 33.4.0-jre} or {@code 15.0.0-RC1}. To find whether a module uses a version in range, such a version counts
+     * as the version it qualifies.
+     */
+    private static boolean inRange(VersionComparator cmp, String version) {
+        if (cmp.isValid(null, version)) {
+            return true;
+        }
+        Matcher numericPrefix = NUMERIC_PREFIX.matcher(version);
+        return numericPrefix.lookingAt() && cmp.isValid(null, numericPrefix.group());
     }
 }

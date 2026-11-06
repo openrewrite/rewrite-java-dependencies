@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 class HasDependencyMatcher {
-    private static final Pattern QUALIFIED_VERSION = Pattern.compile("(\\d+(?:\\.\\d+)*)[-.][A-Za-z].*");
+    private static final Pattern NUMERIC_PREFIX = Pattern.compile("\\d+(?:\\.\\d+)*");
 
     private final String groupIdPattern;
     private final String artifactIdPattern;
@@ -156,7 +156,7 @@ class HasDependencyMatcher {
         if (cmp.isValid(null, version)) {
             return true;
         }
-        Matcher qualified = QUALIFIED_VERSION.matcher(version);
-        return qualified.matches() && cmp.isValid(null, qualified.group(1));
+        Matcher numericPrefix = NUMERIC_PREFIX.matcher(version);
+        return numericPrefix.lookingAt() && cmp.isValid(null, numericPrefix.group());
     }
 }

@@ -178,6 +178,44 @@ class RepositoryHasDependencyTest implements RewriteTest {
     }
 
     @Test
+    void versionRangeMatchesAQualifiedRelease() {
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
+          mavenProject("project-maven",
+            pomXml(primeFacesPom("14.0.14-LTS"), "<!--~~(Repository has dependency: org.primefaces:primefaces:[14,16))~~>-->" + primeFacesPom("14.0.14-LTS"))
+          )
+        );
+    }
+
+    @Test
+    void versionRangeDoesNotMatchAPreRelease() {
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[15,16)")),
+          mavenProject("project-maven",
+            pomXml(primeFacesPom("15.0.0-RC1"))
+          )
+        );
+    }
+
+    private static String primeFacesPom(String version) {
+        //language=xml
+        return """
+          <project>
+            <groupId>com.example</groupId>
+            <artifactId>foo</artifactId>
+            <version>1.0.0</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>%s</version>
+              </dependency>
+            </dependencies>
+          </project>
+          """.formatted(version);
+    }
+
+    @Test
     void invalidOptionsAreInvalid() {
         assertThat(new RepositoryHasDependency("junit", "junit", null, "latest.bogus").validate().isValid()).isFalse();
         assertThat(new RepositoryHasDependency("junit", "junit", "bogus", null).validate().isValid()).isFalse();

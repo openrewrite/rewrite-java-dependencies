@@ -31,9 +31,13 @@ import org.openrewrite.semver.VersionComparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 class HasDependencyMatcher {
+    private static final Pattern QUALIFIED_RELEASE = Pattern.compile("(\\d+(?:\\.\\d+)*)[-.][A-Za-z].*");
+
     private final String groupIdPattern;
     private final String artifactIdPattern;
     private final @Nullable String scope;
@@ -62,7 +66,7 @@ class HasDependencyMatcher {
                 continue;
             }
             resolvedGAs.add(dependency.getGroupId() + ":" + dependency.getArtifactId());
-            if (versionComparator == null || versionComparator.isValid(null, dependency.getVersion())) {
+            if (versionComparator == null || inRange(versionComparator, dependency.getVersion())) {
                 return true;
             }
         }
@@ -84,7 +88,7 @@ class HasDependencyMatcher {
                 ResolvedDependency found = findMatching(resolvedDependency);
                 if (found != null) {
                     resolvedGAs.add(found.getGroupId() + ":" + found.getArtifactId());
-                    if (versionComparator == null || versionComparator.isValid(null, found.getVersion())) {
+                    if (versionComparator == null || inRange(versionComparator, found.getVersion())) {
                         return true;
                     }
                 }
@@ -140,6 +144,20 @@ class HasDependencyMatcher {
         if (version == null || version.startsWith("${")) {
             return false;
         }
-        return cmp.isValid(null, version);
+        return inRange(cmp, version);
+    }
+
+    /**
+     * A version selector only admits releases, which leaves out a release with a qualifier such as {@code 14.0.14-LTS}
+     * or {@code 33.4.0-jre}. To find whether a module uses a version in range, such a release counts as the version it
+     * qualifies, unlike a pre-release.
+     */
+    private static boolean inRange(VersionComparator cmp, String version) {
+        if (cmp.isValid(null, version)) {
+            return true;
+        }
+        Matcher release = QUALIFIED_RELEASE.matcher(version);
+        return release.matches() && !VersionComparator.PRE_RELEASE_ENDING.matcher(version).find() &&
+               cmp.isValid(null, release.group(1));
     }
 }

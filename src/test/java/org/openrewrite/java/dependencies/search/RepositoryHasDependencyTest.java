@@ -17,6 +17,8 @@ package org.openrewrite.java.dependencies.search;
 
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
@@ -177,22 +179,23 @@ class RepositoryHasDependencyTest implements RewriteTest {
         );
     }
 
-    @Test
-    void versionRangeMatchesAQualifiedRelease() {
+    @ParameterizedTest
+    @ValueSource(strings = {"14.0.14-LTS", "15.0.0-RC1"})
+    void versionRangeMatchesAQualifiedVersion(String version) {
         rewriteRun(
           spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
           mavenProject("project-maven",
-            pomXml(primeFacesPom("14.0.14-LTS"), "<!--~~(Repository has dependency: org.primefaces:primefaces:[14,16))~~>-->" + primeFacesPom("14.0.14-LTS"))
+            pomXml(primeFacesPom(version), "<!--~~(Repository has dependency: org.primefaces:primefaces:[14,16))~~>-->" + primeFacesPom(version))
           )
         );
     }
 
     @Test
-    void versionRangeDoesNotMatchAPreRelease() {
+    void versionRangeDoesNotMatchAPreReleaseOfItsUpperBound() {
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[15,16)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
           mavenProject("project-maven",
-            pomXml(primeFacesPom("15.0.0-RC1"))
+            pomXml(primeFacesPom("16.0.0-RC1"))
           )
         );
     }

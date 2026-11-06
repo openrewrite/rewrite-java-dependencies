@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 class HasDependencyMatcher {
-    private static final Pattern QUALIFIED_RELEASE = Pattern.compile("(\\d+(?:\\.\\d+)*)[-.][A-Za-z].*");
+    private static final Pattern QUALIFIED_VERSION = Pattern.compile("(\\d+(?:\\.\\d+)*)[-.][A-Za-z].*");
 
     private final String groupIdPattern;
     private final String artifactIdPattern;
@@ -148,16 +148,15 @@ class HasDependencyMatcher {
     }
 
     /**
-     * A version selector only admits releases, which leaves out a release with a qualifier such as {@code 14.0.14-LTS}
-     * or {@code 33.4.0-jre}. To find whether a module uses a version in range, such a release counts as the version it
-     * qualifies, unlike a pre-release.
+     * A version selector only admits releases, which leaves out a version with a qualifier such as {@code 14.0.14-LTS},
+     * {@code 33.4.0-jre} or {@code 15.0.0-RC1}. To find whether a module uses a version in range, such a version counts
+     * as the version it qualifies.
      */
     private static boolean inRange(VersionComparator cmp, String version) {
         if (cmp.isValid(null, version)) {
             return true;
         }
-        Matcher release = QUALIFIED_RELEASE.matcher(version);
-        return release.matches() && !VersionComparator.PRE_RELEASE_ENDING.matcher(version).find() &&
-               cmp.isValid(null, release.group(1));
+        Matcher qualified = QUALIFIED_VERSION.matcher(version);
+        return qualified.matches() && cmp.isValid(null, qualified.group(1));
     }
 }

@@ -66,6 +66,12 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
     @Nullable
     String version;
 
+    @Option(displayName = "Invert marking",
+            description = "If `true`, will invert the check for whether to mark a file. Defaults to `false`.",
+            required = false)
+    @Nullable
+    Boolean invertMarking;
+
     @Override
     public Validated<Object> validate() {
         Validated<Object> validated = super.validate()
@@ -105,17 +111,20 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean acc) {
-        if (acc.get()) {
-            return new TreeVisitor<Tree, ExecutionContext>() {
-                @Override
-                public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                    if (tree == null) {
-                        return null;
-                    }
-                    return SearchResult.found(tree, "Repository has dependency: " + groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version));
-                }
-            };
+        boolean invert = Boolean.TRUE.equals(invertMarking);
+        if (acc.get() == invert) {
+            return TreeVisitor.noop();
         }
-        return TreeVisitor.noop();
+        String message = (invert ? "Repository does not have dependency: " : "Repository has dependency: ") +
+                groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
+                return SearchResult.found(tree, message);
+            }
+        };
     }
 }

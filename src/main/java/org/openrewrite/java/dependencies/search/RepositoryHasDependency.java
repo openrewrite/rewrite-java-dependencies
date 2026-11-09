@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies.search;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
@@ -34,6 +35,7 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified `groupId` and `artifactId`. " +
                "Places a `SearchResult` marker on all sources within a repository with a matching dependency. " +
+               "With `invertMarking`, every source is marked when no module in the repository has a matching dependency. " +
                "This recipe is intended to be used as a precondition for other recipes. " +
                "For example this could be used to limit the application of a Spring Boot migration to only projects " +
                "that use a Spring Framework dependency, limiting unnecessary upgrading. " +
@@ -67,10 +69,30 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
     String version;
 
     @Option(displayName = "Invert marking",
-            description = "If `true`, will invert the check for whether to mark a file. Defaults to `false`.",
+            description = "If `true`, marks every source when no module in the repository has a matching dependency, " +
+                          "instead of when any module has one. Defaults to `false`.",
             required = false)
     @Nullable
     Boolean invertMarking;
+
+    @JsonCreator
+    public RepositoryHasDependency(String groupIdPattern, String artifactIdPattern, @Nullable String scope,
+                                   @Nullable String version, @Nullable Boolean invertMarking) {
+        this.groupIdPattern = groupIdPattern;
+        this.artifactIdPattern = artifactIdPattern;
+        this.scope = scope;
+        this.version = version;
+        this.invertMarking = invertMarking;
+    }
+
+    /**
+     * @deprecated Use {@link #RepositoryHasDependency(String, String, String, String, Boolean)}.
+     */
+    @Deprecated
+    public RepositoryHasDependency(String groupIdPattern, String artifactIdPattern, @Nullable String scope,
+                                   @Nullable String version) {
+        this(groupIdPattern, artifactIdPattern, scope, version, null);
+    }
 
     @Override
     public Validated<Object> validate() {

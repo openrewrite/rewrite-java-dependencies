@@ -23,6 +23,8 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
@@ -84,6 +86,82 @@ class RepositoryHasDependencyTest implements RewriteTest {
                       <version>6.0.0</version>
                     </dependency>
                   </dependencies>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void usedAsInvertedDeclarativePrecondition() {
+        //language=yaml
+        Consumer<RecipeSpec> recipe = spec -> spec.recipeFromYaml("""
+          type: specs.openrewrite.org/v1beta/recipe
+          name: org.openrewrite.test.UseInvertedPrecondition
+          description: Test recipe using RepositoryHasDependency with invertMarking as a precondition.
+          preconditions:
+            - org.openrewrite.java.dependencies.search.RepositoryHasDependency:
+                groupIdPattern: org.springframework
+                artifactIdPattern: spring-beans
+                invertMarking: true
+          recipeList:
+            - org.openrewrite.FindSourceFiles:
+                filePattern: "**/pom.xml"
+          """, "org.openrewrite.test.UseInvertedPrecondition");
+
+        rewriteRun(
+          recipe,
+          mavenProject("project",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """,
+              """
+                <!--~~>--><project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """
+            )
+          )
+        );
+
+        rewriteRun(
+          recipe,
+          mavenProject("app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>app</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-beans</artifactId>
+                      <version>6.0.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          ),
+          mavenProject("lib",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>lib</artifactId>
+                  <version>1.0.0</version>
                 </project>
                 """
             )

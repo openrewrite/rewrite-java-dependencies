@@ -23,6 +23,8 @@ import org.openrewrite.DocumentExample;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
@@ -91,6 +93,153 @@ class RepositoryHasDependencyTest implements RewriteTest {
         );
     }
 
+    @Test
+    void usedAsInvertedDeclarativePrecondition() {
+        //language=yaml
+        Consumer<RecipeSpec> recipe = spec -> spec.recipeFromYaml("""
+          type: specs.openrewrite.org/v1beta/recipe
+          name: org.openrewrite.test.UseInvertedPrecondition
+          description: Test recipe using RepositoryHasDependency with invertMarking as a precondition.
+          preconditions:
+            - org.openrewrite.java.dependencies.search.RepositoryHasDependency:
+                groupIdPattern: org.springframework
+                artifactIdPattern: spring-beans
+                invertMarking: true
+          recipeList:
+            - org.openrewrite.FindSourceFiles:
+                filePattern: "**/pom.xml"
+          """, "org.openrewrite.test.UseInvertedPrecondition");
+
+        rewriteRun(
+          recipe,
+          mavenProject("project",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """,
+              """
+                <!--~~>--><project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """
+            )
+          )
+        );
+
+        rewriteRun(
+          recipe,
+          mavenProject("app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>app</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-beans</artifactId>
+                      <version>6.0.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          ),
+          mavenProject("lib",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>lib</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """
+            )
+          )
+        );
+    }
+
+    @Test
+    void invertedMarkingMarksEverySourceWhenNoModuleHasDependency() {
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, null, true)),
+          mavenProject("project",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """,
+              """
+                <!--~~(Repository does not have dependency: org.springframework:spring-beans)~~>--><project>
+                  <groupId>com.example</groupId>
+                  <artifactId>foo</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """
+            ),
+            //language=java
+            java(
+              "class A {}",
+              "/*~~(Repository does not have dependency: org.springframework:spring-beans)~~>*/class A {}"
+            )
+          )
+        );
+    }
+
+    @Test
+    void invertedMarkingMarksNothingWhenAnyModuleHasDependency() {
+        rewriteRun(
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, null, true)),
+          mavenProject("app",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>app</artifactId>
+                  <version>1.0.0</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-beans</artifactId>
+                      <version>6.0.0</version>
+                    </dependency>
+                  </dependencies>
+                </project>
+                """
+            )
+          ),
+          mavenProject("lib",
+            //language=xml
+            pomXml(
+              """
+                <project>
+                  <groupId>com.example</groupId>
+                  <artifactId>lib</artifactId>
+                  <version>1.0.0</version>
+                </project>
+                """
+            ),
+            //language=java
+            java("class A {}")
+          )
+        );
+    }
+
     @Language("java")
     private final static String GradleJava = """
       public class AGradle {}
@@ -100,7 +249,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
         // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)", null)),
           mavenProject("project-gradle",
             //language=groovy
             buildGradle("""
@@ -128,7 +277,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
         // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)", null)),
           mavenProject("project-maven",
             //language=xml
             pomXml("""
@@ -163,7 +312,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
         // Force resolution failure (no repositories), so the requested fallback fires.
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[1.0,)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[1.0,)", null)),
           mavenProject("project-gradle",
             //language=groovy
             buildGradle("""
@@ -183,7 +332,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     @ValueSource(strings = {"14.0.14-LTS", "15.0.0-RC1"})
     void versionRangeMatchesAQualifiedVersion(String version) {
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)", null)),
           mavenProject("project-maven",
             pomXml(primeFacesPom(version), "<!--~~(Repository has dependency: org.primefaces:primefaces:[14,16))~~>-->" + primeFacesPom(version))
           )
@@ -193,7 +342,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
     @Test
     void versionRangeDoesNotMatchAPreReleaseOfItsUpperBound() {
         rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
+          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)", null)),
           mavenProject("project-maven",
             pomXml(primeFacesPom("16.0.0-RC1"))
           )
@@ -220,7 +369,7 @@ class RepositoryHasDependencyTest implements RewriteTest {
 
     @Test
     void invalidOptionsAreInvalid() {
-        assertThat(new RepositoryHasDependency("junit", "junit", null, "latest.bogus").validate().isValid()).isFalse();
-        assertThat(new RepositoryHasDependency("junit", "junit", "bogus", null).validate().isValid()).isFalse();
+        assertThat(new RepositoryHasDependency("junit", "junit", null, "latest.bogus", null).validate().isValid()).isFalse();
+        assertThat(new RepositoryHasDependency("junit", "junit", "bogus", null, null).validate().isValid()).isFalse();
     }
 }

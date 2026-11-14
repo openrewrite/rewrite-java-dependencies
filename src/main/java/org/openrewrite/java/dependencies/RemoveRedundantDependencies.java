@@ -61,8 +61,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     public static class Accumulator {
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
         // Maven only: what every direct dependency of a project brings in, whether or not it is a provider.
-        // Maven mediation is not "highest wins", so a direct declaration can be what decides a version
-        // that another direct dependency's closure would otherwise change once the declaration is gone.
+        // Maven mediation is not "highest wins", so a direct declaration can be what keeps a version from
+        // dropping to an older one that another direct dependency's closure brings in once the declaration is gone.
         Map<String, Set<TransitiveDependency>> directClosuresByProject;
     }
 
@@ -337,7 +337,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                     depScope.name().toLowerCase(), emptySet());
                             boolean needsCompileClasspath = depScope == Scope.Compile || depScope == Scope.Provided;
                             if (isRedundant(dep, transitives, variants, needsCompileClasspath) &&
-                                    !isMediatedToAnotherVersion(dep, directClosures)) {
+                                    !isMediatedToALowerVersion(dep, directClosures)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -369,15 +369,16 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return false;
             }
 
-            // Another direct dependency's closure carries the same artifact at a different version. Which of the
-            // two Maven picks depends on depth and declaration order, so the explicit declaration may be the
-            // thing that pins the version, and dropping it can silently move the project to the other one.
-            private boolean isMediatedToAnotherVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
+            // Another direct dependency's closure carries the same artifact at an older version. Which of the
+            // versions Maven picks depends on depth and declaration order, so dropping the declaration could
+            // silently downgrade the project. Ending up on a newer version instead is an acceptable outcome.
+            private boolean isMediatedToALowerVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
+                Version declared = new Version(dep.getVersion());
                 for (TransitiveDependency other : directClosures) {
                     ResolvedGroupArtifactVersion gav = other.getGav();
                     if (dep.getGroupId().equals(gav.getGroupId()) &&
                             dep.getArtifactId().equals(gav.getArtifactId()) &&
-                            !dep.getVersion().equals(gav.getVersion()) &&
+                            new Version(gav.getVersion()).compareTo(declared) < 0 &&
                             !isProvidedByItself(dep, other)) {
                         return true;
                     }

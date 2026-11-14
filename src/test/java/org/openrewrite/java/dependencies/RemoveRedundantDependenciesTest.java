@@ -557,6 +557,66 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    // Found validating against carlan/m220j: the explicit spring-context:5.0.7.RELEASE equals what
+    // spring-boot-starter-web supplies, while spring-boot-starter-security supplies 5.0.8.RELEASE.
+    // Whichever wins mediation once the declaration is gone, the project does not end up on an older version.
+    @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+    @Test
+    void removesDependencyWhenAnotherDirectDependencyWouldMediateToAHigherVersion() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-web")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.0.3.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                    <version>2.0.4.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                    <version>5.0.7.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.0.3.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                    <version>2.0.4.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
     private static final String JACKSON_BEFORE = """
       <project>
         <modelVersion>4.0.0</modelVersion>
@@ -1115,52 +1175,12 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
-        // Found validating against carlan/m220j: the explicit spring-context:5.0.7.RELEASE equals what
-        // spring-boot-starter-web supplies, but spring-boot-starter-security supplies 5.0.8.RELEASE.
-        // Removing the declaration lets the sibling's version win, changing the resolved classpath.
-        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
-        @Test
-        void keepsDependencyWhenAnotherDirectDependencyWouldMediateToADifferentVersion() {
-            rewriteRun(
-              spec -> spec.recipe(new RemoveRedundantDependencies(
-                "org.springframework.boot", "spring-boot-starter-web")),
-              //language=xml
-              pomXml(
-                """
-                  <project>
-                    <modelVersion>4.0.0</modelVersion>
-                    <groupId>com.mycompany.app</groupId>
-                    <artifactId>my-app</artifactId>
-                    <version>1</version>
-                    <dependencies>
-                      <dependency>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-web</artifactId>
-                        <version>2.0.3.RELEASE</version>
-                      </dependency>
-                      <dependency>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-security</artifactId>
-                        <version>2.0.4.RELEASE</version>
-                      </dependency>
-                      <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-context</artifactId>
-                        <version>5.0.7.RELEASE</version>
-                      </dependency>
-                    </dependencies>
-                  </project>
-                  """
-              )
-            );
-        }
-
         // Found validating against parameswaranvv/struts-springboot-migration: struts2-spring-plugin excludes
         // spring-core, spring-beans and spring-context but still brings spring-web:4.3.20 one level nearer than
         // spring-boot-starter-web brings 5.1.9, so the explicit spring-web pin is what keeps 5.1.9
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
-        void keepsDependencyWhenSiblingWithExclusionsWouldMediateToADifferentVersion() {
+        void keepsDependencyWhenSiblingWithExclusionsWouldMediateToALowerVersion() {
             rewriteRun(
               spec -> spec.recipe(new RemoveRedundantDependencies(
                 "org.springframework.boot", "spring-boot-starter-web")),

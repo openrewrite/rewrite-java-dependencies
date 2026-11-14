@@ -1259,6 +1259,58 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
+        // Found validating against shijingsh/xiushang-knife4j: jackson-databind excludes jackson-core, and the
+        // explicit jackson-core declaration is the only thing that supplies it. In that project the LST carried no
+        // effective exclusions for the provider, which this test harness does not reproduce, so the test passes
+        // without the fix too and only guards the behaviour.
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyThatTheProviderItselfExcludes() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "com.fasterxml.jackson.core", "jackson-databind")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <properties>
+                      <jackson.version>2.11.0</jackson.version>
+                    </properties>
+                    <dependencies>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.dataformat</groupId>
+                        <artifactId>jackson-dataformat-yaml</artifactId>
+                        <version>${jackson.version}</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>${jackson.version}</version>
+                        <scope>compile</scope>
+                      </dependency>
+                      <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>${jackson.version}</version>
+                        <scope>compile</scope>
+                        <exclusions>
+                          <exclusion>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-core</artifactId>
+                          </exclusion>
+                        </exclusions>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
         void keepsDependencyWithClassifier() {

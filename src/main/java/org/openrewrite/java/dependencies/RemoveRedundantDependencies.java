@@ -133,7 +133,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                         .computeIfAbsent(depScope.name().toLowerCase(), k -> new HashSet<>());
                                 resolveTransitivesFromPom(
                                         dep.getGav(),
-                                        dep.getEffectiveExclusions(),
+                                        exclusionsOf(dep),
                                         maven.getPom().getRepositories(),
                                         downloader,
                                         ctx,
@@ -151,7 +151,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                 if (dep.isDirect() && visitedDirects.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
                                     resolveTransitivesFromPom(
                                             dep.getGav(),
-                                            dep.getEffectiveExclusions(),
+                                            exclusionsOf(dep),
                                             maven.getPom().getRepositories(),
                                             downloader,
                                             ctx,
@@ -216,6 +216,24 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
             }
         };
+    }
+
+    // The effective exclusions can come back empty for an exclusion the build declares, when the excluded artifact is
+    // also reached some other way, so a declared exclusion of the provider is added back. Without it a provider that
+    // excludes an artifact would be credited with supplying it, and the explicit declaration that is the only
+    // supplier would be removed.
+    private static List<GroupArtifact> exclusionsOf(ResolvedDependency dep) {
+        List<GroupArtifact> declared = dep.getRequested().getExclusions();
+        if (declared == null || declared.isEmpty()) {
+            return dep.getEffectiveExclusions();
+        }
+        List<GroupArtifact> exclusions = new ArrayList<>(dep.getEffectiveExclusions());
+        for (GroupArtifact exclusion : declared) {
+            if (!exclusions.contains(exclusion)) {
+                exclusions.add(exclusion);
+            }
+        }
+        return exclusions;
     }
 
     // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is

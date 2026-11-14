@@ -60,9 +60,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     @Value
     public static class Accumulator {
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
-        // Maven only: what every direct dependency of a project brings in, whether or not it is a provider.
-        // Maven mediation is not "highest wins", so a direct declaration can be what keeps a version from
-        // dropping to an older one that another direct dependency's closure brings in once the declaration is gone.
+        // Maven only: everything each direct dependency brings in, to spot versions mediation could downgrade to
         Map<String, Set<TransitiveDependency>> directClosuresByProject;
     }
 
@@ -74,8 +72,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         // considered redundant on the strength of its own transitives. Without this a glob such as
         // `*` would match every declaration and, in the absence of any other guard, delete them all.
         GroupArtifact providedBy;
-        // True when every path from the provider reaches this entry through a runtime scoped dependency, so it
-        // is on a runtime classpath but not on the compile classpath of a project that depends on the provider
+        // Every path from the provider passes through a runtime dependency, so it is not on the compile classpath
         boolean runtimeOnly;
     }
 
@@ -369,9 +366,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return false;
             }
 
-            // Another direct dependency's closure carries the same artifact at an older version. Which of the
-            // versions Maven picks depends on depth and declaration order, so dropping the declaration could
-            // silently downgrade the project. Ending up on a newer version instead is an acceptable outcome.
+            // Maven picks by depth and declaration order, so dropping the declaration could downgrade to this older
+            // version; ending up on a newer one is fine
             private boolean isMediatedToALowerVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
                 Version declared = new Version(dep.getVersion());
                 for (TransitiveDependency other : directClosures) {

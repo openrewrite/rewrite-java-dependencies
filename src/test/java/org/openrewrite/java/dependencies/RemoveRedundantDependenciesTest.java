@@ -557,9 +557,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
-    // Found validating against carlan/m220j: the explicit spring-context:5.0.7.RELEASE equals what
-    // spring-boot-starter-web supplies, while spring-boot-starter-security supplies 5.0.8.RELEASE.
-    // Whichever wins mediation once the declaration is gone, the project does not end up on an older version.
+    // From carlan/m220j: spring-boot-starter-security brings spring-context 5.0.8, so removal can only upgrade
     @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
     @Test
     void removesDependencyWhenAnotherDirectDependencyWouldMediateToAHigherVersion() {
@@ -1175,9 +1173,8 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
-        // Found validating against parameswaranvv/struts-springboot-migration: struts2-spring-plugin excludes
-        // spring-core, spring-beans and spring-context but still brings spring-web:4.3.20 one level nearer than
-        // spring-boot-starter-web brings 5.1.9, so the explicit spring-web pin is what keeps 5.1.9
+        // From parameswaranvv/struts-springboot-migration: struts2-spring-plugin brings spring-web 4.3.20 nearer,
+        // so the explicit 5.1.9 declaration is what prevents a downgrade
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
         void keepsDependencyWhenSiblingWithExclusionsWouldMediateToALowerVersion() {
@@ -1229,8 +1226,7 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
-        // Found validating against ax1sX/SpringSecurity: spring-boot-starter brings snakeyaml at runtime scope, so
-        // removing a compile-scoped declaration takes it off the compile classpath
+        // From ax1sX/SpringSecurity: spring-boot-starter only brings snakeyaml at runtime scope
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
         void keepsCompileDependencyWhenProviderOnlySuppliesItAtRuntime() {

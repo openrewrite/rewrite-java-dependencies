@@ -60,6 +60,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     @Value
     public static class Accumulator {
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
+        // Maven only: what every direct dependency of a project brings in, whether or not it is a provider.
+        // Maven mediation is not "highest wins", so a direct declaration can be what decides a version
+        // that another direct dependency's closure would otherwise change once the declaration is gone.
+        Map<String, Set<TransitiveDependency>> directClosuresByProject;
     }
 
     @Value
@@ -74,7 +78,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
-        return new Accumulator(new HashMap<>());
+        return new Accumulator(new HashMap<>(), new HashMap<>());
     }
 
     @Override
@@ -134,6 +138,25 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                         downloader,
                                         ctx,
                                         transitives);
+                            }
+                        }
+                    }
+
+                    if (!processed.isEmpty()) {
+                        Set<TransitiveDependency> closures = acc.directClosuresByProject
+                                .computeIfAbsent(projectId, k -> new HashSet<>());
+                        Set<String> visitedDirects = new HashSet<>();
+                        for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
+                            for (ResolvedDependency dep : deps) {
+                                if (dep.isDirect() && visitedDirects.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
+                                    resolveTransitivesFromPom(
+                                            dep.getGav(),
+                                            dep.getEffectiveExclusions(),
+                                            maven.getPom().getRepositories(),
+                                            downloader,
+                                            ctx,
+                                            closures);
+                                }
                             }
                         }
                     }
@@ -293,6 +316,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
                 Set<GroupArtifact> variants = declaredAsVariant(maven.getPom().getRequestedDependencies());
+                Set<TransitiveDependency> directClosures =
+                        acc.directClosuresByProject.getOrDefault(projectId, emptySet());
 
                 // A direct dependency appears under every scope bucket it is visible in; evaluate each
                 // one once using its own effective scope so a wider transitive scope does not falsely
@@ -305,7 +330,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Scope depScope = Scope.fromName(dep.getRequested().getScope());
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
-                            if (isRedundant(dep, transitives, variants)) {
+                            if (isRedundant(dep, transitives, variants) &&
+                                    !isMediatedToAnotherVersion(dep, directClosures)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -330,6 +356,22 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             dep.getVersion().equals(gav.getVersion()) &&
                             depExclusions.equals(transitive.getExclusions()) &&
                             !isProvidedByItself(dep, transitive)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // Another direct dependency's closure carries the same artifact at a different version. Which of the
+            // two Maven picks depends on depth and declaration order, so the explicit declaration may be the
+            // thing that pins the version, and dropping it can silently move the project to the other one.
+            private boolean isMediatedToAnotherVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
+                for (TransitiveDependency other : directClosures) {
+                    ResolvedGroupArtifactVersion gav = other.getGav();
+                    if (dep.getGroupId().equals(gav.getGroupId()) &&
+                            dep.getArtifactId().equals(gav.getArtifactId()) &&
+                            !dep.getVersion().equals(gav.getVersion()) &&
+                            !isProvidedByItself(dep, other)) {
                         return true;
                     }
                 }

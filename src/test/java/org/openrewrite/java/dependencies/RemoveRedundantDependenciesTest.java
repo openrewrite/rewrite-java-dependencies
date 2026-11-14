@@ -1115,6 +1115,46 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
+        // Found validating against carlan/m220j: the explicit spring-context:5.0.7.RELEASE equals what
+        // spring-boot-starter-web supplies, but spring-boot-starter-security supplies 5.0.8.RELEASE.
+        // Removing the declaration lets the sibling's version win, changing the resolved classpath.
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyWhenAnotherDirectDependencyWouldMediateToADifferentVersion() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.0.3.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-security</artifactId>
+                        <version>2.0.4.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                        <version>5.0.7.RELEASE</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
         void keepsDependencyWithClassifier() {

@@ -46,7 +46,7 @@ class FindDuplicateClassesTest implements RewriteTest {
     void findsDuplicateSlf4jBindingClasses() {
         JavaSourceSet sourceSet = JavaSourceSet.build("main", classpath("logback-classic-1.2", "slf4j-nop-1.7"));
         rewriteRun(
-          spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows -> {
+          spec -> spec.dataTable(DuplicateClassesReport.Row.class, rows ->
               assertThat(rows)
                 .allSatisfy(row -> {
                     assertThat(row.getProjectName()).isEqualTo("test-project");
@@ -59,8 +59,7 @@ class FindDuplicateClassesTest implements RewriteTest {
                 })
                 .extracting(DuplicateClassesReport.Row::getTypeName)
                 .contains("org.slf4j.impl.StaticLoggerBinder")
-                .doesNotHaveDuplicates();
-          }),
+                .doesNotHaveDuplicates()),
           java(
             """
               class A {

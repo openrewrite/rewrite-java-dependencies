@@ -557,6 +557,64 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    // From carlan/m220j: spring-boot-starter-security brings spring-context 5.0.8, so removal can only upgrade
+    @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+    @Test
+    void removesDependencyWhenAnotherDirectDependencyWouldMediateToAHigherVersion() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-web")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.0.3.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                    <version>2.0.4.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                    <version>5.0.7.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.0.3.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                    <version>2.0.4.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
     private static final String JACKSON_BEFORE = """
       <project>
         <modelVersion>4.0.0</modelVersion>
@@ -1107,6 +1165,92 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                         <groupId>org.tukaani</groupId>
                         <artifactId>xz</artifactId>
                         <version>1.9</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        // From parameswaranvv/struts-springboot-migration: struts2-spring-plugin brings spring-web 4.3.20 nearer,
+        // so the explicit 5.1.9 declaration is what prevents a downgrade
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyWhenSiblingWithExclusionsWouldMediateToALowerVersion() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.apache.struts</groupId>
+                        <artifactId>struts2-spring-plugin</artifactId>
+                        <version>2.5.20</version>
+                        <exclusions>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-core</artifactId>
+                          </exclusion>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-beans</artifactId>
+                          </exclusion>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-context</artifactId>
+                          </exclusion>
+                        </exclusions>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.1.7.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                        <version>5.1.9.RELEASE</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        // From ax1sX/SpringSecurity: spring-boot-starter only brings snakeyaml at runtime scope
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsCompileDependencyWhenProviderOnlySuppliesItAtRuntime() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.0.3.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                        <version>1.19</version>
                       </dependency>
                     </dependencies>
                   </project>

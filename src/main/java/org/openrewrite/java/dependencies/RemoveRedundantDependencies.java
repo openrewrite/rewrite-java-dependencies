@@ -74,6 +74,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         // considered redundant on the strength of its own transitives. Without this a glob such as
         // `*` would match every declaration and, in the absence of any other guard, delete them all.
         GroupArtifact providedBy;
+        // True when every path from the provider reaches this entry through a runtime scoped dependency, so it
+        // is on a runtime classpath but not on the compile classpath of a project that depends on the provider
+        boolean runtimeOnly;
     }
 
     @Override
@@ -179,12 +182,12 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
 
-                    Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
+                    Set<String> visited = new HashSet<>();
                     for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
                         // The provider is resolved as the root, so its own optional dependencies are listed here,
                         // even though a project depending on the provider never receives them
                         if (!Boolean.TRUE.equals(dep.getOptional())) {
-                            collectAllDependencies(dep, transitives, visited, providedBy);
+                            collectAllDependencies(dep, transitives, visited, providedBy, false);
                         }
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
@@ -203,13 +206,15 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                                Set<ResolvedGroupArtifactVersion> visited, GroupArtifact providedBy) {
-                if (visited.add(dep.getGav())) {
+                                                Set<String> visited, GroupArtifact providedBy, boolean viaRuntime) {
+                boolean runtimeOnly = viaRuntime || "runtime".equals(dep.getRequested().getScope());
+                // Tracked per path kind, so that a compile path to an entry already reached at runtime is still seen
+                if (visited.add(dep.getGav() + (runtimeOnly ? "/runtime" : "/compile"))) {
                     if (isPlainJar(dep.getRequested())) {
-                        transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy));
+                        transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy, runtimeOnly));
                     }
                     for (ResolvedDependency transitive : dep.getDependencies()) {
-                        collectAllDependencies(transitive, transitives, visited, providedBy);
+                        collectAllDependencies(transitive, transitives, visited, providedBy, runtimeOnly);
                     }
                 }
             }
@@ -300,7 +305,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                     for (ResolvedDependency dep : conf.getResolved()) {
                         if (dep.isDirect() &&
-                                isRedundant(dep, transitives, variants)) {
+                                isRedundant(dep, transitives, variants, false)) {
                             // Don't specify configuration - Gradle's resolved config names differ from declaration names
                             result = new RemoveDependency(
                                     dep.getGroupId(), dep.getArtifactId(), null, null, null)
@@ -330,7 +335,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Scope depScope = Scope.fromName(dep.getRequested().getScope());
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
-                            if (isRedundant(dep, transitives, variants) &&
+                            boolean needsCompileClasspath = depScope == Scope.Compile || depScope == Scope.Provided;
+                            if (isRedundant(dep, transitives, variants, needsCompileClasspath) &&
                                     !isMediatedToAnotherVersion(dep, directClosures)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
@@ -343,7 +349,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                        Set<GroupArtifact> variants) {
+                                        Set<GroupArtifact> variants, boolean needsCompileClasspath) {
                 if (constrainsResolution(dep) ||
                         variants.contains(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()))) {
                     return false;
@@ -355,6 +361,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             dep.getArtifactId().equals(gav.getArtifactId()) &&
                             dep.getVersion().equals(gav.getVersion()) &&
                             depExclusions.equals(transitive.getExclusions()) &&
+                            !(needsCompileClasspath && transitive.isRuntimeOnly()) &&
                             !isProvidedByItself(dep, transitive)) {
                         return true;
                     }

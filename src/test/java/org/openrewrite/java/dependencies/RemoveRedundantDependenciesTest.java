@@ -1155,6 +1155,94 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
             );
         }
 
+        // Found validating against parameswaranvv/struts-springboot-migration: struts2-spring-plugin excludes
+        // spring-core, spring-beans and spring-context but still brings spring-web:4.3.20 one level nearer than
+        // spring-boot-starter-web brings 5.1.9, so the explicit spring-web pin is what keeps 5.1.9
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsDependencyWhenSiblingWithExclusionsWouldMediateToADifferentVersion() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.apache.struts</groupId>
+                        <artifactId>struts2-spring-plugin</artifactId>
+                        <version>2.5.20</version>
+                        <exclusions>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-core</artifactId>
+                          </exclusion>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-beans</artifactId>
+                          </exclusion>
+                          <exclusion>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-context</artifactId>
+                          </exclusion>
+                        </exclusions>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.1.7.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                        <version>5.1.9.RELEASE</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        // Found validating against ax1sX/SpringSecurity: spring-boot-starter brings snakeyaml at runtime scope, so
+        // removing a compile-scoped declaration takes it off the compile classpath
+        @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
+        @Test
+        void keepsCompileDependencyWhenProviderOnlySuppliesItAtRuntime() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.0.3.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                        <version>1.19</version>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
         @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
         @Test
         void keepsDependencyWithClassifier() {

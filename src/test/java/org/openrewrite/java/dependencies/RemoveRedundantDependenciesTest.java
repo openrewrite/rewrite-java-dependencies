@@ -615,6 +615,82 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    // As keepsDependencyWhenSiblingWithExclusionsWouldMediateToALowerVersion, but dependencyManagement pins spring-web
+    // to the declared version, which also applies to the copy struts2-spring-plugin brings, so removal changes nothing
+    @Test
+    void removesDependencyWhenSiblingWouldMediateToALowerVersionButDependencyManagementPinsIt() {
+        rewriteRun(
+          spec -> spec.recipe(new RemoveRedundantDependencies(
+            "org.springframework.boot", "spring-boot-starter-web")),
+          //language=xml
+          pomXml(
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencyManagement>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-web</artifactId>
+                      <version>5.1.9.RELEASE</version>
+                    </dependency>
+                  </dependencies>
+                </dependencyManagement>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.struts</groupId>
+                    <artifactId>struts2-spring-plugin</artifactId>
+                    <version>2.5.20</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.1.7.RELEASE</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                    <version>5.1.9.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """,
+            """
+              <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencyManagement>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-web</artifactId>
+                      <version>5.1.9.RELEASE</version>
+                    </dependency>
+                  </dependencies>
+                </dependencyManagement>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.struts</groupId>
+                    <artifactId>struts2-spring-plugin</artifactId>
+                    <version>2.5.20</version>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version>2.1.7.RELEASE</version>
+                  </dependency>
+                </dependencies>
+              </project>
+              """
+          )
+        );
+    }
+
     private static final String JACKSON_BEFORE = """
       <project>
         <modelVersion>4.0.0</modelVersion>

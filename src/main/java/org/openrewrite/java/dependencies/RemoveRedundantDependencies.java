@@ -142,7 +142,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                         }
                     }
 
-                    if (!processed.isEmpty()) {
+                    if (!processed.isEmpty() && hasUnmanagedCandidate(maven,
+                            acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap()))) {
                         Set<TransitiveDependency> closures = acc.directClosuresByProject
                                 .computeIfAbsent(projectId, k -> new HashSet<>());
                         Set<String> visitedDirects = new HashSet<>();
@@ -234,6 +235,33 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
         }
         return exclusions;
+    }
+
+    // Sibling closures are only needed to protect a declaration the provider supplies at the same version and whose
+    // version dependencyManagement leaves alone. Resolving them costs a POM download per direct dependency, so they
+    // are skipped when no such declaration exists.
+    private static boolean hasUnmanagedCandidate(MavenResolutionResult maven, Map<String, Set<TransitiveDependency>> suppliedByScope) {
+        for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
+            for (ResolvedDependency dep : deps) {
+                if (dep.isDirect() && !isManagedAtItsVersion(maven.getPom(), dep)) {
+                    for (Set<TransitiveDependency> supplied : suppliedByScope.values()) {
+                        for (TransitiveDependency t : supplied) {
+                            if (t.getGav().getGroupId().equals(dep.getGroupId()) &&
+                                    t.getGav().getArtifactId().equals(dep.getArtifactId()) &&
+                                    t.getGav().getVersion().equals(dep.getVersion())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // A managed version applies to transitive dependencies too, so once the declaration is gone mediation can not move it
+    private static boolean isManagedAtItsVersion(ResolvedPom pom, ResolvedDependency dep) {
+        return dep.getVersion().equals(pom.getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null));
     }
 
     // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is
@@ -352,7 +380,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                     depScope.name().toLowerCase(), emptySet());
                             boolean needsCompileClasspath = depScope == Scope.Compile || depScope == Scope.Provided;
                             if (isRedundant(dep, transitives, variants, needsCompileClasspath) &&
-                                    !isMediatedToALowerVersion(dep, directClosures)) {
+                                    (isManagedAtItsVersion(maven.getPom(), dep) || !isMediatedToALowerVersion(dep, directClosures))) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);

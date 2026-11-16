@@ -60,6 +60,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     @Value
     public static class Accumulator {
         Map<String, Map<String, Set<TransitiveDependency>>> transitivesByProjectAndScope;
+        // Maven only: everything each direct dependency brings in, to spot versions mediation could downgrade to
+        Map<String, Set<TransitiveDependency>> directClosuresByProject;
     }
 
     @Value
@@ -70,11 +72,13 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         // considered redundant on the strength of its own transitives. Without this a glob such as
         // `*` would match every declaration and, in the absence of any other guard, delete them all.
         GroupArtifact providedBy;
+        // Every path from the provider passes through a runtime dependency, so it is not on the compile classpath
+        boolean runtimeOnly;
     }
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
-        return new Accumulator(new HashMap<>());
+        return new Accumulator(new HashMap<>(), new HashMap<>());
     }
 
     @Override
@@ -129,11 +133,30 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                         .computeIfAbsent(depScope.name().toLowerCase(), k -> new HashSet<>());
                                 resolveTransitivesFromPom(
                                         dep.getGav(),
-                                        dep.getEffectiveExclusions(),
+                                        exclusionsOf(dep),
                                         maven.getPom().getRepositories(),
                                         downloader,
                                         ctx,
                                         transitives);
+                            }
+                        }
+                    }
+
+                    if (!processed.isEmpty()) {
+                        Set<TransitiveDependency> closures = acc.directClosuresByProject
+                                .computeIfAbsent(projectId, k -> new HashSet<>());
+                        Set<String> visitedDirects = new HashSet<>();
+                        for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
+                            for (ResolvedDependency dep : deps) {
+                                if (dep.isDirect() && visitedDirects.add(dep.getGroupId() + ":" + dep.getArtifactId())) {
+                                    resolveTransitivesFromPom(
+                                            dep.getGav(),
+                                            exclusionsOf(dep),
+                                            maven.getPom().getRepositories(),
+                                            downloader,
+                                            ctx,
+                                            closures);
+                                }
                             }
                         }
                     }
@@ -156,12 +179,12 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                     ResolvedPom resolvedPom = pom.resolve(emptyList(), downloader, repos, ctx);
                     ResolvedPom patchedPom = applyExclusions(resolvedPom, effectiveExclusions);
 
-                    Set<ResolvedGroupArtifactVersion> visited = new HashSet<>();
+                    Set<String> visited = new HashSet<>();
                     for (ResolvedDependency dep : patchedPom.resolveDependencies(Scope.Compile, downloader, ctx)) {
                         // The provider is resolved as the root, so its own optional dependencies are listed here,
                         // even though a project depending on the provider never receives them
                         if (!Boolean.TRUE.equals(dep.getOptional())) {
-                            collectAllDependencies(dep, transitives, visited, providedBy);
+                            collectAllDependencies(dep, transitives, visited, providedBy, false);
                         }
                     }
                 } catch (MavenDownloadingException | MavenDownloadingExceptions e) {
@@ -180,17 +203,37 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private void collectAllDependencies(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                                Set<ResolvedGroupArtifactVersion> visited, GroupArtifact providedBy) {
-                if (visited.add(dep.getGav())) {
+                                                Set<String> visited, GroupArtifact providedBy, boolean viaRuntime) {
+                boolean runtimeOnly = viaRuntime || "runtime".equals(dep.getRequested().getScope());
+                // Tracked per path kind, so that a compile path to an entry already reached at runtime is still seen
+                if (visited.add(dep.getGav() + (runtimeOnly ? "/runtime" : "/compile"))) {
                     if (isPlainJar(dep.getRequested())) {
-                        transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy));
+                        transitives.add(new TransitiveDependency(dep.getGav(), declaredExclusions(dep), providedBy, runtimeOnly));
                     }
                     for (ResolvedDependency transitive : dep.getDependencies()) {
-                        collectAllDependencies(transitive, transitives, visited, providedBy);
+                        collectAllDependencies(transitive, transitives, visited, providedBy, runtimeOnly);
                     }
                 }
             }
         };
+    }
+
+    // The effective exclusions can come back empty for an exclusion the build declares, when the excluded artifact is
+    // also reached some other way, so a declared exclusion of the provider is added back. Without it a provider that
+    // excludes an artifact would be credited with supplying it, and the explicit declaration that is the only
+    // supplier would be removed.
+    private static List<GroupArtifact> exclusionsOf(ResolvedDependency dep) {
+        List<GroupArtifact> declared = dep.getRequested().getExclusions();
+        if (declared == null || declared.isEmpty()) {
+            return dep.getEffectiveExclusions();
+        }
+        List<GroupArtifact> exclusions = new ArrayList<>(dep.getEffectiveExclusions());
+        for (GroupArtifact exclusion : declared) {
+            if (!exclusions.contains(exclusion)) {
+                exclusions.add(exclusion);
+            }
+        }
+        return exclusions;
     }
 
     // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is
@@ -277,7 +320,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
 
                     for (ResolvedDependency dep : conf.getResolved()) {
                         if (dep.isDirect() &&
-                                isRedundant(dep, transitives, variants)) {
+                                isRedundant(dep, transitives, variants, false)) {
                             // Don't specify configuration - Gradle's resolved config names differ from declaration names
                             result = new RemoveDependency(
                                     dep.getGroupId(), dep.getArtifactId(), null, null, null)
@@ -293,6 +336,8 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 Map<String, Set<TransitiveDependency>> scopeToTransitives =
                         acc.transitivesByProjectAndScope.getOrDefault(projectId, emptyMap());
                 Set<GroupArtifact> variants = declaredAsVariant(maven.getPom().getRequestedDependencies());
+                Set<TransitiveDependency> directClosures =
+                        acc.directClosuresByProject.getOrDefault(projectId, emptySet());
 
                 // A direct dependency appears under every scope bucket it is visible in; evaluate each
                 // one once using its own effective scope so a wider transitive scope does not falsely
@@ -305,7 +350,9 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             Scope depScope = Scope.fromName(dep.getRequested().getScope());
                             Set<TransitiveDependency> transitives = scopeToTransitives.getOrDefault(
                                     depScope.name().toLowerCase(), emptySet());
-                            if (isRedundant(dep, transitives, variants)) {
+                            boolean needsCompileClasspath = depScope == Scope.Compile || depScope == Scope.Provided;
+                            if (isRedundant(dep, transitives, variants, needsCompileClasspath) &&
+                                    !isMediatedToALowerVersion(dep, directClosures)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -317,7 +364,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
 
             private boolean isRedundant(ResolvedDependency dep, Set<TransitiveDependency> transitives,
-                                        Set<GroupArtifact> variants) {
+                                        Set<GroupArtifact> variants, boolean needsCompileClasspath) {
                 if (constrainsResolution(dep) ||
                         variants.contains(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()))) {
                     return false;
@@ -329,7 +376,24 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                             dep.getArtifactId().equals(gav.getArtifactId()) &&
                             dep.getVersion().equals(gav.getVersion()) &&
                             depExclusions.equals(transitive.getExclusions()) &&
+                            !(needsCompileClasspath && transitive.isRuntimeOnly()) &&
                             !isProvidedByItself(dep, transitive)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // Maven picks by depth and declaration order, so dropping the declaration could downgrade to this older
+            // version; ending up on a newer one is fine
+            private boolean isMediatedToALowerVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
+                Version declared = new Version(dep.getVersion());
+                for (TransitiveDependency other : directClosures) {
+                    ResolvedGroupArtifactVersion gav = other.getGav();
+                    if (dep.getGroupId().equals(gav.getGroupId()) &&
+                            dep.getArtifactId().equals(gav.getArtifactId()) &&
+                            new Version(gav.getVersion()).compareTo(declared) < 0 &&
+                            !isProvidedByItself(dep, other)) {
                         return true;
                     }
                 }

@@ -557,6 +557,163 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
+    // spring-boot-starter brings snakeyaml at runtime, which is all a runtimeOnly declaration needs
+    @Test
+    void removeRuntimeOnlyGradleDependencyTheProviderBringsAtRuntime() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "org.springframework.boot", "spring-boot-starter-web")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                    runtimeOnly 'org.yaml:snakeyaml:1.19'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                }
+                """
+            )
+          )
+        );
+    }
+
+    // The starter asks for spring-web 5.0.7, so Gradle already selects that over the declared 5.0.1
+    @Test
+    void removeGradleDependencyDeclaredLowerThanTheProviderAsks() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "org.springframework.boot", "spring-boot-starter-web")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                    implementation 'org.springframework:spring-web:5.0.1.RELEASE'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                }
+                """
+            )
+          )
+        );
+    }
+
+    // The platform still manages spring-web once the declaration is gone
+    @Test
+    void removeVersionlessGradleDependencyManagedByAPlatform() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "org.springframework.boot", "spring-boot-starter-web")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation platform('org.springframework.boot:spring-boot-dependencies:2.7.18')
+                    implementation 'org.springframework.boot:spring-boot-starter-web'
+                    implementation 'org.springframework:spring-web'
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation platform('org.springframework.boot:spring-boot-dependencies:2.7.18')
+                    implementation 'org.springframework.boot:spring-boot-starter-web'
+                }
+                """
+            )
+          )
+        );
+    }
+
+    // Gradle only excludes a module when every path to it does, and the starter's path to jackson-databind doesn't,
+    // so the declaration's exclusion already has no effect
+    @Test
+    void removeGradleDependencyDeclaringExclusionsTheProviderPathIgnores() {
+        rewriteRun(
+          spec -> spec.beforeRecipe(withToolingApi())
+            .recipe(new RemoveRedundantDependencies(
+              "org.springframework.boot", "spring-boot-starter-json")),
+          mavenProject("my-app",
+            //language=groovy
+            buildGradle(
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-json:2.0.3.RELEASE'
+                    implementation('com.fasterxml.jackson.core:jackson-databind:2.9.6') {
+                        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-annotations'
+                    }
+                }
+                """,
+              """
+                plugins {
+                    id 'java-library'
+                }
+                repositories {
+                    mavenCentral()
+                }
+                dependencies {
+                    implementation 'org.springframework.boot:spring-boot-starter-json:2.0.3.RELEASE'
+                }
+                """
+            )
+          )
+        );
+    }
+
     // From carlan/m220j: spring-boot-starter-security brings spring-context 5.0.8, so removal can only upgrade
     @Issue("https://github.com/openrewrite/rewrite-java-dependencies/issues/211")
     @Test
@@ -1307,6 +1464,116 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                                 strictly '[2.17.0,2.18.0)'
                             }
                         }
+                    }
+                    """
+                )
+              )
+            );
+        }
+
+        // spring-boot-starter only brings snakeyaml at runtime, so removing it would drop it from compileClasspath
+        @Test
+        void keepsCompileGradleDependencyTheProviderOnlyBringsAtRuntime() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi())
+                .recipe(new RemoveRedundantDependencies(
+                  "org.springframework.boot", "spring-boot-starter-web")),
+              mavenProject("my-app",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+                    repositories {
+                        mavenCentral()
+                    }
+                    dependencies {
+                        implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                        implementation 'org.yaml:snakeyaml:1.19'
+                    }
+                    """
+                )
+              )
+            );
+        }
+
+        // jackson-databind excludes jackson-core, so the declaration is the only thing that brings it
+        @Test
+        void keepsGradleDependencyTheProviderExcludes() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi())
+                .recipe(new RemoveRedundantDependencies(
+                  "com.fasterxml.jackson.core", "jackson-databind")),
+              mavenProject("my-app",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+                    repositories {
+                        mavenCentral()
+                    }
+                    dependencies {
+                        implementation 'com.fasterxml.jackson.core:jackson-core:2.11.0'
+                        implementation('com.fasterxml.jackson.core:jackson-databind:2.11.0') {
+                            exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+                        }
+                    }
+                    """
+                )
+              )
+            );
+        }
+
+        // The starter asks for spring-web 5.0.7, so without the declaration Gradle would select the lower version
+        @Test
+        void keepsGradleDependencyDeclaredHigherThanTheProviderAsks() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi())
+                .recipe(new RemoveRedundantDependencies(
+                  "org.springframework.boot", "spring-boot-starter-web")),
+              mavenProject("my-app",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+                    repositories {
+                        mavenCentral()
+                    }
+                    dependencies {
+                        implementation 'org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE'
+                        implementation 'org.springframework:spring-web:5.0.9.RELEASE'
+                    }
+                    """
+                )
+              )
+            );
+        }
+
+        // The provider is only on the test classpaths, so nothing else brings spring-web to compileClasspath
+        @Test
+        void keepsGradleDependencyWhenTheProviderIsOnlyATestDependency() {
+            rewriteRun(
+              spec -> spec.beforeRecipe(withToolingApi())
+                .recipe(new RemoveRedundantDependencies(
+                  "org.springframework.boot", "spring-boot-starter-web")),
+              mavenProject("my-app",
+                //language=groovy
+                buildGradle(
+                  """
+                    plugins {
+                        id 'java-library'
+                    }
+                    repositories {
+                        mavenCentral()
+                    }
+                    dependencies {
+                        testImplementation 'org.springframework.boot:spring-boot-starter-web:2.7.18'
+                        implementation 'org.springframework:spring-web:5.3.31'
                     }
                     """
                 )

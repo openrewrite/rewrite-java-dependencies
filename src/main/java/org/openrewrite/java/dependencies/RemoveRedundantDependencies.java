@@ -334,24 +334,92 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 }
                 Set<GroupArtifact> variants = declaredAsVariant(requested);
 
+                // Decide from the trees Gradle itself resolved, which already reflect exclusions, variants and
+                // runtime-only dependencies. RemoveDependency drops the declaration from every configuration, so it
+                // has to be redundant on every classpath it is a direct dependency of.
+                Set<TransitiveDependency> pomTransitives = new HashSet<>();
+                scopeToTransitives.values().forEach(pomTransitives::addAll);
+                Map<GroupArtifact, Boolean> redundantEverywhere = new LinkedHashMap<>();
                 for (GradleDependencyConfiguration conf : gradle.getConfigurations()) {
-                    Set<TransitiveDependency> transitives = getCompatibleGradleTransitives(
-                            scopeToTransitives, conf.getName());
-                    if (transitives.isEmpty()) {
+                    if (!conf.isCanBeResolved()) {
                         continue;
                     }
-
-                    for (ResolvedDependency dep : conf.getResolved()) {
-                        if (dep.isDirect() &&
-                                isRedundant(dep, transitives, variants, false)) {
-                            // Don't specify configuration - Gradle's resolved config names differ from declaration names
-                            result = new RemoveDependency(
-                                    dep.getGroupId(), dep.getArtifactId(), null, null, null)
-                                    .getVisitor().visit(result, ctx);
+                    List<ResolvedDependency> directs = conf.getDirectResolved();
+                    List<ResolvedDependency> providers = new ArrayList<>();
+                    for (ResolvedDependency d : directs) {
+                        if (StringUtils.matchesGlob(d.getGroupId(), groupId) && StringUtils.matchesGlob(d.getArtifactId(), artifactId)) {
+                            providers.add(d);
                         }
+                    }
+                    for (ResolvedDependency dep : directs) {
+                        GroupArtifact ga = new GroupArtifact(dep.getGroupId(), dep.getArtifactId());
+                        boolean redundant = isRedundantInGradle(dep, providers, variants, pomTransitives);
+                        redundantEverywhere.merge(ga, redundant, Boolean::logicalAnd);
+                    }
+                }
+                for (Map.Entry<GroupArtifact, Boolean> e : redundantEverywhere.entrySet()) {
+                    if (e.getValue()) {
+                        // Don't specify configuration - Gradle's resolved config names differ from declaration names
+                        result = new RemoveDependency(
+                                e.getKey().getGroupId(), e.getKey().getArtifactId(), null, null, null)
+                                .getVisitor().visit(result, ctx);
                     }
                 }
                 return result;
+            }
+
+            private boolean isRedundantInGradle(ResolvedDependency dep, List<ResolvedDependency> providers,
+                                                Set<GroupArtifact> variants, Set<TransitiveDependency> pomTransitives) {
+                // The declaration's own exclusions don't matter: Gradle only excludes a module when every path to it
+                // does, so while the provider also brings this dependency, those exclusions already have no effect
+                if (constrainsResolution(dep) ||
+                        variants.contains(new GroupArtifact(dep.getGroupId(), dep.getArtifactId()))) {
+                    return false;
+                }
+                for (ResolvedDependency provider : providers) {
+                    if (provider.getGroupId().equals(dep.getGroupId()) && provider.getArtifactId().equals(dep.getArtifactId())) {
+                        continue;
+                    }
+                    if (inTree(provider, dep.getGroupId(), dep.getArtifactId(), new HashSet<>()) &&
+                            !wouldLowerVersion(dep, provider, pomTransitives)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            private boolean inTree(ResolvedDependency node, String g, String a, Set<ResolvedDependency> seen) {
+                for (ResolvedDependency child : node.getDependencies()) {
+                    if (child.getGroupId().equals(g) && child.getArtifactId().equals(a)) {
+                        return true;
+                    }
+                    if (seen.add(child) && inTree(child, g, a, seen)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // Gradle picks the highest requested version. The resolved tree shows only the winner, so the provider's
+            // own request comes from its POM: removal is safe when the declaration is versionless (a platform or
+            // constraint still governs), when something else already selected a higher version, or when the
+            // provider asks for at least the declared version.
+            private boolean wouldLowerVersion(ResolvedDependency dep, ResolvedDependency provider, Set<TransitiveDependency> pomTransitives) {
+                String declared = dep.getRequested().getVersion();
+                if (declared == null || !declared.equals(dep.getVersion())) {
+                    return false;
+                }
+                Version declaredVersion = new Version(declared);
+                for (TransitiveDependency t : pomTransitives) {
+                    if (t.getProvidedBy().getGroupId().equals(provider.getGroupId()) &&
+                            t.getProvidedBy().getArtifactId().equals(provider.getArtifactId()) &&
+                            t.getGav().getGroupId().equals(dep.getGroupId()) &&
+                            t.getGav().getArtifactId().equals(dep.getArtifactId()) &&
+                            new Version(t.getGav().getVersion()).compareTo(declaredVersion) >= 0) {
+                        return false;
+                    }
+                }
+                return true;
             }
 
             private @Nullable Tree handleMaven(ExecutionContext ctx, MavenResolutionResult maven, Tree result) {
@@ -437,42 +505,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 GroupArtifact providedBy = transitive.getProvidedBy();
                 return dep.getGroupId().equals(providedBy.getGroupId()) &&
                         dep.getArtifactId().equals(providedBy.getArtifactId());
-            }
-
-            private Set<TransitiveDependency> getCompatibleGradleTransitives(
-                    Map<String, Set<TransitiveDependency>> scopeToTransitives,
-                    String targetScope) {
-
-                Set<TransitiveDependency> result = new HashSet<>();
-
-                Set<TransitiveDependency> sameScope = scopeToTransitives.get(targetScope);
-                if (sameScope != null) {
-                    result.addAll(sameScope);
-                }
-
-                for (String broader : getBroaderGradleScopes(targetScope)) {
-                    Set<TransitiveDependency> broaderTransitives = scopeToTransitives.get(broader);
-                    if (broaderTransitives != null) {
-                        result.addAll(broaderTransitives);
-                    }
-                }
-
-                return result;
-            }
-
-            private List<String> getBroaderGradleScopes(String scope) {
-                switch (scope.toLowerCase()) {
-                    case "runtimeonly":
-                    case "runtimeclasspath":
-                        return Arrays.asList("implementation", "api");
-                    case "implementation":
-                        return singletonList("api");
-                    case "testimplementation":
-                    case "testruntimeonly":
-                        return Arrays.asList("implementation", "api", "testImplementation");
-                    default:
-                        return emptyList();
-                }
             }
         };
     }

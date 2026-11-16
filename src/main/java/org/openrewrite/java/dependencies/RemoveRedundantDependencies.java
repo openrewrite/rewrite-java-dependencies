@@ -237,13 +237,13 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         return exclusions;
     }
 
-    // Sibling closures are only needed to protect a declaration the provider supplies at the same version and whose
-    // version dependencyManagement leaves alone. Resolving them costs a POM download per direct dependency, so they
+    // Sibling closures are only needed to protect a declaration the provider supplies at the same version and that
+    // dependencyManagement leaves to mediation. Resolving them costs a POM download per direct dependency, so they
     // are skipped when no such declaration exists.
     private static boolean hasUnmanagedCandidate(MavenResolutionResult maven, Map<String, Set<TransitiveDependency>> suppliedByScope) {
         for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
             for (ResolvedDependency dep : deps) {
-                if (dep.isDirect() && !isManagedAtItsVersion(maven.getPom(), dep)) {
+                if (dep.isDirect() && managedVersion(maven.getPom(), dep) == null) {
                     for (Set<TransitiveDependency> supplied : suppliedByScope.values()) {
                         for (TransitiveDependency t : supplied) {
                             if (t.getGav().getGroupId().equals(dep.getGroupId()) &&
@@ -259,9 +259,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
         return false;
     }
 
-    // A managed version applies to transitive dependencies too, so once the declaration is gone mediation can not move it
-    private static boolean isManagedAtItsVersion(ResolvedPom pom, ResolvedDependency dep) {
-        return dep.getVersion().equals(pom.getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null));
+    // A managed version applies to transitive dependencies too, so once the declaration is gone it decides the
+    // version instead of mediation
+    private static @Nullable String managedVersion(ResolvedPom pom, ResolvedDependency dep) {
+        return pom.getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null);
     }
 
     // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is
@@ -380,7 +381,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                                     depScope.name().toLowerCase(), emptySet());
                             boolean needsCompileClasspath = depScope == Scope.Compile || depScope == Scope.Provided;
                             if (isRedundant(dep, transitives, variants, needsCompileClasspath) &&
-                                    (isManagedAtItsVersion(maven.getPom(), dep) || !isMediatedToALowerVersion(dep, directClosures))) {
+                                    !isDowngradedByRemoval(maven.getPom(), dep, directClosures)) {
                                 result = new RemoveDependency(
                                         dep.getGroupId(), dep.getArtifactId(), null, null, depScope.name().toLowerCase())
                                         .getVisitor().visit(result, ctx);
@@ -412,8 +413,17 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return false;
             }
 
+            // Ending up on a newer version is fine
+            private boolean isDowngradedByRemoval(ResolvedPom pom, ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
+                String managed = managedVersion(pom, dep);
+                if (managed != null) {
+                    return new Version(managed).compareTo(new Version(dep.getVersion())) < 0;
+                }
+                return isMediatedToALowerVersion(dep, directClosures);
+            }
+
             // Maven picks by depth and declaration order, so dropping the declaration could downgrade to this older
-            // version; ending up on a newer one is fine
+            // version
             private boolean isMediatedToALowerVersion(ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
                 Version declared = new Version(dep.getVersion());
                 for (TransitiveDependency other : directClosures) {

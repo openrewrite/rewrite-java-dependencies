@@ -243,7 +243,7 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
     private static boolean hasUnmanagedCandidate(MavenResolutionResult maven, Map<String, Set<TransitiveDependency>> suppliedByScope) {
         for (List<ResolvedDependency> deps : maven.getDependencies().values()) {
             for (ResolvedDependency dep : deps) {
-                if (dep.isDirect() && managedVersion(maven.getPom(), dep) == null) {
+                if (dep.isDirect() && maven.getPom().getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null) == null) {
                     for (Set<TransitiveDependency> supplied : suppliedByScope.values()) {
                         for (TransitiveDependency t : supplied) {
                             if (t.getGav().getGroupId().equals(dep.getGroupId()) &&
@@ -257,12 +257,6 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
             }
         }
         return false;
-    }
-
-    // A managed version applies to transitive dependencies too, so once the declaration is gone it decides the
-    // version instead of mediation
-    private static @Nullable String managedVersion(ResolvedPom pom, ResolvedDependency dep) {
-        return pom.getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null);
     }
 
     // Declared (requested) exclusions rather than effective ones: within a large tree the effective set is
@@ -413,9 +407,10 @@ public class RemoveRedundantDependencies extends ScanningRecipe<RemoveRedundantD
                 return false;
             }
 
-            // Ending up on a newer version is fine
+            // A managed version applies to transitive dependencies too, so once the declaration is gone it decides the
+            // version instead of mediation. Ending up on a newer version is fine
             private boolean isDowngradedByRemoval(ResolvedPom pom, ResolvedDependency dep, Set<TransitiveDependency> directClosures) {
-                String managed = managedVersion(pom, dep);
+                String managed = pom.getManagedVersion(dep.getGroupId(), dep.getArtifactId(), null, null);
                 if (managed != null) {
                     return new Version(managed).compareTo(new Version(dep.getVersion())) < 0;
                 }

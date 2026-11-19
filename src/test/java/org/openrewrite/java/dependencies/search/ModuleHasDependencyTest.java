@@ -23,17 +23,21 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.java.marker.JavaProject;
 import org.openrewrite.maven.MavenExecutionContextView;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openrewrite.Tree.randomId;
 import static org.openrewrite.gradle.Assertions.buildGradle;
 import static org.openrewrite.gradle.toolingapi.Assertions.withToolingApi;
 import static org.openrewrite.java.Assertions.java;
 import static org.openrewrite.java.Assertions.mavenProject;
+import static org.openrewrite.java.Assertions.srcMainJava;
 import static org.openrewrite.java.dependencies.MavenCentralMirror.settingsMirroringOnlyCentral;
 import static org.openrewrite.maven.Assertions.pomXml;
+import static org.openrewrite.xml.Assertions.xml;
 
 class ModuleHasDependencyTest implements RewriteTest {
     private static final String GROUP_ID = "org.springframework";
@@ -846,6 +850,215 @@ class ModuleHasDependencyTest implements RewriteTest {
                   )
                 )
               )
+            );
+        }
+    }
+
+    @Nested
+    class FileWithoutModuleMarker {
+
+        @Language("xml")
+        private static final String BEANS = "<beans/>";
+
+        @Language("xml")
+        private static final String PARENT_MANAGING_VERSION = """
+          <project>
+            <groupId>com.example</groupId>
+            <artifactId>parent</artifactId>
+            <version>1.0.0</version>
+            <packaging>pom</packaging>
+            <modules>
+              <module>web</module>
+              <module>core</module>
+            </modules>
+            <dependencyManagement>
+              <dependencies>
+                <dependency>
+                  <groupId>org.springframework</groupId>
+                  <artifactId>spring-beans</artifactId>
+                  <version>6.0.0</version>
+                </dependency>
+              </dependencies>
+            </dependencyManagement>
+          </project>
+          """;
+
+        @Language("xml")
+        private static final String WEB_WITH_MANAGED_VERSION = """
+          <project>
+            <parent>
+              <groupId>com.example</groupId>
+              <artifactId>parent</artifactId>
+              <version>1.0.0</version>
+            </parent>
+            <artifactId>web</artifactId>
+            <packaging>war</packaging>
+            <dependencies>
+              <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+              </dependency>
+            </dependencies>
+          </project>
+          """;
+
+        @Language("xml")
+        private static final String CORE_WITHOUT_DEPENDENCY = """
+          <project>
+            <parent>
+              <groupId>com.example</groupId>
+              <artifactId>parent</artifactId>
+              <version>1.0.0</version>
+            </parent>
+            <artifactId>core</artifactId>
+          </project>
+          """;
+
+        @Test
+        void belongsToInnermostModuleDirectory() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, null)),
+              pomXml(PARENT_MANAGING_VERSION, spec -> spec.markers(new JavaProject(randomId(), "parent", null))),
+              mavenProject("web",
+                pomXml(
+                  WEB_WITH_MANAGED_VERSION,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(MAVEN_MARKER_POSITIVE)
+                      .actual()
+                  )
+                )
+              ),
+              mavenProject("core",
+                pomXml(CORE_WITHOUT_DEPENDENCY)
+              ),
+              xml(BEANS, MAVEN_MARKER_POSITIVE + BEANS, spec -> spec.path("web/src/main/webapp/WEB-INF/applicationContext.xml")),
+              xml(BEANS, spec -> spec.path("core/src/main/webapp/WEB-INF/applicationContext.xml")),
+              xml(BEANS, spec -> spec.path("config/applicationContext.xml"))
+            );
+        }
+
+        @Test
+        void singleModuleAtRepositoryRoot() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, null)),
+              pomXml(
+                MAVEN_DIRECT,
+                spec -> spec
+                  .markers(new JavaProject(randomId(), "foo", null))
+                  .after(actual ->
+                    assertThat(actual)
+                      .startsWith(MAVEN_MARKER_POSITIVE)
+                      .actual()
+                  )
+              ),
+              xml(BEANS, MAVEN_MARKER_POSITIVE + BEANS, spec -> spec.path("src/main/webapp/WEB-INF/applicationContext.xml"))
+            );
+        }
+
+        @Test
+        void gradleModule() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, null)),
+              mavenProject("web",
+                buildGradle(
+                  GRADLE_DIRECT,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(GRADLE_MARKER_POSITIVE)
+                      .actual()
+                  )
+                )
+              ),
+              xml(BEANS, MAVEN_MARKER_POSITIVE + BEANS, spec -> spec.path("web/src/main/webapp/WEB-INF/applicationContext.xml"))
+            );
+        }
+
+        @Test
+        void moduleWithoutBuildFileOrModuleMarker() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, null)),
+              pomXml(
+                MAVEN_DIRECT,
+                spec -> spec
+                  .markers(new JavaProject(randomId(), "foo", null))
+                  .after(actual ->
+                    assertThat(actual)
+                      .startsWith(MAVEN_MARKER_POSITIVE)
+                      .actual()
+                  )
+              ),
+              mavenProject("legacy",
+                srcMainJava(
+                  java("class Legacy {}")
+                )
+              ),
+              xml(BEANS, spec -> spec.path("legacy/src/main/webapp/WEB-INF/applicationContext.xml")),
+              pomXml(
+                //language=xml
+                """
+                  <project>
+                    <groupId>com.example</groupId>
+                    <artifactId>outside-the-build</artifactId>
+                    <version>1.0.0</version>
+                  </project>
+                  """,
+                spec -> spec.path("outside/pom.xml")
+              ),
+              xml(BEANS, spec -> spec.path("outside/src/main/webapp/WEB-INF/applicationContext.xml"))
+            );
+        }
+
+        @Test
+        void directoryOfTwoModules() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, null)),
+              pomXml(
+                MAVEN_DIRECT,
+                spec -> spec
+                  .path("web/pom.xml")
+                  .markers(new JavaProject(randomId(), "web-maven", null))
+                  .after(actual ->
+                    assertThat(actual)
+                      .startsWith(MAVEN_MARKER_POSITIVE)
+                      .actual()
+                  )
+              ),
+              buildGradle(
+                GRADLE_NONE,
+                spec -> spec
+                  .path("web/build.gradle")
+                  .markers(new JavaProject(randomId(), "web-gradle", null))
+              ),
+              xml(BEANS, spec -> spec.path("web/src/main/webapp/WEB-INF/applicationContext.xml"))
+            );
+        }
+
+        @Test
+        void invertedMarking() {
+            rewriteRun(
+              spec -> spec.recipe(new ModuleHasDependency(GROUP_ID, ARTIFACT_ID, null, null, null, true)),
+              pomXml(MAVEN_DIRECT, spec -> spec.markers(new JavaProject(randomId(), "foo", null))),
+              mavenProject("core",
+                pomXml(
+                  //language=xml
+                  """
+                    <project>
+                      <groupId>com.example</groupId>
+                      <artifactId>core</artifactId>
+                      <version>1.0.0</version>
+                    </project>
+                    """,
+                  spec -> spec.after(actual ->
+                    assertThat(actual)
+                      .startsWith(MAVEN_MARKER_NEGATIVE)
+                      .actual()
+                  )
+                )
+              ),
+              xml(BEANS, spec -> spec.path("src/main/webapp/WEB-INF/applicationContext.xml")),
+              xml(BEANS, spec -> spec.path("config/applicationContext.xml")),
+              xml(BEANS, MAVEN_MARKER_NEGATIVE + BEANS, spec -> spec.path("core/src/main/webapp/WEB-INF/applicationContext.xml"))
             );
         }
     }

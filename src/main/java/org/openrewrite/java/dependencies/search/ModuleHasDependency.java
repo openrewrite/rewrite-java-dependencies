@@ -19,14 +19,21 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.gradle.marker.GradleProject;
 import org.openrewrite.java.marker.JavaProject;
+import org.openrewrite.java.marker.JavaSourceSet;
+import org.openrewrite.marker.Markers;
 import org.openrewrite.marker.SearchResult;
+import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.Scope;
 import org.openrewrite.semver.Semver;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
+import static java.util.Collections.disjoint;
+import static java.util.Collections.emptySet;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
@@ -36,6 +43,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified `groupId` and `artifactId`. " +
                 "Places a `SearchResult` marker on all sources within a module with a matching dependency. " +
+                "A source without a module marker, such as a file outside the module's source sets, belongs to the innermost module whose directory holds it. " +
                 "This recipe is intended to be used as a precondition for other recipes. " +
                 "For example this could be used to limit the application of a Spring Boot migration to only projects " +
                 "that use `spring-boot-starter`, limiting unnecessary upgrading. " +
@@ -93,25 +101,87 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Override
     public Set<JavaProject> getInitialValue(ExecutionContext ctx) {
-        return new HashSet<>();
+        return new ModulesWithDependency();
+    }
+
+    /**
+     * Kept a {@code Set<JavaProject>} so that recipes reusing this recipe's scanner with their own set keep working.
+     */
+    private static class ModulesWithDependency extends HashSet<JavaProject> {
+        private static final Path ROOT = Paths.get("");
+
+        private final Map<Path, Set<JavaProject>> modulesByBuildFileDirectory = new HashMap<>();
+        private final Map<Path, Set<JavaProject>> modulesBySourceSetDirectory = new HashMap<>();
+
+        /**
+         * A module's directory is the one holding its build file or its {@code src/<source set>} directory. The second
+         * places a module whose build file is not in the LST, such as a Gradle subproject configured by its parent.
+         * A build file without a module marker, such as the POM of a project outside the build's reactor, still bounds
+         * a directory, whose files then belong to no module.
+         */
+        void addModuleDirectory(SourceFile sourceFile, @Nullable JavaProject jp) {
+            Markers markers = sourceFile.getMarkers();
+            Path path = sourceFile.getSourcePath();
+            JavaSourceSet sourceSet = jp == null ? null : markers.findFirst(JavaSourceSet.class).orElse(null);
+            if (sourceSet != null) {
+                for (int i = 0; i < path.getNameCount() - 2; i++) {
+                    if ("src".equals(path.getName(i).toString()) && sourceSet.getName().equals(path.getName(i + 1).toString())) {
+                        modulesBySourceSetDirectory.computeIfAbsent(i == 0 ? ROOT : path.subpath(0, i), d -> new HashSet<>()).add(jp);
+                        return;
+                    }
+                }
+            } else if (isBuildFile(path, markers, jp)) {
+                Set<JavaProject> modules = modulesByBuildFileDirectory.computeIfAbsent(directoryOf(path), d -> new HashSet<>());
+                if (jp != null) {
+                    modules.add(jp);
+                }
+            }
+        }
+
+        private static boolean isBuildFile(Path path, Markers markers, @Nullable JavaProject jp) {
+            String fileName = String.valueOf(path.getFileName());
+            return "pom.xml".equals(fileName) || "build.gradle".equals(fileName) || "build.gradle.kts".equals(fileName) ||
+                   jp != null && (markers.findFirst(MavenResolutionResult.class).isPresent() || markers.findFirst(GradleProject.class).isPresent());
+        }
+
+        Set<JavaProject> enclosingModules(Path sourcePath) {
+            for (Path dir = directoryOf(sourcePath); ; dir = directoryOf(dir)) {
+                Set<JavaProject> modules = modulesByBuildFileDirectory.get(dir);
+                if (modules == null || modules.isEmpty()) {
+                    modules = modulesBySourceSetDirectory.getOrDefault(dir, modules);
+                }
+                if (modules != null) {
+                    return modules;
+                }
+                if (ROOT.equals(dir)) {
+                    return emptySet();
+                }
+            }
+        }
+
+        private static Path directoryOf(Path path) {
+            Path parent = path.getParent();
+            return parent == null ? ROOT : parent;
+        }
     }
 
     @Override
     public TreeVisitor<?, ExecutionContext> getScanner(Set<JavaProject> acc) {
         HasDependencyMatcher matcher = new HasDependencyMatcher(groupIdPattern, artifactIdPattern, scope, version, Boolean.TRUE.equals(onlyDirect));
+        @Nullable ModulesWithDependency moduleDirectories = acc instanceof ModulesWithDependency ? (ModulesWithDependency) acc : null;
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (tree == null) {
                     return null;
                 }
-                tree.getMarkers()
-                        .findFirst(JavaProject.class)
-                        .ifPresent(jp -> {
-                            if (!acc.contains(jp) && matcher.hasDependency(tree)) {
-                                acc.add(jp);
-                            }
-                        });
+                JavaProject jp = tree.getMarkers().findFirst(JavaProject.class).orElse(null);
+                if (jp != null && !acc.contains(jp) && matcher.hasDependency(tree)) {
+                    acc.add(jp);
+                }
+                if (moduleDirectories != null && tree instanceof SourceFile) {
+                    moduleDirectories.addModuleDirectory((SourceFile) tree, jp);
+                }
                 return tree;
             }
         };
@@ -119,6 +189,7 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(Set<JavaProject> acc) {
+        @Nullable ModulesWithDependency moduleDirectories = acc instanceof ModulesWithDependency ? (ModulesWithDependency) acc : null;
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
@@ -127,18 +198,20 @@ public class ModuleHasDependency extends ScanningRecipe<Set<JavaProject>> {
                 }
                 boolean shouldInvert = Boolean.TRUE.equals(invertMarking);
                 String dependencyGav = groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
-                Optional<JavaProject> maybeJp = tree.getMarkers().findFirst(JavaProject.class);
-                if (!maybeJp.isPresent()) {
+                Set<JavaProject> modules = tree.getMarkers().findFirst(JavaProject.class)
+                        .map(Collections::singleton)
+                        .orElseGet(() -> moduleDirectories != null && tree instanceof SourceFile ?
+                                moduleDirectories.enclosingModules(((SourceFile) tree).getSourcePath()) : emptySet());
+                if (modules.isEmpty()) {
                     if (shouldInvert) {
                         return SearchResult.found(tree, "No module, so vacuously does not have dependency: " + dependencyGav);
                     }
                     return tree;
                 }
-                JavaProject jp = maybeJp.get();
-                if (shouldInvert && !acc.contains(jp)) {
+                if (shouldInvert && disjoint(acc, modules)) {
                     return SearchResult.found(tree, "Module does not have dependency: " + dependencyGav);
                 }
-                if (!shouldInvert && acc.contains(jp)) {
+                if (!shouldInvert && acc.containsAll(modules)) {
                     return SearchResult.found(tree, "Module has dependency: " + dependencyGav);
                 }
                 return tree;

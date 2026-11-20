@@ -15,6 +15,7 @@
  */
 package org.openrewrite.java.dependencies.search;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jspecify.annotations.Nullable;
@@ -34,6 +35,7 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     String description = "Searches for both Gradle and Maven modules that have a dependency matching the specified `groupId` and `artifactId`. " +
                "Places a `SearchResult` marker on all sources within a repository with a matching dependency. " +
+               "With `invertMarking`, every source is marked when no module in the repository has a matching dependency. " +
                "This recipe is intended to be used as a precondition for other recipes. " +
                "For example this could be used to limit the application of a Spring Boot migration to only projects " +
                "that use a Spring Framework dependency, limiting unnecessary upgrading. " +
@@ -65,6 +67,32 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
             required = false)
     @Nullable
     String version;
+
+    @Option(displayName = "Invert marking",
+            description = "If `true`, marks every source when no module in the repository has a matching dependency, " +
+                          "instead of when any module has one. Defaults to `false`.",
+            required = false)
+    @Nullable
+    Boolean invertMarking;
+
+    @JsonCreator
+    public RepositoryHasDependency(String groupIdPattern, String artifactIdPattern, @Nullable String scope,
+                                   @Nullable String version, @Nullable Boolean invertMarking) {
+        this.groupIdPattern = groupIdPattern;
+        this.artifactIdPattern = artifactIdPattern;
+        this.scope = scope;
+        this.version = version;
+        this.invertMarking = invertMarking;
+    }
+
+    /**
+     * @deprecated Use {@link #RepositoryHasDependency(String, String, String, String, Boolean)}.
+     */
+    @Deprecated
+    public RepositoryHasDependency(String groupIdPattern, String artifactIdPattern, @Nullable String scope,
+                                   @Nullable String version) {
+        this(groupIdPattern, artifactIdPattern, scope, version, null);
+    }
 
     @Override
     public Validated<Object> validate() {
@@ -105,17 +133,20 @@ public class RepositoryHasDependency extends ScanningRecipe<AtomicBoolean> {
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor(AtomicBoolean acc) {
-        if (acc.get()) {
-            return new TreeVisitor<Tree, ExecutionContext>() {
-                @Override
-                public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                    if (tree == null) {
-                        return null;
-                    }
-                    return SearchResult.found(tree, "Repository has dependency: " + groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version));
-                }
-            };
+        boolean invert = Boolean.TRUE.equals(invertMarking);
+        if (acc.get() == invert) {
+            return TreeVisitor.noop();
         }
-        return TreeVisitor.noop();
+        String message = (invert ? "Repository does not have dependency: " : "Repository has dependency: ") +
+                groupIdPattern + ":" + artifactIdPattern + (version == null ? "" : ":" + version);
+        return new TreeVisitor<Tree, ExecutionContext>() {
+            @Override
+            public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
+                if (tree == null) {
+                    return null;
+                }
+                return SearchResult.found(tree, message);
+            }
+        };
     }
 }

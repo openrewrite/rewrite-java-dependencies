@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId;
 import org.openrewrite.maven.table.MavenMetadataFailures;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -196,15 +197,15 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
     }
 
     @Getter(AccessLevel.NONE)
-    private final transient AtomicReference<org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId> mavenDelegate = new AtomicReference<>();
+    private final transient AtomicReference<ChangeDependencyGroupIdAndArtifactId> mavenDelegate = new AtomicReference<>();
 
     @Getter(AccessLevel.NONE)
     private final transient AtomicReference<org.openrewrite.gradle.ChangeDependency> gradleDelegate = new AtomicReference<>();
 
-    org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId getMavenChangeDependency() {
-        org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId recipe = mavenDelegate.get();
+    ChangeDependencyGroupIdAndArtifactId getMavenChangeDependency() {
+        ChangeDependencyGroupIdAndArtifactId recipe = mavenDelegate.get();
         if (recipe == null) {
-            recipe = new org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId(
+            recipe = new ChangeDependencyGroupIdAndArtifactId(
                     oldGroupId, oldArtifactId, newGroupId, newArtifactId,
                     newVersion, versionPattern, overrideManagedVersion, changeManagedDependency, changePluginDependencies);
             mavenDelegate.set(recipe);
@@ -225,7 +226,7 @@ public class ChangeDependency extends ScanningRecipe<ChangeDependency.Accumulato
 
     @Data
     public static final class Accumulator {
-        private final org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId.Accumulator mavenAccumulator;
+        private final ChangeDependencyGroupIdAndArtifactId.Accumulator mavenAccumulator;
         private final org.openrewrite.gradle.ChangeDependency.Accumulator gradleAccumulator;
     }
 }

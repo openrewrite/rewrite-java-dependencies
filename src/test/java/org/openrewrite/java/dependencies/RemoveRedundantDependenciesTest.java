@@ -851,50 +851,6 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
         );
     }
 
-    // The explicit version overrides the imported BOM, which also applies to the copy the provider brings, so removing
-    // the declaration would drop spring-web from 5.1.9 to the managed 5.0.8, even though no sibling brings an older one
-    @Test
-    void keepsDependencyWhenABomManagesALowerVersion() {
-        rewriteRun(
-          spec -> spec.recipe(new RemoveRedundantDependencies(
-            "org.springframework.boot", "spring-boot-starter-web")),
-          //language=xml
-          pomXml(
-            """
-              <project>
-                <modelVersion>4.0.0</modelVersion>
-                <groupId>com.mycompany.app</groupId>
-                <artifactId>my-app</artifactId>
-                <version>1</version>
-                <dependencyManagement>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework</groupId>
-                      <artifactId>spring-framework-bom</artifactId>
-                      <version>5.0.8.RELEASE</version>
-                      <type>pom</type>
-                      <scope>import</scope>
-                    </dependency>
-                  </dependencies>
-                </dependencyManagement>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                    <version>2.1.7.RELEASE</version>
-                  </dependency>
-                  <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-web</artifactId>
-                    <version>5.1.9.RELEASE</version>
-                  </dependency>
-                </dependencies>
-              </project>
-              """
-          )
-        );
-    }
-
     // As keepsDependencyWhenSiblingWithExclusionsWouldMediateToALowerVersion, but the imported BOM manages spring-web
     // at a newer version, so removal is an upgrade whatever struts2-spring-plugin brings
     @Test
@@ -1845,6 +1801,50 @@ class RemoveRedundantDependenciesTest implements RewriteTest {
                         <version>2.17.0</version>
                         <type>test-jar</type>
                         <scope>test</scope>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """
+              )
+            );
+        }
+
+        // The explicit version overrides the imported BOM, which also applies to the copy the provider brings, so removing
+        // the declaration would drop spring-web from 5.1.9 to the managed 5.0.8, even though no sibling brings an older one
+        @Test
+        void keepsDependencyWhenABomManagesALowerVersion() {
+            rewriteRun(
+              spec -> spec.recipe(new RemoveRedundantDependencies(
+                "org.springframework.boot", "spring-boot-starter-web")),
+              //language=xml
+              pomXml(
+                """
+                  <project>
+                    <modelVersion>4.0.0</modelVersion>
+                    <groupId>com.mycompany.app</groupId>
+                    <artifactId>my-app</artifactId>
+                    <version>1</version>
+                    <dependencyManagement>
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.springframework</groupId>
+                          <artifactId>spring-framework-bom</artifactId>
+                          <version>5.0.8.RELEASE</version>
+                          <type>pom</type>
+                          <scope>import</scope>
+                        </dependency>
+                      </dependencies>
+                    </dependencyManagement>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <version>2.1.7.RELEASE</version>
+                      </dependency>
+                      <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                        <version>5.1.9.RELEASE</version>
                       </dependency>
                     </dependencies>
                   </project>

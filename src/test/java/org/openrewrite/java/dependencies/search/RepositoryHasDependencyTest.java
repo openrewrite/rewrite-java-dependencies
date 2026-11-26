@@ -16,6 +16,7 @@
 package org.openrewrite.java.dependencies.search;
 
 import org.intellij.lang.annotations.Language;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -96,89 +97,6 @@ class RepositoryHasDependencyTest implements RewriteTest {
       public class AGradle {}
       """;
 
-    @Test
-    void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
-        // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
-        rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
-          mavenProject("project-gradle",
-            //language=groovy
-            buildGradle("""
-              plugins {
-                id 'java-library'
-              }
-              repositories {
-                mavenCentral()
-              }
-              configurations.all {
-                resolutionStrategy {
-                  force 'org.springframework:spring-beans:6.0.0'
-                }
-              }
-              dependencies {
-                implementation 'org.springframework:spring-beans:5.3.0'
-              }
-              """),
-            java(GradleJava)
-          )
-        );
-    }
-
-    @Test
-    void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
-        // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
-        rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
-          mavenProject("project-maven",
-            //language=xml
-            pomXml("""
-              <project>
-                <groupId>com.example</groupId>
-                <artifactId>foo</artifactId>
-                <version>1.0.0</version>
-                <dependencyManagement>
-                  <dependencies>
-                    <dependency>
-                      <groupId>org.springframework.boot</groupId>
-                      <artifactId>spring-boot-dependencies</artifactId>
-                      <version>3.0.0</version>
-                      <type>pom</type>
-                      <scope>import</scope>
-                    </dependency>
-                  </dependencies>
-                </dependencyManagement>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                  </dependency>
-                </dependencies>
-              </project>
-              """)
-          )
-        );
-    }
-
-    @Test
-    void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
-        // Force resolution failure (no repositories), so the requested fallback fires.
-        rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[1.0,)")),
-          mavenProject("project-gradle",
-            //language=groovy
-            buildGradle("""
-              plugins {
-                id 'java-library'
-              }
-              dependencies {
-                implementation 'org.springframework:spring-beans'
-              }
-              """),
-            java(GradleJava)
-          )
-        );
-    }
-
     @ParameterizedTest
     @ValueSource(strings = {"14.0.14-LTS", "15.0.0-RC1"})
     void versionRangeMatchesAQualifiedVersion(String version) {
@@ -186,16 +104,6 @@ class RepositoryHasDependencyTest implements RewriteTest {
           spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
           mavenProject("project-maven",
             pomXml(primeFacesPom(version), "<!--~~(Repository has dependency: org.primefaces:primefaces:[14,16))~~>-->" + primeFacesPom(version))
-          )
-        );
-    }
-
-    @Test
-    void versionRangeDoesNotMatchAPreReleaseOfItsUpperBound() {
-        rewriteRun(
-          spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
-          mavenProject("project-maven",
-            pomXml(primeFacesPom("16.0.0-RC1"))
           )
         );
     }
@@ -222,5 +130,102 @@ class RepositoryHasDependencyTest implements RewriteTest {
     void invalidOptionsAreInvalid() {
         assertThat(new RepositoryHasDependency("junit", "junit", null, "latest.bogus").validate().isValid()).isFalse();
         assertThat(new RepositoryHasDependency("junit", "junit", "bogus", null).validate().isValid()).isFalse();
+    }
+
+    @Nested
+    class NoChange {
+
+        @Test
+        void gradleVersionRangeDoesNotMatchDeclaredWhenResolvedVersionIsOutOfRange() {
+            // The declared-dependency fallback must be skipped for an already-resolved coordinate (resolutionStrategy).
+            rewriteRun(
+              spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+              mavenProject("project-gradle",
+                //language=groovy
+                buildGradle("""
+                  plugins {
+                    id 'java-library'
+                  }
+                  repositories {
+                    mavenCentral()
+                  }
+                  configurations.all {
+                    resolutionStrategy {
+                      force 'org.springframework:spring-beans:6.0.0'
+                    }
+                  }
+                  dependencies {
+                    implementation 'org.springframework:spring-beans:5.3.0'
+                  }
+                  """),
+                java(GradleJava)
+              )
+            );
+        }
+
+        @Test
+        void mavenVersionRangeDoesNotMatchBomManagedDependencyWhenResolvedIsOutOfRange() {
+            // Regression for rewrite-third-party#76: BOM-managed version (null on requested) must not match the range.
+            rewriteRun(
+              spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[5.0,6.0)")),
+              mavenProject("project-maven",
+                //language=xml
+                pomXml("""
+                  <project>
+                    <groupId>com.example</groupId>
+                    <artifactId>foo</artifactId>
+                    <version>1.0.0</version>
+                    <dependencyManagement>
+                      <dependencies>
+                        <dependency>
+                          <groupId>org.springframework.boot</groupId>
+                          <artifactId>spring-boot-dependencies</artifactId>
+                          <version>3.0.0</version>
+                          <type>pom</type>
+                          <scope>import</scope>
+                        </dependency>
+                      </dependencies>
+                    </dependencyManagement>
+                    <dependencies>
+                      <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                      </dependency>
+                    </dependencies>
+                  </project>
+                  """)
+              )
+            );
+        }
+
+        @Test
+        void gradleRequestedWithoutVersionAndConstraintDoesNotMatch() {
+            // Force resolution failure (no repositories), so the requested fallback fires.
+            rewriteRun(
+              spec -> spec.recipe(new RepositoryHasDependency("org.springframework", "spring-beans", null, "[1.0,)")),
+              mavenProject("project-gradle",
+                //language=groovy
+                buildGradle("""
+                  plugins {
+                    id 'java-library'
+                  }
+                  dependencies {
+                    implementation 'org.springframework:spring-beans'
+                  }
+                  """),
+                java(GradleJava)
+              )
+            );
+        }
+
+        @Test
+        void versionRangeDoesNotMatchAPreReleaseOfItsUpperBound() {
+            rewriteRun(
+              spec -> spec.recipe(new RepositoryHasDependency("org.primefaces", "primefaces", null, "[14,16)")),
+              mavenProject("project-maven",
+                pomXml(primeFacesPom("16.0.0-RC1"))
+              )
+            );
+        }
     }
 }
